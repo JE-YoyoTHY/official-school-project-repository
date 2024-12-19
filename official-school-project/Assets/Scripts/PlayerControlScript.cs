@@ -40,6 +40,8 @@ public class PlayerControlScript : MonoBehaviour
 
 	}
 
+	/*private void myAcceleration()*/
+
 	#endregion
 
 }
