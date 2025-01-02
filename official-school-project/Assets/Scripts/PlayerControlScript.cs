@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static Unity.Burst.Intrinsics.X86;
@@ -10,6 +11,7 @@ public class PlayerControlScript : MonoBehaviour
 	#region variable
 	//reference
 	private Rigidbody2D rb;
+	private PlayerGroundTriggerScript groundTrigger;
 
 	//physics
 	private float myGravityScale;
@@ -29,6 +31,24 @@ public class PlayerControlScript : MonoBehaviour
 	[SerializeField] private float moveTurnSpeedScale;
 
 
+	[Header("jump")]
+	[SerializeField] private float jumpStrength;
+	[SerializeField] private float jumpGravity;
+	[SerializeField] private float jumpMinSpeed;
+	private bool isJumping;
+	private sbyte jumpKeyValue;
+	[SerializeField] private float jumpPreInputTime;
+	private Coroutine jumpCoroutine;
+	private Coroutine jumpExtraHangTimeCoroutine;
+	[SerializeField] private float jumpExtraHangTimeGravityScale;
+
+	//ground hit
+	[Header("Ground Hit")]
+	[SerializeField] private float coyoteTime;
+	private Coroutine coyoteTimeCoroutine;
+	private bool onGround;
+	
+
 	#endregion
 
 
@@ -38,6 +58,8 @@ public class PlayerControlScript : MonoBehaviour
     {
         //init
 		rb = GetComponent<Rigidbody2D>();
+		groundTrigger = transform.GetChild(0).GetComponent<PlayerGroundTriggerScript>();
+
 		myGravityScale = myNormalGravityScale;
 		myGravityMaxSpeed = myNormalGravityMaxSpeed;
 		isFrictionActive = true;
@@ -47,8 +69,10 @@ public class PlayerControlScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+		groundHitCheckMain();
 		myGravityMain();
 		moveMain();
+		jumpMain();
 
 		myFrictionMain();
     }
@@ -213,4 +237,155 @@ public class PlayerControlScript : MonoBehaviour
 	}
 
 	#endregion
+
+	#region jump
+
+	private void jumpMain()
+	{
+		if(jumpKeyValue == 2)
+		{
+			jumpKeyValue = 1;
+			if(jumpCoroutine != null)
+			{
+				StopCoroutine(jumpCoroutine);
+			}
+			jumpCoroutine = StartCoroutine(jumpPreInput(jumpPreInputTime));
+		}
+
+		if (isJumping)
+		{
+			if(rb.velocity.y < jumpMinSpeed)
+			{
+				jumpEnd();
+			}
+		}
+
+		//release jump button
+		if(jumpKeyValue == -1)
+		{
+			if (isJumping)
+			{
+				jumpEnd();
+			}
+		}
+	}
+
+	private void jumpStart()
+	{
+		isJumping = true;
+		mySetVy(jumpStrength);
+		mySetGravity(jumpGravity, myGravityMaxSpeed);
+		leaveGround();
+	}
+
+	private void jumpEnd()
+	{
+		mySetGravity(jumpGravity * jumpExtraHangTimeGravityScale, myGravityMaxSpeed);
+		mySetVy(jumpMinSpeed);
+
+		if (isJumping)
+		{
+			isJumping = false;
+		}
+
+		if(jumpExtraHangTimeCoroutine != null)
+		{
+			StopCoroutine(jumpExtraHangTimeCoroutine);
+		}
+		jumpExtraHangTimeCoroutine = StartCoroutine(jumpExtraHangTime());
+	}
+
+	private bool canJump()
+	{
+		if (!isJumping && onGround) return true;
+		else return false;
+	}
+
+	public void jumpInput(InputAction.CallbackContext ctx)
+	{
+		if (ctx.performed)
+		{
+			jumpKeyValue = 2;
+		}
+
+		if (ctx.canceled)
+		{
+			jumpKeyValue = -1;
+		}
+	}
+
+	IEnumerator jumpPreInput(float t) //t for time
+	{
+		while(t > 0)
+		{
+			t -= Time.deltaTime;
+
+			if(canJump())
+			{
+				jumpStart();
+				yield break;
+			}
+
+			yield return null;
+		}
+	}
+
+	IEnumerator jumpExtraHangTime()
+	{
+		while(rb.velocity.y > jumpMinSpeed * -1)
+		{
+			yield return null;
+		}
+		mySetGravity(myNormalGravityScale, myGravityMaxSpeed);
+	}
+
+	#endregion
+
+	#region ground hit check
+
+	private void groundHitCheckMain()
+	{
+		if (groundTrigger.onGround())
+		{
+			onGround = true;
+			if(coyoteTimeCoroutine != null)
+			{
+				StopCoroutine(coyoteTimeCoroutine);
+				coyoteTimeCoroutine = null;
+			}
+		}
+		else
+		{
+			if(onGround && coyoteTimeCoroutine == null)
+			{
+				coyoteTimeCoroutine = StartCoroutine(leaveGroundDelay(coyoteTime));
+			}
+		}
+	}
+
+	private void leaveGround()
+	{
+		groundTrigger.leaveGround();
+		onGround = false;
+
+		if (coyoteTimeCoroutine != null)
+		{
+			StopCoroutine(coyoteTimeCoroutine);
+			coyoteTimeCoroutine = null;
+		}
+	}
+
+	IEnumerator leaveGroundDelay(float t) // t for time, this function implement the coyote time
+	{
+		while(t > 0)
+		{
+			t -= Time.deltaTime;
+			yield return null;
+		}
+		leaveGround();
+	}
+
+	#endregion
+
+
 }
