@@ -8,41 +8,34 @@ using UnityEngine;
 public class UI : MonoBehaviour
 {
     // Start is called before the first frame update
-    public string textContent = string.Empty;
-    public TextMeshProUGUI subtitleText;
-    public float letterRate;
-    public float spaceRate;
+    private string _textContent = string.Empty;
+    public TextMeshProUGUI textUI;
+    private float _charRate;
+    private float _spaceRate;
     public SubtitleManager subtitleManager = new SubtitleManager();
     void Start()
     {
-        letterRate = 0.03f;
-        spaceRate = 0.01f;
+        _charRate = 0.03f;
+        _spaceRate = 0.01f;
         subtitleManager.changeCurrentLanguage("english");
-        textContent = subtitleManager.getSubtitleById("002").content;
+        _textContent = subtitleManager.getSubtitleById("002").content;
         StartCoroutine(showSubtitleText());
     }
 
-    // Update is called once per frame
-    void Update()
+    public IEnumerator showSubtitleText()
     {
-        
-    }
-
-    
-    private IEnumerator showSubtitleText()
-    {
-        if (textContent != "")
+        if (_textContent != "")
         {
-            for (int i=0; i < textContent.Length; i++)
+            for (int i=0; i < _textContent.Length; i++)
             {
-                subtitleText.text += textContent[i];
-                if (textContent[i].ToString() == " ")
+                textUI.text += _textContent[i];
+                if (_textContent[i].ToString() == " ")
                 {
-                    yield return new WaitForSeconds(spaceRate);
+                    yield return new WaitForSeconds(_spaceRate);
                 }
                 else
                 {
-                    yield return new WaitForSeconds(letterRate);
+                    yield return new WaitForSeconds(_charRate);
                 }
                 
                 
@@ -53,5 +46,8 @@ public class UI : MonoBehaviour
             Console.WriteLine("[showSubtitleText]: text is empty.");
         }
     }
-    
+
+    public float getCharRate() { return _charRate; }
+    public float getSpaceRate() { return _spaceRate; }
+
 }
