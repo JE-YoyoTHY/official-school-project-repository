@@ -23,7 +23,7 @@ public class PlayerControlScript : MonoBehaviour
 	private bool isFrictionActive;
 	private Coroutine myFrictionLessCoroutine;
 
-	[Header("move")]
+	[Header("Move")]
 	[SerializeField] private float moveMaxSpeed;
 	[SerializeField] private float moveAcceleration; // speed add per second
 	private bool isMoving;
@@ -31,7 +31,7 @@ public class PlayerControlScript : MonoBehaviour
 	[SerializeField] private float moveTurnSpeedScale;
 
 
-	[Header("jump")]
+	[Header("Jump")]
 	[SerializeField] private float jumpStrength;
 	[SerializeField] private float jumpGravity;
 	[SerializeField] private float jumpMinSpeed;
@@ -174,8 +174,8 @@ public class PlayerControlScript : MonoBehaviour
 				{
 					myAcceleration(new Vector2(moveAcceleration * moveKeyValue, 0), new Vector2(moveMaxSpeed * moveKeyValue, 0));
 				}
-				else if(moveKeyValue * rb.velocity.x < 0)
-				{
+                else  // moveKeyValue * rb.velocity.x < 0, 不同方向
+                {
 					myAcceleration(new Vector2(moveAcceleration * moveKeyValue * moveTurnSpeedScale, 0), new Vector2(moveMaxSpeed * moveKeyValue, 0));
 				}
 			}

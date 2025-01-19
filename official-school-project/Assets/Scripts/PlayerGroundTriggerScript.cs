@@ -6,6 +6,7 @@ public class PlayerGroundTriggerScript : MonoBehaviour
 {
 
 	private bool isGrounded;
+	private const int groundLayer = 6;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,7 +21,7 @@ public class PlayerGroundTriggerScript : MonoBehaviour
 
 	private void OnTriggerStay2D(Collider2D collision)
 	{
-		if(collision.gameObject.layer == 6)
+		if(collision.gameObject.layer == groundLayer)
 		{
 			isGrounded = true;
 		}
@@ -28,7 +29,7 @@ public class PlayerGroundTriggerScript : MonoBehaviour
 
 	private void OnTriggerExit2D(Collider2D collision)
 	{
-		if (collision.gameObject.layer == 6)
+		if (collision.gameObject.layer == groundLayer)
 		{
 			isGrounded = false;
 		}
