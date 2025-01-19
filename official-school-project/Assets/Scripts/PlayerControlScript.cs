@@ -74,6 +74,11 @@ public class PlayerControlScript : MonoBehaviour
 	//freeze frame
 	private Vector2 freezeVelocity;
 
+	//levels
+	private LevelManagerScript currentLevel;
+	private const int killZoneLayer = 7;
+	private const int levelTriggerLayer = 8;
+
 	#endregion
 
 
@@ -604,6 +609,64 @@ public class PlayerControlScript : MonoBehaviour
 		rb.velocity = freezeVelocity;
 	}
 
+
+	#endregion
+
+	#region level functions
+
+	private void OnTriggerEnter2D(Collider2D collision)
+	{
+		if (collision.gameObject.layer == killZoneLayer)
+		{
+			playerDeath();
+		}
+
+		if (collision.gameObject.layer == levelTriggerLayer)
+		{
+			if (currentLevel != collision.gameObject.transform.parent.gameObject.GetComponent<LevelManagerScript>())
+			{
+				if (currentLevel != null)
+				{
+					currentLevel.disableLevel();
+				}
+				currentLevel = collision.gameObject.transform.parent.gameObject.GetComponent<LevelManagerScript>();
+				changeLevel();
+			}
+		}
+	}
+
+	private void changeLevel()
+	{
+		currentLevel.startLevel();
+	}
+
+	private void playerDeath()
+	{
+		currentLevel.restartLevel();
+		rb.velocity = Vector2.zero;
+
+		//reset
+		//jump
+		if (isJumping) jumpEnd();
+		if (jumpExtraHangTimeCoroutine != null) StopCoroutine(jumpExtraHangTimeCoroutine);
+
+		//fireball
+		if (isFireballPushForceAdding) fireballPushForceEnd();
+		if (fireballHangTimeCoroutine != null) StopCoroutine(fireballHangTimeCoroutine);
+		GameObject[] fbs;
+		fbs = GameObject.FindGameObjectsWithTag("Fireball");
+		foreach (GameObject fb in fbs) Destroy(fb);
+
+		//friction
+		if (myFrictionLessCoroutine != null) StopCoroutine(myFrictionLessCoroutine);
+
+		//freeze frame
+		if (logic.isFreeze()) logic.setFreezeTime(0);
+
+		//physic state
+		mySetGravity(myNormalGravityScale, myNormalGravityMaxSpeed);
+		isFrictionActive = true;
+	}
 
 	#endregion
 
