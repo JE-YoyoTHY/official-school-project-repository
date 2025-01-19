@@ -8,10 +8,7 @@ public class Subtitle
     public float duration;
 }
 
-public class SubtitleDict
-{
-    public Dictionary<string, Subtitle> subtitleSet;
-}
+
 
 
 
