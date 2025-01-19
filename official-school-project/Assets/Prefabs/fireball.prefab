@@ -162,9 +162,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 8
-  explodeForce: 10
+  explodeForce: 50
   explodeRadius: 5
   explodeFrictionLessDuration: 0.15
   explodeHorizontalScale: 1.6
-  explodeFreezeTime: 0
+  explodeFreezeTime: 1
   explodeDuration: 0.1

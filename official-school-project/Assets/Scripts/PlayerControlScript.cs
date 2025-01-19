@@ -13,6 +13,7 @@ public class PlayerControlScript : MonoBehaviour
 	private Rigidbody2D rb;
 	private PlayerGroundTriggerScript groundTrigger;
 	private GameObject fireballMeter;
+	private LogicScript logic;
 
 	//physics
 	private float myGravityScale;
@@ -70,6 +71,8 @@ public class PlayerControlScript : MonoBehaviour
 	[SerializeField] private float fireballCastFreezeTime;
 	private Coroutine fireballHangTimeCoroutine;
 
+	//freeze frame
+	private Vector2 freezeVelocity;
 
 	#endregion
 
@@ -82,6 +85,7 @@ public class PlayerControlScript : MonoBehaviour
 		rb = GetComponent<Rigidbody2D>();
 		groundTrigger = transform.GetChild(0).GetComponent<PlayerGroundTriggerScript>();
 		fireballMeter = transform.GetChild(1).gameObject;
+		logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
 
 		myGravityScale = myNormalGravityScale;
 		myGravityMaxSpeed = myNormalGravityMaxSpeed;
@@ -94,13 +98,21 @@ public class PlayerControlScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-		groundHitCheckMain();
-		myGravityMain();
-		moveMain();
-		jumpMain();
-		fireballMain();
+		if (!logic.isFreeze())
+		{
+			groundHitCheckMain();
+			myGravityMain();
+			moveMain();
+			jumpMain();
+			fireballMain();
 
-		myFrictionMain();
+			myFrictionMain();
+		}
+		else
+		{
+			rb.velocity = Vector2.zero;
+		}
+		
     }
 
 	#region physic function
@@ -249,7 +261,8 @@ public class PlayerControlScript : MonoBehaviour
 	{
 		while(t > 0)
 		{
-			t -= Time.deltaTime;
+			if (!logic.isFreeze())
+				t -= Time.deltaTime;
 			yield return null;
 		}
 		isFrictionActive = true;
@@ -344,7 +357,8 @@ public class PlayerControlScript : MonoBehaviour
 	{
 		while(t > 0)
 		{
-			t -= Time.deltaTime;
+			if (!logic.isFreeze())
+				t -= Time.deltaTime;
 
 			if(canJump())
 			{
@@ -405,7 +419,8 @@ public class PlayerControlScript : MonoBehaviour
 	{
 		while(t > 0)
 		{
-			t -= Time.deltaTime;
+			if (!logic.isFreeze())
+				t -= Time.deltaTime;
 			yield return null;
 		}
 		leaveGround();
@@ -491,6 +506,7 @@ public class PlayerControlScript : MonoBehaviour
 		fireballPushForceDurationCounter = fireballPushForceDuration;
 
 		//freeze frame
+		freezeStart(fireballCastFreezeTime);
 	}
 
 	private void fireballPushForceEnd()
@@ -501,7 +517,7 @@ public class PlayerControlScript : MonoBehaviour
 		fireballHangTimeCoroutine = StartCoroutine(fireballHangTime(fireballPushForceHangTimeDuration));
 	}
 
-	public void fireballExplode(Vector2 localVelocity, float frictionLessDuration)
+	public void fireballExplode(Vector2 localVelocity, float frictionLessDuration, float localFreezeTime)
 	{
 		fireballPushForceEnd();
 		myImpulseAcceleration(localVelocity);
@@ -509,6 +525,7 @@ public class PlayerControlScript : MonoBehaviour
 		isFrictionActive = false;
 		if(myFrictionLessCoroutine != null) StopCoroutine(myFrictionLessCoroutine);
 		myFrictionLessCoroutine = StartCoroutine(myFrictionLess(frictionLessDuration));
+		freezeStart(localFreezeTime);
 	}
 
 	private void fireballChargeMain()
@@ -546,7 +563,8 @@ public class PlayerControlScript : MonoBehaviour
 	{
 		while (t > 0)
 		{
-			t -= Time.deltaTime;
+			if (!logic.isFreeze())
+				t -= Time.deltaTime;
 			
 			if (canCastFireball())
 			{
@@ -562,7 +580,8 @@ public class PlayerControlScript : MonoBehaviour
 	{
 		while(t > 0)
 		{
-			t -= Time.deltaTime;
+			if (!logic.isFreeze())
+				t -= Time.deltaTime;
 			yield return null;
 		}
 		mySetGravity(myNormalGravityScale, myGravityMaxSpeed);
@@ -572,5 +591,20 @@ public class PlayerControlScript : MonoBehaviour
 
 	#endregion
 
+	#region freeze frame
+
+	private void freezeStart(float t) //fv for freeze velocity
+	{
+		freezeVelocity = rb.velocity;
+		logic.setFreezeTime(t);
+	}
+
+	public void freezeEnd()
+	{
+		rb.velocity = freezeVelocity;
+	}
+
+
+	#endregion
 
 }

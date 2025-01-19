@@ -8,6 +8,7 @@ public class FireballScript : MonoBehaviour
 	private Rigidbody2D rb;
 	private CircleCollider2D coll;
 	private PlayerControlScript player;
+	private LogicScript logic;
 
 	private Vector2 moveDir;
 	[SerializeField] private float moveSpeed;
@@ -25,10 +26,17 @@ public class FireballScript : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-		if (!isExploding)
+	{
+		if (!logic.isFreeze())
 		{
-			moveMain();
+			if (!isExploding)
+			{
+				moveMain();
+			}
+		}
+		else
+		{
+			rb.velocity = Vector2.zero;
 		}
     }
 
@@ -43,6 +51,7 @@ public class FireballScript : MonoBehaviour
 		rb = GetComponent<Rigidbody2D>();
 		coll = GetComponent<CircleCollider2D>();
 		player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControlScript>();
+		logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
 		isExploding = false;
 		playerPushed = false;
 	}
@@ -60,7 +69,10 @@ public class FireballScript : MonoBehaviour
 	{
 		while(t > 0)
 		{
-			t -= Time.deltaTime;
+			if (!logic.isFreeze())
+			{
+				t -= Time.deltaTime;
+			}
 			yield return null;
 		}
 		Destroy(gameObject);
@@ -68,20 +80,24 @@ public class FireballScript : MonoBehaviour
 
 	private void OnTriggerStay2D(Collider2D collision)
 	{
-		if(collision.gameObject.layer == groundLayer && !isExploding)
+		if(!logic.isFreeze())
 		{
-			explode();
+			if(collision.gameObject.layer == groundLayer && !isExploding)
+			{
+				explode();
+			}
+
+			if(collision.gameObject.tag == "Player" && isExploding && !playerPushed)
+			{
+				Vector3 dis = player.transform.position - transform.position;
+				Vector2 localForce = new Vector2(dis.x, dis.y);
+				localForce = localForce.normalized * explodeForce;
+				localForce = new Vector2(localForce.x * explodeHorizontalScale, localForce.y);
+
+				player.fireballExplode(localForce, explodeFrictionLessDuration, explodeFreezeTime);
+				playerPushed = true;
+			}
 		}
 
-		if(collision.gameObject.tag == "Player" && isExploding && !playerPushed)
-		{
-			Vector3 dis = player.transform.position - transform.position;
-			Vector2 localForce = new Vector2(dis.x, dis.y);
-			localForce = localForce.normalized * explodeForce;
-			localForce = new Vector2(localForce.x * explodeHorizontalScale, localForce.y);
-
-			player.fireballExplode(localForce, explodeFrictionLessDuration);
-			playerPushed = true;
-		}
 	}
 }
