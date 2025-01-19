@@ -12,6 +12,7 @@ public class PlayerControlScript : MonoBehaviour
 	//reference
 	private Rigidbody2D rb;
 	private PlayerGroundTriggerScript groundTrigger;
+	private GameObject fireballMeter;
 
 	//physics
 	private float myGravityScale;
@@ -47,7 +48,28 @@ public class PlayerControlScript : MonoBehaviour
 	[SerializeField] private float coyoteTime;
 	private Coroutine coyoteTimeCoroutine;
 	private bool onGround;
-	
+
+	//fireball
+	[Header("Fireball")]
+	[SerializeField] private GameObject fireballPrefab;
+	[SerializeField] private float fireballPreInputTime;
+	private sbyte fireballKeyValue;
+	[SerializeField] private int fireballMaxCharges;
+	private int fireballCurrentCharges;
+	private Vector2 fireballDir; // the true dir
+	private Vector2 fireballDirValue; // store input value
+	private sbyte fireballDirLastHorizontal;
+	private Coroutine fireballInputCoroutine;
+	[SerializeField] private float fireballPushForceAcceleration;
+	[SerializeField] private float fireballPushForceMaxSpeed;
+	[SerializeField] private float fireballPushForceDuration;
+	[SerializeField] private float fireballPushUpForceScale; // make upward force less
+	private bool isFireballPushForceAdding;
+	private float fireballPushForceDurationCounter;
+	[SerializeField] private float fireballPushForceHangTimeDuration;
+	[SerializeField] private float fireballCastFreezeTime;
+	private Coroutine fireballHangTimeCoroutine;
+
 
 	#endregion
 
@@ -59,10 +81,13 @@ public class PlayerControlScript : MonoBehaviour
         //init
 		rb = GetComponent<Rigidbody2D>();
 		groundTrigger = transform.GetChild(0).GetComponent<PlayerGroundTriggerScript>();
+		fireballMeter = transform.GetChild(1).gameObject;
 
 		myGravityScale = myNormalGravityScale;
 		myGravityMaxSpeed = myNormalGravityMaxSpeed;
 		isFrictionActive = true;
+
+		fireballDirLastHorizontal = 1;
 
     }
 
@@ -73,6 +98,7 @@ public class PlayerControlScript : MonoBehaviour
 		myGravityMain();
 		moveMain();
 		jumpMain();
+		fireballMain();
 
 		myFrictionMain();
     }
@@ -105,7 +131,7 @@ public class PlayerControlScript : MonoBehaviour
 
 			if (rb.velocity.x < localMaxVelocity.x)
 			{
-				rb.AddForce(Mathf.Min(myAdjustFriction * Time.deltaTime * -1, localMaxVelocity.x - rb.velocity.x) * Vector2.right * rb.mass, ForceMode2D.Impulse);
+				rb.AddForce(Mathf.Min(myAdjustFriction * Time.deltaTime, localMaxVelocity.x - rb.velocity.x) * Vector2.right * rb.mass, ForceMode2D.Impulse);
 
 			}
 		}
@@ -132,7 +158,7 @@ public class PlayerControlScript : MonoBehaviour
 
 			if (rb.velocity.y < localMaxVelocity.y)
 			{
-				rb.AddForce(Mathf.Min(myAdjustFriction * Time.deltaTime * -1, localMaxVelocity.y - rb.velocity.y) * Vector2.up * rb.mass, ForceMode2D.Impulse);
+				rb.AddForce(Mathf.Min(myAdjustFriction * Time.deltaTime, localMaxVelocity.y - rb.velocity.y) * Vector2.up * rb.mass, ForceMode2D.Impulse);
 			}
 		}
 	}
@@ -189,7 +215,7 @@ public class PlayerControlScript : MonoBehaviour
 
 	private bool canMove()
 	{
-		if (true) return true;
+		if (!isFireballPushForceAdding) return true;
 		else return false;
 	}
 
@@ -200,12 +226,12 @@ public class PlayerControlScript : MonoBehaviour
 
 	#endregion
 
-	#region natural force includes gravity and friction
+	#region natural force, includes gravity and friction
 
 	//friction
 	private void myFrictionMain() // horizontal
 	{
-		if(!isMoving && isFrictionActive)
+		if(!isMoving && isFrictionActive && !isFireballPushForceAdding)
 		{
 			if(rb.velocity.x < 0)
 			{
@@ -297,7 +323,7 @@ public class PlayerControlScript : MonoBehaviour
 
 	private bool canJump()
 	{
-		if (!isJumping && onGround) return true;
+		if (!isJumping && onGround && !isFireballPushForceAdding) return true;
 		else return false;
 	}
 
@@ -384,6 +410,165 @@ public class PlayerControlScript : MonoBehaviour
 		}
 		leaveGround();
 	}
+
+	#endregion
+
+	#region fireball
+
+	private void fireballMain()
+	{
+		if(fireballKeyValue == 2)
+		{
+			fireballKeyValue = 1;
+
+			if(fireballInputCoroutine != null)
+			{
+				StopCoroutine(fireballInputCoroutine);
+			}
+			fireballInputCoroutine = StartCoroutine(fireballPreInput(fireballPreInputTime));	
+		}
+
+		fireballPushForceMain();
+		fireballChargeMain();
+	}
+
+	private void fireballStart()
+	{
+		GameObject summonedFireball = null;
+		summonedFireball = Instantiate(fireballPrefab, transform.position, transform.rotation);
+		
+		if(fireballDir.magnitude > 0) summonedFireball.GetComponent<FireballScript>().summon(fireballDir);
+		else summonedFireball.GetComponent<FireballScript>().summon(new Vector2(fireballDirLastHorizontal, 0));
+		
+		fireballCurrentCharges--;
+		fireballPushForceStart();
+	}
+
+	private bool canCastFireball()
+	{
+		if (fireballCurrentCharges > 0 && !isFireballPushForceAdding) return true;
+		else return false;
+	}
+
+	private void fireballPushForceMain()
+	{
+		if (isFireballPushForceAdding)
+		{
+			if(fireballDir.magnitude == 0)
+			{
+				myAcceleration(new Vector2(fireballPushForceAcceleration * fireballDirLastHorizontal * -1,0), new Vector2(fireballPushForceMaxSpeed * fireballDirLastHorizontal * -1, 0));
+			}
+            else
+            {
+				Vector2 pushDir = fireballDir.normalized;
+				if (pushDir.y < 0) pushDir = new Vector2(fireballDir.x, fireballDir.y * fireballPushUpForceScale);
+				myAcceleration(pushDir * fireballPushForceAcceleration * -1, pushDir * fireballPushForceMaxSpeed * -1);
+            }
+			fireballPushForceDurationCounter -= Time.deltaTime;
+
+			if (fireballPushForceDurationCounter < 0)
+			{
+				fireballPushForceEnd();
+			}
+        }
+		else // direction
+		{
+			fireballDir = fireballDirValue;
+			if (fireballDir.x != 0) fireballDirLastHorizontal = (sbyte)fireballDir.x;
+		}
+	}
+
+	private void fireballPushForceStart()
+	{
+		if (isJumping)
+		{
+			jumpEnd();
+			if(jumpExtraHangTimeCoroutine != null) StopCoroutine(jumpExtraHangTimeCoroutine);
+		}
+		mySetGravity(0, myGravityMaxSpeed);
+		mySetVy(0);
+		isFireballPushForceAdding = true;
+		fireballPushForceDurationCounter = fireballPushForceDuration;
+
+		//freeze frame
+	}
+
+	private void fireballPushForceEnd()
+	{
+		isFireballPushForceAdding = false;
+		fireballPushForceDurationCounter = 0;
+		if (fireballHangTimeCoroutine != null) StopCoroutine(fireballHangTimeCoroutine);
+		fireballHangTimeCoroutine = StartCoroutine(fireballHangTime(fireballPushForceHangTimeDuration));
+	}
+
+	public void fireballExplode(Vector2 localVelocity, float frictionLessDuration)
+	{
+		fireballPushForceEnd();
+		myImpulseAcceleration(localVelocity);
+
+		isFrictionActive = false;
+		if(myFrictionLessCoroutine != null) StopCoroutine(myFrictionLessCoroutine);
+		myFrictionLessCoroutine = StartCoroutine(myFrictionLess(frictionLessDuration));
+	}
+
+	private void fireballChargeMain()
+	{
+		//recharge
+		if (onGround)
+		{
+			fireballCurrentCharges = fireballMaxCharges;
+		}
+
+		//display
+		fireballMeter.transform.localScale = new Vector3(1, (float)fireballCurrentCharges / fireballMaxCharges, 1);
+	}
+
+	public void fireballInput(InputAction.CallbackContext ctx)
+	{
+		if (ctx.performed)
+		{
+			fireballKeyValue = 2;
+		}
+
+		if (ctx.canceled)
+		{
+			fireballKeyValue = -1;
+		}
+	}
+
+	public void fireballDirInput(InputAction.CallbackContext ctx)
+	{
+		//if (!isFireballPushForceAdding) fireballDir = ctx.ReadValue<Vector2>();
+		fireballDirValue = ctx.ReadValue<Vector2>();
+	}
+
+	IEnumerator fireballPreInput(float t)
+	{
+		while (t > 0)
+		{
+			t -= Time.deltaTime;
+			
+			if (canCastFireball())
+			{
+				fireballStart();
+				yield break;
+			}
+			
+			yield return null;
+		}
+	}
+
+	IEnumerator fireballHangTime(float t) // after fireball pushforce ends, player will enter this stage, which they will have no gravity
+	{
+		while(t > 0)
+		{
+			t -= Time.deltaTime;
+			yield return null;
+		}
+		mySetGravity(myNormalGravityScale, myGravityMaxSpeed);
+	}
+
+
 
 	#endregion
 
