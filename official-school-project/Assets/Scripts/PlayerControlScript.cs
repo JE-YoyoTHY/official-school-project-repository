@@ -103,6 +103,7 @@ public class PlayerControlScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+		inputMain();
 		if (!logic.isFreeze())
 		{
 			groundHitCheckMain();
@@ -232,14 +233,14 @@ public class PlayerControlScript : MonoBehaviour
 
 	private bool canMove()
 	{
-		if (!isFireballPushForceAdding) return true;
+		if (!isFireballPushForceAdding && !logic.isFreeze()) return true;
 		else return false;
 	}
 
-	public void moveInput(InputAction.CallbackContext ctx)
+	/*public void moveInput(InputAction.CallbackContext ctx)
 	{
 		moveKeyValue = (sbyte)ctx.ReadValue<float>();
-	}
+	}*/
 
 	#endregion
 
@@ -286,7 +287,7 @@ public class PlayerControlScript : MonoBehaviour
 
 	private void jumpMain()
 	{
-		if(jumpKeyValue == 2)
+		/*if(jumpKeyValue == 2)
 		{
 			jumpKeyValue = 1;
 			if(jumpCoroutine != null)
@@ -294,7 +295,7 @@ public class PlayerControlScript : MonoBehaviour
 				StopCoroutine(jumpCoroutine);
 			}
 			jumpCoroutine = StartCoroutine(jumpPreInput(jumpPreInputTime));
-		}
+		}*/
 
 		if (isJumping)
 		{
@@ -341,11 +342,11 @@ public class PlayerControlScript : MonoBehaviour
 
 	private bool canJump()
 	{
-		if (!isJumping && onGround && !isFireballPushForceAdding) return true;
+		if (!isJumping && onGround && !isFireballPushForceAdding && !logic.isFreeze()) return true;
 		else return false;
 	}
 
-	public void jumpInput(InputAction.CallbackContext ctx)
+	/*public void jumpInput(InputAction.CallbackContext ctx)
 	{
 		if (ctx.performed)
 		{
@@ -356,13 +357,13 @@ public class PlayerControlScript : MonoBehaviour
 		{
 			jumpKeyValue = -1;
 		}
-	}
+	}*/
 
 	IEnumerator jumpPreInput(float t) //t for time
 	{
 		while(t > 0)
 		{
-			if (!logic.isFreeze())
+			//if (!logic.isFreeze())
 				t -= Time.deltaTime;
 
 			if(canJump())
@@ -437,7 +438,7 @@ public class PlayerControlScript : MonoBehaviour
 
 	private void fireballMain()
 	{
-		if(fireballKeyValue == 2)
+		/*if(fireballKeyValue == 2)
 		{
 			fireballKeyValue = 1;
 
@@ -446,27 +447,42 @@ public class PlayerControlScript : MonoBehaviour
 				StopCoroutine(fireballInputCoroutine);
 			}
 			fireballInputCoroutine = StartCoroutine(fireballPreInput(fireballPreInputTime));	
-		}
+		}*/
 
 		fireballPushForceMain();
 		fireballChargeMain();
 	}
 
-	private void fireballStart()
+	/* 當玩家按下按鍵後且canCastFireball執行
+	 * --進入凍結幀
+	 * --凍結幀結束後執行fireballSummon and fireballPushStart
+	 */
+	private void fireballStart() 
+	{
+		isFireballPushForceAdding = true;
+
+		//freeze frame
+		freezeStart(fireballCastFreezeTime);
+
+		//coroutine
+		StartCoroutine(fireballStartAfterFreezeTime());
+	}
+
+	private void fireballSummon()
 	{
 		GameObject summonedFireball = null;
 		summonedFireball = Instantiate(fireballPrefab, transform.position, transform.rotation);
-		
-		if(fireballDir.magnitude > 0) summonedFireball.GetComponent<FireballScript>().summon(fireballDir);
+
+		if (fireballDir.magnitude > 0) summonedFireball.GetComponent<FireballScript>().summon(fireballDir);
 		else summonedFireball.GetComponent<FireballScript>().summon(new Vector2(fireballDirLastHorizontal, 0));
-		
+
 		fireballCurrentCharges--;
-		fireballPushForceStart();
+		//fireballPushForceStart();
 	}
 
 	private bool canCastFireball()
 	{
-		if (fireballCurrentCharges > 0 && !isFireballPushForceAdding) return true;
+		if (fireballCurrentCharges > 0 && !isFireballPushForceAdding && !logic.isFreeze()) return true;
 		else return false;
 	}
 
@@ -491,11 +507,11 @@ public class PlayerControlScript : MonoBehaviour
 				fireballPushForceEnd();
 			}
         }
-		else // direction
+		/*else // direction
 		{
 			fireballDir = fireballDirValue;
 			if (fireballDir.x != 0) fireballDirLastHorizontal = (sbyte)fireballDir.x;
-		}
+		}*/
 	}
 
 	private void fireballPushForceStart()
@@ -507,11 +523,9 @@ public class PlayerControlScript : MonoBehaviour
 		}
 		mySetGravity(0, myGravityMaxSpeed);
 		mySetVy(0);
-		isFireballPushForceAdding = true;
+		//isFireballPushForceAdding = true;
 		fireballPushForceDurationCounter = fireballPushForceDuration;
 
-		//freeze frame
-		freezeStart(fireballCastFreezeTime);
 	}
 
 	private void fireballPushForceEnd()
@@ -545,7 +559,7 @@ public class PlayerControlScript : MonoBehaviour
 		fireballMeter.transform.localScale = new Vector3(1, (float)fireballCurrentCharges / fireballMaxCharges, 1);
 	}
 
-	public void fireballInput(InputAction.CallbackContext ctx)
+	/*public void fireballInput(InputAction.CallbackContext ctx)
 	{
 		if (ctx.performed)
 		{
@@ -556,19 +570,19 @@ public class PlayerControlScript : MonoBehaviour
 		{
 			fireballKeyValue = -1;
 		}
-	}
+	}*/
 
-	public void fireballDirInput(InputAction.CallbackContext ctx)
+	/*public void fireballDirInput(InputAction.CallbackContext ctx)
 	{
 		//if (!isFireballPushForceAdding) fireballDir = ctx.ReadValue<Vector2>();
 		fireballDirValue = ctx.ReadValue<Vector2>();
-	}
+	}*/
 
 	IEnumerator fireballPreInput(float t)
 	{
 		while (t > 0)
 		{
-			if (!logic.isFreeze())
+			//if (!logic.isFreeze())
 				t -= Time.deltaTime;
 			
 			if (canCastFireball())
@@ -592,6 +606,12 @@ public class PlayerControlScript : MonoBehaviour
 		mySetGravity(myNormalGravityScale, myGravityMaxSpeed);
 	}
 
+	IEnumerator fireballStartAfterFreezeTime()
+	{
+		while(logic.isFreeze()) yield return null;
+		fireballSummon();
+		fireballPushForceStart();
+	}
 
 
 	#endregion
@@ -670,4 +690,89 @@ public class PlayerControlScript : MonoBehaviour
 
 	#endregion
 
+
+	//inputs region handles inputs function, namely set keyValue 2 -> 1, and trigger pre input
+	#region inputs
+
+	private void inputMain()
+	{
+		//jump
+		if (jumpKeyValue == 2)
+		{
+			jumpKeyValue = 1;
+			if (jumpCoroutine != null)
+			{
+				StopCoroutine(jumpCoroutine);
+			}
+			jumpCoroutine = StartCoroutine(jumpPreInput(jumpPreInputTime));
+		}
+
+		//fireball
+		if (fireballKeyValue == 2)
+		{
+			fireballKeyValue = 1;
+
+			if (fireballInputCoroutine != null)
+			{
+				StopCoroutine(fireballInputCoroutine);
+			}
+			fireballInputCoroutine = StartCoroutine(fireballPreInput(fireballPreInputTime));
+		}
+
+		//fireball dir
+		/*player can change fb dir in freeze frame, 
+		case 1:玩家一直沒碰方向鍵 -> 玩家最後觸碰的水平方向
+		case 2:玩家在凍結幀期間改變方向鍵 -> 玩家新按的方向
+		case 3:玩家在凍結幀期間放開方向鍵 -> 玩家最後觸碰的方向
+		 */
+		if (!isFireballPushForceAdding)
+		{
+			fireballDir = fireballDirValue;
+			//if (fireballDir.x != 0) fireballDirLastHorizontal = (sbyte)fireballDir.x;
+		}
+		else
+		{
+			if (logic.isFreeze() && fireballDirValue.magnitude != 0) fireballDir = fireballDirValue;
+		}
+		if (fireballDir.x != 0) fireballDirLastHorizontal = (sbyte)fireballDir.x;
+	}
+
+	public void moveInput(InputAction.CallbackContext ctx)
+	{
+		moveKeyValue = (sbyte)ctx.ReadValue<float>();
+	}
+
+	public void jumpInput(InputAction.CallbackContext ctx)
+	{
+		if (ctx.performed)
+		{
+			jumpKeyValue = 2;
+		}
+
+		if (ctx.canceled)
+		{
+			jumpKeyValue = -1;
+		}
+	}
+
+	public void fireballInput(InputAction.CallbackContext ctx)
+	{
+		if (ctx.performed)
+		{
+			fireballKeyValue = 2;
+		}
+
+		if (ctx.canceled)
+		{
+			fireballKeyValue = -1;
+		}
+	}
+
+	public void fireballDirInput(InputAction.CallbackContext ctx)
+	{
+		//if (!isFireballPushForceAdding) fireballDir = ctx.ReadValue<Vector2>();
+		fireballDirValue = ctx.ReadValue<Vector2>();
+	}
+
+	#endregion
 }
