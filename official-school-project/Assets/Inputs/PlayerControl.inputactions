@@ -24,7 +24,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "fireballCast",
+                    "name": "fireballCastByKeyboard",
                     "type": "Button",
                     "id": "e11ad96e-6c3e-4251-836b-250952a6fa6c",
                     "expectedControlType": "Button",
@@ -40,6 +40,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "fireballCastByMouse",
+                    "type": "Button",
+                    "id": "80ccb7d4-664e-4c5b-8f59-3c06a2fa71fb",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -94,18 +103,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "fireballCast",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "ad2c833c-4aae-43d4-99c7-a3890f50c8da",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "fireballCast",
+                    "action": "fireballCastByKeyboard",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -163,6 +161,17 @@
                     "action": "fireballDir",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "9087f24d-4376-4d0c-97d2-2fa1840c92c9",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "fireballCastByMouse",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

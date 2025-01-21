@@ -55,10 +55,13 @@ public class PlayerControlScript : MonoBehaviour
 	[SerializeField] private GameObject fireballPrefab;
 	[SerializeField] private float fireballPreInputTime;
 	private sbyte fireballKeyValue;
+	private sbyte fireballMouseValue;
+	private bool fireballCastByKeyboard;
 	[SerializeField] private int fireballMaxCharges;
 	private int fireballCurrentCharges;
 	private Vector2 fireballDir; // the true dir
 	private Vector2 fireballDirValue; // store input value
+	private Vector2 fireballMouseDirValue;
 	private sbyte fireballDirLastHorizontal;
 	private Coroutine fireballInputCoroutine;
 	[SerializeField] private float fireballPushForceAcceleration;
@@ -460,6 +463,7 @@ public class PlayerControlScript : MonoBehaviour
 	private void fireballStart() 
 	{
 		isFireballPushForceAdding = true;
+		fireballDir = fireballCastByKeyboard ? fireballDir : fireballMouseDirValue;
 
 		//freeze frame
 		freezeStart(fireballCastFreezeTime);
@@ -578,7 +582,32 @@ public class PlayerControlScript : MonoBehaviour
 		fireballDirValue = ctx.ReadValue<Vector2>();
 	}*/
 
-	IEnumerator fireballPreInput(float t)
+	private void fireballMouseDir()
+	{
+		//Vector2 screenMid = new Vector2(Screen.width/2, Screen.height/2);
+		//Vector2 deltaMousePos = new Vector2((float)Mouse.current.position.ReadValue().x - Screen.width / 2, (float)Mouse.current.position.ReadValue().y - Screen.height / 2);
+		Vector3 deltaMousePos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()) - transform.position;
+		float localDeg = Vector2.Angle(Vector2.right, new Vector2(deltaMousePos.x, deltaMousePos.y));
+		if (deltaMousePos.y < 0) localDeg = 360 - localDeg;
+		
+		if (localDeg >= 22.5 && localDeg < 67.5) fireballMouseDirValue = new Vector2(1,1).normalized;
+		else if (localDeg >= 67.5 && localDeg < 112.5) fireballMouseDirValue = Vector2.up;
+		else if (localDeg >= 112.5 && localDeg < 157.5) fireballMouseDirValue = new Vector2(-1, 1).normalized;
+		else if (localDeg >= 157.5 && localDeg < 202.5) fireballMouseDirValue = Vector2.left;
+		else if (localDeg >= 202.5 && localDeg < 247.5) fireballMouseDirValue = new Vector2(-1, -1).normalized;
+		else if (localDeg >= 247.5 && localDeg < 297.5) fireballMouseDirValue = Vector2.down;
+		else if (localDeg >= 297.5 && localDeg < 337.5) fireballMouseDirValue = new Vector2(1, -1).normalized;
+		else fireballMouseDirValue = Vector2.right;
+		/*float mouseSin = deltaMousePos.normalized.y;
+		float mouseCos = deltaMousePos.normalized.x;
+
+		//dir
+		/*rightif (mouseCos > 0 && mouseCos > Mathf.Cos(22.5f * Mathf.Deg2Rad)) fireballMouseDirValue = Vector2.right;
+		/*right-upelse if (mouseCos > 0 && mouseSin > 0 && mouseCos < Mathf.Cos(22.5f * Mathf.Deg2Rad)) fireballMouseDirValue = new Vector2;
+		*/
+	}
+
+	IEnumerator fireballPreInput(float t, bool isCastByKeyboard)
 	{
 		while (t > 0)
 		{
@@ -587,6 +616,7 @@ public class PlayerControlScript : MonoBehaviour
 			
 			if (canCastFireball())
 			{
+				fireballCastByKeyboard = isCastByKeyboard;
 				fireballStart();
 				yield break;
 			}
@@ -712,11 +742,16 @@ public class PlayerControlScript : MonoBehaviour
 		{
 			fireballKeyValue = 1;
 
-			if (fireballInputCoroutine != null)
-			{
-				StopCoroutine(fireballInputCoroutine);
-			}
-			fireballInputCoroutine = StartCoroutine(fireballPreInput(fireballPreInputTime));
+			if (fireballInputCoroutine != null) StopCoroutine(fireballInputCoroutine);
+			fireballInputCoroutine = StartCoroutine(fireballPreInput(fireballPreInputTime, true));
+		}
+
+		if(fireballMouseValue == 2)
+		{
+			fireballMouseValue = 1;
+
+			if(fireballInputCoroutine != null) StopCoroutine(fireballInputCoroutine);
+			fireballInputCoroutine = StartCoroutine(fireballPreInput(fireballPreInputTime, false));
 		}
 
 		//fireball dir
@@ -732,9 +767,12 @@ public class PlayerControlScript : MonoBehaviour
 		}
 		else
 		{
-			if (logic.isFreeze() && fireballDirValue.magnitude != 0) fireballDir = fireballDirValue;
+			if (logic.isFreeze() && fireballDirValue.magnitude != 0 && fireballCastByKeyboard) fireballDir = fireballDirValue;
+			if (logic.isFreeze() && fireballMouseDirValue.magnitude != 0 && !fireballCastByKeyboard) fireballDir = fireballMouseDirValue;
 		}
 		if (fireballDir.x != 0) fireballDirLastHorizontal = (sbyte)fireballDir.x;
+
+		fireballMouseDir();
 	}
 
 	public void moveInput(InputAction.CallbackContext ctx)
@@ -774,5 +812,17 @@ public class PlayerControlScript : MonoBehaviour
 		fireballDirValue = ctx.ReadValue<Vector2>();
 	}
 
+	public void fireballMouseInput(InputAction.CallbackContext ctx)
+	{
+		if (ctx.performed)
+		{
+			fireballMouseValue = 2;
+		}
+
+		if (ctx.canceled)
+		{
+			fireballMouseValue = -1;
+		}
+	}
 	#endregion
 }
