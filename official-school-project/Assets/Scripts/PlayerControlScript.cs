@@ -73,6 +73,7 @@ public class PlayerControlScript : MonoBehaviour
 	[SerializeField] private float fireballPushForceHangTimeDuration;
 	[SerializeField] private float fireballCastFreezeTime;
 	private Coroutine fireballHangTimeCoroutine;
+	private bool fireballStartAfterFreezeTimeActive;
 
 	//freeze frame
 	private Vector2 freezeVelocity;
@@ -469,7 +470,8 @@ public class PlayerControlScript : MonoBehaviour
 		freezeStart(fireballCastFreezeTime);
 
 		//coroutine
-		StartCoroutine(fireballStartAfterFreezeTime());
+		//StartCoroutine(fireballStartAfterFreezeTime());
+		fireballStartAfterFreezeTimeActive = true;
 	}
 
 	private void fireballSummon()
@@ -492,6 +494,13 @@ public class PlayerControlScript : MonoBehaviour
 
 	private void fireballPushForceMain()
 	{
+		if (fireballStartAfterFreezeTimeActive)
+		{
+			fireballSummon();
+			fireballPushForceStart();
+			fireballStartAfterFreezeTimeActive= false;
+		}
+
 		if (isFireballPushForceAdding)
 		{
 			if(fireballDir.magnitude == 0)
@@ -525,11 +534,11 @@ public class PlayerControlScript : MonoBehaviour
 			jumpEnd();
 			if(jumpExtraHangTimeCoroutine != null) StopCoroutine(jumpExtraHangTimeCoroutine);
 		}
+		if (fireballHangTimeCoroutine != null) StopCoroutine(fireballHangTimeCoroutine);
 		mySetGravity(0, myGravityMaxSpeed);
 		mySetVy(0);
 		//isFireballPushForceAdding = true;
 		fireballPushForceDurationCounter = fireballPushForceDuration;
-
 	}
 
 	private void fireballPushForceEnd()
@@ -636,19 +645,19 @@ public class PlayerControlScript : MonoBehaviour
 		mySetGravity(myNormalGravityScale, myGravityMaxSpeed);
 	}
 
-	IEnumerator fireballStartAfterFreezeTime()
+	/*IEnumerator fireballStartAfterFreezeTime()
 	{
 		while(logic.isFreeze()) yield return null;
 		fireballSummon();
 		fireballPushForceStart();
-	}
+	}*/
 
 
 	#endregion
 
 	#region freeze frame
 
-	private void freezeStart(float t) //fv for freeze velocity
+	private void freezeStart(float t)
 	{
 		freezeVelocity = rb.velocity;
 		logic.setFreezeTime(t);
