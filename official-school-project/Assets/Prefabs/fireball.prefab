@@ -166,5 +166,5 @@ MonoBehaviour:
   explodeRadius: 5
   explodeFrictionLessDuration: 0.15
   explodeHorizontalScale: 1.6
-  explodeFreezeTime: 0
+  explodeFreezeTime: 0.05
   explodeDuration: 0.1

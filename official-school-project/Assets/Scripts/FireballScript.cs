@@ -12,11 +12,11 @@ public class FireballScript : MonoBehaviour
 
 	private Vector2 moveDir;
 	[SerializeField] private float moveSpeed;
-	[SerializeField] private float explodeForce;
+	//[SerializeField] private float explodeForce;
 	[SerializeField] private float explodeRadius;
-	[SerializeField] private float explodeFrictionLessDuration; // or i should take over player's control
-	[SerializeField] private float explodeHorizontalScale;
-	[SerializeField] private float explodeFreezeTime;
+	//[SerializeField] private float explodeFrictionLessDuration; // or i should take over player's control
+	//[SerializeField] private float explodeHorizontalScale;
+	//[SerializeField] private float explodeFreezeTime;
 	[SerializeField] private float explodeDuration;
 	private bool isExploding;
 	private bool playerPushed;
@@ -91,10 +91,10 @@ public class FireballScript : MonoBehaviour
 			{
 				Vector3 dis = player.transform.position - transform.position;
 				Vector2 localForce = new Vector2(dis.x, dis.y);
-				localForce = localForce.normalized * explodeForce;
-				localForce = new Vector2(localForce.x * explodeHorizontalScale, localForce.y);
+				//localForce = localForce.normalized * explodeForce;
+				//localForce = new Vector2(localForce.x * explodeHorizontalScale, localForce.y);
 
-				player.fireballExplode(localForce, explodeFrictionLessDuration, explodeFreezeTime);
+				player.fireballExplodeStart(localForce.normalized);
 				playerPushed = true;
 			}
 		}

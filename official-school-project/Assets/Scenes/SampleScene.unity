@@ -10045,7 +10045,13 @@ MonoBehaviour:
   fireballPushForceDuration: 0.2
   fireballPushUpForceScale: 0.3
   fireballPushForceHangTimeDuration: 0.1
-  fireballCastFreezeTime: 0.1
+  fireballCastFreezeTime: 0.05
+  fireballExplodeForce: 10
+  fireballExplodeFrictionlessDuration: 0.15
+  fireballExplodeHorizontalScale: 1.6
+  fireballExplodeFreezeTime: 0.05
+  fireballExplodeMoveSameDirBoost: 1.2
+  fireballExplodeMoveDifferentDirDecrease: 0.8
 --- !u!114 &1742552395
 MonoBehaviour:
   m_ObjectHideFlags: 0

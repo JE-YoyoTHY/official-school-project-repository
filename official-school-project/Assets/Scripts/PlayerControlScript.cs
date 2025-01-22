@@ -29,7 +29,7 @@ public class PlayerControlScript : MonoBehaviour
 	[SerializeField] private float moveMaxSpeed;
 	[SerializeField] private float moveAcceleration; // speed add per second
 	private bool isMoving;
-	private sbyte moveKeyValue;
+	private sbyte moveKeyValue; // also represent move dir
 	[SerializeField] private float moveTurnSpeedScale;
 
 
@@ -74,6 +74,13 @@ public class PlayerControlScript : MonoBehaviour
 	[SerializeField] private float fireballCastFreezeTime;
 	private Coroutine fireballHangTimeCoroutine;
 	private bool fireballStartAfterFreezeTimeActive;
+
+	[SerializeField] private float fireballExplodeForce;
+	[SerializeField] private float fireballExplodeFrictionlessDuration;
+	[SerializeField] private float fireballExplodeHorizontalScale;
+	[SerializeField] private float fireballExplodeFreezeTime;
+	[SerializeField] private float fireballExplodeMoveSameDirBoost;
+	[SerializeField] private float fireballExplodeMoveDifferentDirDecrease;
 
 	//freeze frame
 	private Vector2 freezeVelocity;
@@ -549,15 +556,34 @@ public class PlayerControlScript : MonoBehaviour
 		fireballHangTimeCoroutine = StartCoroutine(fireballHangTime(fireballPushForceHangTimeDuration));
 	}
 
-	public void fireballExplode(Vector2 localVelocity, float frictionLessDuration, float localFreezeTime)
+	public void fireballExplodeStart(Vector2 localVelocity)
 	{
+		freezeStart(fireballExplodeFreezeTime);
+		StartCoroutine(fireballExplode(localVelocity));
+	}
+
+	//public void fireballExplode(Vector2 localVelocity/*, float frictionLessDuration, float localFreezeTime*/)
+	IEnumerator fireballExplode(Vector2 localVelocity)
+	{
+		while(logic.isFreeze()) yield return null;
+		
 		fireballPushForceEnd();
+
+		/* if player try to move to the same dir of the explode dir -> increase the speed
+		 * if player try to move to the opposite dir of the explode fir -> decrease the speed
+		 * else, the speed is multiplied by 1
+		 */
+		localVelocity = localVelocity * fireballExplodeForce;
+		localVelocity = new Vector2(localVelocity.x * fireballExplodeHorizontalScale, localVelocity.y);
+
+		if(moveKeyValue * localVelocity.x > 0) localVelocity = new Vector2(localVelocity.x * fireballExplodeMoveSameDirBoost, localVelocity.y);
+		else if (moveKeyValue * localVelocity.x < 0) localVelocity = new Vector2(localVelocity.x * fireballExplodeMoveDifferentDirDecrease, localVelocity.y);
 		myImpulseAcceleration(localVelocity);
 
 		isFrictionActive = false;
 		if(myFrictionLessCoroutine != null) StopCoroutine(myFrictionLessCoroutine);
-		myFrictionLessCoroutine = StartCoroutine(myFrictionLess(frictionLessDuration));
-		freezeStart(localFreezeTime);
+		myFrictionLessCoroutine = StartCoroutine(myFrictionLess(fireballExplodeFrictionlessDuration));
+		//freezeStart(fireballExplodeFreezeTime);
 	}
 
 	private void fireballChargeMain()
