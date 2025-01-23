@@ -20,8 +20,10 @@ public class PlayerControlScript : MonoBehaviour
 	private float myGravityMaxSpeed; // max fall speed
 	[SerializeField] private float myNormalGravityScale;
 	[SerializeField] private float myNormalGravityMaxSpeed;
-	[SerializeField] private float myFrictionAcceleration;
-	[SerializeField] private float myAdjustFriction; // when player has acceleration and speed greater than max, apply this force
+	private float myFrictionAcceleration;
+	private float myAdjustFriction; // when player has acceleration and speed greater than max, apply this force
+	[SerializeField] private float myNormalFrictionAcceleration;
+	[SerializeField] private float myNormalAdjustFriction;
 	private bool isFrictionActive;
 	private Coroutine myFrictionLessCoroutine;
 
@@ -31,6 +33,8 @@ public class PlayerControlScript : MonoBehaviour
 	private bool isMoving;
 	private sbyte moveKeyValue; // also represent move dir
 	[SerializeField] private float moveTurnSpeedScale;
+	private bool isMoveActive;
+	private Coroutine moveLessCoroutine;
 
 
 	[Header("Jump")]
@@ -43,6 +47,8 @@ public class PlayerControlScript : MonoBehaviour
 	private Coroutine jumpCoroutine;
 	private Coroutine jumpExtraHangTimeCoroutine;
 	[SerializeField] private float jumpExtraHangTimeGravityScale;
+	private bool isJumpActive;
+	private Coroutine jumpLessCoroutine;
 
 	//ground hit
 	[Header("Ground Hit")]
@@ -74,13 +80,18 @@ public class PlayerControlScript : MonoBehaviour
 	[SerializeField] private float fireballCastFreezeTime;
 	private Coroutine fireballHangTimeCoroutine;
 	private bool fireballStartAfterFreezeTimeActive;
+	[SerializeField] private float fireballHangTimeFrictionScale;
+	[SerializeField] private float fireballHangTimeMoveSameDirBoost;
+	[SerializeField] private float fireballHangTimeMoveDifferentDirDecrease;
+	private sbyte fireballHangTimeMoveBoostDir; // if player try to move this dir, they'll get boost, else decrease
 
 	[SerializeField] private float fireballExplodeForce;
-	[SerializeField] private float fireballExplodeFrictionlessDuration;
+	//[SerializeField] private float fireballExplodeUncontrollableDuration;
 	[SerializeField] private float fireballExplodeHorizontalScale;
 	[SerializeField] private float fireballExplodeFreezeTime;
 	[SerializeField] private float fireballExplodeMoveSameDirBoost;
 	[SerializeField] private float fireballExplodeMoveDifferentDirDecrease;
+	[SerializeField] private float fireballExplodeGuaranteeSpeedScale; // 火球爆炸的寶底速度，因為火球速度是用加的
 
 	//freeze frame
 	private Vector2 freezeVelocity;
@@ -105,7 +116,11 @@ public class PlayerControlScript : MonoBehaviour
 
 		myGravityScale = myNormalGravityScale;
 		myGravityMaxSpeed = myNormalGravityMaxSpeed;
+		myFrictionAcceleration = myNormalFrictionAcceleration;
+		myAdjustFriction = myNormalAdjustFriction;
 		isFrictionActive = true;
+		isMoveActive = true;
+		isJumpActive = true;
 
 		fireballDirLastHorizontal = 1;
 
@@ -145,7 +160,7 @@ public class PlayerControlScript : MonoBehaviour
 				rb.AddForce(new Vector2(Mathf.Min(localAcceleration.x * Time.deltaTime, localMaxVelocity.x - rb.velocity.x), 0) * rb.mass, ForceMode2D.Impulse);
 			}
 
-			if(rb.velocity.x > localMaxVelocity.x)
+			if(rb.velocity.x > localMaxVelocity.x && isFrictionActive)
 			{
 				rb.AddForce(Mathf.Max(myAdjustFriction * Time.deltaTime * -1, localMaxVelocity.x - rb.velocity.x) * Vector2.right * rb.mass, ForceMode2D.Impulse);
 
@@ -158,7 +173,7 @@ public class PlayerControlScript : MonoBehaviour
 				rb.AddForce(new Vector2(Mathf.Max(localAcceleration.x * Time.deltaTime, localMaxVelocity.x - rb.velocity.x), 0) * rb.mass, ForceMode2D.Impulse);
 			}
 
-			if (rb.velocity.x < localMaxVelocity.x)
+			if (rb.velocity.x < localMaxVelocity.x && isFrictionActive)
 			{
 				rb.AddForce(Mathf.Min(myAdjustFriction * Time.deltaTime, localMaxVelocity.x - rb.velocity.x) * Vector2.right * rb.mass, ForceMode2D.Impulse);
 
@@ -173,7 +188,7 @@ public class PlayerControlScript : MonoBehaviour
 				rb.AddForce(new Vector2(0, Mathf.Min(localAcceleration.y * Time.deltaTime, localMaxVelocity.y - rb.velocity.y)) * rb.mass, ForceMode2D.Impulse);
 			}
 
-			if (rb.velocity.y > localMaxVelocity.y)
+			if (rb.velocity.y > localMaxVelocity.y && isFrictionActive)
 			{
 				rb.AddForce(Mathf.Max(myAdjustFriction * Time.deltaTime * -1, localMaxVelocity.y - rb.velocity.y) * Vector2.up * rb.mass, ForceMode2D.Impulse);
 			}
@@ -185,7 +200,7 @@ public class PlayerControlScript : MonoBehaviour
 				rb.AddForce(new Vector2(0, Mathf.Max(localAcceleration.y * Time.deltaTime, localMaxVelocity.y - rb.velocity.y)) * rb.mass, ForceMode2D.Impulse);
 			}
 
-			if (rb.velocity.y < localMaxVelocity.y)
+			if (rb.velocity.y < localMaxVelocity.y && isFrictionActive)
 			{
 				rb.AddForce(Mathf.Min(myAdjustFriction * Time.deltaTime, localMaxVelocity.y - rb.velocity.y) * Vector2.up * rb.mass, ForceMode2D.Impulse);
 			}
@@ -212,6 +227,12 @@ public class PlayerControlScript : MonoBehaviour
 		myGravityMaxSpeed = localMaxGravity;
 	}
 
+	private void mySetFriction(float localFriction, float localAdjustFriction)
+	{
+		myFrictionAcceleration = localFriction;
+		myAdjustFriction = localAdjustFriction;
+	}
+
 	#endregion
 
 
@@ -224,14 +245,29 @@ public class PlayerControlScript : MonoBehaviour
 			if (canMove())
 			{
 				isMoving = true;
-				
-				if(moveKeyValue * rb.velocity.x >= 0) // same direction
+
+				//normal
+				if (fireballHangTimeMoveBoostDir == 0)
 				{
-					myAcceleration(new Vector2(moveAcceleration * moveKeyValue, 0), new Vector2(moveMaxSpeed * moveKeyValue, 0));
+					if (moveKeyValue * rb.velocity.x >= 0) // same direction
+					{
+						myAcceleration(new Vector2(moveAcceleration * moveKeyValue, 0), new Vector2(moveMaxSpeed * moveKeyValue, 0));
+					}
+					else  // moveKeyValue * rb.velocity.x < 0, 不同方向
+					{
+						myAcceleration(new Vector2(moveAcceleration * moveKeyValue * moveTurnSpeedScale, 0), new Vector2(moveMaxSpeed * moveKeyValue, 0));
+					}
 				}
-                else  // moveKeyValue * rb.velocity.x < 0, 不同方向
-                {
-					myAcceleration(new Vector2(moveAcceleration * moveKeyValue * moveTurnSpeedScale, 0), new Vector2(moveMaxSpeed * moveKeyValue, 0));
+				else // fireball hang time boost
+				{
+					if(moveKeyValue * fireballHangTimeMoveBoostDir > 0) // same dir
+					{
+						myAcceleration(new Vector2(moveAcceleration * moveKeyValue * fireballHangTimeMoveSameDirBoost, 0), new Vector2(moveMaxSpeed * moveKeyValue * fireballHangTimeMoveSameDirBoost, 0));
+					}
+					else
+					{
+						myAcceleration(new Vector2(moveAcceleration * moveKeyValue * fireballHangTimeMoveDifferentDirDecrease, 0), new Vector2(moveMaxSpeed * moveKeyValue * fireballHangTimeMoveDifferentDirDecrease, 0));
+					}
 				}
 			}
 		}
@@ -244,7 +280,7 @@ public class PlayerControlScript : MonoBehaviour
 
 	private bool canMove()
 	{
-		if (!isFireballPushForceAdding && !logic.isFreeze()) return true;
+		if (!isFireballPushForceAdding && !logic.isFreeze() && isMoveActive) return true;
 		else return false;
 	}
 
@@ -252,6 +288,17 @@ public class PlayerControlScript : MonoBehaviour
 	{
 		moveKeyValue = (sbyte)ctx.ReadValue<float>();
 	}*/
+
+	IEnumerator moveLess(float t)
+	{
+		while (t > 0)
+		{
+			if (!logic.isFreeze())
+				t -= Time.deltaTime;
+			yield return null;
+		}
+		isMoveActive = true;
+	}
 
 	#endregion
 
@@ -353,7 +400,7 @@ public class PlayerControlScript : MonoBehaviour
 
 	private bool canJump()
 	{
-		if (!isJumping && onGround && !isFireballPushForceAdding && !logic.isFreeze()) return true;
+		if (!isJumping && onGround && !isFireballPushForceAdding && !logic.isFreeze() && isJumpActive) return true;
 		else return false;
 	}
 
@@ -394,6 +441,17 @@ public class PlayerControlScript : MonoBehaviour
 			yield return null;
 		}
 		mySetGravity(myNormalGravityScale, myGravityMaxSpeed);
+	}
+
+	IEnumerator jumpLess(float t)
+	{
+		while (t > 0)
+		{
+			if (!logic.isFreeze())
+				t -= Time.deltaTime;
+			yield return null;
+		}
+		isJumpActive = true;
 	}
 
 	#endregion
@@ -546,6 +604,18 @@ public class PlayerControlScript : MonoBehaviour
 		mySetVy(0);
 		//isFireballPushForceAdding = true;
 		fireballPushForceDurationCounter = fireballPushForceDuration;
+
+		isFrictionActive = true; isMoveActive = true; isJumpActive = true;
+		if (myFrictionLessCoroutine != null) StopCoroutine(myFrictionLessCoroutine);
+		if (moveLessCoroutine != null) StopCoroutine(moveLessCoroutine);
+		if (jumpLessCoroutine != null) StopCoroutine(jumpLessCoroutine);
+
+		//move boost
+		if (fireballDir.x > 0) fireballHangTimeMoveBoostDir = -1;
+		else if (fireballDir.x < 0) fireballHangTimeMoveBoostDir = 1;
+		else fireballHangTimeMoveBoostDir = 0;
+
+		mySetFriction(myNormalFrictionAcceleration * fireballHangTimeFrictionScale, myNormalAdjustFriction * fireballHangTimeFrictionScale);
 	}
 
 	private void fireballPushForceEnd()
@@ -563,9 +633,16 @@ public class PlayerControlScript : MonoBehaviour
 	}
 
 	//public void fireballExplode(Vector2 localVelocity/*, float frictionLessDuration, float localFreezeTime*/)
-	IEnumerator fireballExplode(Vector2 localVelocity)
+	IEnumerator fireballExplode(Vector2 localVelocity) // will end fireball push force and enter hangtime
 	{
 		while(logic.isFreeze()) yield return null;
+
+		//enter hang time
+		mySetGravity(0, myGravityMaxSpeed);
+		if (localVelocity.x > 0) fireballHangTimeMoveBoostDir = 1;
+		else if (localVelocity.x < 0) fireballHangTimeMoveBoostDir = -1;
+		else fireballHangTimeMoveBoostDir = 0;
+		mySetFriction(myNormalFrictionAcceleration * fireballHangTimeFrictionScale, myNormalAdjustFriction * fireballHangTimeFrictionScale);
 		
 		fireballPushForceEnd();
 
@@ -576,14 +653,21 @@ public class PlayerControlScript : MonoBehaviour
 		localVelocity = localVelocity * fireballExplodeForce;
 		localVelocity = new Vector2(localVelocity.x * fireballExplodeHorizontalScale, localVelocity.y);
 
-		if(moveKeyValue * localVelocity.x > 0) localVelocity = new Vector2(localVelocity.x * fireballExplodeMoveSameDirBoost, localVelocity.y);
+		if (moveKeyValue * localVelocity.x > 0) localVelocity = new Vector2(localVelocity.x * fireballExplodeMoveSameDirBoost, localVelocity.y);
 		else if (moveKeyValue * localVelocity.x < 0) localVelocity = new Vector2(localVelocity.x * fireballExplodeMoveDifferentDirDecrease, localVelocity.y);
 		myImpulseAcceleration(localVelocity);
 
-		isFrictionActive = false;
+		//guarantee speed
+		if ((localVelocity.x > 0 && rb.velocity.x < localVelocity.x * fireballExplodeGuaranteeSpeedScale) || (localVelocity.x < 0 && rb.velocity.x > localVelocity.x * fireballExplodeGuaranteeSpeedScale)) rb.velocity = new Vector2(localVelocity.x * fireballExplodeGuaranteeSpeedScale, rb.velocity.y);
+		if ((localVelocity.y > 0 && rb.velocity.y < localVelocity.y * fireballExplodeGuaranteeSpeedScale) || (localVelocity.y < 0 && rb.velocity.y > localVelocity.y * fireballExplodeGuaranteeSpeedScale)) rb.velocity = new Vector2(rb.velocity.x, localVelocity.y * fireballExplodeGuaranteeSpeedScale);
+
+		/*isFrictionActive = false; isMoveActive = false; isJumpActive = false;
 		if(myFrictionLessCoroutine != null) StopCoroutine(myFrictionLessCoroutine);
-		myFrictionLessCoroutine = StartCoroutine(myFrictionLess(fireballExplodeFrictionlessDuration));
-		//freezeStart(fireballExplodeFreezeTime);
+		myFrictionLessCoroutine = StartCoroutine(myFrictionLess(fireballExplodeUncontrollableDuration));
+		if(moveLessCoroutine != null) StopCoroutine(moveLessCoroutine);
+		moveLessCoroutine = StartCoroutine(moveLess(fireballExplodeUncontrollableDuration));
+		if(jumpLessCoroutine != null) StopCoroutine(jumpLessCoroutine);
+		jumpLessCoroutine = StartCoroutine(jumpLess(fireballExplodeUncontrollableDuration));*/
 	}
 
 	private void fireballChargeMain()
@@ -669,6 +753,8 @@ public class PlayerControlScript : MonoBehaviour
 			yield return null;
 		}
 		mySetGravity(myNormalGravityScale, myGravityMaxSpeed);
+		fireballHangTimeMoveBoostDir = 0;
+		mySetFriction(myNormalFrictionAcceleration, myNormalAdjustFriction);
 	}
 
 	/*IEnumerator fireballStartAfterFreezeTime()
@@ -750,6 +836,8 @@ public class PlayerControlScript : MonoBehaviour
 
 		//physic state
 		mySetGravity(myNormalGravityScale, myNormalGravityMaxSpeed);
+		mySetFriction(myNormalFrictionAcceleration, myNormalAdjustFriction);
+		fireballHangTimeMoveBoostDir = 0;
 		isFrictionActive = true;
 	}
 

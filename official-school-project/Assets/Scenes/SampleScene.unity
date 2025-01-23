@@ -436,7 +436,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 43.18621, y: 0.4557228, z: 0.016996382}
+  m_LocalPosition: {x: -0.98, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10026,8 +10026,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myNormalGravityScale: 50
   myNormalGravityMaxSpeed: 50
-  myFrictionAcceleration: 100
-  myAdjustFriction: 50
+  myNormalFrictionAcceleration: 100
+  myNormalAdjustFriction: 50
   moveMaxSpeed: 5
   moveAcceleration: 50
   moveTurnSpeedScale: 1.6
@@ -10046,12 +10046,16 @@ MonoBehaviour:
   fireballPushUpForceScale: 0.3
   fireballPushForceHangTimeDuration: 0.1
   fireballCastFreezeTime: 0.05
+  fireballHangTimeFrictionScale: 0.4
+  fireballHangTimeMoveSameDirBoost: 1.5
+  fireballHangTimeMoveDifferentDirDecrease: 0.8
   fireballExplodeForce: 10
-  fireballExplodeFrictionlessDuration: 0.15
+  fireballExplodeUncontrollableDuration: 0.1
   fireballExplodeHorizontalScale: 1.6
   fireballExplodeFreezeTime: 0.05
   fireballExplodeMoveSameDirBoost: 1.2
   fireballExplodeMoveDifferentDirDecrease: 0.8
+  fireballExplodeGuaranteeSpeedScale: 0.5
 --- !u!114 &1742552395
 MonoBehaviour:
   m_ObjectHideFlags: 0
