@@ -673,13 +673,25 @@ public class PlayerControlScript : MonoBehaviour
 	private void fireballChargeMain()
 	{
 		//recharge
-		if (onGround)
+		if (onGround && fireballChargeNeeded())
 		{
 			fireballCurrentCharges = fireballMaxCharges;
 		}
 
 		//display
 		fireballMeter.transform.localScale = new Vector3(1, (float)fireballCurrentCharges / fireballMaxCharges, 1);
+	}
+
+	public bool fireballChargeNeeded()
+	{
+		if (fireballCurrentCharges < fireballMaxCharges) return true;
+		else return false;
+	}
+
+	public void fireballChargeGain(int localCharges)
+	{
+		fireballCurrentCharges += localCharges;
+		fireballCurrentCharges = (fireballCurrentCharges > fireballMaxCharges) ? fireballMaxCharges : fireballCurrentCharges;
 	}
 
 	/*public void fireballInput(InputAction.CallbackContext ctx)

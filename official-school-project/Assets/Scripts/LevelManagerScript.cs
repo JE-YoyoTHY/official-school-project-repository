@@ -13,7 +13,7 @@ public class LevelManagerScript : MonoBehaviour
 
 	private bool isCurrentLevel;
 
-	[HideInInspector] public UnityEvent levelSetUpEvent; //currently no effect, cuz i havent implement gate yet
+	[HideInInspector] public UnityEvent levelSetUpEvent; //set up crystal ...
 
 	// Start is called before the first frame update
 	void Start()
@@ -22,6 +22,11 @@ public class LevelManagerScript : MonoBehaviour
 		player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControlScript>();
 
 		transform.GetChild(3).GetComponent<CinemachineVirtualCamera>().Follow = myCameraTarget.transform; // child 3 ->virtual camera
+
+		for(int i = 0; i < transform.childCount; i++)
+		{
+			if(transform.GetChild(i).tag == "RechargeCrystal") levelSetUpEvent.AddListener(transform.GetChild(i).GetComponent<RechargeCrystalScript>().regainPower);
+		}
 	}
 
 	// Update is called once per frame
