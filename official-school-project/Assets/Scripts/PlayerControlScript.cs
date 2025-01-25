@@ -855,6 +855,30 @@ public class PlayerControlScript : MonoBehaviour
 
 	#endregion
 
+	#region level objects
+
+	public void springPush(Vector2 localForce)
+	{
+		//reset player state
+		if (isJumping) jumpEnd();
+		if (jumpExtraHangTimeCoroutine != null) StopCoroutine(jumpExtraHangTimeCoroutine);
+
+		if (isFireballPushForceAdding) fireballPushForceEnd();
+		if (fireballHangTimeCoroutine != null) StopCoroutine(fireballHangTimeCoroutine);
+
+		if (myFrictionLessCoroutine != null) StopCoroutine(myFrictionLessCoroutine);
+
+		mySetGravity(myNormalGravityScale, myNormalGravityMaxSpeed);
+		mySetFriction(myNormalFrictionAcceleration, myNormalAdjustFriction);
+		fireballHangTimeMoveBoostDir = 0;
+		isFrictionActive = true;
+
+		//push
+		rb.velocity = localForce;
+		fireballChargeGain(3);
+	}
+
+	#endregion
 
 	//inputs region handles inputs function, namely set keyValue 2 -> 1, and trigger pre input
 	#region inputs

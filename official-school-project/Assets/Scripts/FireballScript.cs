@@ -20,6 +20,7 @@ public class FireballScript : MonoBehaviour
 	[SerializeField] private float explodeDuration;
 	private bool isExploding;
 	private bool playerPushed;
+	private bool leftPlayer;
 
 	private const int groundLayer = 6;
 
@@ -54,6 +55,7 @@ public class FireballScript : MonoBehaviour
 		logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
 		isExploding = false;
 		playerPushed = false;
+		leftPlayer = false;
 	}
 
 	private void explode() // summon a object, if player touch this, they gain velocity
@@ -82,7 +84,7 @@ public class FireballScript : MonoBehaviour
 	{
 		if(!logic.isFreeze())
 		{
-			if(collision.gameObject.layer == groundLayer && !isExploding)
+			if((collision.gameObject.layer == groundLayer || collision.gameObject.tag == "Fireball" || (collision.gameObject.tag == "Player" && leftPlayer)) && !isExploding)
 			{
 				explode();
 			}
@@ -99,5 +101,21 @@ public class FireballScript : MonoBehaviour
 			}
 		}
 
+	}
+
+	private void OnTriggerExit2D(Collider2D collision)
+	{
+		if(collision.gameObject.tag == "Player")
+		{
+			leftPlayer = true;
+		}
+	}
+
+	public void springPush(Vector2 localDir)
+	{
+		if(!isExploding)
+		{
+			moveDir = localDir;
+		}
 	}
 }
