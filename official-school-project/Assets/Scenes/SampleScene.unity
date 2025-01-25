@@ -2043,11 +2043,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!4 &985796299 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 711597147356794323, guid: 46b8fa702aadbe74a8066ce4c8008942, type: 3}
-  m_PrefabInstance: {fileID: 5178013348386816483}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1093363518
 GameObject:
   m_ObjectHideFlags: 0
@@ -10001,6 +9996,11 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.9214906, y: 0.094230294}
   m_EdgeRadius: 0
+--- !u!4 &1575163379 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8721591156648209645, guid: 46b8fa702aadbe74a8066ce4c8008942, type: 3}
+  m_PrefabInstance: {fileID: 5178013348386816483}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1742552393
 GameObject:
   m_ObjectHideFlags: 0
@@ -10529,7 +10529,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 711597147356794323, guid: 46b8fa702aadbe74a8066ce4c8008942, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 8721591156648209645, guid: 46b8fa702aadbe74a8066ce4c8008942, type: 3}
       insertIndex: -1
       addedObject: {fileID: 238755327}
     m_AddedComponents: []
@@ -10540,7 +10540,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 985796299}
+    m_TransformParent: {fileID: 1575163379}
     m_Modifications:
     - target: {fileID: 361586782690079839, guid: 157ad85e2b58a08429ae43203474a7a9, type: 3}
       propertyPath: m_SortingOrder

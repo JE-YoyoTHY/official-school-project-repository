@@ -9,6 +9,9 @@ public class LevelManagerScript : MonoBehaviour
 {
 	//reference
 	private GameObject myCameraTarget;
+	private Transform camLB; // cam lb for camera left bottom boundary
+	private Transform camRT; // cam rt for camera right top 
+	private CinemachineVirtualCamera myVirtualCam;
 	private PlayerControlScript player;
 
 	private bool isCurrentLevel;
@@ -18,14 +21,17 @@ public class LevelManagerScript : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-		myCameraTarget = transform.GetChild(4).gameObject; // child 4 -> camera target
+		myCameraTarget = transform.GetChild(1).GetChild(3).gameObject; // 1 -> camera component, 3 -> camera target
+		camLB = transform.GetChild(1).GetChild(0); // 1->camera component, 0 -> left bottom
+		camRT = transform.GetChild(1).GetChild(1); // 1->camera component, 1 -> right top
+		myVirtualCam = transform.GetChild(1).GetChild(2).GetComponent<CinemachineVirtualCamera>();  // child 1 -> camera component , 2 ->virtual cam
 		player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControlScript>();
 
-		transform.GetChild(3).GetComponent<CinemachineVirtualCamera>().Follow = myCameraTarget.transform; // child 3 ->virtual camera
+		myVirtualCam.Follow = myCameraTarget.transform; 
 
-		for(int i = 0; i < transform.childCount; i++)
+		for(int i = 0; i < transform.GetChild(2).childCount; i++) // child 2 -> level objects
 		{
-			if(transform.GetChild(i).tag == "RechargeCrystal") levelSetUpEvent.AddListener(transform.GetChild(i).GetComponent<RechargeCrystalScript>().regainPower);
+			if(transform.GetChild(2).GetChild(i).tag == "RechargeCrystal") levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<RechargeCrystalScript>().regainPower);
 		}
 	}
 
@@ -42,18 +48,19 @@ public class LevelManagerScript : MonoBehaviour
 	{
 		levelSetUpEvent.Invoke();
 		isCurrentLevel = true;
-		transform.GetChild(3).GetComponent<CinemachineVirtualCamera>().Priority = 11;
+		//transform.GetChild(3).GetComponent<CinemachineVirtualCamera>().Priority = 11;
+		myVirtualCam.Priority = 11;
 	}
 
 	public void disableLevel()
 	{
 		isCurrentLevel = false;
-		transform.GetChild(3).GetComponent<CinemachineVirtualCamera>().Priority = 10;
+		myVirtualCam.Priority = 10;
 	}
 
 	public void restartLevel()
 	{
-		player.transform.position = transform.GetChild(0).transform.position; //child 0 -> respawn point
+		player.transform.position = transform.GetChild(0).GetChild(0).transform.position; //child 0 -> basic, 0 -> respawn
 		levelSetUpEvent.Invoke();
 	}
 
@@ -61,25 +68,25 @@ public class LevelManagerScript : MonoBehaviour
 	{
 		myCameraTarget.GetComponent<Rigidbody2D>().velocity = player.GetComponent<Rigidbody2D>().velocity;
 
-		if (myCameraTarget.transform.position.x < transform.GetChild(1).transform.position.x || player.transform.position.x < transform.GetChild(1).transform.position.x)
+		if (myCameraTarget.transform.position.x < camLB.position.x || player.transform.position.x < camLB.position.x)
 		{
-			myCameraTarget.transform.position = new Vector3(transform.GetChild(1).transform.position.x, myCameraTarget.transform.position.y, myCameraTarget.transform.position.z);
+			myCameraTarget.transform.position = new Vector3(camLB.position.x, myCameraTarget.transform.position.y, myCameraTarget.transform.position.z);
 			myCameraTarget.GetComponent<Rigidbody2D>().velocity = new Vector2(0, myCameraTarget.GetComponent<Rigidbody2D>().velocity.y);
 		}
-		if (myCameraTarget.transform.position.y < transform.GetChild(1).transform.position.y || player.transform.position.y < transform.GetChild(1).transform.position.y)
+		if (myCameraTarget.transform.position.y < camLB.position.y || player.transform.position.y < camLB.position.y)
 		{
-			myCameraTarget.transform.position = new Vector3(myCameraTarget.transform.position.x, transform.GetChild(1).transform.position.y, myCameraTarget.transform.position.z);
+			myCameraTarget.transform.position = new Vector3(myCameraTarget.transform.position.x, camLB.position.y, myCameraTarget.transform.position.z);
 			myCameraTarget.GetComponent<Rigidbody2D>().velocity = new Vector2(myCameraTarget.GetComponent<Rigidbody2D>().velocity.x, 0);
 		}
 
-		if (myCameraTarget.transform.position.x > transform.GetChild(2).transform.position.x || player.transform.position.x > transform.GetChild(2).transform.position.x)
+		if (myCameraTarget.transform.position.x > camRT.position.x || player.transform.position.x > camRT.position.x)
 		{
-			myCameraTarget.transform.position = new Vector3(transform.GetChild(2).transform.position.x, myCameraTarget.transform.position.y, myCameraTarget.transform.position.z);
+			myCameraTarget.transform.position = new Vector3(camRT.position.x, myCameraTarget.transform.position.y, myCameraTarget.transform.position.z);
 			myCameraTarget.GetComponent<Rigidbody2D>().velocity = new Vector2(0, myCameraTarget.GetComponent<Rigidbody2D>().velocity.y);
 		}
-		if (myCameraTarget.transform.position.y > transform.GetChild(2).transform.position.y || player.transform.position.y > transform.GetChild(2).transform.position.y)
+		if (myCameraTarget.transform.position.y > camRT.position.y || player.transform.position.y > camRT.position.y)
 		{
-			myCameraTarget.transform.position = new Vector3(myCameraTarget.transform.position.x, transform.GetChild(2).transform.position.y, myCameraTarget.transform.position.z);
+			myCameraTarget.transform.position = new Vector3(myCameraTarget.transform.position.x, camRT.position.y, myCameraTarget.transform.position.z);
 			myCameraTarget.GetComponent<Rigidbody2D>().velocity = new Vector2(myCameraTarget.GetComponent<Rigidbody2D>().velocity.x, 0);
 		}
 	}

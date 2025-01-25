@@ -806,13 +806,13 @@ public class PlayerControlScript : MonoBehaviour
 
 		if (collision.gameObject.layer == levelTriggerLayer)
 		{
-			if (currentLevel != collision.gameObject.transform.parent.gameObject.GetComponent<LevelManagerScript>())
+			if (currentLevel != collision.gameObject.transform.parent.parent.gameObject.GetComponent<LevelManagerScript>())
 			{
 				if (currentLevel != null)
 				{
 					currentLevel.disableLevel();
 				}
-				currentLevel = collision.gameObject.transform.parent.gameObject.GetComponent<LevelManagerScript>();
+				currentLevel = collision.gameObject.transform.parent.parent.gameObject.GetComponent<LevelManagerScript>();
 				changeLevel();
 			}
 		}
