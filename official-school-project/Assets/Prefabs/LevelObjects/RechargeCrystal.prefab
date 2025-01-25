@@ -175,5 +175,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cooldownDuration: 2
-  activeColor: {r: 0.2977593, g: 1, b: 0, a: 0}
-  deactiveColor: {r: 0.4943396, g: 0.4943396, b: 0.4943396, a: 0}
+  activeColor: {r: 0.2977593, g: 1, b: 0, a: 1}
+  deactiveColor: {r: 0.4943396, g: 0.4943396, b: 0.4943396, a: 1}

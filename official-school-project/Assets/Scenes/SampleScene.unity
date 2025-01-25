@@ -441,7 +441,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.98, y: 0, z: 0}
+  m_LocalPosition: {x: -1.37, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10484,7 +10484,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3592140426881449737, guid: 46b8fa702aadbe74a8066ce4c8008942, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.98
+      value: -1.37
       objectReference: {fileID: 0}
     - target: {fileID: 3592140426881449737, guid: 46b8fa702aadbe74a8066ce4c8008942, type: 3}
       propertyPath: m_LocalPosition.y
@@ -10550,6 +10550,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: RechargeCrystal
       objectReference: {fileID: 0}
+    - target: {fileID: 3837696460837466708, guid: 157ad85e2b58a08429ae43203474a7a9, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4126297140584563844, guid: 157ad85e2b58a08429ae43203474a7a9, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.23
@@ -10592,7 +10596,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9057210752041135060, guid: 157ad85e2b58a08429ae43203474a7a9, type: 3}
       propertyPath: m_BodyType
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
