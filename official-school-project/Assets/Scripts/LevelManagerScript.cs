@@ -16,7 +16,7 @@ public class LevelManagerScript : MonoBehaviour
 
 	private bool isCurrentLevel;
 
-	[HideInInspector] public UnityEvent levelSetUpEvent; //set up crystal ...
+	[HideInInspector] public UnityEvent levelSetUpEvent; //set up crystal, gate ...
 
 	// Start is called before the first frame update
 	void Start()
@@ -32,6 +32,7 @@ public class LevelManagerScript : MonoBehaviour
 		for(int i = 0; i < transform.GetChild(2).childCount; i++) // child 2 -> level objects
 		{
 			if(transform.GetChild(2).GetChild(i).tag == "RechargeCrystal") levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<RechargeCrystalScript>().regainPower);
+			if (transform.GetChild(2).GetChild(i).tag == "Gate") levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<GateScript>().gateReset);
 		}
 	}
 
