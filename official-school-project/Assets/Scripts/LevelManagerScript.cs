@@ -13,6 +13,11 @@ public class LevelManagerScript : MonoBehaviour
 	private Transform camRT; // cam rt for camera right top 
 	private CinemachineVirtualCamera myVirtualCam;
 	private PlayerControlScript player;
+	
+	/*//camera
+	private Vector3 playerLastFramePos;
+	private const int playerLastFramePosUpdateRate = 4;
+	private int playerLastFramePosCounter;*/
 
 	private bool isCurrentLevel;
 
@@ -68,6 +73,27 @@ public class LevelManagerScript : MonoBehaviour
 	private void cameraMain()
 	{
 		myCameraTarget.GetComponent<Rigidbody2D>().velocity = player.GetComponent<Rigidbody2D>().velocity;
+		//i want camera to move if player's pos has changed, or cam will move, while player stands still, for instance : shoot fb upwards while on ground
+
+		/*Vector3 deltaPos = player.transform.position - playerLastFramePos;
+		playerLastFramePosCounter++;
+		if(playerLastFramePosCounter >= playerLastFramePosUpdateRate)
+		{
+			playerLastFramePos = player.transform.position;
+			playerLastFramePosCounter = 0;
+		}
+		//Debug.Log(deltaPos);
+
+		if (Mathf.Abs(deltaPos.x) > 0) //0.001 can be changed
+			myCameraTarget.GetComponent<Rigidbody2D>().velocity = new Vector2(player.GetComponent<Rigidbody2D>().velocity.x, myCameraTarget.GetComponent<Rigidbody2D>().velocity.y);
+		else
+			//myCameraTarget.GetComponent<Rigidbody2D>().velocity = new Vector2(0, myCameraTarget.GetComponent<Rigidbody2D>().velocity.y);
+		
+		if (Mathf.Abs(deltaPos.y) > 0)
+			myCameraTarget.GetComponent<Rigidbody2D>().velocity = new Vector2(myCameraTarget.GetComponent<Rigidbody2D>().velocity.x, player.GetComponent<Rigidbody2D>().velocity.y);
+		else
+			//myCameraTarget.GetComponent<Rigidbody2D>().velocity = new Vector2(myCameraTarget.GetComponent<Rigidbody2D>().velocity.x, 0);
+			*/
 
 		if (myCameraTarget.transform.position.x < camLB.position.x || player.transform.position.x < camLB.position.x)
 		{

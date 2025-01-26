@@ -205,6 +205,10 @@ public class PlayerControlScript : MonoBehaviour
 				rb.AddForce(Mathf.Min(myAdjustFriction * Time.deltaTime, localMaxVelocity.y - rb.velocity.y) * Vector2.up * rb.mass, ForceMode2D.Impulse);
 			}
 		}
+
+		//idk if it is needed, but if not, camera might move down even player stands still
+		if (groundTrigger.onGround() && rb.velocity.y < 0)
+			rb.velocity = new Vector2(rb.velocity.x, 0);
 	}
 
 	private void myImpulseAcceleration(Vector2 localImpulseAcceleration)
@@ -336,7 +340,10 @@ public class PlayerControlScript : MonoBehaviour
 	//gravity
 	private void myGravityMain()
 	{
-		myAcceleration(Vector2.down * myGravityScale, Vector2.down * myGravityMaxSpeed);
+		//if(!onGround) // that means when player is in coyote time, they wont have gravity
+		//to avoid player getting no gravity during coyote time, i want to use ground trigger's isGrounded
+		//if(!groundTrigger.onGround())
+			myAcceleration(Vector2.down * myGravityScale, Vector2.down * myGravityMaxSpeed);
 	}
 
 	#endregion
@@ -857,14 +864,14 @@ public class PlayerControlScript : MonoBehaviour
 
 	#region level objects
 
-	public void springPush(Vector2 localForce)
+	public void springPush(Vector2 localForce, Vector3 localPos) // i also want to set player's pos to spirng's pos
 	{
 		//reset player state
 		if (isJumping) jumpEnd();
 		if (jumpExtraHangTimeCoroutine != null) StopCoroutine(jumpExtraHangTimeCoroutine);
 
 		if (isFireballPushForceAdding) fireballPushForceEnd();
-		if (fireballHangTimeCoroutine != null) StopCoroutine(fireballHangTimeCoroutine);
+		//if (fireballHangTimeCoroutine != null) StopCoroutine(fireballHangTimeCoroutine);
 
 		if (myFrictionLessCoroutine != null) StopCoroutine(myFrictionLessCoroutine);
 
@@ -876,6 +883,17 @@ public class PlayerControlScript : MonoBehaviour
 		//push
 		rb.velocity = localForce;
 		fireballChargeGain(3);
+		transform.position = localPos;
+
+		//hang time, maybe i need its own hang time duration
+		mySetGravity(0, myGravityMaxSpeed);
+		if (localForce.x > 0) fireballHangTimeMoveBoostDir = 1;
+		else if (localForce.x < 0) fireballHangTimeMoveBoostDir = -1;
+		else fireballHangTimeMoveBoostDir = 0;
+		mySetFriction(myNormalFrictionAcceleration * fireballHangTimeFrictionScale, myNormalAdjustFriction * fireballHangTimeFrictionScale);
+
+		if (fireballHangTimeCoroutine != null) StopCoroutine(fireballHangTimeCoroutine);
+		fireballHangTimeCoroutine = StartCoroutine(fireballHangTime(fireballPushForceHangTimeDuration));
 	}
 
 	#endregion

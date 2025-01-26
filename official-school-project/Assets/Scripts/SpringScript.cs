@@ -38,7 +38,7 @@ public class SpringScript : MonoBehaviour
 	private void springPlayerTrigger()
 	{
 		Vector2 localDir = transform.GetChild(0).localPosition; // child 0 for target
-		player.springPush(localDir.normalized * pushForce);
+		player.springPush(localDir.normalized * pushForce, transform.position);
 	}
 
 	/*private void springFireballTrigger()
