@@ -161,10 +161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8537a5a824c26514c8416a2889d3aaca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 8
-  explodeForce: 15
+  normalMoveSpeed: 20
+  fireballFriction: 50
   explodeRadius: 5
-  explodeFrictionLessDuration: 0.15
-  explodeHorizontalScale: 1.6
-  explodeFreezeTime: 0.05
   explodeDuration: 0.1

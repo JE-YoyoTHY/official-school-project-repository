@@ -173,6 +173,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pushForce: 25
+  fireballSpeedScale: 2
 --- !u!1 &9031049849027646312
 GameObject:
   m_ObjectHideFlags: 0

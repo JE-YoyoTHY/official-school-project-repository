@@ -7,6 +7,7 @@ public class SpringScript : MonoBehaviour
 	private PlayerControlScript player;
 
 	[SerializeField] private float pushForce;
+	[SerializeField] private float fireballSpeedScale;
 
     // Start is called before the first frame update
     void Start()
@@ -30,7 +31,7 @@ public class SpringScript : MonoBehaviour
 		if(collision.gameObject.tag == "Fireball")
 		{
 			Vector2 localDir = transform.GetChild(0).localPosition;
-			collision.gameObject.GetComponent<FireballScript>().springPush(localDir.normalized);
+			collision.gameObject.GetComponent<FireballScript>().springPush(localDir.normalized, fireballSpeedScale);
 		}
 	}
 

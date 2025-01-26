@@ -11,7 +11,9 @@ public class FireballScript : MonoBehaviour
 	private LogicScript logic;
 
 	private Vector2 moveDir;
-	[SerializeField] private float moveSpeed;
+	private float moveSpeed;
+	[SerializeField] private float normalMoveSpeed;
+	[SerializeField] private float fireballFriction; // reduce its speed to normal when speed is greater than normal, for example : spring
 	//[SerializeField] private float explodeForce;
 	[SerializeField] private float explodeRadius;
 	//[SerializeField] private float explodeFrictionLessDuration; // or i should take over player's control
@@ -43,6 +45,11 @@ public class FireballScript : MonoBehaviour
 
 	private void moveMain()
 	{
+		if(moveSpeed > normalMoveSpeed) //apply friction
+		{
+			moveSpeed = Mathf.Max(moveSpeed - fireballFriction * Time.deltaTime, normalMoveSpeed);
+		}
+
 		rb.velocity = moveDir * moveSpeed;
 	}
 
@@ -56,6 +63,8 @@ public class FireballScript : MonoBehaviour
 		isExploding = false;
 		playerPushed = false;
 		leftPlayer = false;
+
+		moveSpeed = normalMoveSpeed;
 	}
 
 	private void explode() // summon a object, if player touch this, they gain velocity
@@ -111,11 +120,12 @@ public class FireballScript : MonoBehaviour
 		}
 	}
 
-	public void springPush(Vector2 localDir)
+	public void springPush(Vector2 localDir, float localForce)
 	{
 		if(!isExploding)
 		{
 			moveDir = localDir;
+			moveSpeed = moveSpeed * localForce;
 		}
 	}
 }
