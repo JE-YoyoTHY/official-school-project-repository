@@ -285,7 +285,7 @@ GameObject:
   - component: {fileID: 4377145120656381386}
   - component: {fileID: 3819518672615676595}
   - component: {fileID: 4016982004085427297}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GateSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}

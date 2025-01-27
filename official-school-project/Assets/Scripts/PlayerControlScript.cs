@@ -98,8 +98,10 @@ public class PlayerControlScript : MonoBehaviour
 
 	//levels
 	private LevelManagerScript currentLevel;
+	private GameObject currentRespawnPoint; // idk 要放在Player還是level manager
 	private const int killZoneLayer = 7;
 	private const int levelTriggerLayer = 8;
+	private const int respawnTriggerLayer = 9;
 
 	#endregion
 
@@ -813,14 +815,22 @@ public class PlayerControlScript : MonoBehaviour
 
 		if (collision.gameObject.layer == levelTriggerLayer)
 		{
-			if (currentLevel != collision.gameObject.transform.parent.parent.gameObject.GetComponent<LevelManagerScript>())
+			if (currentLevel != collision.gameObject.transform.parent.parent.parent.gameObject.GetComponent<LevelManagerScript>())
 			{
 				if (currentLevel != null)
 				{
 					currentLevel.disableLevel();
 				}
-				currentLevel = collision.gameObject.transform.parent.parent.gameObject.GetComponent<LevelManagerScript>();
+				currentLevel = collision.gameObject.transform.parent.parent.parent.gameObject.GetComponent<LevelManagerScript>();
 				changeLevel();
+			}
+		}
+
+		if (collision.gameObject.layer == respawnTriggerLayer)
+		{
+			if(currentRespawnPoint != collision.gameObject.transform.GetChild(0).gameObject)
+			{
+				currentRespawnPoint = collision.gameObject.transform.GetChild(0).gameObject;
 			}
 		}
 	}
@@ -832,6 +842,7 @@ public class PlayerControlScript : MonoBehaviour
 
 	private void playerDeath()
 	{
+		transform.position = currentRespawnPoint.transform.position;
 		currentLevel.restartLevel();
 		rb.velocity = Vector2.zero;
 

@@ -20,6 +20,7 @@ public class LevelManagerScript : MonoBehaviour
 	private int playerLastFramePosCounter;*/
 
 	private bool isCurrentLevel;
+	//private Transform currentRespawnPoint; // idk 要放在Player還是level manager
 
 	[HideInInspector] public UnityEvent levelSetUpEvent; //set up crystal, gate ...
 
@@ -75,7 +76,7 @@ public class LevelManagerScript : MonoBehaviour
 
 	public void restartLevel()
 	{
-		player.transform.position = transform.GetChild(0).GetChild(0).transform.position; //child 0 -> basic, 0 -> respawn
+		//player.transform.position = transform.GetChild(0).GetChild(0).transform.position; //child 0 -> basic, 0 -> respawn
 		levelSetUpEvent.Invoke();
 	}
 
