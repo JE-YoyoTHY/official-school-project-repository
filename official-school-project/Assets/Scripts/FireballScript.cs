@@ -67,12 +67,12 @@ public class FireballScript : MonoBehaviour
 		moveSpeed = normalMoveSpeed;
 	}
 
-	private void explode() // summon a object, if player touch this, they gain velocity
+	private void explode()
 	{
 		isExploding = true;
 		transform.localScale = new Vector3(explodeRadius / coll.radius, explodeRadius / coll.radius, 1);
 
-		
+		//StopAllCoroutines();
 		StartCoroutine(destroyCoroutine(explodeDuration));
 	}
 

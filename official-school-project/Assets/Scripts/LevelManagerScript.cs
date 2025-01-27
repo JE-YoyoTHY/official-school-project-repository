@@ -38,6 +38,7 @@ public class LevelManagerScript : MonoBehaviour
 		{
 			if(transform.GetChild(2).GetChild(i).tag == "RechargeCrystal") levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<RechargeCrystalScript>().regainPower);
 			if (transform.GetChild(2).GetChild(i).tag == "Gate") levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<GateScript>().gateReset);
+			if (transform.GetChild(2).GetChild(i).tag == "BreakablePlatform") levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<BreakablePlatformScript>().restoreAfterBreak);
 		}
 	}
 
@@ -49,6 +50,14 @@ public class LevelManagerScript : MonoBehaviour
 			cameraMain();
 		}
 	}
+
+	/*void FixedUpdate()
+	{
+		if (isCurrentLevel)
+		{
+			cameraMain();
+		}
+	}*/
 
 	public void startLevel()
 	{

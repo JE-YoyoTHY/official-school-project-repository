@@ -24,6 +24,11 @@ public class PlayerGroundTriggerScript : MonoBehaviour
 		if(collision.gameObject.layer == groundLayer)
 		{
 			isGrounded = true;
+
+			if(collision.gameObject.tag == "BreakablePlatform")
+			{
+				collision.gameObject.GetComponent<BreakablePlatformScript>().touchPlayer();
+			}
 		}
 	}
 

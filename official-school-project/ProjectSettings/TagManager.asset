@@ -8,6 +8,7 @@ TagManager:
   - Logic
   - RechargeCrystal
   - Gate
+  - BreakablePlatform
   layers:
   - Default
   - TransparentFX
