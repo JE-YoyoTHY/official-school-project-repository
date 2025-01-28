@@ -8,10 +8,14 @@ using UnityEngine.Events;
 public class LevelManagerScript : MonoBehaviour
 {
 	//reference
-	private GameObject myCameraTarget;
-	private Transform camLB; // cam lb for camera left bottom boundary
-	private Transform camRT; // cam rt for camera right top 
+
+	// legacy below
+	//private GameObject myCameraTarget;
+	//private Transform camLB; // cam lb for camera left bottom boundary
+	//private Transform camRT; // cam rt for camera right top 
+	
 	private CinemachineVirtualCamera myVirtualCam;
+
 	private PlayerControlScript player;
 	
 	/*//camera
@@ -27,13 +31,14 @@ public class LevelManagerScript : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-		myCameraTarget = transform.GetChild(1).GetChild(3).gameObject; // 1 -> camera component, 3 -> camera target
-		camLB = transform.GetChild(1).GetChild(0); // 1->camera component, 0 -> left bottom
-		camRT = transform.GetChild(1).GetChild(1); // 1->camera component, 1 -> right top
-		myVirtualCam = transform.GetChild(1).GetChild(2).GetComponent<CinemachineVirtualCamera>();  // child 1 -> camera component , 2 ->virtual cam
+		//myCameraTarget = transform.GetChild(1).GetChild(3).gameObject; // 1 -> camera component, 3 -> camera target
+		//camLB = transform.GetChild(1).GetChild(0); // 1->camera component, 0 -> left bottom
+		//camRT = transform.GetChild(1).GetChild(1); // 1->camera component, 1 -> right top
+		myVirtualCam = transform.GetChild(1).GetChild(0).GetComponent<CinemachineVirtualCamera>();  // child 1 -> camera component , 0 ->virtual cam
 		player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControlScript>();
 
-		myVirtualCam.Follow = myCameraTarget.transform; 
+		myVirtualCam.Follow = player.transform;
+		myVirtualCam.GetComponent<CinemachineConfiner2D>().m_BoundingShape2D = myVirtualCam.transform.parent.GetChild(1).GetComponent<Collider2D>(); // my virtual cam parent -> cam component , child 1 -> boundary
 
 		for(int i = 0; i < transform.GetChild(2).childCount; i++) // child 2 -> level objects
 		{
@@ -46,10 +51,10 @@ public class LevelManagerScript : MonoBehaviour
 	// Update is called once per frame
 	void LateUpdate()
 	{
-		if (isCurrentLevel)
+		/*if (isCurrentLevel)
 		{
 			cameraMain();
-		}
+		}*/
 	}
 
 	/*void FixedUpdate()
@@ -80,7 +85,7 @@ public class LevelManagerScript : MonoBehaviour
 		levelSetUpEvent.Invoke();
 	}
 
-	private void cameraMain()
+	/*private void cameraMain()
 	{
 		myCameraTarget.GetComponent<Rigidbody2D>().velocity = player.GetComponent<Rigidbody2D>().velocity;
 		//i want camera to move if player's pos has changed, or cam will move, while player stands still, for instance : shoot fb upwards while on ground
@@ -105,7 +110,7 @@ public class LevelManagerScript : MonoBehaviour
 			//myCameraTarget.GetComponent<Rigidbody2D>().velocity = new Vector2(myCameraTarget.GetComponent<Rigidbody2D>().velocity.x, 0);
 			*/
 
-		if (myCameraTarget.transform.position.x < camLB.position.x || player.transform.position.x < camLB.position.x)
+		/*if (myCameraTarget.transform.position.x < camLB.position.x || player.transform.position.x < camLB.position.x)
 		{
 			myCameraTarget.transform.position = new Vector3(camLB.position.x, myCameraTarget.transform.position.y, myCameraTarget.transform.position.z);
 			myCameraTarget.GetComponent<Rigidbody2D>().velocity = new Vector2(0, myCameraTarget.GetComponent<Rigidbody2D>().velocity.y);
@@ -126,5 +131,5 @@ public class LevelManagerScript : MonoBehaviour
 			myCameraTarget.transform.position = new Vector3(myCameraTarget.transform.position.x, camRT.position.y, myCameraTarget.transform.position.z);
 			myCameraTarget.GetComponent<Rigidbody2D>().velocity = new Vector2(myCameraTarget.GetComponent<Rigidbody2D>().velocity.x, 0);
 		}
-	}
+	}*/
 }

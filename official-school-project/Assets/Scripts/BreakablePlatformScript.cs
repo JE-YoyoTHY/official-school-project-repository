@@ -41,14 +41,18 @@ public class BreakablePlatformScript : MonoBehaviour
 		}
 	}
 
-	private void OnTriggerStay2D(Collider2D collision)
+	/*private void OnTriggerStay2D(Collider2D collision)
 	{
 		if (collision.gameObject.tag == "Fireball")
 		{
-			breakPrepare();
-			breakStart();
+			FireballScript fb = collision.gameObject.GetComponent<FireballScript>();
+			if (!fb.isExploding)
+			{
+				breakPrepare();
+				breakStart();
+			}
 		}
-	}
+	}*/
 
 	private void breakMain()
 	{
@@ -90,9 +94,10 @@ public class BreakablePlatformScript : MonoBehaviour
 		breakTimeCounter = breakTime;
 	}
 
-	private void breakStart()
+	public void breakStart()
 	{
 		breakTimeCounter = 0;
+		isBreaking = true;
 		isRestoreing = true;
 		//isBreaking = false;
 		restoreTimeCounter = restoreTime;

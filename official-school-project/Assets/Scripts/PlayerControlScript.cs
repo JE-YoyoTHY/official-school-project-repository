@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -74,6 +75,7 @@ public class PlayerControlScript : MonoBehaviour
 	[SerializeField] private float fireballPushForceMaxSpeed;
 	[SerializeField] private float fireballPushForceDuration;
 	[SerializeField] private float fireballPushUpForceScale; // make upward force less
+	[SerializeField] private float fireballPushScreenShakeForce;
 	private bool isFireballPushForceAdding;
 	private float fireballPushForceDurationCounter;
 	[SerializeField] private float fireballPushForceHangTimeDuration;
@@ -625,6 +627,11 @@ public class PlayerControlScript : MonoBehaviour
 		else fireballHangTimeMoveBoostDir = 0;
 
 		mySetFriction(myNormalFrictionAcceleration * fireballHangTimeFrictionScale, myNormalAdjustFriction * fireballHangTimeFrictionScale);
+
+		CinemachineImpulseSource impulseSource = GetComponent<CinemachineImpulseSource>();
+
+		impulseSource.m_DefaultVelocity = fireballDir;
+		impulseSource.GenerateImpulseWithForce(fireballPushScreenShakeForce);
 	}
 
 	private void fireballPushForceEnd()
@@ -842,9 +849,9 @@ public class PlayerControlScript : MonoBehaviour
 
 	private void playerDeath()
 	{
+		rb.velocity = Vector2.zero;
 		transform.position = currentRespawnPoint.transform.position;
 		currentLevel.restartLevel();
-		rb.velocity = Vector2.zero;
 
 		//reset
 		//jump

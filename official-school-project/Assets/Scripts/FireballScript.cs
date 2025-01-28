@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,11 +21,14 @@ public class FireballScript : MonoBehaviour
 	//[SerializeField] private float explodeHorizontalScale;
 	//[SerializeField] private float explodeFreezeTime;
 	[SerializeField] private float explodeDuration;
-	private bool isExploding;
+	public bool isExploding { get; private set; }
 	private bool playerPushed;
 	private bool leftPlayer;
 
 	private const int groundLayer = 6;
+
+	//screen shake
+	[SerializeField] private float impulseForce;
 
 
     // Update is called once per frame
@@ -95,18 +99,28 @@ public class FireballScript : MonoBehaviour
 		{
 			if((collision.gameObject.layer == groundLayer || collision.gameObject.tag == "Fireball" || (collision.gameObject.tag == "Player" && leftPlayer)) && !isExploding)
 			{
+				if(collision.gameObject.tag == "BreakablePlatform")
+				{
+					collision.gameObject.GetComponent<BreakablePlatformScript>().breakStart();
+				}
+
 				explode();
 			}
 
 			if(collision.gameObject.tag == "Player" && isExploding && !playerPushed)
 			{
 				Vector3 dis = player.transform.position - transform.position;
-				Vector2 localForce = new Vector2(dis.x, dis.y);
+				Vector2 localForce = new Vector2(dis.x, dis.y).normalized;
 				//localForce = localForce.normalized * explodeForce;
 				//localForce = new Vector2(localForce.x * explodeHorizontalScale, localForce.y);
 
-				player.fireballExplodeStart(localForce.normalized);
+				player.fireballExplodeStart(localForce);
 				playerPushed = true;
+
+				CinemachineImpulseSource impulseSource = GetComponent<CinemachineImpulseSource>();
+
+				impulseSource.m_DefaultVelocity = localForce;
+				impulseSource.GenerateImpulseWithForce(impulseForce);
 			}
 		}
 

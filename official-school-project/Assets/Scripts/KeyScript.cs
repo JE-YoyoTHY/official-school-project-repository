@@ -23,9 +23,17 @@ public class KeyScript : MonoBehaviour
 
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
-		if((collision.gameObject.tag == "Player" || collision.gameObject.tag == "Fireball") && !isObtained)
+		if((collision.gameObject.tag == "Player") && !isObtained)
 		{
 			keyObtain();
+		}
+
+		if(collision.gameObject.tag == "Fireball" && !isObtained)
+		{
+			if(!collision.gameObject.GetComponent<FireballScript>().isExploding)
+			{
+				keyObtain();
+			}
 		}
 	}
 
