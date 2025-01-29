@@ -71,6 +71,8 @@ public class PlayerControlScript : MonoBehaviour
 	private Vector2 fireballMouseDirValue;
 	private sbyte fireballDirLastHorizontal;
 	private Coroutine fireballInputCoroutine;
+
+	[Header("Fireball Push")]
 	[SerializeField] private float fireballPushForceAcceleration;
 	[SerializeField] private float fireballPushForceMaxSpeed;
 	[SerializeField] private float fireballPushForceDuration;
@@ -82,11 +84,14 @@ public class PlayerControlScript : MonoBehaviour
 	[SerializeField] private float fireballCastFreezeTime;
 	private Coroutine fireballHangTimeCoroutine;
 	private bool fireballStartAfterFreezeTimeActive;
+
+	[Header("Fireball Hangtime")]
 	[SerializeField] private float fireballHangTimeFrictionScale;
 	[SerializeField] private float fireballHangTimeMoveSameDirBoost;
 	[SerializeField] private float fireballHangTimeMoveDifferentDirDecrease;
 	private sbyte fireballHangTimeMoveBoostDir; // if player try to move this dir, they'll get boost, else decrease
 
+	[Header("Fireball Explode")]
 	[SerializeField] private float fireballExplodeForce;
 	//[SerializeField] private float fireballExplodeUncontrollableDuration;
 	[SerializeField] private float fireballExplodeHorizontalScale;
@@ -105,6 +110,8 @@ public class PlayerControlScript : MonoBehaviour
 	private const int levelTriggerLayer = 8;
 	private const int respawnTriggerLayer = 9;
 
+	private bool isControlBySpring;
+	private Coroutine springCoroutine;
 	#endregion
 
 
@@ -288,7 +295,7 @@ public class PlayerControlScript : MonoBehaviour
 
 	private bool canMove()
 	{
-		if (!isFireballPushForceAdding && !logic.isFreeze() && isMoveActive) return true;
+		if (!isFireballPushForceAdding && !logic.isFreeze() && isMoveActive && !isControlBySpring) return true;
 		else return false;
 	}
 
@@ -315,7 +322,7 @@ public class PlayerControlScript : MonoBehaviour
 	//friction
 	private void myFrictionMain() // horizontal
 	{
-		if(!isMoving && isFrictionActive && !isFireballPushForceAdding)
+		if(!isMoving && isFrictionActive && !isFireballPushForceAdding && !isControlBySpring)
 		{
 			if(rb.velocity.x < 0)
 			{
@@ -411,7 +418,7 @@ public class PlayerControlScript : MonoBehaviour
 
 	private bool canJump()
 	{
-		if (!isJumping && onGround && !isFireballPushForceAdding && !logic.isFreeze() && isJumpActive) return true;
+		if (!isJumping && onGround && !isFireballPushForceAdding && !logic.isFreeze() && isJumpActive && !isControlBySpring) return true;
 		else return false;
 	}
 
@@ -611,6 +618,7 @@ public class PlayerControlScript : MonoBehaviour
 			if(jumpExtraHangTimeCoroutine != null) StopCoroutine(jumpExtraHangTimeCoroutine);
 		}
 		if (fireballHangTimeCoroutine != null) StopCoroutine(fireballHangTimeCoroutine);
+		springEnd();
 		mySetGravity(0, myGravityMaxSpeed);
 		mySetVy(0);
 		//isFireballPushForceAdding = true;
@@ -887,7 +895,12 @@ public class PlayerControlScript : MonoBehaviour
 
 	#region level objects
 
-	public void springPush(Vector2 localForce, Vector3 localPos) // i also want to set player's pos to spirng's pos
+
+	/*if player's move ability is removed, 
+	 * i want to return their ability after they pass the "target", or player cast a fireball, 
+	 * during this, player cant move, jump, and have no gravity
+	 */
+	public void springPush(Vector2 localForce, bool isControlRemoved, Vector3 springPos, Vector3 springTargetPos)
 	{
 		//reset player state
 		if (isJumping) jumpEnd();
@@ -906,17 +919,49 @@ public class PlayerControlScript : MonoBehaviour
 		//push
 		rb.velocity = localForce;
 		fireballChargeGain(3);
-		transform.position = localPos;
+		//transform.position = localPos;
 
 		//hang time, maybe i need its own hang time duration
-		mySetGravity(0, myGravityMaxSpeed);
+		/*mySetGravity(0, myGravityMaxSpeed);
 		if (localForce.x > 0) fireballHangTimeMoveBoostDir = 1;
 		else if (localForce.x < 0) fireballHangTimeMoveBoostDir = -1;
 		else fireballHangTimeMoveBoostDir = 0;
 		mySetFriction(myNormalFrictionAcceleration * fireballHangTimeFrictionScale, myNormalAdjustFriction * fireballHangTimeFrictionScale);
 
 		if (fireballHangTimeCoroutine != null) StopCoroutine(fireballHangTimeCoroutine);
-		fireballHangTimeCoroutine = StartCoroutine(fireballHangTime(fireballPushForceHangTimeDuration));
+		fireballHangTimeCoroutine = StartCoroutine(fireballHangTime(fireballPushForceHangTimeDuration));*/
+
+		if(isControlRemoved)
+		{
+			if (springCoroutine != null) StopCoroutine(springCoroutine);
+			springCoroutine = StartCoroutine(springControlless(localForce, springPos, springTargetPos));
+		}
+	}
+
+	IEnumerator springControlless(Vector2 localForce, Vector3 springPos, Vector3 springTargetPos)
+	{
+		isControlBySpring = true;
+		mySetGravity(0, myGravityMaxSpeed);
+
+		Vector3 deltaPos = springPos - transform.position;
+
+		while (deltaPos.magnitude < (springTargetPos - springPos).magnitude)
+		{
+			deltaPos = springPos - transform.position;
+			rb.velocity = localForce;
+			yield return null;
+		}
+		springEnd();
+	}
+
+	private void springEnd()
+	{
+		isControlBySpring = false;
+		if(springCoroutine != null) StopCoroutine(springCoroutine);
+		mySetGravity(myNormalGravityScale, myNormalGravityMaxSpeed);
+		rb.velocity = rb.velocity / 2;
+
+		//jumpEnd();
 	}
 
 	#endregion

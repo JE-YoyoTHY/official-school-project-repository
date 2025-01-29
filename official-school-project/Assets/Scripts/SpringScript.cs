@@ -9,6 +9,8 @@ public class SpringScript : MonoBehaviour
 	[SerializeField] private float pushForce;
 	[SerializeField] private float fireballSpeedScale;
 
+	[SerializeField] private bool removePlayerMoveAbility;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -30,15 +32,20 @@ public class SpringScript : MonoBehaviour
 
 		if(collision.gameObject.tag == "Fireball")
 		{
-			Vector2 localDir = transform.GetChild(0).localPosition;
+			//Vector2 localDir = transform.GetChild(0).localPosition;
+			Vector3 deltaPos = transform.GetChild(0).position - transform.position;
+			Vector2 localDir = new Vector2(deltaPos.x, deltaPos.y).normalized;
 			collision.gameObject.GetComponent<FireballScript>().springPush(localDir.normalized, fireballSpeedScale);
 		}
 	}
 
 	private void springPlayerTrigger()
 	{
-		Vector2 localDir = transform.GetChild(0).localPosition; // child 0 for target
-		player.springPush(localDir.normalized * pushForce, transform.position);
+		//Vector2 localDir = transform.GetChild(0).localPosition; // child 0 for target
+		Vector3 deltaPos = transform.GetChild(0).position - transform.position;
+		Vector2 localDir = new Vector2(deltaPos.x, deltaPos.y).normalized;
+		//Debug.Log(deltaPos + ", " + localDir);
+		player.springPush(localDir.normalized * pushForce, removePlayerMoveAbility, transform.position, transform.GetChild(0).position);
 	}
 
 	/*private void springFireballTrigger()
