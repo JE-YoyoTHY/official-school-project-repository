@@ -9,6 +9,7 @@ TagManager:
   - RechargeCrystal
   - Gate
   - BreakablePlatform
+  - KillFireballWithoutExplode
   layers:
   - Default
   - TransparentFX
