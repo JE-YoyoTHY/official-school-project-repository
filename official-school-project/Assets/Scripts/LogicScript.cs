@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Tilemaps;
 
 public class LogicScript : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class LogicScript : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
     {
-        
+		gridColor();
     }
 
     // Update is called once per frame
@@ -55,6 +56,19 @@ public class LogicScript : MonoBehaviour
 		}
 	}
 
+
+	#endregion
+
+	#region grid set up
+
+	private void gridColor()
+	{
+		GameObject[] killFbZones = GameObject.FindGameObjectsWithTag("KillFireballWithoutExplode");
+		foreach (GameObject killFbZone in killFbZones)
+		{
+			killFbZone.GetComponent<Tilemap>().color = Color.clear;
+		}
+	}
 
 	#endregion
 

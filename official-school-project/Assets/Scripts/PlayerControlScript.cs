@@ -212,7 +212,7 @@ public class PlayerControlScript : MonoBehaviour
 
 		//idk if it is needed, but if not, camera might move down even player stands still
 		if (groundTrigger.onGround() && rb.velocity.y < 0)
-			rb.velocity = new Vector2(rb.velocity.x, 0);
+			mySetVy(0);
 	}
 
 	private void myImpulseAcceleration(Vector2 localImpulseAcceleration)
@@ -876,6 +876,11 @@ public class PlayerControlScript : MonoBehaviour
 		mySetFriction(myNormalFrictionAcceleration, myNormalAdjustFriction);
 		fireballHangTimeMoveBoostDir = 0;
 		isFrictionActive = true;
+
+		//coroutine
+		if(jumpCoroutine != null) StopCoroutine(jumpCoroutine);
+		if(fireballInputCoroutine != null) StopCoroutine(fireballInputCoroutine);
+		StopAllCoroutines();
 	}
 
 	#endregion

@@ -97,6 +97,12 @@ public class FireballScript : MonoBehaviour
 	{
 		if(!logic.isFreeze())
 		{
+			if(collision.gameObject.tag == "KillFireballWithoutExplode")
+			{
+				Destroy(gameObject);
+				return ;
+			}
+
 			if((collision.gameObject.layer == groundLayer || collision.gameObject.tag == "Fireball" || (collision.gameObject.tag == "Player" && leftPlayer)) && !isExploding)
 			{
 				if(collision.gameObject.tag == "BreakablePlatform")
