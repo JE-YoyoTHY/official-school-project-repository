@@ -166,7 +166,7 @@ MonoBehaviour:
   fireballFriction: 50
   explodeRadius: 5
   explodeDuration: 0.1
-  impulseForce: 0.5
+  impulseForce: 0.3
 --- !u!114 &2583024885239792354
 MonoBehaviour:
   m_ObjectHideFlags: 0

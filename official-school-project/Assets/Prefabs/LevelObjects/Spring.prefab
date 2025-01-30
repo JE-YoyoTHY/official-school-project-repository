@@ -172,8 +172,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32ef51d4823837a47aaccfdc9b9e109d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pushForce: 25
+  pushForce: 30
   fireballSpeedScale: 2
+  removePlayerMoveAbility: 0
+  springDuration: 0.3
+  springGravityScale: 20
+  springFriction: 20
 --- !u!1 &9031049849027646312
 GameObject:
   m_ObjectHideFlags: 0

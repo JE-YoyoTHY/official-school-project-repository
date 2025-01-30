@@ -322,7 +322,7 @@ public class PlayerControlScript : MonoBehaviour
 	//friction
 	private void myFrictionMain() // horizontal
 	{
-		if(!isMoving && isFrictionActive && !isFireballPushForceAdding && !isControlBySpring)
+		if(!isMoving && isFrictionActive && !isFireballPushForceAdding /*&& !isControlBySpring*/)
 		{
 			if(rb.velocity.x < 0)
 			{
@@ -900,7 +900,7 @@ public class PlayerControlScript : MonoBehaviour
 	 * i want to return their ability after they pass the "target", or player cast a fireball, 
 	 * during this, player cant move, jump, and have no gravity
 	 */
-	public void springPush(Vector2 localForce, bool isControlRemoved, Vector3 springPos, Vector3 springTargetPos)
+	public void springPush(Vector2 localForce, bool isControlRemoved, float springDuration, float springGravityScale, float springFriction/*, Vector3 springPos, Vector3 springTargetPos*/)
 	{
 		//reset player state
 		if (isJumping) jumpEnd();
@@ -934,23 +934,37 @@ public class PlayerControlScript : MonoBehaviour
 		if(isControlRemoved)
 		{
 			if (springCoroutine != null) StopCoroutine(springCoroutine);
-			springCoroutine = StartCoroutine(springControlless(localForce, springPos, springTargetPos));
+			springCoroutine = StartCoroutine(springControlless(localForce, springDuration, springGravityScale, springFriction));
 		}
 	}
 
-	IEnumerator springControlless(Vector2 localForce, Vector3 springPos, Vector3 springTargetPos)
+	IEnumerator springControlless(Vector2 localForce, float springDuration, float springGravityScale, float springFriction /*Vector3 springPos, Vector3 springTargetPos*/)
 	{
 		isControlBySpring = true;
-		mySetGravity(0, myGravityMaxSpeed);
+		mySetGravity(springGravityScale, myNormalGravityMaxSpeed);
+		//mySetFriction(myNormalFrictionAcceleration * 0, myNormalAdjustFriction);
+		mySetFriction(springFriction, myNormalAdjustFriction);
+		rb.velocity = localForce;
 
-		Vector3 deltaPos = springPos - transform.position;
-
-		while (deltaPos.magnitude < (springTargetPos - springPos).magnitude)
+		while(springDuration > 0)
 		{
-			deltaPos = springPos - transform.position;
-			rb.velocity = localForce;
+			if(!logic.isFreeze())
+				springDuration -= Time.deltaTime;
+
+			if (localForce.x > 0 && rb.velocity.x < moveMaxSpeed) mySetVx(moveMaxSpeed);
+			if (localForce.x < 0 && rb.velocity.x > moveMaxSpeed * -1) mySetVx(moveMaxSpeed * -1);
+
 			yield return null;
 		}
+
+		//Vector3 deltaPos = springPos - transform.position;
+
+		/*while (deltaPos.magnitude < (springTargetPos - springPos).magnitude)
+		{
+			deltaPos = springPos - transform.position;
+			//rb.velocity = localForce;
+			yield return null;
+		}*/
 		springEnd();
 	}
 
@@ -959,7 +973,10 @@ public class PlayerControlScript : MonoBehaviour
 		isControlBySpring = false;
 		if(springCoroutine != null) StopCoroutine(springCoroutine);
 		mySetGravity(myNormalGravityScale, myNormalGravityMaxSpeed);
-		rb.velocity = rb.velocity / 2;
+		mySetFriction(myNormalFrictionAcceleration, myNormalAdjustFriction);
+		//rb.velocity = rb.velocity / 2;
+		//if (rb.velocity.x < 0 && rb.velocity.x < moveMaxSpeed * -1) mySetVx(moveMaxSpeed * -1);
+		//if (rb.velocity.x > 0 && rb.velocity.x > moveMaxSpeed * 1) mySetVx(moveMaxSpeed);
 
 		//jumpEnd();
 	}
