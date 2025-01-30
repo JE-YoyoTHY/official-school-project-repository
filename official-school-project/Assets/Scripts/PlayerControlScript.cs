@@ -33,7 +33,7 @@ public class PlayerControlScript : MonoBehaviour
 	[SerializeField] private float moveAcceleration; // speed add per second
 	private bool isMoving;
 	private sbyte moveKeyValue; // also represent move dir
-	[SerializeField] private float moveTurnSpeedScale;
+	//[SerializeField] private float moveTurnSpeedScale; i set to 2 before
 	private bool isMoveActive;
 	private Coroutine moveLessCoroutine;
 
@@ -270,7 +270,14 @@ public class PlayerControlScript : MonoBehaviour
 					}
 					else  // moveKeyValue * rb.velocity.x < 0, 不同方向
 					{
-						myAcceleration(new Vector2(moveAcceleration * moveKeyValue * moveTurnSpeedScale, 0), new Vector2(moveMaxSpeed * moveKeyValue, 0));
+						/* inspired by celeste, that player is hard to turn around in air
+						 * and i dont want player is harder to stop when they try to turn than stop moving
+						 * so i canceled turn speed scale, and add friction acceleration instead
+						 * but that only happen when player is on ground
+						 */
+						//myAcceleration(new Vector2(moveAcceleration * moveKeyValue * moveTurnSpeedScale, 0), new Vector2(moveMaxSpeed * moveKeyValue, 0));
+						if(onGround) myAcceleration(new Vector2((moveAcceleration + myFrictionAcceleration) * moveKeyValue, 0), new Vector2(moveMaxSpeed * moveKeyValue, 0));
+						else myAcceleration(new Vector2(moveAcceleration * moveKeyValue, 0), new Vector2(moveMaxSpeed * moveKeyValue, 0));
 					}
 				}
 				else // fireball hang time boost
