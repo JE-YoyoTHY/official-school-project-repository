@@ -21,6 +21,7 @@ public class FireballScript : MonoBehaviour
 	//[SerializeField] private float explodeHorizontalScale;
 	//[SerializeField] private float explodeFreezeTime;
 	[SerializeField] private float explodeDuration;
+	[SerializeField] private float hitPlayerSpeedScale; // i want to add fb's velocity * this scale to player when player is hit by fb
 	public bool isExploding { get; private set; }
 	private bool playerPushed;
 	private bool leftPlayer;
@@ -34,12 +35,12 @@ public class FireballScript : MonoBehaviour
     // Update is called once per frame
     void Update()
 	{
-		if (!logic.isFreeze())
+		if (!logic.isFreeze() && !isExploding)
 		{
-			if (!isExploding)
-			{
+			//if (!isExploding)
+			//{
 				moveMain();
-			}
+			//}
 		}
 		else
 		{
@@ -76,8 +77,28 @@ public class FireballScript : MonoBehaviour
 		isExploding = true;
 		transform.localScale = new Vector3(explodeRadius / coll.radius, explodeRadius / coll.radius, 1);
 
+		rb.velocity = Vector2.zero;
 		//StopAllCoroutines();
 		StartCoroutine(destroyCoroutine(explodeDuration));
+	}
+
+	private void explodePushPlayer()
+	{
+		Vector3 dis = player.transform.position - transform.position;
+		Vector2 pushDir = new Vector2(dis.x, dis.y).normalized;
+		//localForce = localForce.normalized * explodeForce;
+		//localForce = new Vector2(localForce.x * explodeHorizontalScale, localForce.y);
+
+
+		player.fireballExplodeStart(pushDir, rb.velocity * hitPlayerSpeedScale);
+		playerPushed = true;
+
+
+		//screen shake
+		CinemachineImpulseSource impulseSource = GetComponent<CinemachineImpulseSource>();
+
+		impulseSource.m_DefaultVelocity = pushDir;
+		impulseSource.GenerateImpulseWithForce(impulseForce);
 	}
 
 	IEnumerator destroyCoroutine(float t)
@@ -103,7 +124,7 @@ public class FireballScript : MonoBehaviour
 				return ;
 			}
 
-			if((collision.gameObject.layer == groundLayer || collision.gameObject.tag == "Fireball" || (collision.gameObject.tag == "Player" && leftPlayer)) && !isExploding)
+			if((collision.gameObject.layer == groundLayer || collision.gameObject.tag == "Fireball" /*|| (collision.gameObject.tag == "Player" && leftPlayer)*/) && !isExploding)
 			{
 				if(collision.gameObject.tag == "BreakablePlatform")
 				{
@@ -113,9 +134,18 @@ public class FireballScript : MonoBehaviour
 				explode();
 			}
 
+			/* if player was hit by fb
+			 * i want to give player an extra force, that push player toward the direction which fireball goes
+			 */
+			if(collision.gameObject.tag == "Player" && leftPlayer && !isExploding)
+			{
+				explodePushPlayer();
+				explode();
+			}
+
 			if(collision.gameObject.tag == "Player" && isExploding && !playerPushed)
 			{
-				Vector3 dis = player.transform.position - transform.position;
+				/*Vector3 dis = player.transform.position - transform.position;
 				Vector2 localForce = new Vector2(dis.x, dis.y).normalized;
 				//localForce = localForce.normalized * explodeForce;
 				//localForce = new Vector2(localForce.x * explodeHorizontalScale, localForce.y);
@@ -126,7 +156,10 @@ public class FireballScript : MonoBehaviour
 				CinemachineImpulseSource impulseSource = GetComponent<CinemachineImpulseSource>();
 
 				impulseSource.m_DefaultVelocity = localForce;
-				impulseSource.GenerateImpulseWithForce(impulseForce);
+				impulseSource.GenerateImpulseWithForce(impulseForce);*/
+
+				if (rb.velocity.magnitude != 0) rb.velocity = Vector2.zero;
+				explodePushPlayer();
 			}
 		}
 

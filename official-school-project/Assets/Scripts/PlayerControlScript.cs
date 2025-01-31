@@ -657,14 +657,14 @@ public class PlayerControlScript : MonoBehaviour
 		fireballHangTimeCoroutine = StartCoroutine(fireballHangTime(fireballPushForceHangTimeDuration));
 	}
 
-	public void fireballExplodeStart(Vector2 localVelocity)
+	public void fireballExplodeStart(Vector2 localVelocity, Vector2 fireballVelocity)
 	{
 		freezeStart(fireballExplodeFreezeTime);
-		StartCoroutine(fireballExplode(localVelocity));
+		StartCoroutine(fireballExplode(localVelocity, fireballVelocity));
 	}
 
 	//public void fireballExplode(Vector2 localVelocity/*, float frictionLessDuration, float localFreezeTime*/)
-	IEnumerator fireballExplode(Vector2 localVelocity) // will end fireball push force and enter hangtime
+	IEnumerator fireballExplode(Vector2 localVelocity, Vector2 fireballVelocity) // will end fireball push force and enter hangtime
 	{
 		while(logic.isFreeze()) yield return null;
 
@@ -686,6 +686,14 @@ public class PlayerControlScript : MonoBehaviour
 
 		if (moveKeyValue * localVelocity.x > 0) localVelocity = new Vector2(localVelocity.x * fireballExplodeMoveSameDirBoost, localVelocity.y);
 		else if (moveKeyValue * localVelocity.x < 0) localVelocity = new Vector2(localVelocity.x * fireballExplodeMoveDifferentDirDecrease, localVelocity.y);
+
+
+		/* add fireball's Velocity if player was hit by fireball, 
+		 * this line of code's position will affect how player's action affect fb's velocity boost,
+		 * currently, i decide to add fb velocity last, so it wont be affected by horizontal boost and move same dir boost
+		 */
+		localVelocity = localVelocity + fireballVelocity;
+
 		myImpulseAcceleration(localVelocity);
 
 		//guarantee speed
