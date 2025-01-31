@@ -16,8 +16,10 @@ public class PlayerControlScript : MonoBehaviour
 	private GameObject fireballMeter;
 	private LogicScript logic;
 
-	//physics
-	private float myGravityScale;
+
+
+    //physics
+    private float myGravityScale;
 	private float myGravityMaxSpeed; // max fall speed
 	[SerializeField] private float myNormalGravityScale;
 	[SerializeField] private float myNormalGravityMaxSpeed;
@@ -31,8 +33,8 @@ public class PlayerControlScript : MonoBehaviour
 	[Header("Move")]
 	[SerializeField] private float moveMaxSpeed;
 	[SerializeField] private float moveAcceleration; // speed add per second
-	private bool isMoving;
-	private sbyte moveKeyValue; // also represent move dir
+	public bool isMoving { get; private set; }
+	public sbyte moveKeyValue { get; private set; } // also represent move dir
 	//[SerializeField] private float moveTurnSpeedScale; i set to 2 before
 	private bool isMoveActive;
 	private Coroutine moveLessCoroutine;
@@ -158,10 +160,10 @@ public class PlayerControlScript : MonoBehaviour
 		
     }
 
-	#region physic function
+    #region physic function
 
 
-	private void myAcceleration(Vector2 localAcceleration, Vector2 localMaxVelocity)
+    private void myAcceleration(Vector2 localAcceleration, Vector2 localMaxVelocity)
 	{
 		// x
 		if(localAcceleration.x > 0)
@@ -260,7 +262,6 @@ public class PlayerControlScript : MonoBehaviour
 			if (canMove())
 			{
 				isMoving = true;
-
 				//normal
 				if (fireballHangTimeMoveBoostDir == 0)
 				{

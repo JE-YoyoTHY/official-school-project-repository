@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerGroundTriggerScript : MonoBehaviour
 {
 
-	private bool isGrounded;
+	public bool isGrounded { get; private set; }
 	private const int groundLayer = 6;
     // Start is called before the first frame update
     void Start()
