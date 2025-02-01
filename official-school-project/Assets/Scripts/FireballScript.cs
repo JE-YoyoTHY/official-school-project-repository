@@ -31,6 +31,11 @@ public class FireballScript : MonoBehaviour
 	//screen shake
 	[SerializeField] private float impulseForce;
 
+	//raycast for prevent collision being igorend when moving too fast
+	//the formula is : distance = (current speed - min speed) * scale
+	[SerializeField] private float raycastMinSpeed;
+	[SerializeField] private float exceedSpeedToDistanceScale;
+
 
     // Update is called once per frame
     void Update()
@@ -56,6 +61,36 @@ public class FireballScript : MonoBehaviour
 		}
 
 		rb.velocity = moveDir * moveSpeed;
+
+		if(moveSpeed > raycastMinSpeed)
+		{
+			RaycastHit2D hit = Physics2D.Raycast(transform.position, moveDir, (moveSpeed - raycastMinSpeed) * exceedSpeedToDistanceScale);
+			if (hit)
+			{
+				//Debug.Log(hit.collider.name);
+				if(hit.collider.gameObject.tag == "KillFireballWithoutExplode")
+				{
+					Destroy(gameObject);
+				}
+
+				if(hit.collider.gameObject.layer == groundLayer || (hit.collider.gameObject.tag == "Fireball" && hit.collider.gameObject != this.gameObject))
+				{
+					if (hit.collider.gameObject.tag == "BreakablePlatform")
+					{
+						hit.collider.gameObject.GetComponent<BreakablePlatformScript>().breakStart();
+					}
+
+					explode();
+				}
+
+				if (hit.collider.gameObject.tag == "Player" && leftPlayer)
+				{
+					explodePushPlayer();
+					explode();
+				}
+			}
+			//Debug.DrawRay(transform.position, moveDir * (moveSpeed - raycastMinSpeed) * exceedSpeedToDistanceScale);
+		}
 	}
 
 	public void summon(Vector2 localDir)

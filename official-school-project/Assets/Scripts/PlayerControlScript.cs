@@ -944,13 +944,18 @@ public class PlayerControlScript : MonoBehaviour
 		mySetGravity(myNormalGravityScale, myNormalGravityMaxSpeed);
 		mySetFriction(myNormalFrictionAcceleration, myNormalAdjustFriction);
 		fireballHangTimeMoveBoostDir = 0;
-		isFrictionActive = true;
+		isFrictionActive = true; isMoveActive = true; isJumpActive = true;
 
 		//coroutine
-		if(jumpCoroutine != null) StopCoroutine(jumpCoroutine);
+		if (jumpCoroutine != null) StopCoroutine(jumpCoroutine);
 		if(fireballInputCoroutine != null) StopCoroutine(fireballInputCoroutine);
 		if(fireballExplodeCoroutine != null) StopCoroutine(fireballExplodeCoroutine);
+		if (fireballExplodeCoroutine != null) StopCoroutine(fireballExplodeCoroutine);
+		if (moveLessCoroutine != null) StopCoroutine(moveLessCoroutine);
+		if (jumpLessCoroutine != null) StopCoroutine(jumpLessCoroutine);
 		StopAllCoroutines();
+
+
 	}
 
 	#endregion
