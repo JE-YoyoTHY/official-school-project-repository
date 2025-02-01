@@ -95,12 +95,16 @@ public class PlayerControlScript : MonoBehaviour
 
 	[Header("Fireball Explode")]
 	[SerializeField] private float fireballExplodeForce;
-	//[SerializeField] private float fireballExplodeUncontrollableDuration;
 	[SerializeField] private float fireballExplodeHorizontalScale;
 	[SerializeField] private float fireballExplodeFreezeTime;
 	[SerializeField] private float fireballExplodeMoveSameDirBoost;
 	[SerializeField] private float fireballExplodeMoveDifferentDirDecrease;
 	[SerializeField] private float fireballExplodeGuaranteeSpeedScale; // 火球爆炸的寶底速度，因為火球速度是用加的
+	
+	[SerializeField] private float fireballExplodeDuration; //this variable and below make fb explode like celeste's bumper, which works like spring
+	[SerializeField] private float fireballExplodeGravityScale;
+	[SerializeField] private float fireballExplodeFriction;
+	private Coroutine fireballExplodeCoroutine;
 
 	//freeze frame
 	private Vector2 freezeVelocity;
@@ -661,59 +665,100 @@ public class PlayerControlScript : MonoBehaviour
 	public void fireballExplodeStart(Vector2 localVelocity, Vector2 fireballVelocity)
 	{
 		freezeStart(fireballExplodeFreezeTime);
-		StartCoroutine(fireballExplode(localVelocity, fireballVelocity));
+
+		if (fireballExplodeCoroutine != null) StopCoroutine(fireballExplodeCoroutine);
+		fireballExplodeCoroutine = StartCoroutine(fireballExplode(localVelocity, fireballVelocity));
 	}
 
 	//public void fireballExplode(Vector2 localVelocity/*, float frictionLessDuration, float localFreezeTime*/)
 	IEnumerator fireballExplode(Vector2 localVelocity, Vector2 fireballVelocity) // will end fireball push force and enter hangtime
 	{
-		while(logic.isFreeze()) yield return null;
+		//coroutine phase 1 -> wait until freezeEnd
+			while(logic.isFreeze()) yield return null;
 
-		//enter hang time
+
+		//coroutine phase 2 -> apply explode force and do some setup
+			//legacy below
+			/*//enter hang time
 		mySetGravity(0, myGravityMaxSpeed);
 		if (localVelocity.x > 0) fireballHangTimeMoveBoostDir = 1;
 		else if (localVelocity.x < 0) fireballHangTimeMoveBoostDir = -1;
 		else fireballHangTimeMoveBoostDir = 0;
-		mySetFriction(myNormalFrictionAcceleration * fireballHangTimeFrictionScale, myNormalAdjustFriction * fireballHangTimeFrictionScale);
+		mySetFriction(myNormalFrictionAcceleration * fireballHangTimeFrictionScale, myNormalAdjustFriction * fireballHangTimeFrictionScale);*/
 		
-		fireballPushForceEnd();
+			fireballPushForceEnd();
 
-		/* if player try to move to the same dir of the explode dir -> increase the speed
-		 * if player try to move to the opposite dir of the explode fir -> decrease the speed
-		 * else, the speed is multiplied by 1
-		 */
-		localVelocity = localVelocity * fireballExplodeForce;
-		localVelocity = new Vector2(localVelocity.x * fireballExplodeHorizontalScale, localVelocity.y);
+			/* if player try to move to the same dir of the explode dir -> increase the speed
+			 * if player try to move to the opposite dir of the explode fir -> decrease the speed
+			 * else, the speed is multiplied by 1
+			 */
+			localVelocity = localVelocity * fireballExplodeForce;
+			localVelocity = new Vector2(localVelocity.x * fireballExplodeHorizontalScale, localVelocity.y);
 
-		if (moveKeyValue * localVelocity.x > 0) localVelocity = new Vector2(localVelocity.x * fireballExplodeMoveSameDirBoost, localVelocity.y);
-		else if (moveKeyValue * localVelocity.x < 0) localVelocity = new Vector2(localVelocity.x * fireballExplodeMoveDifferentDirDecrease, localVelocity.y);
+			if (moveKeyValue * localVelocity.x > 0) localVelocity = new Vector2(localVelocity.x * fireballExplodeMoveSameDirBoost, localVelocity.y);
+			else if (moveKeyValue * localVelocity.x < 0) localVelocity = new Vector2(localVelocity.x * fireballExplodeMoveDifferentDirDecrease, localVelocity.y);
 
 
-		/* add fireball's Velocity if player was hit by fireball, 
-		 * this line of code's position will affect how player's action affect fb's velocity boost,
-		 * currently, i decide to add fb velocity last, so it wont be affected by horizontal boost and move same dir boost
-		 */
-		localVelocity = localVelocity + fireballVelocity;
+			/* add fireball's Velocity if player was hit by fireball, 
+			 * this line of code's position will affect how player's action affect fb's velocity boost,
+			* currently, i decide to add fb velocity last, so it wont be affected by horizontal boost and move same dir boost
+			*/
+			localVelocity = localVelocity + fireballVelocity;
 
-		myImpulseAcceleration(localVelocity);
+			myImpulseAcceleration(localVelocity);
+			//rb.velocity = localVelocity;
 
-		//guarantee speed
-		if ((localVelocity.x > 0 && rb.velocity.x < localVelocity.x * fireballExplodeGuaranteeSpeedScale) || (localVelocity.x < 0 && rb.velocity.x > localVelocity.x * fireballExplodeGuaranteeSpeedScale)) rb.velocity = new Vector2(localVelocity.x * fireballExplodeGuaranteeSpeedScale, rb.velocity.y);
-		if ((localVelocity.y > 0 && rb.velocity.y < localVelocity.y * fireballExplodeGuaranteeSpeedScale) || (localVelocity.y < 0 && rb.velocity.y > localVelocity.y * fireballExplodeGuaranteeSpeedScale)) rb.velocity = new Vector2(rb.velocity.x, localVelocity.y * fireballExplodeGuaranteeSpeedScale);
+			//guarantee speed
+			if ((localVelocity.x > 0 && rb.velocity.x < localVelocity.x * fireballExplodeGuaranteeSpeedScale) || (localVelocity.x < 0 && rb.velocity.x > localVelocity.x * fireballExplodeGuaranteeSpeedScale)) rb.velocity = new Vector2(localVelocity.x * fireballExplodeGuaranteeSpeedScale, rb.velocity.y);
+			if ((localVelocity.y > 0 && rb.velocity.y < localVelocity.y * fireballExplodeGuaranteeSpeedScale) || (localVelocity.y < 0 && rb.velocity.y > localVelocity.y * fireballExplodeGuaranteeSpeedScale)) rb.velocity = new Vector2(rb.velocity.x, localVelocity.y * fireballExplodeGuaranteeSpeedScale);
 
-		/*isFrictionActive = false; isMoveActive = false; isJumpActive = false;
-		if(myFrictionLessCoroutine != null) StopCoroutine(myFrictionLessCoroutine);
-		myFrictionLessCoroutine = StartCoroutine(myFrictionLess(fireballExplodeUncontrollableDuration));
-		if(moveLessCoroutine != null) StopCoroutine(moveLessCoroutine);
-		moveLessCoroutine = StartCoroutine(moveLess(fireballExplodeUncontrollableDuration));
-		if(jumpLessCoroutine != null) StopCoroutine(jumpLessCoroutine);
-		jumpLessCoroutine = StartCoroutine(jumpLess(fireballExplodeUncontrollableDuration));*/
+			isMoving = false;
+			isMoveActive = false; isJumpActive = false;
+			if(moveLessCoroutine != null) StopCoroutine(moveLessCoroutine);
+			moveLessCoroutine = StartCoroutine(moveLess(fireballExplodeDuration));
+			if(jumpLessCoroutine != null) StopCoroutine(jumpLessCoroutine);
+			jumpLessCoroutine = StartCoroutine(jumpLess(fireballExplodeDuration));
+
+			mySetGravity(fireballExplodeGravityScale, myNormalGravityMaxSpeed);
+			mySetFriction(fireballExplodeFriction, myNormalAdjustFriction);
+
+
+		//coroutine phase 3 -> wait until duration end
+			float t = fireballExplodeDuration;
+			while(t > 0)
+			{
+				if (!logic.isFreeze())
+					t -= Time.deltaTime;
+				yield return null;
+			}
+
+		//coroutine phase 4 -> end
+			fireballExplodeEnd();
+
 	}
+
+	private void fireballExplodeEnd()
+	{
+		if (moveLessCoroutine != null) StopCoroutine(moveLessCoroutine);
+		if (jumpLessCoroutine != null) StopCoroutine(jumpLessCoroutine);
+		isMoveActive = true; isJumpActive = true;
+
+		if (fireballExplodeCoroutine != null) StopCoroutine(fireballExplodeCoroutine);
+
+		mySetGravity(myNormalGravityScale, myNormalGravityMaxSpeed);
+		mySetFriction(myNormalFrictionAcceleration, myNormalAdjustFriction);
+	}
+
+	//i tried to write this part in fireballExplode
+	/*IEnumerator fireballExplodeControlless(float t)
+	{
+
+	}*/
 
 	private void fireballChargeMain()
 	{
 		//recharge
-		if (onGround && fireballChargeNeeded())
+		if (onGround && fireballChargeNeeded() && !isFireballPushForceAdding)
 		{
 			fireballCurrentCharges = fireballMaxCharges;
 		}
@@ -904,6 +949,7 @@ public class PlayerControlScript : MonoBehaviour
 		//coroutine
 		if(jumpCoroutine != null) StopCoroutine(jumpCoroutine);
 		if(fireballInputCoroutine != null) StopCoroutine(fireballInputCoroutine);
+		if(fireballExplodeCoroutine != null) StopCoroutine(fireballExplodeCoroutine);
 		StopAllCoroutines();
 	}
 
@@ -919,6 +965,7 @@ public class PlayerControlScript : MonoBehaviour
 	public void springPush(Vector2 localForce, bool isControlRemoved, float springDuration, float springGravityScale, float springFriction/*, Vector3 springPos, Vector3 springTargetPos*/)
 	{
 		//reset player state
+		isMoving = false;
 		if (isJumping) jumpEnd();
 		if (jumpExtraHangTimeCoroutine != null) StopCoroutine(jumpExtraHangTimeCoroutine);
 

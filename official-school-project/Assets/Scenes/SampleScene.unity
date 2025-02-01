@@ -3838,7 +3838,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -137.22993, y: 35.965115, z: -10}
+  m_LocalPosition: {x: 44.31, y: 1.29, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -57814,7 +57814,7 @@ MonoBehaviour:
   coyoteTime: 0.1
   fireballPrefab: {fileID: 5748096341067494691, guid: ccbf7d65b2cd3b7428dc4e90730c24de, type: 3}
   fireballPreInputTime: 0.1
-  fireballMaxCharges: 3
+  fireballMaxCharges: 2
   fireballPushForceAcceleration: 200
   fireballPushForceMaxSpeed: 10
   fireballPushForceDuration: 0.2
@@ -57825,12 +57825,15 @@ MonoBehaviour:
   fireballHangTimeFrictionScale: 0.4
   fireballHangTimeMoveSameDirBoost: 1.2
   fireballHangTimeMoveDifferentDirDecrease: 0.8
-  fireballExplodeForce: 13
+  fireballExplodeForce: 25
   fireballExplodeHorizontalScale: 1.3
   fireballExplodeFreezeTime: 0.05
   fireballExplodeMoveSameDirBoost: 1.2
   fireballExplodeMoveDifferentDirDecrease: 0.8
   fireballExplodeGuaranteeSpeedScale: 0.5
+  fireballExplodeDuration: 0.2
+  fireballExplodeGravityScale: 20
+  fireballExplodeFriction: 20
 --- !u!114 &1742552395
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58064,7 +58067,7 @@ Transform:
   m_GameObject: {fileID: 1742552393}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -153.67, y: 29.3, z: 0}
+  m_LocalPosition: {x: 145.6, y: 0.2, z: 0}
   m_LocalScale: {x: 1, y: 1.6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

@@ -23,7 +23,7 @@ public class LevelManagerScript : MonoBehaviour
 	private const int playerLastFramePosUpdateRate = 4;
 	private int playerLastFramePosCounter;*/
 
-	private bool isCurrentLevel;
+	//private bool isCurrentLevel;
 	//private Transform currentRespawnPoint; // idk 要放在Player還是level manager
 
 	[HideInInspector] public UnityEvent levelSetUpEvent; //set up crystal, gate ...
@@ -68,14 +68,14 @@ public class LevelManagerScript : MonoBehaviour
 	public void startLevel()
 	{
 		levelSetUpEvent.Invoke();
-		isCurrentLevel = true;
+		//isCurrentLevel = true;
 		//transform.GetChild(3).GetComponent<CinemachineVirtualCamera>().Priority = 11;
 		myVirtualCam.Priority = 11;
 	}
 
 	public void disableLevel()
 	{
-		isCurrentLevel = false;
+		//isCurrentLevel = false;
 		myVirtualCam.Priority = 10;
 	}
 
