@@ -17,18 +17,6 @@ public class PlayerAnims : MonoBehaviour
     public string currentState;
     public string STATE_IDLE { get; private set; } = "PlayerIdle";
     public string STATE_RUN { get; private set; } = "PlayerRun";
-    public enum STATE_SHOOT_ENUM
-    {
-        // 上為0, 順時針轉依序為1, 2, 3...
-        TOP = 0,
-        TOP_RIGHT = 1,
-        RIGHT = 2,
-        BOTTOM_RIGHT = 3,
-        BOTTOM = 4,
-        BOTTOM_LEFT = 5,
-        LEFT = 6,
-        TOP_LEFT = 7,
-    };
     public string STATE_JUMP { get; private set; } = "PlayerJump";
     public string STATE_FALL { get; private set; } = "PlayerFall";
     public string STATE_LAND { get; private set; } = "PlayerLand";
@@ -39,6 +27,7 @@ public class PlayerAnims : MonoBehaviour
     };
     #endregion
 
+    public bool canChangeState { get; private set; } = true;
     private bool previousIsGrounded;
     private bool currentIsGrounded;
     private sbyte facingDir;
@@ -49,7 +38,7 @@ public class PlayerAnims : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         playerControlScript = player.GetComponent<PlayerControlScript>();
         playerGroundTriggerScript = player.GetComponentInChildren<PlayerGroundTriggerScript>(false);  // false 代表只偵測active的子物件
-        
+
     }
 
     void Update()
@@ -61,6 +50,8 @@ public class PlayerAnims : MonoBehaviour
     }
     public void changeState(string newState)
     {
+        if (canChangeState == false) { return; }
+
         currentState = newState;
         if (availableAnims.Contains(newState))
         {
@@ -77,7 +68,7 @@ public class PlayerAnims : MonoBehaviour
         }
         else if (playerControlScript.isJumping == true)
         {
-            changeState(STATE_JUMP);  // 目前先這樣測試
+            changeState(STATE_JUMP);
         }
         else if (playerControlScript.gameObject.GetComponent<Rigidbody2D>().velocity.y <= 0 && playerGroundTriggerScript.isGrounded == false)
         {
@@ -88,7 +79,7 @@ public class PlayerAnims : MonoBehaviour
             print("land");
             changeState(STATE_LAND);
         }
-        else
+        else if (playerGroundTriggerScript.isGrounded == true && playerControlScript.isMoving == false && playerControlScript.isJumping == false)
         {
             changeState(STATE_IDLE);
         }
@@ -100,10 +91,10 @@ public class PlayerAnims : MonoBehaviour
         bool shouldFlip = false;
         if (facingDir == 0) { return; }
         if (facingDir == 1) { shouldFlip = false; }
-        else if (facingDir == -1) {  shouldFlip = true; }
+        else if (facingDir == -1) { shouldFlip = true; }
 
         spriteRenderer.flipX = shouldFlip;
-        
+
     }
 
     public bool isLandNow()
@@ -119,5 +110,12 @@ public class PlayerAnims : MonoBehaviour
         {
             return false;
         }
+    }
+
+    public void setCanChangeState(string state)
+    {
+        if (state == "land_start") { canChangeState = false; }
+        else if (state == "land_end") { canChangeState = true; }
+
     }
 }
