@@ -44,7 +44,7 @@ public class PlayerControlScript : MonoBehaviour
 	[SerializeField] private float jumpStrength;
 	[SerializeField] private float jumpGravity;
 	[SerializeField] private float jumpMinSpeed;
-	private bool isJumping;
+	public bool isJumping { get; private set; }
 	private sbyte jumpKeyValue;
 	[SerializeField] private float jumpPreInputTime;
 	private Coroutine jumpCoroutine;
@@ -556,7 +556,7 @@ public class PlayerControlScript : MonoBehaviour
 	{
 		isFireballPushForceAdding = true;
 		fireballDir = fireballCastByKeyboard ? fireballDir : fireballMouseDirValue;
-
+		print(fireballDir);
 		//freeze frame
 		freezeStart(fireballCastFreezeTime);
 

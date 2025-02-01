@@ -31,13 +31,16 @@ public class PlayerAnims : MonoBehaviour
     };
     public string STATE_JUMP { get; private set; } = "PlayerJump";
     public string STATE_FALL { get; private set; } = "PlayerFall";
+    public string STATE_LAND { get; private set; } = "PlayerLand";
 
     private List<string> availableAnims = new List<string>()
     {
-        "PlayerRun", "PlayerIdle"
+        "PlayerRun", "PlayerIdle", "PlayerJump", "PlayerFall", "PlayerLand"
     };
     #endregion
 
+    private bool previousIsGrounded;
+    private bool currentIsGrounded;
     private sbyte facingDir;
     void Start()
     {
@@ -72,9 +75,22 @@ public class PlayerAnims : MonoBehaviour
         {
             changeState(STATE_RUN);
         }
+        else if (playerControlScript.isJumping == true)
+        {
+            changeState(STATE_JUMP);  // 目前先這樣測試
+        }
+        else if (playerControlScript.gameObject.GetComponent<Rigidbody2D>().velocity.y <= 0 && playerGroundTriggerScript.isGrounded == false)
+        {
+            changeState(STATE_FALL);
+        }
+        else if (isLandNow() == true)
+        {
+            print("land");
+            changeState(STATE_LAND);
+        }
         else
         {
-            changeState(STATE_IDLE);  // 目前先這樣測試
+            changeState(STATE_IDLE);
         }
 
     }
@@ -88,5 +104,20 @@ public class PlayerAnims : MonoBehaviour
 
         spriteRenderer.flipX = shouldFlip;
         
+    }
+
+    public bool isLandNow()
+    {
+        previousIsGrounded = currentIsGrounded;
+        currentIsGrounded = playerGroundTriggerScript.isGrounded;
+
+        if (previousIsGrounded == false && currentIsGrounded == true)  // 代表剛落地
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
