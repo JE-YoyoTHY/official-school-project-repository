@@ -104,6 +104,7 @@ public class PlayerControlScript : MonoBehaviour
 	[SerializeField] private float fireballExplodeDuration; //this variable and below make fb explode like celeste's bumper, which works like spring
 	[SerializeField] private float fireballExplodeGravityScale;
 	[SerializeField] private float fireballExplodeFriction;
+	[SerializeField] private float fireballExplodeAdjustFriction;
 	private bool isFireballExplodeForceAdding;
 	private Coroutine fireballExplodeCoroutine;
 
@@ -714,15 +715,15 @@ public class PlayerControlScript : MonoBehaviour
 			if ((localVelocity.y > 0 && rb.velocity.y < localVelocity.y * fireballExplodeGuaranteeSpeedScale) || (localVelocity.y < 0 && rb.velocity.y > localVelocity.y * fireballExplodeGuaranteeSpeedScale)) rb.velocity = new Vector2(rb.velocity.x, localVelocity.y * fireballExplodeGuaranteeSpeedScale);
 
 			isFireballExplodeForceAdding = true;
-			isMoving = false;
-			isMoveActive = false; isJumpActive = false;
-			if(moveLessCoroutine != null) StopCoroutine(moveLessCoroutine);
-			moveLessCoroutine = StartCoroutine(moveLess(fireballExplodeDuration));
-			if(jumpLessCoroutine != null) StopCoroutine(jumpLessCoroutine);
-			jumpLessCoroutine = StartCoroutine(jumpLess(fireballExplodeDuration));
+			//isMoving = false;
+			//isMoveActive = false; isJumpActive = false;
+			//if(moveLessCoroutine != null) StopCoroutine(moveLessCoroutine);
+			//moveLessCoroutine = StartCoroutine(moveLess(fireballExplodeDuration));
+			//if(jumpLessCoroutine != null) StopCoroutine(jumpLessCoroutine);
+			//jumpLessCoroutine = StartCoroutine(jumpLess(fireballExplodeDuration));
 
 			mySetGravity(fireballExplodeGravityScale, myNormalGravityMaxSpeed);
-			mySetFriction(fireballExplodeFriction, myNormalAdjustFriction);
+			mySetFriction(fireballExplodeFriction, fireballExplodeAdjustFriction);
 
 
 		//coroutine phase 3 -> wait until duration end

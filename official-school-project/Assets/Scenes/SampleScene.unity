@@ -70036,6 +70036,7 @@ MonoBehaviour:
   fireballExplodeDuration: 0.2
   fireballExplodeGravityScale: 20
   fireballExplodeFriction: 20
+  fireballExplodeAdjustFriction: 10
 --- !u!114 &1742552395
 MonoBehaviour:
   m_ObjectHideFlags: 0
