@@ -7,6 +7,7 @@ using Unity.VisualScripting;
 
 public class CameraControlTriggerScript : MonoBehaviour
 {
+	private LevelManagerScript levelManager;
 	private Collider2D coll;
 
 	[SerializeField] private CameraSwitchDirection cameraSwitchDir;
@@ -22,6 +23,7 @@ public class CameraControlTriggerScript : MonoBehaviour
 	void Start()
     {
         coll = GetComponent<Collider2D>();
+		levelManager = transform.parent.parent.parent.GetComponent<LevelManagerScript>();
     }
 
     // Update is called once per frame
@@ -39,14 +41,25 @@ public class CameraControlTriggerScript : MonoBehaviour
 			switch(cameraSwitchDir)
 			{
 				case CameraSwitchDirection.Vertical:
-					if(exitDirection.y < 0)
+					if(exitDirection.y < 0) //below
 					{
-
+						levelManager.swapCamera(cameraBelow);
+					}
+					else if(exitDirection.y > 0)
+					{
+						levelManager.swapCamera(cameraAbove);
 					}
 
 					break;
 				case CameraSwitchDirection.Horizontal:
-
+					if (exitDirection.x < 0) //left
+					{
+						levelManager.swapCamera(cameraOnLeft);
+					}
+					else if (exitDirection.x > 0)
+					{
+						levelManager.swapCamera(cameraOnRight);
+					}
 					break;
 			}
 		}

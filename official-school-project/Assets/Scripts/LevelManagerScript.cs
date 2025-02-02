@@ -14,7 +14,7 @@ public class LevelManagerScript : MonoBehaviour
 	//private Transform camLB; // cam lb for camera left bottom boundary
 	//private Transform camRT; // cam rt for camera right top 
 	
-	private CinemachineVirtualCamera myVirtualCam;
+	//private CinemachineVirtualCamera myVirtualCam;
 	private CinemachineVirtualCamera currentCam;
 
 	private PlayerControlScript player;
@@ -35,11 +35,19 @@ public class LevelManagerScript : MonoBehaviour
 		//myCameraTarget = transform.GetChild(1).GetChild(3).gameObject; // 1 -> camera component, 3 -> camera target
 		//camLB = transform.GetChild(1).GetChild(0); // 1->camera component, 0 -> left bottom
 		//camRT = transform.GetChild(1).GetChild(1); // 1->camera component, 1 -> right top
-		myVirtualCam = transform.GetChild(1).GetChild(0).GetComponent<CinemachineVirtualCamera>();  // child 1 -> camera component , 0 ->virtual cam
+		//myVirtualCam = transform.GetChild(1).GetChild(0).GetComponent<CinemachineVirtualCamera>();  // child 1 -> camera component , 0 ->virtual cam
 		player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControlScript>();
 
-		myVirtualCam.Follow = player.transform;
-		myVirtualCam.GetComponent<CinemachineConfiner2D>().m_BoundingShape2D = myVirtualCam.transform.parent.GetChild(1).GetComponent<Collider2D>(); // my virtual cam parent -> cam component , child 1 -> boundary
+		//myVirtualCam.Follow = player.transform;
+		//myVirtualCam.GetComponent<CinemachineConfiner2D>().m_BoundingShape2D = myVirtualCam.transform.parent.GetChild(1).GetComponent<Collider2D>(); // my virtual cam parent -> cam component , child 1 -> boundary
+
+		for(int i = 0; i < transform.GetChild(1).GetChild(0).childCount; i++) // 1 -> camera component, 0 -> virtual cams
+		{
+			//if (i == 0) swapCamera(transform.GetChild(1).GetChild(0).GetChild(i).GetComponent<CinemachineVirtualCamera>());
+			currentCam = transform.GetChild(1).GetChild(0).GetChild(0).GetComponent<CinemachineVirtualCamera>();
+			transform.GetChild(1).GetChild(0).GetChild(i).GetComponent<CinemachineVirtualCamera>().Follow = player.transform;
+			transform.GetChild(1).GetChild(0).GetChild(i).GetComponent<CinemachineConfiner2D>().m_BoundingShape2D = transform.GetChild(1).GetChild(2).GetComponent<Collider2D>(); // 1 -> cam component, 2 -> boundary
+		}
 
 		for(int i = 0; i < transform.GetChild(2).childCount; i++) // child 2 -> level objects
 		{
@@ -71,13 +79,13 @@ public class LevelManagerScript : MonoBehaviour
 		levelSetUpEvent.Invoke();
 		//isCurrentLevel = true;
 		//transform.GetChild(3).GetComponent<CinemachineVirtualCamera>().Priority = 11;
-		myVirtualCam.Priority = 11;
+		currentCam.Priority = 11;
 	}
 
 	public void disableLevel()
 	{
 		//isCurrentLevel = false;
-		myVirtualCam.Priority = 10;
+		currentCam.Priority = 10;
 	}
 
 	public void restartLevel()
@@ -139,9 +147,14 @@ public class LevelManagerScript : MonoBehaviour
 
 	public void swapCamera(CinemachineVirtualCamera newCam)
 	{
-		currentCam.Priority = 10;
-		currentCam = newCam;
-		newCam.Priority = 11;
+		if(currentCam != newCam)
+		{
+			if(currentCam != null)
+				currentCam.Priority = 10;
+			currentCam = newCam;
+			newCam.Priority = 11;
+		}
+		
 	}
 
 
