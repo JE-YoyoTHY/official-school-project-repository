@@ -224,8 +224,8 @@ public class PlayerControlScript : MonoBehaviour
 		}
 
 		//idk if it is needed, but if not, camera might move down even player stands still
-		if (groundTrigger.onGround() && rb.velocity.y < 0)
-			mySetVy(0);
+		//if (groundTrigger.onGround() && rb.velocity.y < 0)
+		//	mySetVy(0);
 	}
 
 	private void myImpulseAcceleration(Vector2 localImpulseAcceleration)

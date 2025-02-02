@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class GateScript : MonoBehaviour
 {
@@ -55,4 +56,47 @@ public class GateScript : MonoBehaviour
 			gateOpen();
 		}*/
 	}
+
+
+	//funcitons for custom editor
+	public void setLockedPos()
+	{
+		transform.GetChild(1).position = // 1 -> locked pos
+		transform.GetChild(0).position; // 0-> sprite
+	}
+
+	public void setOpenedPos()
+	{
+		transform.GetChild(2).position = // 2 -> locked pos
+		transform.GetChild(0).position; // 0-> sprite
+	}
 }
+
+
+#if UNITY_EDITOR
+[CustomEditor(typeof(GateScript))]
+public class GateCustomInspector : Editor
+{
+	public override void OnInspectorGUI()
+	{
+		base.OnInspectorGUI();
+
+		GateScript Gate = (GateScript)target;
+
+		EditorGUILayout.BeginHorizontal();
+		if(GUILayout.Button("Set Locked Position", GUILayout.Width(180f)))
+		{
+			Gate.setLockedPos();
+		}
+
+		if (GUILayout.Button("Set Opened Position", GUILayout.Width(180f)))
+		{
+			Gate.setOpenedPos();
+		}
+		EditorGUILayout.EndHorizontal();
+	}
+
+
+}
+
+#endif
