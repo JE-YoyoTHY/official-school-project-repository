@@ -104,6 +104,7 @@ public class PlayerControlScript : MonoBehaviour
 	[SerializeField] private float fireballExplodeDuration; //this variable and below make fb explode like celeste's bumper, which works like spring
 	[SerializeField] private float fireballExplodeGravityScale;
 	[SerializeField] private float fireballExplodeFriction;
+	private bool isFireballExplodeForceAdding;
 	private Coroutine fireballExplodeCoroutine;
 
 	//freeze frame
@@ -712,6 +713,7 @@ public class PlayerControlScript : MonoBehaviour
 			if ((localVelocity.x > 0 && rb.velocity.x < localVelocity.x * fireballExplodeGuaranteeSpeedScale) || (localVelocity.x < 0 && rb.velocity.x > localVelocity.x * fireballExplodeGuaranteeSpeedScale)) rb.velocity = new Vector2(localVelocity.x * fireballExplodeGuaranteeSpeedScale, rb.velocity.y);
 			if ((localVelocity.y > 0 && rb.velocity.y < localVelocity.y * fireballExplodeGuaranteeSpeedScale) || (localVelocity.y < 0 && rb.velocity.y > localVelocity.y * fireballExplodeGuaranteeSpeedScale)) rb.velocity = new Vector2(rb.velocity.x, localVelocity.y * fireballExplodeGuaranteeSpeedScale);
 
+			isFireballExplodeForceAdding = true;
 			isMoving = false;
 			isMoveActive = false; isJumpActive = false;
 			if(moveLessCoroutine != null) StopCoroutine(moveLessCoroutine);
@@ -739,6 +741,8 @@ public class PlayerControlScript : MonoBehaviour
 
 	private void fireballExplodeEnd()
 	{
+		isFireballExplodeForceAdding = false;
+
 		if (moveLessCoroutine != null) StopCoroutine(moveLessCoroutine);
 		if (jumpLessCoroutine != null) StopCoroutine(jumpLessCoroutine);
 		isMoveActive = true; isJumpActive = true;
@@ -758,7 +762,7 @@ public class PlayerControlScript : MonoBehaviour
 	private void fireballChargeMain()
 	{
 		//recharge
-		if (onGround && fireballChargeNeeded() && !isFireballPushForceAdding)
+		if (onGround && fireballChargeNeeded() && !isFireballPushForceAdding && !isFireballExplodeForceAdding)
 		{
 			fireballCurrentCharges = fireballMaxCharges;
 		}
@@ -929,6 +933,7 @@ public class PlayerControlScript : MonoBehaviour
 
 		//fireball
 		if (isFireballPushForceAdding) fireballPushForceEnd();
+		if (isFireballExplodeForceAdding) fireballExplodeEnd();
 		if (fireballHangTimeCoroutine != null) StopCoroutine(fireballHangTimeCoroutine);
 		GameObject[] fbs;
 		fbs = GameObject.FindGameObjectsWithTag("Fireball");

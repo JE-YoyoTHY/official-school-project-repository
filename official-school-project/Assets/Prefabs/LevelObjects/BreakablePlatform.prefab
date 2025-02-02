@@ -288,5 +288,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86604e1331aa9cb478626f55f805347c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakTime: 2
-  restoreTime: 7
+  breakTime: 1.3
+  restoreTime: 1.8

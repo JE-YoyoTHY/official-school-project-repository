@@ -15,6 +15,7 @@ public class LevelManagerScript : MonoBehaviour
 	//private Transform camRT; // cam rt for camera right top 
 	
 	private CinemachineVirtualCamera myVirtualCam;
+	private CinemachineVirtualCamera currentCam;
 
 	private PlayerControlScript player;
 	
@@ -110,26 +111,42 @@ public class LevelManagerScript : MonoBehaviour
 			//myCameraTarget.GetComponent<Rigidbody2D>().velocity = new Vector2(myCameraTarget.GetComponent<Rigidbody2D>().velocity.x, 0);
 			*/
 
-		/*if (myCameraTarget.transform.position.x < camLB.position.x || player.transform.position.x < camLB.position.x)
-		{
-			myCameraTarget.transform.position = new Vector3(camLB.position.x, myCameraTarget.transform.position.y, myCameraTarget.transform.position.z);
-			myCameraTarget.GetComponent<Rigidbody2D>().velocity = new Vector2(0, myCameraTarget.GetComponent<Rigidbody2D>().velocity.y);
-		}
-		if (myCameraTarget.transform.position.y < camLB.position.y || player.transform.position.y < camLB.position.y)
-		{
-			myCameraTarget.transform.position = new Vector3(myCameraTarget.transform.position.x, camLB.position.y, myCameraTarget.transform.position.z);
-			myCameraTarget.GetComponent<Rigidbody2D>().velocity = new Vector2(myCameraTarget.GetComponent<Rigidbody2D>().velocity.x, 0);
-		}
+	/*if (myCameraTarget.transform.position.x < camLB.position.x || player.transform.position.x < camLB.position.x)
+	{
+		myCameraTarget.transform.position = new Vector3(camLB.position.x, myCameraTarget.transform.position.y, myCameraTarget.transform.position.z);
+		myCameraTarget.GetComponent<Rigidbody2D>().velocity = new Vector2(0, myCameraTarget.GetComponent<Rigidbody2D>().velocity.y);
+	}
+	if (myCameraTarget.transform.position.y < camLB.position.y || player.transform.position.y < camLB.position.y)
+	{
+		myCameraTarget.transform.position = new Vector3(myCameraTarget.transform.position.x, camLB.position.y, myCameraTarget.transform.position.z);
+		myCameraTarget.GetComponent<Rigidbody2D>().velocity = new Vector2(myCameraTarget.GetComponent<Rigidbody2D>().velocity.x, 0);
+	}
 
-		if (myCameraTarget.transform.position.x > camRT.position.x || player.transform.position.x > camRT.position.x)
-		{
-			myCameraTarget.transform.position = new Vector3(camRT.position.x, myCameraTarget.transform.position.y, myCameraTarget.transform.position.z);
-			myCameraTarget.GetComponent<Rigidbody2D>().velocity = new Vector2(0, myCameraTarget.GetComponent<Rigidbody2D>().velocity.y);
-		}
-		if (myCameraTarget.transform.position.y > camRT.position.y || player.transform.position.y > camRT.position.y)
-		{
-			myCameraTarget.transform.position = new Vector3(myCameraTarget.transform.position.x, camRT.position.y, myCameraTarget.transform.position.z);
-			myCameraTarget.GetComponent<Rigidbody2D>().velocity = new Vector2(myCameraTarget.GetComponent<Rigidbody2D>().velocity.x, 0);
-		}
-	}*/
+	if (myCameraTarget.transform.position.x > camRT.position.x || player.transform.position.x > camRT.position.x)
+	{
+		myCameraTarget.transform.position = new Vector3(camRT.position.x, myCameraTarget.transform.position.y, myCameraTarget.transform.position.z);
+		myCameraTarget.GetComponent<Rigidbody2D>().velocity = new Vector2(0, myCameraTarget.GetComponent<Rigidbody2D>().velocity.y);
+	}
+	if (myCameraTarget.transform.position.y > camRT.position.y || player.transform.position.y > camRT.position.y)
+	{
+		myCameraTarget.transform.position = new Vector3(myCameraTarget.transform.position.x, camRT.position.y, myCameraTarget.transform.position.z);
+		myCameraTarget.GetComponent<Rigidbody2D>().velocity = new Vector2(myCameraTarget.GetComponent<Rigidbody2D>().velocity.x, 0);
+	}
+}*/
+
+
+	#region camera
+
+	public void swapCamera(CinemachineVirtualCamera newCam)
+	{
+		currentCam.Priority = 10;
+		currentCam = newCam;
+		newCam.Priority = 11;
+	}
+
+
+
+	#endregion
+
+
 }
