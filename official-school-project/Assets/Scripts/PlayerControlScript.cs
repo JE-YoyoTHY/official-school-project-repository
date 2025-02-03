@@ -595,7 +595,7 @@ public class PlayerControlScript : MonoBehaviour
 		{
 			fireballSummon();
 			fireballPushForceStart();
-			fireballStartAfterFreezeTimeActive= false;
+			fireballStartAfterFreezeTimeActive = false;
 		}
 
 		if (isFireballPushForceAdding)
@@ -648,7 +648,7 @@ public class PlayerControlScript : MonoBehaviour
 		else if (fireballDir.x < 0) fireballHangTimeMoveBoostDir = 1;
 		else fireballHangTimeMoveBoostDir = 0;
 
-		mySetFriction(myNormalFrictionAcceleration * fireballHangTimeFrictionScale, myNormalAdjustFriction * fireballHangTimeFrictionScale);
+		mySetFriction(myNormalFrictionAcceleration * fireballHangTimeFrictionScale, 0);
 
 		CinemachineImpulseSource impulseSource = GetComponent<CinemachineImpulseSource>();
 
@@ -660,6 +660,7 @@ public class PlayerControlScript : MonoBehaviour
 	{
 		isFireballPushForceAdding = false;
 		fireballPushForceDurationCounter = 0;
+		mySetFriction(myNormalFrictionAcceleration * fireballHangTimeFrictionScale, myNormalAdjustFriction * fireballHangTimeFrictionScale);
 		if (fireballHangTimeCoroutine != null) StopCoroutine(fireballHangTimeCoroutine);
 		fireballHangTimeCoroutine = StartCoroutine(fireballHangTime(fireballPushForceHangTimeDuration));
 	}
@@ -689,6 +690,7 @@ public class PlayerControlScript : MonoBehaviour
 		mySetFriction(myNormalFrictionAcceleration * fireballHangTimeFrictionScale, myNormalAdjustFriction * fireballHangTimeFrictionScale);*/
 		
 			fireballPushForceEnd();
+			if (fireballHangTimeCoroutine != null) StopCoroutine(fireballHangTimeCoroutine);
 
 			/* if player try to move to the same dir of the explode dir -> increase the speed
 			 * if player try to move to the opposite dir of the explode fir -> decrease the speed
