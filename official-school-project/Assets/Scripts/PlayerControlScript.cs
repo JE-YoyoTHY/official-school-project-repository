@@ -65,6 +65,7 @@ public class PlayerControlScript : MonoBehaviour
 	[SerializeField] private float fireballPreInputTime;
 	private sbyte fireballKeyValue;
 	private sbyte fireballMouseValue;
+	//private sbyte fireballArrowKeyValue;
 	private bool fireballCastByKeyboard;
 	[SerializeField] private int fireballMaxCharges;
 	private int fireballCurrentCharges;
@@ -691,6 +692,8 @@ public class PlayerControlScript : MonoBehaviour
 		
 			fireballPushForceEnd();
 			if (fireballHangTimeCoroutine != null) StopCoroutine(fireballHangTimeCoroutine);
+			fireballHangTimeMoveBoostDir = 0;
+
 
 			/* if player try to move to the same dir of the explode dir -> increase the speed
 			 * if player try to move to the opposite dir of the explode fir -> decrease the speed
