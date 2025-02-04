@@ -625,6 +625,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9184143754752090971}
   - component: {fileID: 2670930717260603553}
+  - component: {fileID: 826707912515758429}
   m_Layer: 9
   m_Name: RespawnPointTrigger
   m_TagString: Untagged
@@ -693,6 +694,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &826707912515758429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3085923834098409958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a24f135f4674e1c49a74c4f245e3bc28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3122681945596742189
 GameObject:
   m_ObjectHideFlags: 0

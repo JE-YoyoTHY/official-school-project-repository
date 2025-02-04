@@ -931,6 +931,7 @@ public class PlayerControlScript : MonoBehaviour
 		rb.velocity = Vector2.zero;
 		transform.position = currentRespawnPoint.transform.position;
 		currentLevel.restartLevel();
+		currentRespawnPoint.transform.parent.GetComponent<RespawnPointScript>().changeCameraAfterRespawn();
 
 		//reset
 		//jump
