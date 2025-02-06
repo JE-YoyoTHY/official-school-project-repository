@@ -366,10 +366,15 @@ public class PlayerControlScript : MonoBehaviour
 	//gravity
 	private void myGravityMain()
 	{
-		//if(!onGround) // that means when player is in coyote time, they wont have gravity
-		//to avoid player getting no gravity during coyote time, i want to use ground trigger's isGrounded
-		//if(!groundTrigger.onGround())
-			myAcceleration(Vector2.down * myGravityScale, Vector2.down * myGravityMaxSpeed);
+		if(!isJumping && !isFireballPushForceAdding && !isFireballExplodeForceAdding && !isControlBySpring)
+		{
+			if (rb.velocity.y < jumpMinSpeed && rb.velocity.y > -jumpMinSpeed)
+				mySetGravity(jumpGravity * jumpExtraHangTimeGravityScale, myNormalGravityMaxSpeed);
+			else if(rb.velocity.y < -jumpMinSpeed)
+				mySetGravity(myNormalGravityScale, myNormalGravityMaxSpeed);
+		}
+
+		myAcceleration(Vector2.down * myGravityScale, Vector2.down * myGravityMaxSpeed);
 	}
 
 	#endregion
@@ -409,15 +414,34 @@ public class PlayerControlScript : MonoBehaviour
 	private void jumpStart()
 	{
 		isJumping = true;
-		mySetVy(jumpStrength);
-		mySetGravity(jumpGravity, myGravityMaxSpeed);
+		if(isFireballExplodeForceAdding)
+		{
+			if(rb.velocity.y < jumpStrength)
+			{
+				mySetVy(jumpStrength);
+			}
+		}
+		else
+		{
+			mySetVy(jumpStrength);
+			mySetGravity(jumpGravity, myGravityMaxSpeed);
+		}
+
+		
 		leaveGround();
 	}
 
 	private void jumpEnd()
 	{
-		mySetGravity(jumpGravity * jumpExtraHangTimeGravityScale, myGravityMaxSpeed);
-		mySetVy(jumpMinSpeed);
+		if (isFireballExplodeForceAdding)
+		{
+			if(rb.velocity.y < jumpMinSpeed) mySetVy(jumpMinSpeed);
+		}
+		else
+		{
+			mySetGravity(jumpGravity * jumpExtraHangTimeGravityScale, myGravityMaxSpeed);
+			mySetVy(jumpMinSpeed);
+		}
 
 		if (isJumping)
 		{
