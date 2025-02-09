@@ -100,12 +100,14 @@ public class PlayerControlScript : MonoBehaviour
 	[SerializeField] private float fireballExplodeFreezeTime;
 	[SerializeField] private float fireballExplodeMoveSameDirBoost;
 	[SerializeField] private float fireballExplodeMoveDifferentDirDecrease;
-	[SerializeField] private float fireballExplodeGuaranteeSpeedScale; // 火球爆炸的寶底速度，因為火球速度是用加的
+	[SerializeField] private float fireballExplodeGuaranteeSpeedScale; // 火球爆炸的寶底速度，因為火球速度是用加的, 以這次要加的速度為基準
+	[SerializeField] private float fireballExplodeMaxSpeedScale; // 以explode force為基準, x y 分別處理
 	
-	[SerializeField] private float fireballExplodeDuration; //this variable and below make fb explode like celeste's bumper, which works like spring
+	[SerializeField] private float fireballExplodeDuration;
 	[SerializeField] private float fireballExplodeGravityScale;
 	[SerializeField] private float fireballExplodeFriction;
 	[SerializeField] private float fireballExplodeAdjustFriction;
+	[SerializeField] private float fireballExplodeMoveAccelerationScale;
 	private bool isFireballExplodeForceAdding;
 	private Coroutine fireballExplodeCoroutine;
 
@@ -270,7 +272,7 @@ public class PlayerControlScript : MonoBehaviour
 			{
 				isMoving = true;
 				//normal
-				if (fireballHangTimeMoveBoostDir == 0)
+				if (fireballHangTimeMoveBoostDir == 0 && !isFireballExplodeForceAdding)
 				{
 					if (moveKeyValue * rb.velocity.x >= 0) // same direction
 					{
@@ -288,7 +290,7 @@ public class PlayerControlScript : MonoBehaviour
 						else myAcceleration(new Vector2(moveAcceleration * moveKeyValue, 0), new Vector2(moveMaxSpeed * moveKeyValue, 0));
 					}
 				}
-				else // fireball hang time boost
+				else if (fireballHangTimeMoveBoostDir != 0)// fireball hang time boost
 				{
 					if(moveKeyValue * fireballHangTimeMoveBoostDir > 0) // same dir
 					{
@@ -298,6 +300,10 @@ public class PlayerControlScript : MonoBehaviour
 					{
 						myAcceleration(new Vector2(moveAcceleration * moveKeyValue * fireballHangTimeMoveDifferentDirDecrease, 0), new Vector2(moveMaxSpeed * moveKeyValue * fireballHangTimeMoveDifferentDirDecrease, 0));
 					}
+				}
+				else if (isFireballExplodeForceAdding)
+				{
+					myAcceleration(new Vector2(moveAcceleration * moveKeyValue * fireballExplodeMoveAccelerationScale, 0), new Vector2(moveMaxSpeed * moveKeyValue, 0));
 				}
 			}
 		}
@@ -742,8 +748,13 @@ public class PlayerControlScript : MonoBehaviour
 			//guarantee speed
 			if ((localVelocity.x > 0 && rb.velocity.x < localVelocity.x * fireballExplodeGuaranteeSpeedScale) || (localVelocity.x < 0 && rb.velocity.x > localVelocity.x * fireballExplodeGuaranteeSpeedScale)) rb.velocity = new Vector2(localVelocity.x * fireballExplodeGuaranteeSpeedScale, rb.velocity.y);
 			if ((localVelocity.y > 0 && rb.velocity.y < localVelocity.y * fireballExplodeGuaranteeSpeedScale) || (localVelocity.y < 0 && rb.velocity.y > localVelocity.y * fireballExplodeGuaranteeSpeedScale)) rb.velocity = new Vector2(rb.velocity.x, localVelocity.y * fireballExplodeGuaranteeSpeedScale);
+			//max speed
+			if (localVelocity.x > 0 && rb.velocity.x > fireballExplodeForce * fireballExplodeMaxSpeedScale * fireballExplodeHorizontalScale) mySetVx(fireballExplodeForce * fireballExplodeMaxSpeedScale * fireballExplodeHorizontalScale);
+			if (localVelocity.x < 0 && rb.velocity.x < fireballExplodeForce * fireballExplodeMaxSpeedScale * fireballExplodeHorizontalScale * -1) mySetVx(fireballExplodeForce * fireballExplodeMaxSpeedScale * fireballExplodeHorizontalScale * -1);
+			if (localVelocity.y > 0 && rb.velocity.y > fireballExplodeForce * fireballExplodeMaxSpeedScale) mySetVy(fireballExplodeForce * fireballExplodeMaxSpeedScale);
+			if (localVelocity.y < 0 && rb.velocity.y < fireballExplodeForce * fireballExplodeMaxSpeedScale * -1) mySetVy(fireballExplodeForce * fireballExplodeMaxSpeedScale * -1);
 
-			isFireballExplodeForceAdding = true;
+		isFireballExplodeForceAdding = true;
 			//isMoving = false;
 			//isMoveActive = false; isJumpActive = false;
 			//if(moveLessCoroutine != null) StopCoroutine(moveLessCoroutine);
@@ -753,6 +764,7 @@ public class PlayerControlScript : MonoBehaviour
 
 			mySetGravity(fireballExplodeGravityScale, myNormalGravityMaxSpeed);
 			mySetFriction(fireballExplodeFriction, fireballExplodeAdjustFriction);
+			if (localVelocity.y > 0) leaveGround(); // for cancel coyote time
 
 
 		//coroutine phase 3 -> wait until duration end
