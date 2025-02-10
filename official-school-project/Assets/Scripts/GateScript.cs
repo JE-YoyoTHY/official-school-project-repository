@@ -12,6 +12,9 @@ public class GateScript : MonoBehaviour
 	private int currentKeyCount; //while max key count = child 3(keys) . childcount
 	private bool gateOpened;
 
+	[SerializeField] private float howLongToOpen;
+	private float openTimeCounter;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,16 +26,27 @@ public class GateScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-		if (currentKeyCount == transform.GetChild(3).childCount && !gateOpened) // child 3 -> keys
+		if (!LogicScript.instance.isFreeze())
 		{
-			gateOpen();
+			if (currentKeyCount == transform.GetChild(3).childCount && !gateOpened) // child 3 -> keys
+			{
+				gateOpen();
+			}
+			if (gateOpened && openTimeCounter < howLongToOpen)
+			{
+				gateSprite.transform.position = Vector3.Lerp(lockedPos.transform.position, openedPos.transform.position, openTimeCounter / howLongToOpen);
+				openTimeCounter = Mathf.Min(openTimeCounter + Time.deltaTime, howLongToOpen);
+				
+			}
 		}
+		
 	}
 
 	private void gateOpen()
 	{
 		gateOpened = true;
-		gateSprite.transform.position = openedPos.transform.position;
+		//gateSprite.transform.position = openedPos.transform.position;
+		openTimeCounter = 0;
 	}
 
 	public void gateReset()
