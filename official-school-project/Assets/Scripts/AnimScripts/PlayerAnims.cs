@@ -20,6 +20,8 @@ public class PlayerAnims : MonoBehaviour
     public string STATE_JUMP { get; private set; } = "PlayerJump";
     public string STATE_FALL { get; private set; } = "PlayerFall";
     public string STATE_LAND { get; private set; } = "PlayerLand";
+    public string STATE_HARD_LAND { get; private set; } = "PlayerHardLand";
+    public string STATE_PARKOUR_ROLL { get; private set; } = "PlayerParkourRoll";
 
     private List<string> availableAnims = new List<string>()
     {
@@ -28,17 +30,25 @@ public class PlayerAnims : MonoBehaviour
     #endregion
 
     public bool canChangeState { get; private set; } = true;
+    private Rigidbody2D playerRb2D;
+    [SerializeField] private Vector2 previousVelocity;
+    [SerializeField] private Vector2 currentVelocity;
+    [SerializeField] private float hardLandMinVy = 10f;  // 璶才HardLand┮惠程Y硉
+    [SerializeField] private float parkourRollMinVx = 10f;  // 璶才HardLand璶Τ程X硉穦陆簎
     private bool previousIsGrounded;
     private bool currentIsGrounded;
     private sbyte facingDir;
+    private Dictionary<string, bool> stateCondition = new Dictionary<string, bool>();
     void Start()
     {
+        
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         player = GameObject.FindGameObjectWithTag("Player");
         playerControlScript = player.GetComponent<PlayerControlScript>();
         playerGroundTriggerScript = player.GetComponentInChildren<PlayerGroundTriggerScript>(false);  // false 盎代activeン
-
+        playerRb2D = playerControlScript.gameObject.GetComponent<Rigidbody2D>();
+        currentVelocity = playerRb2D.velocity;
     }
 
     void Update()
@@ -46,7 +56,15 @@ public class PlayerAnims : MonoBehaviour
         transform.position = GameObject.Find("Player").transform.position;
         facingDir = playerControlScript.moveKeyValue;
         flipPlayerSprite(facingDir);
+
+
+        refreshStateCondition();
         stateDetect();
+    }
+
+    private void FixedUpdate()
+    {
+        refreshVelocityInfo();
     }
     public void changeState(string newState)
     {
@@ -61,25 +79,33 @@ public class PlayerAnims : MonoBehaviour
 
     public void stateDetect()
     {
-        // run
-        if (playerControlScript.isMoving == true && playerGroundTriggerScript.isGrounded == true)
+        if (stateCondition["run"])
         {
             changeState(STATE_RUN);
         }
-        else if (playerControlScript.isJumping == true)
+        if (stateCondition["jump"])
         {
             changeState(STATE_JUMP);
         }
-        else if (playerControlScript.gameObject.GetComponent<Rigidbody2D>().velocity.y <= 0 && playerGroundTriggerScript.isGrounded == false)
+        if (stateCondition["fall"])
         {
             changeState(STATE_FALL);
         }
-        else if (isLandNow() == true)
+        if (stateCondition["hard_land"])
+        {
+            print("hard_land");
+        }
+        if (stateCondition["land"])
         {
             print("land");
             changeState(STATE_LAND);
         }
-        else if (playerGroundTriggerScript.isGrounded == true && playerControlScript.isMoving == false && playerControlScript.isJumping == false)
+
+        if (stateCondition["parkour_roll"])
+        {
+            print("parkour_roll");
+        }
+        if (stateCondition["idle"])
         {
             changeState(STATE_IDLE);
         }
@@ -97,18 +123,19 @@ public class PlayerAnims : MonoBehaviour
 
     }
 
-    public bool isLandNow()
+    public Vector2 getLandVelocity()
     {
         previousIsGrounded = currentIsGrounded;
         currentIsGrounded = playerGroundTriggerScript.isGrounded;
 
         if (previousIsGrounded == false && currentIsGrounded == true)  // 辅
         {
-            return true;
+            print(previousVelocity);
+            return previousVelocity;
         }
         else
         {
-            return false;
+            return Vector2.zero;  // ⊿Τ辅
         }
     }
 
@@ -117,5 +144,25 @@ public class PlayerAnims : MonoBehaviour
         if (state == "land_start") { canChangeState = false; }
         else if (state == "land_end") { canChangeState = true; }
 
+    }
+    public void refreshVelocityInfo()
+    {
+        previousVelocity = currentVelocity;
+        currentVelocity = playerRb2D.velocity;
+    }
+
+    public void refreshStateCondition()
+    {
+
+        stateCondition = new Dictionary<string, bool>
+        {
+            {"run",  playerControlScript.isMoving == true && playerGroundTriggerScript.isGrounded == true},
+            {"jump", playerControlScript.isJumping == true},
+            {"fall", currentVelocity.y <= 0 && playerGroundTriggerScript.isGrounded == false},
+            {"land", getLandVelocity() != Vector2.zero && Mathf.Abs(getLandVelocity().y) <= hardLandMinVy},
+            {"hard_land", getLandVelocity() != Vector2.zero && Mathf.Abs(getLandVelocity().y) > hardLandMinVy},
+            {"parkour_roll", getLandVelocity() != Vector2.zero && Mathf.Abs(getLandVelocity().y) > hardLandMinVy && Mathf.Abs(currentVelocity.x) > parkourRollMinVx},
+            {"idle", playerGroundTriggerScript.isGrounded == true && playerControlScript.isMoving == false && playerControlScript.isJumping == false}
+        };
     }
 }
