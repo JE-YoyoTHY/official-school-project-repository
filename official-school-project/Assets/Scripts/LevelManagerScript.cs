@@ -16,7 +16,6 @@ public class LevelManagerScript : MonoBehaviour
 	
 	//private CinemachineVirtualCamera myVirtualCam;
 	private CinemachineVirtualCamera currentCam;
-
 	private PlayerControlScript player;
 	
 	/*//camera
@@ -28,6 +27,9 @@ public class LevelManagerScript : MonoBehaviour
 	//private Transform currentRespawnPoint; // idk 要放在Player還是level manager
 
 	[HideInInspector] public UnityEvent levelSetUpEvent; //set up crystal, gate ...
+
+	//change level
+	[SerializeField] private float levelChangeFreezeTime;
 
 	// Start is called before the first frame update
 	void Start()
@@ -51,10 +53,14 @@ public class LevelManagerScript : MonoBehaviour
 
 		for(int i = 0; i < transform.GetChild(2).childCount; i++) // child 2 -> level objects
 		{
-			if(transform.GetChild(2).GetChild(i).tag == "RechargeCrystal") levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<RechargeCrystalScript>().regainPower);
+			if (transform.GetChild(2).GetChild(i).tag == "RechargeCrystal") levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<RechargeCrystalScript>().regainPower);
 			if (transform.GetChild(2).GetChild(i).tag == "Gate") levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<GateScript>().gateReset);
 			if (transform.GetChild(2).GetChild(i).tag == "BreakablePlatform") levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<BreakablePlatformScript>().restoreAfterBreak);
 		}
+
+		//blockage -> when player exit this level, enable this to prevent player from returning
+		transform.GetChild(0).GetChild(2).GetComponent<SpriteRenderer>().color = Color.clear; // 0 -> basic, 2 -> blockage
+		transform.GetChild(0).GetChild(2).gameObject.SetActive(false); // 0 -> basic, 2 -> blockage
 	}
 
 	// Update is called once per frame
@@ -82,10 +88,13 @@ public class LevelManagerScript : MonoBehaviour
 		currentCam.Priority = 11;
 	}
 
-	public void disableLevel()
+	public void disableLevel() // means leave this level
 	{
 		//isCurrentLevel = false;
 		currentCam.Priority = 10;
+		transform.GetChild(0).GetChild(2).gameObject.SetActive(true); // 0 -> basic, 2 -> blockage
+
+		player.freezeStart(levelChangeFreezeTime);
 	}
 
 	public void restartLevel()

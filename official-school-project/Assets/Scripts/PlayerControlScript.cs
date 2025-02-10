@@ -912,7 +912,7 @@ public class PlayerControlScript : MonoBehaviour
 
 	#region freeze frame
 
-	private void freezeStart(float t)
+	public void freezeStart(float t)
 	{
 		freezeVelocity = rb.velocity;
 		logic.setFreezeTime(t);
