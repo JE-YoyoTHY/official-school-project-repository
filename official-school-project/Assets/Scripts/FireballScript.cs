@@ -153,32 +153,42 @@ public class FireballScript : MonoBehaviour
 	{
 		if(!logic.isFreeze())
 		{
-			if(collision.gameObject.tag == "KillFireballWithoutExplode")
+			if(collision.CompareTag("KillFireballWithoutExplode"))
 			{
 				Destroy(gameObject);
 				return ;
 			}
 
-			if((collision.gameObject.layer == groundLayer || collision.gameObject.tag == "Fireball" /*|| (collision.gameObject.tag == "Player" && leftPlayer)*/) && !isExploding)
+
+			/* currently, one way platform is using tilemap, 
+			 * and my solution to make fb pass through is
+			 * when it touch one way platform and move upwards
+			 */
+			if((collision.gameObject.layer == groundLayer || collision.CompareTag("Fireball") /*|| (collision.gameObject.tag == "Player" && leftPlayer)*/) && !isExploding)
 			{
-				if(collision.gameObject.tag == "BreakablePlatform")
+				if(collision.CompareTag("BreakablePlatform"))
 				{
 					collision.gameObject.GetComponent<BreakablePlatformScript>().breakStart();
 				}
 
-				explode();
+				// if is passing one way platform -> not explode
+				if(!(collision.CompareTag("OneWayPlatform") && moveDir.y > 0))
+				{
+					explode();
+				}
+
 			}
 
 			/* if player was hit by fb
 			 * i want to give player an extra force, that push player toward the direction which fireball goes
 			 */
-			if(collision.gameObject.tag == "Player" && leftPlayer && !isExploding)
+			if(collision.CompareTag("Player") && leftPlayer && !isExploding)
 			{
 				explodePushPlayer();
 				explode();
 			}
 
-			if(collision.gameObject.tag == "Player" && isExploding && !playerPushed)
+			if(collision.CompareTag("Player") && isExploding && !playerPushed)
 			{
 				/*Vector3 dis = player.transform.position - transform.position;
 				Vector2 localForce = new Vector2(dis.x, dis.y).normalized;
@@ -202,7 +212,7 @@ public class FireballScript : MonoBehaviour
 
 	private void OnTriggerExit2D(Collider2D collision)
 	{
-		if(collision.gameObject.tag == "Player")
+		if(collision.CompareTag("Player"))
 		{
 			leftPlayer = true;
 		}
@@ -216,4 +226,5 @@ public class FireballScript : MonoBehaviour
 			moveSpeed = moveSpeed * localForce;
 		}
 	}
+
 }

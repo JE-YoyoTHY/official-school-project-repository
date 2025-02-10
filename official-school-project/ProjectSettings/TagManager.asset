@@ -10,6 +10,7 @@ TagManager:
   - Gate
   - BreakablePlatform
   - KillFireballWithoutExplode
+  - OneWayPlatform
   layers:
   - Default
   - TransparentFX
