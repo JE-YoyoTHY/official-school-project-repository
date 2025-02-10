@@ -163,7 +163,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   normalMoveSpeed: 20
-  fireballFriction: 50
+  fireballFriction: 15
   explodeRadius: 4
   explodeDuration: 0.1
   hitPlayerSpeedScale: 0.75
