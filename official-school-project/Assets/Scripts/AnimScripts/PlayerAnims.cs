@@ -35,8 +35,8 @@ public class PlayerAnims : MonoBehaviour
     [SerializeField] private Vector2 currentVelocity;
     [SerializeField] private float hardLandMinVy = 10f;  // 璶才HardLand┮惠程Y硉
     [SerializeField] private float parkourRollMinVx = 10f;  // 璶才HardLand璶Τ程X硉穦陆簎
-    private bool previousIsGrounded;
-    private bool currentIsGrounded;
+    [SerializeField] private bool previousIsGrounded;
+    [SerializeField] private bool currentIsGrounded;
     private sbyte facingDir;
     private Dictionary<string, bool> stateCondition = new Dictionary<string, bool>();
     void Start()
@@ -49,6 +49,7 @@ public class PlayerAnims : MonoBehaviour
         playerGroundTriggerScript = player.GetComponentInChildren<PlayerGroundTriggerScript>(false);  // false 盎代activeン
         playerRb2D = playerControlScript.gameObject.GetComponent<Rigidbody2D>();
         currentVelocity = playerRb2D.velocity;
+        refreshStateCondition();
     }
 
     void Update()
@@ -57,9 +58,9 @@ public class PlayerAnims : MonoBehaviour
         facingDir = playerControlScript.moveKeyValue;
         flipPlayerSprite(facingDir);
 
-
-        refreshStateCondition();
         stateDetect();
+        refreshStateCondition();
+        
     }
 
     private void FixedUpdate()
@@ -91,15 +92,21 @@ public class PlayerAnims : MonoBehaviour
         {
             changeState(STATE_FALL);
         }
-        if (stateCondition["hard_land"])
+
+
+        print($"getLandVelocity(): {getLandVelocity()}");
+        print($"is vector2.zero: {getLandVelocity() == Vector2.zero}");
+        if (getLandVelocity() != Vector2.zero && Mathf.Abs(getLandVelocity().y) > hardLandMinVy)
         {
             print("hard_land");
         }
-        if (stateCondition["land"])
+
+        if (getLandVelocity() != Vector2.zero && Mathf.Abs(getLandVelocity().y) <= hardLandMinVy)
         {
             print("land");
             changeState(STATE_LAND);
         }
+
 
         if (stateCondition["parkour_roll"])
         {
@@ -130,7 +137,7 @@ public class PlayerAnims : MonoBehaviour
 
         if (previousIsGrounded == false && currentIsGrounded == true)  // 辅
         {
-            print(previousVelocity);
+            print($"previousVelocity{previousVelocity}");
             return previousVelocity;
         }
         else
@@ -160,7 +167,7 @@ public class PlayerAnims : MonoBehaviour
             {"jump", playerControlScript.isJumping == true},
             {"fall", currentVelocity.y <= 0 && playerGroundTriggerScript.isGrounded == false},
             {"land", getLandVelocity() != Vector2.zero && Mathf.Abs(getLandVelocity().y) <= hardLandMinVy},
-            {"hard_land", getLandVelocity() != Vector2.zero && Mathf.Abs(getLandVelocity().y) > hardLandMinVy},
+            {"hard_land", getLandVelocity() != Vector2.zero && Mathf.Abs(getLandVelocity().y) <= hardLandMinVy},
             {"parkour_roll", getLandVelocity() != Vector2.zero && Mathf.Abs(getLandVelocity().y) > hardLandMinVy && Mathf.Abs(currentVelocity.x) > parkourRollMinVx},
             {"idle", playerGroundTriggerScript.isGrounded == true && playerControlScript.isMoving == false && playerControlScript.isJumping == false}
         };
