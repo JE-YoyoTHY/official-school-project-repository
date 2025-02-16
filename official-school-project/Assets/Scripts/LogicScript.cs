@@ -56,6 +56,11 @@ public class LogicScript : MonoBehaviour
 
 	public void setFreezeTime(float t)
 	{
+		if (freezeTimer <= 0) // from not freeze to freeze -> set up player
+		{
+			PlayerControlScript.instance.freezeStart();
+		}
+
 		freezeTimer = t;
 	}
 

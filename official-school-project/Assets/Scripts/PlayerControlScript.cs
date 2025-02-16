@@ -8,6 +8,26 @@ using static Unity.Burst.Intrinsics.X86;
 
 public class PlayerControlScript : MonoBehaviour
 {
+
+	#region singleton
+
+	public static PlayerControlScript instance { get; private set; }
+
+	private void Awake()
+	{
+		if(instance != null && instance != this)
+		{
+			Destroy(this);
+		}
+		else
+		{
+			instance = this;
+		}
+	}
+
+	#endregion
+
+
 	//variables
 	#region variable
 	//reference
@@ -117,7 +137,7 @@ public class PlayerControlScript : MonoBehaviour
 
 	//levels
 	private LevelManagerScript currentLevel;
-	private GameObject currentRespawnPoint; // idk 要放在Player還是level manager
+	//private GameObject currentRespawnPoint; // idk 要放在Player還是level manager
 	private const int killZoneLayer = 7;
 	private const int levelTriggerLayer = 8;
 	private const int respawnTriggerLayer = 9;
@@ -596,7 +616,8 @@ public class PlayerControlScript : MonoBehaviour
 		fireballDir = fireballCastByKeyboard ? fireballDir : fireballMouseDirValue;
 		print(fireballDir);
 		//freeze frame
-		freezeStart(fireballCastFreezeTime);
+		//freezeStart(fireballCastFreezeTime);
+		LogicScript.instance.setFreezeTime(fireballCastFreezeTime);
 
 		//coroutine
 		//StartCoroutine(fireballStartAfterFreezeTime());
@@ -710,7 +731,8 @@ public class PlayerControlScript : MonoBehaviour
 
 	public void fireballExplodeStart(Vector2 localVelocity, Vector2 fireballVelocity)
 	{
-		freezeStart(fireballExplodeFreezeTime);
+		//freezeStart(fireballExplodeFreezeTime);
+		LogicScript.instance.setFreezeTime(fireballExplodeFreezeTime);
 
 		if (fireballExplodeCoroutine != null) StopCoroutine(fireballExplodeCoroutine);
 		fireballExplodeCoroutine = StartCoroutine(fireballExplode(localVelocity, fireballVelocity));
@@ -932,10 +954,10 @@ public class PlayerControlScript : MonoBehaviour
 
 	#region freeze frame
 
-	public void freezeStart(float t)
+	public void freezeStart()
 	{
 		freezeVelocity = rb.velocity;
-		logic.setFreezeTime(t);
+		//logic.setFreezeTime(t);
 	}
 
 	public void freezeEnd()
@@ -957,7 +979,16 @@ public class PlayerControlScript : MonoBehaviour
 
 		if (collision.gameObject.layer == levelTriggerLayer)
 		{
-			if (currentLevel != collision.gameObject.transform.parent.parent.parent.gameObject.GetComponent<LevelManagerScript>())
+			/*if (currentLevel != collision.gameObject.transform.parent.parent.parent.gameObject.GetComponent<LevelManagerScript>())
+			{
+				if (currentLevel != null)
+				{
+					currentLevel.disableLevel();
+				}
+				currentLevel = collision.gameObject.transform.parent.parent.parent.gameObject.GetComponent<LevelManagerScript>();
+				changeLevel();
+			}*/
+			if (collision.gameObject.name == "EnterTrigger")
 			{
 				if (currentLevel != null)
 				{
@@ -966,14 +997,25 @@ public class PlayerControlScript : MonoBehaviour
 				currentLevel = collision.gameObject.transform.parent.parent.parent.gameObject.GetComponent<LevelManagerScript>();
 				changeLevel();
 			}
+
+			if (collision.gameObject.name == "ExitTrigger")
+			{
+				if (currentLevel != null)
+				{
+					currentLevel.disableLevel();
+				}
+				currentLevel = collision.gameObject.transform.parent.parent.parent.gameObject.GetComponent<LevelManagerScript>().nextLevel;
+				changeLevel();
+			}
 		}
 
 		if (collision.gameObject.layer == respawnTriggerLayer)
 		{
-			if(currentRespawnPoint != collision.gameObject.transform.GetChild(0).gameObject)
+			/*if(currentRespawnPoint != collision.gameObject.transform.GetChild(0).gameObject)
 			{
 				currentRespawnPoint = collision.gameObject.transform.GetChild(0).gameObject;
-			}
+			}*/
+			currentLevel.swapRespawnPoint(collision.gameObject.transform.GetChild(0).gameObject);
 		}
 	}
 
@@ -985,9 +1027,9 @@ public class PlayerControlScript : MonoBehaviour
 	private void playerDeath()
 	{
 		rb.velocity = Vector2.zero;
-		transform.position = currentRespawnPoint.transform.position;
+		//transform.position = currentRespawnPoint.transform.position;
 		currentLevel.restartLevel();
-		currentRespawnPoint.transform.parent.GetComponent<RespawnPointScript>().changeCameraAfterRespawn();
+		//currentRespawnPoint.transform.parent.GetComponent<RespawnPointScript>().changeCameraAfterRespawn();
 
 		//reset
 		//jump
