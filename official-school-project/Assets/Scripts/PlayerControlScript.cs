@@ -102,7 +102,8 @@ public class PlayerControlScript : MonoBehaviour
 	[SerializeField] private float fireballExplodeMoveDifferentDirDecrease;
 	[SerializeField] private float fireballExplodeGuaranteeSpeedScale; // 火球爆炸的寶底速度，因為火球速度是用加的, 以這次要加的速度為基準
 	[SerializeField] private float fireballExplodeMaxSpeedScale; // 以explode force為基準, x y 分別處理
-	
+	[SerializeField] private float fireballExplodeExtraPushUpForce;
+	[SerializeField] private float fireballExplodeExtraPushUpAngle; //如果方向向量的俯角大於此數值，則不會給予
 	[SerializeField] private float fireballExplodeDuration;
 	[SerializeField] private float fireballExplodeGravityScale;
 	[SerializeField] private float fireballExplodeFriction;
@@ -729,6 +730,11 @@ public class PlayerControlScript : MonoBehaviour
 			fireballHangTimeMoveBoostDir = 0;
 
 
+			/* extra push up force
+			 * and because of this, jump will be disabled while explode duration
+			 */
+			bool addPushUpForce = (localVelocity.y >= Mathf.Sin(0 - fireballExplodeExtraPushUpAngle * Mathf.Deg2Rad)) ? true : false;
+
 			/* if player try to move to the same dir of the explode dir -> increase the speed
 			 * if player try to move to the opposite dir of the explode fir -> decrease the speed
 			 * else, the speed is multiplied by 1
@@ -746,6 +752,9 @@ public class PlayerControlScript : MonoBehaviour
 			*/
 			localVelocity = localVelocity + fireballVelocity;
 
+			//push up force
+			if (addPushUpForce) localVelocity += Vector2.up * fireballExplodeExtraPushUpForce;
+
 			myImpulseAcceleration(localVelocity);
 			//rb.velocity = localVelocity;
 
@@ -758,13 +767,13 @@ public class PlayerControlScript : MonoBehaviour
 			if (localVelocity.y > 0 && rb.velocity.y > fireballExplodeForce * fireballExplodeMaxSpeedScale) mySetVy(fireballExplodeForce * fireballExplodeMaxSpeedScale);
 			if (localVelocity.y < 0 && rb.velocity.y < fireballExplodeForce * fireballExplodeMaxSpeedScale * -1) mySetVy(fireballExplodeForce * fireballExplodeMaxSpeedScale * -1);
 
-		isFireballExplodeForceAdding = true;
+			isFireballExplodeForceAdding = true;
 			//isMoving = false;
 			//isMoveActive = false; isJumpActive = false;
 			//if(moveLessCoroutine != null) StopCoroutine(moveLessCoroutine);
 			//moveLessCoroutine = StartCoroutine(moveLess(fireballExplodeDuration));
-			//if(jumpLessCoroutine != null) StopCoroutine(jumpLessCoroutine);
-			//jumpLessCoroutine = StartCoroutine(jumpLess(fireballExplodeDuration));
+			if(jumpLessCoroutine != null) StopCoroutine(jumpLessCoroutine);
+			jumpLessCoroutine = StartCoroutine(jumpLess(fireballExplodeDuration));
 
 			mySetGravity(fireballExplodeGravityScale, myNormalGravityMaxSpeed);
 			mySetFriction(fireballExplodeFriction, fireballExplodeAdjustFriction);
