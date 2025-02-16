@@ -103,7 +103,7 @@ public class PlayerControlScript : MonoBehaviour
 	[SerializeField] private float fireballExplodeGuaranteeSpeedScale; // 火球爆炸的寶底速度，因為火球速度是用加的, 以這次要加的速度為基準
 	[SerializeField] private float fireballExplodeMaxSpeedScale; // 以explode force為基準, x y 分別處理
 	[SerializeField] private float fireballExplodeExtraPushUpForce;
-	[SerializeField] private float fireballExplodeExtraPushUpAngle; //如果方向向量的俯角大於此數值，則不會給予
+	[SerializeField] private float fireballExplodeExtraPushUpAngle; //如果方向向量的俯角與仰角在此數值之間，會給予一向上速度
 	[SerializeField] private float fireballExplodeDuration;
 	[SerializeField] private float fireballExplodeGravityScale;
 	[SerializeField] private float fireballExplodeFriction;
@@ -344,7 +344,7 @@ public class PlayerControlScript : MonoBehaviour
 	//friction
 	private void myFrictionMain() // horizontal
 	{
-		if(!isMoving && isFrictionActive && !isFireballPushForceAdding /*&& !isControlBySpring*/)
+		if(!isMoving && isFrictionActive && !(isFireballPushForceAdding && fireballDir.x != 0) /*&& !isControlBySpring*/)
 		{
 			if(rb.velocity.x < 0)
 			{
@@ -621,6 +621,7 @@ public class PlayerControlScript : MonoBehaviour
 		else return false;
 	}
 
+
 	private void fireballPushForceMain()
 	{
 		if (fireballStartAfterFreezeTimeActive)
@@ -656,8 +657,14 @@ public class PlayerControlScript : MonoBehaviour
 		}*/
 	}
 
+	/* friction:
+	 * when pushing, adjust friction is set to normal
+	 * during hangtime, both friction value is multiplied by a hangtime multiplier
+	 */
 	private void fireballPushForceStart()
 	{
+		isMoving = false;
+
 		if (isJumping)
 		{
 			jumpEnd();
@@ -668,7 +675,7 @@ public class PlayerControlScript : MonoBehaviour
 		mySetGravity(0, myGravityMaxSpeed);
 		
 		//set player's velocity, currently, i want to set player vy to 0. vx to 0 if there's no horizontal force
-		mySetVy(0);
+		/*if(rb.velocity.y < 0)*/ mySetVy(0);
 		if (fireballDir.x == 0) mySetVx(0);
 
 		//isFireballPushForceAdding = true;
@@ -684,7 +691,7 @@ public class PlayerControlScript : MonoBehaviour
 		else if (fireballDir.x < 0) fireballHangTimeMoveBoostDir = 1;
 		else fireballHangTimeMoveBoostDir = 0;
 
-		mySetFriction(myNormalFrictionAcceleration * fireballHangTimeFrictionScale, 0);
+		mySetFriction(myNormalFrictionAcceleration, myNormalAdjustFriction);
 
 		CinemachineImpulseSource impulseSource = GetComponent<CinemachineImpulseSource>();
 
@@ -733,7 +740,7 @@ public class PlayerControlScript : MonoBehaviour
 			/* extra push up force
 			 * and because of this, jump will be disabled while explode duration
 			 */
-			bool addPushUpForce = (localVelocity.y >= Mathf.Sin(0 - fireballExplodeExtraPushUpAngle * Mathf.Deg2Rad)) ? true : false;
+			bool addPushUpForce = (localVelocity.y >= Mathf.Sin(0 - fireballExplodeExtraPushUpAngle * Mathf.Deg2Rad) && localVelocity.y <= Mathf.Sin(fireballExplodeExtraPushUpAngle * Mathf.Deg2Rad)) ? true : false;
 
 			/* if player try to move to the same dir of the explode dir -> increase the speed
 			 * if player try to move to the opposite dir of the explode fir -> decrease the speed
