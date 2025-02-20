@@ -11,6 +11,7 @@ TagManager:
   - BreakablePlatform
   - KillFireballWithoutExplode
   - OneWayPlatform
+  - PerformanceTrigger
   layers:
   - Default
   - TransparentFX

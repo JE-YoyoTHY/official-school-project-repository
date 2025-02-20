@@ -64,8 +64,8 @@ public class LevelManagerScript : MonoBehaviour
 		}
 
 		//blockage -> when player exit this level, enable this to prevent player from returning
-		//transform.GetChild(0).GetChild(2).GetComponent<SpriteRenderer>().color = Color.clear; // 0 -> basic, 2 -> blockage
-		//transform.GetChild(0).GetChild(2).gameObject.SetActive(false); // 0 -> basic, 2 -> blockage
+		transform.GetChild(0).GetChild(2).GetComponent<SpriteRenderer>().color = Color.clear; // 0 -> basic, 2 -> blockage
+		transform.GetChild(0).GetChild(2).gameObject.SetActive(false); // 0 -> basic, 2 -> blockage
 	}
 
 	// Update is called once per frame
@@ -110,6 +110,11 @@ public class LevelManagerScript : MonoBehaviour
 		player.transform.position = currentRespawnPoint.transform.position;
 		currentRespawnPoint.transform.parent.GetComponent<RespawnPointScript>().changeCameraAfterRespawn();
 		levelSetUpEvent.Invoke();
+	}
+
+	public void enableBlockage()
+	{
+		transform.GetChild(0).GetChild(2).gameObject.SetActive(true); // 0 -> basic, 2 -> blockage
 	}
 
 	/*private void cameraMain()

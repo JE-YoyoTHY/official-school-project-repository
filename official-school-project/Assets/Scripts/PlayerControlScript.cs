@@ -95,6 +95,8 @@ public class PlayerControlScript : MonoBehaviour
 	private sbyte fireballDirLastHorizontal;
 	private Coroutine fireballInputCoroutine;
 
+	private bool fireballPlayerGotten;
+
 	[Header("Fireball Push")]
 	[SerializeField] private float fireballPushForceAcceleration;
 	[SerializeField] private float fireballPushForceMaxSpeed;
@@ -166,6 +168,8 @@ public class PlayerControlScript : MonoBehaviour
 		isJumpActive = true;
 
 		fireballDirLastHorizontal = 1;
+
+		fireballPlayerGotten = false;
 
     }
 
@@ -337,7 +341,7 @@ public class PlayerControlScript : MonoBehaviour
 
 	private bool canMove()
 	{
-		if (!isFireballPushForceAdding && !logic.isFreeze() && isMoveActive && !isControlBySpring) return true;
+		if (!isFireballPushForceAdding && !logic.isFreeze() && isMoveActive && !isControlBySpring && !PlayerPerformanceSystemScript.instance.isBeingControl) return true;
 		else return false;
 	}
 
@@ -484,7 +488,7 @@ public class PlayerControlScript : MonoBehaviour
 
 	private bool canJump()
 	{
-		if (!isJumping && onGround && !isFireballPushForceAdding && !logic.isFreeze() && isJumpActive && !isControlBySpring) return true;
+		if (!isJumping && onGround && !isFireballPushForceAdding && !logic.isFreeze() && isJumpActive && !isControlBySpring && !PlayerPerformanceSystemScript.instance.isBeingControl) return true;
 		else return false;
 	}
 
@@ -638,7 +642,7 @@ public class PlayerControlScript : MonoBehaviour
 
 	private bool canCastFireball()
 	{
-		if (fireballCurrentCharges > 0 && !isFireballPushForceAdding && !logic.isFreeze()) return true;
+		if (fireballCurrentCharges > 0 && !isFireballPushForceAdding && !logic.isFreeze() && !PlayerPerformanceSystemScript.instance.isBeingControl && fireballPlayerGotten) return true;
 		else return false;
 	}
 
@@ -950,6 +954,11 @@ public class PlayerControlScript : MonoBehaviour
 	}*/
 
 
+	public void fireballPlayerGetAbility()
+	{
+		fireballPlayerGotten = true;
+	}
+
 	#endregion
 
 	#region freeze frame
@@ -1160,6 +1169,43 @@ public class PlayerControlScript : MonoBehaviour
 	}
 
 	#endregion
+
+	#region performance
+
+	public void performanceStart()
+	{		
+		//jump
+		if (isJumping) jumpEnd();
+		if (jumpExtraHangTimeCoroutine != null) StopCoroutine(jumpExtraHangTimeCoroutine);
+
+		//fireball
+		if (isFireballPushForceAdding) fireballPushForceEnd();
+		if (isFireballExplodeForceAdding) fireballExplodeEnd();
+		if (fireballHangTimeCoroutine != null) StopCoroutine(fireballHangTimeCoroutine);
+
+		//friction
+		if (myFrictionLessCoroutine != null) StopCoroutine(myFrictionLessCoroutine);
+
+		//freeze frame
+		//if (logic.isFreeze()) logic.setFreezeTime(0);
+
+		//physic state
+		mySetGravity(myNormalGravityScale, myNormalGravityMaxSpeed);
+		mySetFriction(myNormalFrictionAcceleration, myNormalAdjustFriction);
+		fireballHangTimeMoveBoostDir = 0;
+		isFrictionActive = true; isMoveActive = true; isJumpActive = true;
+
+		//coroutine
+		if (jumpCoroutine != null) StopCoroutine(jumpCoroutine);
+		if (fireballInputCoroutine != null) StopCoroutine(fireballInputCoroutine);
+		if (fireballExplodeCoroutine != null) StopCoroutine(fireballExplodeCoroutine);
+		if (fireballExplodeCoroutine != null) StopCoroutine(fireballExplodeCoroutine);
+		if (moveLessCoroutine != null) StopCoroutine(moveLessCoroutine);
+		if (jumpLessCoroutine != null) StopCoroutine(jumpLessCoroutine);
+	}
+
+	#endregion
+
 
 	//inputs region handles inputs function, namely set keyValue 2 -> 1, and trigger pre input
 	#region inputs
