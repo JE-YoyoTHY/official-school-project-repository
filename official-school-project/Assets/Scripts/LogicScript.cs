@@ -86,7 +86,8 @@ public class LogicScript : MonoBehaviour
 		GameObject[] killFbZones = GameObject.FindGameObjectsWithTag("KillFireballWithoutExplode");
 		foreach (GameObject killFbZone in killFbZones)
 		{
-			killFbZone.GetComponent<Tilemap>().color = Color.clear;
+			if (killFbZone.GetComponent<Tilemap>() != null)
+				killFbZone.GetComponent<Tilemap>().color = Color.clear;
 		}
 	}
 
