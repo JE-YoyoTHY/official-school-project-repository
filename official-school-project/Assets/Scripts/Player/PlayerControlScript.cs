@@ -65,7 +65,7 @@ public class PlayerControlScript : MonoBehaviour
 	[SerializeField] private float jumpGravity;
 	[SerializeField] private float jumpMinSpeed;
 	public bool isJumping { get; private set; }
-	private sbyte jumpKeyValue;
+	//private sbyte jumpKeyValue;
 	[SerializeField] private float jumpPreInputTime;
 	private Coroutine jumpCoroutine;
 	private Coroutine jumpExtraHangTimeCoroutine;
@@ -83,14 +83,14 @@ public class PlayerControlScript : MonoBehaviour
 	[Header("Fireball")]
 	[SerializeField] private GameObject fireballPrefab;
 	[SerializeField] private float fireballPreInputTime;
-	private sbyte fireballKeyValue;
-	private sbyte fireballMouseValue;
+	//private sbyte fireballKeyValue;
+	//private sbyte fireballMouseValue;
 	//private sbyte fireballArrowKeyValue;
 	private bool fireballCastByKeyboard;
 	[SerializeField] private int fireballMaxCharges;
 	private int fireballCurrentCharges;
 	private Vector2 fireballDir; // the true dir
-	private Vector2 fireballDirValue; // store input value
+	//private Vector2 fireballDirValue; // store input value
 	private Vector2 fireballMouseDirValue;
 	private sbyte fireballDirLastHorizontal;
 	private Coroutine fireballInputCoroutine;
@@ -433,7 +433,8 @@ public class PlayerControlScript : MonoBehaviour
 		}
 
 		//release jump button
-		if(jumpKeyValue == -1)
+		//if(jumpKeyValue == -1)
+		if (InputManagerScript.instance.jumpInput == InputState.release)
 		{
 			if (isJumping)
 			{
@@ -1212,10 +1213,13 @@ public class PlayerControlScript : MonoBehaviour
 
 	private void inputMain()
 	{
+		//move
+		moveKeyValue = (sbyte)InputManagerScript.instance.moveInput;
+		
 		//jump
-		if (jumpKeyValue == 2)
+		if (InputManagerScript.instance.jumpInput == InputState.press)
 		{
-			jumpKeyValue = 1;
+			InputManagerScript.instance.jumpInput = InputState.hold;
 			if (jumpCoroutine != null)
 			{
 				StopCoroutine(jumpCoroutine);
@@ -1224,44 +1228,93 @@ public class PlayerControlScript : MonoBehaviour
 		}
 
 		//fireball
-		if (fireballKeyValue == 2)
+		if (InputManagerScript.instance.fireballCastByKeyboardInput == InputState.press)
 		{
-			fireballKeyValue = 1;
-
+			InputManagerScript.instance.fireballCastByKeyboardInput = InputState.hold;
 			if (fireballInputCoroutine != null) StopCoroutine(fireballInputCoroutine);
 			fireballInputCoroutine = StartCoroutine(fireballPreInput(fireballPreInputTime, true));
 		}
-
-		if(fireballMouseValue == 2)
+		if (InputManagerScript.instance.fireballCastByMouseInput == InputState.press)
 		{
-			fireballMouseValue = 1;
-
-			if(fireballInputCoroutine != null) StopCoroutine(fireballInputCoroutine);
+			InputManagerScript.instance.fireballCastByMouseInput = InputState.hold;
+			if (fireballInputCoroutine != null) StopCoroutine(fireballInputCoroutine);
 			fireballInputCoroutine = StartCoroutine(fireballPreInput(fireballPreInputTime, false));
 		}
 
 		//fireball dir
-		/*player can change fb dir in freeze frame, 
-		case 1:玩家一直沒碰方向鍵 -> 玩家最後觸碰的水平方向
-		case 2:玩家在凍結幀期間改變方向鍵 -> 玩家新按的方向
-		case 3:玩家在凍結幀期間放開方向鍵 -> 玩家最後觸碰的方向
-		 */
+		//player can change fb dir in freeze frame,
+		//case 1:
+		//	玩家一直沒碰方向鍵->玩家最後觸碰的水平方向
+		//case 2:
+		//	玩家在凍結幀期間改變方向鍵->玩家新按的方向
+		//case 3:
+		//	玩家在凍結幀期間放開方向鍵->玩家最後觸碰的方向
 		if (!isFireballPushForceAdding)
 		{
-			fireballDir = fireballDirValue;
+			fireballDir = InputManagerScript.instance.fireballDirInput;
 			//if (fireballDir.x != 0) fireballDirLastHorizontal = (sbyte)fireballDir.x;
 		}
 		else
 		{
-			if (logic.isFreeze() && fireballDirValue.magnitude != 0 && fireballCastByKeyboard) fireballDir = fireballDirValue;
+			if (logic.isFreeze() && InputManagerScript.instance.fireballDirInput.magnitude != 0 && fireballCastByKeyboard) fireballDir = InputManagerScript.instance.fireballDirInput;
 			if (logic.isFreeze() && fireballMouseDirValue.magnitude != 0 && !fireballCastByKeyboard) fireballDir = fireballMouseDirValue;
 		}
 		if (fireballDir.x != 0) fireballDirLastHorizontal = (sbyte)fireballDir.x;
 
-		fireballMouseDir();
-	}
+			fireballMouseDir();
 
-	public void moveInput(InputAction.CallbackContext ctx)
+			//legacy
+			/*
+			//jump
+			if (jumpKeyValue == 2)
+			{
+				jumpKeyValue = 1;
+				if (jumpCoroutine != null)
+				{
+					StopCoroutine(jumpCoroutine);
+				}
+				jumpCoroutine = StartCoroutine(jumpPreInput(jumpPreInputTime));
+			}
+
+			//fireball
+			if (fireballKeyValue == 2)
+			{
+				fireballKeyValue = 1;
+
+				if (fireballInputCoroutine != null) StopCoroutine(fireballInputCoroutine);
+				fireballInputCoroutine = StartCoroutine(fireballPreInput(fireballPreInputTime, true));
+			}
+
+			if(fireballMouseValue == 2)
+			{
+				fireballMouseValue = 1;
+
+				if(fireballInputCoroutine != null) StopCoroutine(fireballInputCoroutine);
+				fireballInputCoroutine = StartCoroutine(fireballPreInput(fireballPreInputTime, false));
+			}
+
+			//fireball dir
+			player can change fb dir in freeze frame, 
+			case 1:玩家一直沒碰方向鍵 -> 玩家最後觸碰的水平方向
+			case 2:玩家在凍結幀期間改變方向鍵 -> 玩家新按的方向
+			case 3:玩家在凍結幀期間放開方向鍵 -> 玩家最後觸碰的方向
+
+			if (!isFireballPushForceAdding)
+			{
+				fireballDir = fireballDirValue;
+				//if (fireballDir.x != 0) fireballDirLastHorizontal = (sbyte)fireballDir.x;
+			}
+			else
+			{
+				if (logic.isFreeze() && fireballDirValue.magnitude != 0 && fireballCastByKeyboard) fireballDir = fireballDirValue;
+				if (logic.isFreeze() && fireballMouseDirValue.magnitude != 0 && !fireballCastByKeyboard) fireballDir = fireballMouseDirValue;
+			}
+			if (fireballDir.x != 0) fireballDirLastHorizontal = (sbyte)fireballDir.x;
+
+			fireballMouseDir();*/
+		}
+
+	/*public void moveInput(InputAction.CallbackContext ctx)
 	{
 		moveKeyValue = (sbyte)ctx.ReadValue<float>();
 	}
@@ -1309,6 +1362,6 @@ public class PlayerControlScript : MonoBehaviour
 		{
 			fireballMouseValue = -1;
 		}
-	}
+	}*/
 	#endregion
 }
