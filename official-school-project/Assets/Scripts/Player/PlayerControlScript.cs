@@ -91,7 +91,7 @@ public class PlayerControlScript : MonoBehaviour
 	private int fireballCurrentCharges;
 	private Vector2 fireballDir; // the true dir
 	//private Vector2 fireballDirValue; // store input value
-	private Vector2 fireballMouseDirValue;
+	public Vector2 fireballMouseDirValue { get; private set; }
 	private sbyte fireballDirLastHorizontal;
 	private Coroutine fireballInputCoroutine;
 
@@ -333,7 +333,7 @@ public class PlayerControlScript : MonoBehaviour
 			}
 		}
 
-		if(moveKeyValue == 0)
+		if(moveKeyValue == 0 || !canMove())
 		{
 			isMoving = false;
 		}
@@ -615,8 +615,10 @@ public class PlayerControlScript : MonoBehaviour
 	 * --進入凍結幀
 	 * --凍結幀結束後執行fireballSummon and fireballPushStart
 	 */
-	private void fireballStart() 
+	public void fireballStart(bool isCastByKeyboard) 
 	{
+		fireballCastByKeyboard = isCastByKeyboard;
+
 		isFireballPushForceAdding = true;
 		fireballDir = fireballCastByKeyboard ? fireballDir : fireballMouseDirValue;
 		print(fireballDir);
@@ -925,8 +927,8 @@ public class PlayerControlScript : MonoBehaviour
 			
 			if (canCastFireball())
 			{
-				fireballCastByKeyboard = isCastByKeyboard;
-				fireballStart();
+				//fireballCastByKeyboard = isCastByKeyboard;
+				fireballStart(isCastByKeyboard);
 				yield break;
 			}
 			
@@ -967,6 +969,7 @@ public class PlayerControlScript : MonoBehaviour
 	public void freezeStart()
 	{
 		freezeVelocity = rb.velocity;
+		rb.velocity = Vector2.zero;
 		//logic.setFreezeTime(t);
 	}
 
@@ -1031,6 +1034,7 @@ public class PlayerControlScript : MonoBehaviour
 
 	private void changeLevel()
 	{
+		rb.velocity = Vector2.zero;
 		currentLevel.startLevel();
 	}
 
@@ -1075,7 +1079,7 @@ public class PlayerControlScript : MonoBehaviour
 		if (jumpLessCoroutine != null) StopCoroutine(jumpLessCoroutine);
 		StopAllCoroutines();
 
-
+		PlayerPerformanceSystemScript.instance.controlEnd();
 	}
 
 	#endregion
@@ -1215,31 +1219,36 @@ public class PlayerControlScript : MonoBehaviour
 	{
 		//move
 		moveKeyValue = (sbyte)InputManagerScript.instance.moveInput;
-		
-		//jump
-		if (InputManagerScript.instance.jumpInput == InputState.press)
-		{
-			InputManagerScript.instance.jumpInput = InputState.hold;
-			if (jumpCoroutine != null)
-			{
-				StopCoroutine(jumpCoroutine);
-			}
-			jumpCoroutine = StartCoroutine(jumpPreInput(jumpPreInputTime));
-		}
 
-		//fireball
-		if (InputManagerScript.instance.fireballCastByKeyboardInput == InputState.press)
+		//those function which will modify the value of Input Manager should only be executed when not beingControl
+		if (!PlayerPerformanceSystemScript.instance.isBeingControl)
 		{
-			InputManagerScript.instance.fireballCastByKeyboardInput = InputState.hold;
-			if (fireballInputCoroutine != null) StopCoroutine(fireballInputCoroutine);
-			fireballInputCoroutine = StartCoroutine(fireballPreInput(fireballPreInputTime, true));
+			//jump
+			if (InputManagerScript.instance.jumpInput == InputState.press)
+			{
+				InputManagerScript.instance.jumpInput = InputState.hold;
+				if (jumpCoroutine != null)
+				{
+					StopCoroutine(jumpCoroutine);
+				}
+				jumpCoroutine = StartCoroutine(jumpPreInput(jumpPreInputTime));
+			}
+
+			//fireball
+			if (InputManagerScript.instance.fireballCastByKeyboardInput == InputState.press)
+			{
+				InputManagerScript.instance.fireballCastByKeyboardInput = InputState.hold;
+				if (fireballInputCoroutine != null) StopCoroutine(fireballInputCoroutine);
+				fireballInputCoroutine = StartCoroutine(fireballPreInput(fireballPreInputTime, true));
+			}
+			if (InputManagerScript.instance.fireballCastByMouseInput == InputState.press)
+			{
+				InputManagerScript.instance.fireballCastByMouseInput = InputState.hold;
+				if (fireballInputCoroutine != null) StopCoroutine(fireballInputCoroutine);
+				fireballInputCoroutine = StartCoroutine(fireballPreInput(fireballPreInputTime, false));
+			}
 		}
-		if (InputManagerScript.instance.fireballCastByMouseInput == InputState.press)
-		{
-			InputManagerScript.instance.fireballCastByMouseInput = InputState.hold;
-			if (fireballInputCoroutine != null) StopCoroutine(fireballInputCoroutine);
-			fireballInputCoroutine = StartCoroutine(fireballPreInput(fireballPreInputTime, false));
-		}
+		
 
 		//fireball dir
 		//player can change fb dir in freeze frame,
@@ -1256,8 +1265,8 @@ public class PlayerControlScript : MonoBehaviour
 		}
 		else
 		{
-			if (logic.isFreeze() && InputManagerScript.instance.fireballDirInput.magnitude != 0 && fireballCastByKeyboard) fireballDir = InputManagerScript.instance.fireballDirInput;
-			if (logic.isFreeze() && fireballMouseDirValue.magnitude != 0 && !fireballCastByKeyboard) fireballDir = fireballMouseDirValue;
+			if (logic.isFreeze() && InputManagerScript.instance.fireballDirInput.magnitude != 0 && fireballCastByKeyboard && !PlayerPerformanceSystemScript.instance.isBeingControl) fireballDir = InputManagerScript.instance.fireballDirInput;
+			if (logic.isFreeze() && fireballMouseDirValue.magnitude != 0 && !fireballCastByKeyboard && !PlayerPerformanceSystemScript.instance.isBeingControl) fireballDir = fireballMouseDirValue;
 		}
 		if (fireballDir.x != 0) fireballDirLastHorizontal = (sbyte)fireballDir.x;
 

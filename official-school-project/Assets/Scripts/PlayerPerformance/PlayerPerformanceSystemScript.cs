@@ -21,7 +21,7 @@ public class PlayerPerformanceSystemScript : MonoBehaviour
 
 	#endregion
 
-	private PlayerPerformanceTriggerScript currentController;
+	public PlayerPerformanceTriggerScript currentController {  get; private set; }
 	public bool isBeingControl { get; private set; }
 
 
@@ -34,7 +34,7 @@ public class PlayerPerformanceSystemScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (currentController != null && !LogicScript.instance.isFreeze())
+        if (currentController != null)
 		{
 			currentController.controlMain();
 		}
@@ -49,7 +49,7 @@ public class PlayerPerformanceSystemScript : MonoBehaviour
 
 	}
 
-	private void controlEnd()
+	public void controlEnd()
 	{
 		isBeingControl = false;
 		currentController = null;
@@ -74,16 +74,24 @@ public class PlayerPerformanceSystemScript : MonoBehaviour
 			{
 				if(newTrigger == currentController.performanceTriggerInspectorObject.nextTrigger)
 				{
-					newTrigger.enableTrigger();
+					//var previousTrigger = currentController;
 					currentController.disableTrigger();
 					currentController = newTrigger;
+					newTrigger.enableTrigger();
+					
 				}
 
-				if (currentController.performanceTriggerInspectorObject.isEndPoint)
+				/*if (currentController.performanceTriggerInspectorObject.isEndPoint)
 				{
 					controlEnd();
-				}
+				}*/
 			}
 		}
+	}
+
+	public void setController(PlayerPerformanceTriggerScript newTrigger)
+	{
+		currentController = newTrigger;
+		newTrigger.enableTrigger();
 	}
 }

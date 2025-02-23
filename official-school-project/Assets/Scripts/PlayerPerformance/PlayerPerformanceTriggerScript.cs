@@ -42,6 +42,11 @@ public class PlayerPerformanceTriggerScript : MonoBehaviour
 	public void enableTrigger()
 	{
 		performanceTriggerInspectorObject.startEvent.Invoke();
+
+		if (performanceTriggerInspectorObject.isEndPoint)
+		{
+			PlayerPerformanceSystemScript.instance.controlEnd();
+		}
 	}
 
 	public void disableTrigger()
@@ -49,11 +54,21 @@ public class PlayerPerformanceTriggerScript : MonoBehaviour
 		performanceTriggerInspectorObject.endEvent.Invoke();
 	}
 
+	public void enableNextTrigger()
+	{
+		disableTrigger();
+		PlayerPerformanceSystemScript.instance.setController(performanceTriggerInspectorObject.nextTrigger);
+	}
+
 	public void controlMain()
 	{
-		if (performanceTriggerInspectorObject.action == PerformanceAction.move)
+		if (performanceTriggerInspectorObject.action == PerformanceAction.move && !LogicScript.instance.isFreeze())
 		{
 			moveMain();
+		}
+		if (performanceTriggerInspectorObject.action == PerformanceAction.waitForInput)
+		{
+			waitForInputMain();
 		}
 	}
 
@@ -72,6 +87,48 @@ public class PlayerPerformanceTriggerScript : MonoBehaviour
 
 	#endregion
 
+	#region wait for input
+
+	private void waitForInputMain()
+	{
+		if (performanceTriggerInspectorObject.waitInputAction == PerformanceWaitInputAction.fireball)
+		{
+			// freeze the game until player press the correct input
+			LogicScript.instance.setFreezeTime(1f);
+
+			// end freeze state
+			if (InputManagerScript.instance.fireballCastByKeyboardInput == InputState.press
+				&& InputManagerScript.instance.fireballDirInput.normalized == performanceTriggerInspectorObject.waitFireballDir.normalized)
+			{
+				endFireballInputWait(true);
+			}
+			if (InputManagerScript.instance.fireballCastByMouseInput == InputState.press
+				&& PlayerControlScript.instance.fireballMouseDirValue.normalized == performanceTriggerInspectorObject.waitFireballDir.normalized)
+			{
+				endFireballInputWait(false);
+			}
+
+		}
+	}
+
+	private void endWaitForInput()
+	{
+		LogicScript.instance.setFreezeTime(0.01f);
+		enableNextTrigger();
+
+	}
+
+	private void endFireballInputWait(bool isCastByKeyboard)
+	{
+		endWaitForInput();
+		PlayerControlScript.instance.fireballStart(isCastByKeyboard);
+
+		InputManagerScript.instance.fireballCastByKeyboardInput = InputState.normal;
+		InputManagerScript.instance.fireballCastByMouseInput = InputState.normal;
+
+	}
+
+	#endregion
 
 }
 
@@ -81,21 +138,35 @@ public class PerformanceTriggerInspectorObject
 	public bool isStartPoint;
 	public bool isEndPoint;
 
+	//public bool needGrounded;
+
 	[HideInInspector] public PerformanceAction action;
 	[HideInInspector] public PlayerPerformanceTriggerScript nextTrigger;
-
-	//move
-	[HideInInspector] public float moveSpeed;
 
 	[Header("Invoke Events")]
 	public UnityEvent startEvent;
 	public UnityEvent endEvent;
+
+
+	//move
+	[HideInInspector] public float moveSpeed;
+
+	//wait for inputs
+	[HideInInspector] public PerformanceWaitInputAction waitInputAction;
+	[HideInInspector] public Vector2 waitFireballDir;
 }
 
 public enum PerformanceAction
 {
-	none,
-	move
+	noControl, //no control for trigger and player, so player will maintain the speed they should have
+	move,
+	waitForInput,
+}
+
+public enum PerformanceWaitInputAction
+{
+	jump,
+	fireball
 }
 
 #if UNITY_EDITOR
@@ -128,6 +199,16 @@ public class PerformanceScriptEditor : Editor
 			{
 				playerPerformanceTrigger.performanceTriggerInspectorObject.moveSpeed =
 					EditorGUILayout.FloatField("Move Speed", playerPerformanceTrigger.performanceTriggerInspectorObject.moveSpeed);
+			}
+
+			if (playerPerformanceTrigger.performanceTriggerInspectorObject.action == PerformanceAction.waitForInput)
+			{
+				playerPerformanceTrigger.performanceTriggerInspectorObject.waitInputAction =
+				(PerformanceWaitInputAction)EditorGUILayout.EnumPopup("Wait for input", playerPerformanceTrigger.performanceTriggerInspectorObject.waitInputAction);
+
+				if (playerPerformanceTrigger.performanceTriggerInspectorObject.waitInputAction == PerformanceWaitInputAction.fireball)
+					playerPerformanceTrigger.performanceTriggerInspectorObject.waitFireballDir =
+						EditorGUILayout.Vector2Field("Wait fireball direction (Not normalized)", playerPerformanceTrigger.performanceTriggerInspectorObject.waitFireballDir);
 			}
 		}
 
