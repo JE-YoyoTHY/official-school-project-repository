@@ -94,8 +94,8 @@ public class PlayerAnims : MonoBehaviour
         }
 
 
-        print($"getLandVelocity(): {getLandVelocity()}");
-        print($"is vector2.zero: {getLandVelocity() == Vector2.zero}");
+        //print($"getLandVelocity(): {getLandVelocity()}");
+        //print($"is vector2.zero: {getLandVelocity() == Vector2.zero}");
         if (getLandVelocity() != Vector2.zero && Mathf.Abs(getLandVelocity().y) > hardLandMinVy)
         {
             print("hard_land");
@@ -137,7 +137,7 @@ public class PlayerAnims : MonoBehaviour
 
         if (previousIsGrounded == false && currentIsGrounded == true)  // ¥Nªí­è¸¨¦a
         {
-            print($"previousVelocity{previousVelocity}");
+            //print($"previousVelocity{previousVelocity}");
             return previousVelocity;
         }
         else

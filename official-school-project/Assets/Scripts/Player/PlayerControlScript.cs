@@ -621,7 +621,7 @@ public class PlayerControlScript : MonoBehaviour
 
 		isFireballPushForceAdding = true;
 		fireballDir = fireballCastByKeyboard ? fireballDir : fireballMouseDirValue;
-		print(fireballDir);
+		//print(fireballDir);
 		//freeze frame
 		//freezeStart(fireballCastFreezeTime);
 		LogicScript.instance.setFreezeTime(fireballCastFreezeTime);
