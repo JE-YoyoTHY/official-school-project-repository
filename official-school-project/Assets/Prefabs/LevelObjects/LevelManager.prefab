@@ -295,7 +295,6 @@ MonoBehaviour:
     isEndPoint: 1
     action: 0
     nextTrigger: {fileID: 0}
-    moveSpeed: 0
     startEvent:
       m_PersistentCalls:
         m_Calls:
@@ -314,6 +313,9 @@ MonoBehaviour:
     endEvent:
       m_PersistentCalls:
         m_Calls: []
+    moveSpeed: 0
+    waitInputAction: 0
+    waitFireballDir: {x: 0, y: 0}
 --- !u!61 &5740975313916328940
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1263,13 +1265,15 @@ MonoBehaviour:
     isEndPoint: 0
     action: 1
     nextTrigger: {fileID: 6725957441966427451}
-    moveSpeed: 5
     startEvent:
       m_PersistentCalls:
         m_Calls: []
     endEvent:
       m_PersistentCalls:
         m_Calls: []
+    moveSpeed: 5
+    waitInputAction: 0
+    waitFireballDir: {x: 0, y: 0}
 --- !u!61 &545499432890968410
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1393,7 +1397,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27f2bd07c46b0d04c9774d3a0b717962, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextLevel: {fileID: 0}
+  nextLevel: {fileID: 3957093434405583105}
   levelSetUpEvent:
     m_PersistentCalls:
       m_Calls: []

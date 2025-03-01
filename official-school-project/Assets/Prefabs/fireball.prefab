@@ -170,6 +170,7 @@ MonoBehaviour:
   impulseForce: 0.3
   raycastMinSpeed: 20
   exceedSpeedToDistanceScale: 0.1
+  leavePlayerTime: 0.1
 --- !u!114 &2583024885239792354
 MonoBehaviour:
   m_ObjectHideFlags: 0

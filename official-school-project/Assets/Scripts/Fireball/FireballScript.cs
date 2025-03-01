@@ -36,6 +36,8 @@ public class FireballScript : MonoBehaviour
 	[SerializeField] private float raycastMinSpeed;
 	[SerializeField] private float exceedSpeedToDistanceScale;
 
+	[SerializeField] private float leavePlayerTime;
+
 
     // Update is called once per frame
     void Update()
@@ -91,6 +93,9 @@ public class FireballScript : MonoBehaviour
 			}
 			//Debug.DrawRay(transform.position, moveDir * (moveSpeed - raycastMinSpeed) * exceedSpeedToDistanceScale);
 		}
+
+		if(leavePlayerTime >= 0) leavePlayerTime -= Time.deltaTime;
+		if (leavePlayerTime < 0) leftPlayer = true;
 	}
 
 	public void summon(Vector2 localDir)
@@ -210,13 +215,13 @@ public class FireballScript : MonoBehaviour
 
 	}
 
-	private void OnTriggerExit2D(Collider2D collision)
-	{
-		if(collision.CompareTag("Player"))
-		{
-			leftPlayer = true;
-		}
-	}
+	//private void OnTriggerExit2D(Collider2D collision)
+	//{
+	//	if(collision.CompareTag("Player"))
+	//	{
+	//		leftPlayer = true;
+	//	}
+	//}
 
 	public void springPush(Vector2 localDir, float localForce)
 	{
@@ -225,6 +230,8 @@ public class FireballScript : MonoBehaviour
 			moveDir = localDir;
 			moveSpeed = moveSpeed * localForce;
 		}
+
+		leftPlayer = true;
 	}
 
 }
