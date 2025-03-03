@@ -4,12 +4,10 @@ using UnityEngine;
 using UnityEngine.Events;
 using DG.Tweening;
 
-public class NewBehaviourScript : MonoBehaviour
+public class TransitionBlackHole : MonoBehaviour
 {
-    // Start is called before the first frame update
     private RectTransform holeRect;
     private RectTransform canvasRect;
-    public Transform squareTransform;
 
     [SerializeField] private float openDuration;
     [SerializeField] private float openRadius;
@@ -40,7 +38,7 @@ public class NewBehaviourScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        /* 要測試的時候可以打開
         if (Input.GetKeyDown(KeyCode.O))
         {
             openHole();
@@ -51,34 +49,14 @@ public class NewBehaviourScript : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.A))
         {
-            setHolePosWithWorldPos(GameObject.Find("Square").transform.position);
+            UIPerforming.setUIPosWithWorldPos(canvasRect, holeRect, new Vector3(20, 20, 0));
         }
+        */
     }
 
     
-    public Vector2 getUIPosFromWorldPos(Vector3 worldPos)
-    {
-        Vector2 UIPos;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            canvasRect,
-            Camera.main.WorldToScreenPoint(worldPos),
-            Camera.main,
-            out UIPos
-        );
-        return UIPos;
+    
 
-    }
-
-    public Vector3 getWorldPosFromRectTransform(RectTransform rect)
-    {
-        Vector3 worldPos = rect.position;
-        return worldPos;
-    }
-
-    public void setHolePosWithWorldPos(Vector3 worldPos)
-    {
-        holeRect.anchoredPosition = getUIPosFromWorldPos(worldPos);
-    }
 
 
     public void openHole(float? duration = null, Ease? easeType = null)
