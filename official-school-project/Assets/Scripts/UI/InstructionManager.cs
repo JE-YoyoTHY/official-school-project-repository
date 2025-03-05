@@ -26,6 +26,9 @@ public class InstructionManager : MonoBehaviour
             availabelImagePanels[prefab.name] = prefab;
         }
 
+        
+
+
     }
 
     // Update is called once per frame
@@ -33,19 +36,20 @@ public class InstructionManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            print("R");
             showImagePanel("TextPanel");
         }
     }
 
-    public void showImagePanel(string prefabName, float duration = 1, Ease easeType = Ease.OutBack)
+    public GameObject showImagePanel(string prefabName, float duration = 2, Ease easeType = Ease.OutBack)
     {
-        print("enter showimagepanel.");
         if (availabelImagePanels.ContainsKey(prefabName))
         {
-            print("contain key");
             GameObject imagePanel = Instantiate(availabelImagePanels[prefabName]);
+
+
             imagePanel.transform.SetParent(instructionCanvasTransform, false);
+
+            
 
             Material imagePanelMaterial = imagePanel.GetComponent<Image>().material;
             if (imagePanelMaterial.shader == dissolveShader)
@@ -55,11 +59,17 @@ public class InstructionManager : MonoBehaviour
                 imagePanelMaterial.DOFloat(1, "_Fade", duration).SetEase(easeType);
                 print("tween finish");
             }
+
+            return imagePanel;
         }
-        else { Debug.LogError("[showImagePanel]: prefabName not match."); }
+        else { Debug.LogError("[showImagePanel]: prefabName not match."); return null; }
 
         
+        
     }
+
+
+
 
 
 
