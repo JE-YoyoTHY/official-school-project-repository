@@ -94,6 +94,7 @@ public class PlayerControlScript : MonoBehaviour
 	public Vector2 fireballMouseDirValue { get; private set; }
 	private sbyte fireballDirLastHorizontal;
 	private Coroutine fireballInputCoroutine;
+	private bool isFireballActive;
 
 	private bool fireballPlayerGotten;
 
@@ -138,6 +139,13 @@ public class PlayerControlScript : MonoBehaviour
 	private Vector2 freezeVelocity;
 
 	//levels
+	[Header("Levels")]
+	[SerializeField] private float deathRespawnDelayTime;
+	[SerializeField] private TransitionBlackHole deathHoleScript;
+    [SerializeField] private TransitionBlackHole levelTransitionHoleScript;
+    [SerializeField] private float playerControlRegainMinHoleRadius;
+	private Coroutine deathRespawnDelayCoroutine;
+	private Coroutine deathRespawnPlayerControlRegainCoroutine;
 	private LevelManagerScript currentLevel;
 	//private GameObject currentRespawnPoint; // idk 要放在Player還是level manager
 	private const int killZoneLayer = 7;
@@ -645,7 +653,7 @@ public class PlayerControlScript : MonoBehaviour
 
 	private bool canCastFireball()
 	{
-		if (fireballCurrentCharges > 0 && !isFireballPushForceAdding && !logic.isFreeze() && !PlayerPerformanceSystemScript.instance.isBeingControl && fireballPlayerGotten) return true;
+		if (fireballCurrentCharges > 0 && !isFireballPushForceAdding && !logic.isFreeze() && !PlayerPerformanceSystemScript.instance.isBeingControl && fireballPlayerGotten && isFireballActive) return true;
 		else return false;
 	}
 
@@ -987,7 +995,8 @@ public class PlayerControlScript : MonoBehaviour
 	{
 		if (collision.gameObject.layer == killZoneLayer)
 		{
-			playerDeath();
+			if(deathRespawnDelayCoroutine == null)
+			playerDeathDelayStart();
 		}
 
 		if (collision.gameObject.layer == levelTriggerLayer)
@@ -1036,9 +1045,12 @@ public class PlayerControlScript : MonoBehaviour
 	{
 		rb.velocity = Vector2.zero;
 		currentLevel.startLevel();
+
+		levelTransitionHoleScript.transform.parent.gameObject.SetActive(true);
+		levelTransitionHoleScript.closeHole();
 	}
 
-	private void playerDeath()
+	public void playerDeath()
 	{
 		rb.velocity = Vector2.zero;
 		//transform.position = currentRespawnPoint.transform.position;
@@ -1068,7 +1080,7 @@ public class PlayerControlScript : MonoBehaviour
 		mySetGravity(myNormalGravityScale, myNormalGravityMaxSpeed);
 		mySetFriction(myNormalFrictionAcceleration, myNormalAdjustFriction);
 		fireballHangTimeMoveBoostDir = 0;
-		isFrictionActive = true; isMoveActive = true; isJumpActive = true;
+		//isFrictionActive = true; isMoveActive = true; isJumpActive = true; isFireballActive = true;
 
 		//coroutine
 		if (jumpCoroutine != null) StopCoroutine(jumpCoroutine);
@@ -1081,6 +1093,54 @@ public class PlayerControlScript : MonoBehaviour
 
 		PlayerPerformanceSystemScript.instance.controlEnd();
 	}
+
+	public void playerRespawn()
+	{
+		deathRespawnDelayCoroutine = null;
+        if (deathRespawnPlayerControlRegainCoroutine != null) StopCoroutine(deathRespawnPlayerControlRegainCoroutine);
+		deathRespawnPlayerControlRegainCoroutine = StartCoroutine(playerRespawnControlRegain());
+    }
+
+	private void playerDeathDelayStart()
+	{
+		if(deathRespawnDelayCoroutine != null) StopCoroutine(deathRespawnDelayCoroutine);
+		deathRespawnDelayCoroutine = StartCoroutine(playerDeathDelayMain(deathRespawnDelayTime));
+	}
+
+	private IEnumerator playerDeathDelayMain(float t)
+	{
+		//initial
+		isMoveActive = false;
+		isJumpActive = false;
+		isFrictionActive = false;
+		isFireballActive = false;
+		mySetGravity(0, 0);
+
+
+		while(t >= 0)
+		{
+			rb.velocity = Vector2.zero;
+			
+
+			t -= Time.deltaTime;
+			yield return null;
+		}
+
+		deathHoleScript.transform.parent.gameObject.SetActive(true);
+		deathHoleScript.closeHole();
+
+	}
+
+	private IEnumerator playerRespawnControlRegain()
+	{
+		while (deathHoleScript.holeRect.sizeDelta.x < playerControlRegainMinHoleRadius)
+		{
+			yield return null;
+		}
+
+        isFrictionActive = true; isMoveActive = true; isJumpActive = true; isFireballActive = true;
+    }
+
 
 	#endregion
 

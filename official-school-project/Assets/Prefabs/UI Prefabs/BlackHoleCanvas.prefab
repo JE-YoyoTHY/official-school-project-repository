@@ -88,16 +88,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a976cbe09f3323444ae5e31aeead2ed7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  openDuration: 0
-  openRadius: 0
-  openEaseType: 0
-  openFinished:
+  openDuration: 1.5
+  openRadius: 3000
+  openEaseType: 15
+  openHoleFinished:
     m_PersistentCalls:
       m_Calls: []
-  closeDuration: 0
+  closeDuration: 1.5
   closeRadius: 0
-  closeEaseType: 0
-  closeFinished:
+  closeEaseType: 15
+  closeHoleFinished:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &4847873013742402998

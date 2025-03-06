@@ -3,20 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using DG.Tweening;
+using UnityEditor;
+using Unity.VisualScripting;
 
 public class TransitionBlackHole : MonoBehaviour
 {
-    private RectTransform holeRect;
+    public RectTransform holeRect {  get; private set; }
     private RectTransform canvasRect;
 
-    [SerializeField] private float openDuration;
-    [SerializeField] private float openRadius;
-    [SerializeField] private Ease openEaseType;
-    public UnityEvent openFinished; 
-    [SerializeField] private float closeDuration;
-    [SerializeField] private float closeRadius;
-    [SerializeField] private Ease closeEaseType;
-    public UnityEvent closeFinished;
+    [SerializeField] private float openDuration = 1.5f;
+    [SerializeField] private float openRadius = 3000;
+    [SerializeField] private Ease openEaseType = Ease.OutQuint;
+    public UnityEvent openHoleFinished; 
+    [SerializeField] private float closeDuration = 0.25f;
+    [SerializeField] private float closeRadius = 0;
+    [SerializeField] private Ease closeEaseType = Ease.OutQuint;
+    public UnityEvent closeHoleFinished;
+
+    
 
 
 
@@ -24,69 +28,69 @@ public class TransitionBlackHole : MonoBehaviour
     {
         holeRect = GetComponent<RectTransform>();
         canvasRect = holeRect.root.GetComponent<Canvas>().GetComponent<RectTransform>();
+        holeRect.sizeDelta = new Vector2(openRadius, openRadius);
 
-        openRadius = 3000;
-        openDuration = 1.5f;
-        openEaseType = Ease.OutQuint;
-
-        closeRadius = 0;
-        closeDuration = 1.5f;
-        closeEaseType = Ease.OutQuint;
-
+        gameObject.transform.parent.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        /* 要測試的時候可以打開
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            openHole();
-        }
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            closeHole();
-        }
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            UIPerforming.setUIPosWithWorldPos(canvasRect, holeRect, new Vector3(20, 20, 0));
-        }
-        */
+
+        
     }
 
-    
-    
 
 
-
-    public void openHole(float? duration = null, Ease? easeType = null)
+    #region FUNCTION: openHole()
+    public void openHole()
     {
-        duration ??= openDuration;  // 如果沒有duration參數傳入則使用預設值
-        easeType ??= openEaseType;
+        float duration = openDuration;
+        Ease easeType = openEaseType;
         Vector2 holeSize = holeRect.sizeDelta;
         Vector2 finalSize = new Vector2(openRadius, openRadius);
 
         DOTween.To(() => holeRect.sizeDelta, x => holeRect.sizeDelta = x, finalSize, openDuration).SetEase((Ease)easeType).onComplete = openCallBack;
     }
 
-    public void closeHole(float? duration = null, Ease? easeType = null)
+    public void openHole(float duration, Ease easeType)
     {
-        duration ??= closeDuration;
-        easeType ??= closeEaseType;
+        Vector2 holeSize = holeRect.sizeDelta;
+        Vector2 finalSize = new Vector2(openRadius, openRadius);
+
+        DOTween.To(() => holeRect.sizeDelta, x => holeRect.sizeDelta = x, finalSize, openDuration).SetEase((Ease)easeType).onComplete = openCallBack;
+    }
+    #endregion
+
+    #region FUNCTION: closeHole()
+    public void closeHole()
+    {
+        float duration = closeDuration;
+        Ease easeType = closeEaseType;
+
         Vector2 holeSize = holeRect.sizeDelta;
         Vector2 finalSize = new Vector2(closeRadius, closeRadius);
 
         DOTween.To(() => holeRect.sizeDelta, x => holeRect.sizeDelta = x, finalSize, closeDuration).SetEase((Ease)easeType).onComplete = closeCallBack;
     }
+    public void closeHole(float duration, Ease easeType)
+    {
+        Vector2 holeSize = holeRect.sizeDelta;
+        Vector2 finalSize = new Vector2(closeRadius, closeRadius);
+
+        DOTween.To(() => holeRect.sizeDelta, x => holeRect.sizeDelta = x, finalSize, closeDuration).SetEase((Ease)easeType).onComplete = closeCallBack;
+    }
+    #endregion
 
     public void openCallBack()
     {
-        openFinished.Invoke();
+        openHoleFinished.Invoke();
+        gameObject.transform.parent.gameObject.SetActive(false);
     }
 
     public void closeCallBack()
     {
-        closeFinished.Invoke();
+        closeHoleFinished.Invoke();
     }
 
 
@@ -99,3 +103,36 @@ public class TransitionBlackHole : MonoBehaviour
 
 
 }
+
+#if UNITY_EDITOR
+
+[CustomEditor(typeof(TransitionBlackHole))]
+public class TransitionBlackHoleCustomInspector : Editor
+{
+
+    TransitionBlackHole transitionBlackHole;
+
+    private void OnEnable()
+    {
+        transitionBlackHole = (TransitionBlackHole)target; 
+    }
+
+    
+    public override void OnInspectorGUI()
+    {
+        base.OnInspectorGUI();
+
+        
+
+        if (GUILayout.Button("Open Hole", GUILayout.Width(180f)))
+        {
+            transitionBlackHole.openHole();
+        }
+        if (GUILayout.Button("Close Hole", GUILayout.Width(180f)))
+        {
+            transitionBlackHole.closeHole();
+        }
+    }
+}
+
+#endif
