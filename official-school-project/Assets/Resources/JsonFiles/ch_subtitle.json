@@ -1,5 +1,5 @@
 {
-    "001": {"content":"內容1", "duration":2}, 
+    "move_instruction": {"content":"按下 A 與 D 以移動", "duration":2}, 
     "002": {"content":"內容2", "duration":2}, 
     "003": {"content":"內容3", "duration":2}
 }

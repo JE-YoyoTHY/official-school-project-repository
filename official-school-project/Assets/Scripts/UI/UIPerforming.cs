@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public static class UIPerforming
 {
@@ -31,5 +32,20 @@ public static class UIPerforming
 
     {
         uiRect.anchoredPosition = getUIPosFromWorldPos(canvasRect, targetWorldPos);
+    }
+
+    public static void setImageTransparency(Image targetImage, float alpha)
+    {
+        // 0 = 完全透明; 1 = 完全不透明, 0 <= alpha <= 1
+        if (alpha < 0 || alpha > 1) 
+        { 
+            Debug.LogError("[setImageTransparency]: alpha out of range, it should be between 0 to 1.");
+            return; 
+        }
+
+        Color newColor = targetImage.color;
+        newColor.a = alpha;
+
+        targetImage.color = newColor;
     }
 }

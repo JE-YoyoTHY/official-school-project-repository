@@ -7,39 +7,77 @@ using Newtonsoft.Json;
 using System.Linq;
 using System;
 
-public class SubtitleManager
+public static class SubtitleManager
 {
-    private string _currentLanguage = "chinese";  // 設定中文為預設語言
-    private string[] _availableLanguages = {"chinese", "english"};  // 可用語言
-    private Dictionary<string, string> _languagePaths = new Dictionary<string, string>
+    public static string _currentLanguage = "chinese";  // 設定中文為預設語言
+    public static string[] _availableLanguages = {"chinese", "english"};  // 可用語言
+    public static Dictionary<string, string> _languagePaths = new Dictionary<string, string>
     {
         { "chinese", Application.dataPath + "/Resources/JsonFiles/ch_subtitle.json"},
         { "english", Application.dataPath + "/Resources/JsonFiles/en_subtitle.json"},
     };
-    private string _str_json = string.Empty;  // 先將JSON文字檔預設為空，並在函式中讀取
 
     //-----------------------------------------------------------------------------\\
 
-    public Subtitle getSubtitleById(string id)
+    public static Subtitle getSubtitleById(string id)
     {
+        string str_json = string.Empty;
         
         using (StreamReader read = new StreamReader(_languagePaths[_currentLanguage]))
         {
             // 依照目前語言讀取JSON檔
-            _str_json = read.ReadToEnd();
+            str_json = read.ReadToEnd();
         }
         // 將JSON文字檔轉換為JSON檔
-        Dictionary<string, Subtitle> subtitleDict = JsonConvert.DeserializeObject<Dictionary<string, Subtitle>>(_str_json);
+        Dictionary<string, Subtitle> subtitleDict = JsonConvert.DeserializeObject<Dictionary<string, Subtitle>>(str_json);
 
         // 取得整個字幕的宇集，取得底下的字幕組(鍵值對，鍵: id, 值: class Subtitle)，再利用id取得該字幕組
         var subtitle = subtitleDict[id];
         
+        if (subtitle == null)
+        {
+            Debug.LogError("[getSubtitleById]: id not match.");
+            return null;
+        }
 
 
         return subtitle;
     }
 
-    public void changeCurrentLanguage(string lan)
+    public static string getSubtitleContentById(string id)
+    {
+        string str_json = string.Empty;
+        using (StreamReader read = new StreamReader(_languagePaths[_currentLanguage]))
+        {
+            // 依照目前語言讀取JSON檔
+            str_json = read.ReadToEnd();
+        }
+        // 將JSON文字檔轉換為JSON檔
+        Dictionary<string, Subtitle> subtitleDict = JsonConvert.DeserializeObject<Dictionary<string, Subtitle>>(str_json);
+
+        // 取得整個字幕的宇集，取得底下的字幕組(鍵值對，鍵: id, 值: class Subtitle)，再利用id取得該字幕組
+
+        Subtitle subtitle = subtitleDict[id];
+        string content = subtitle.content;
+
+        if (subtitle == null)
+        {
+            Debug.LogError("[getSubtitleContentById]: id not match.");
+            return null;
+        }
+
+        if (content == null)
+        {
+            Debug.LogError("[getSubtitleContentById]: id matches, but no content found.");
+            return null;
+        }
+
+
+
+        return content;
+    }
+
+    public static void changeCurrentLanguage(string lan)
     {
         if (_availableLanguages.Contains(lan))
         {
@@ -47,16 +85,8 @@ public class SubtitleManager
         }
         else
         {
-           Console.WriteLine("[changeCurrentLanguage]: Not available.");
+           Debug.LogError("[changeCurrentLanguage]: Not available.");
         }
-    }
-    public string getCurrentLanguage()
-    {
-        return _currentLanguage;
-    }
-    public string[] getAvailableLanguages()
-    {
-        return _availableLanguages;
     }
 
     

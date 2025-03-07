@@ -10,15 +10,14 @@ public class UI : MonoBehaviour
     // Start is called before the first frame update
     private string _textContent = string.Empty;
     public TextMeshProUGUI textUI;
-    private float _charRate;
-    private float _spaceRate;
-    public SubtitleManager subtitleManager = new SubtitleManager();
+    [SerializeField] private float _charRate;
+    [SerializeField] private float _spaceRate;
     void Start()
     {
         _charRate = 0.03f;
         _spaceRate = 0.01f;
-        subtitleManager.changeCurrentLanguage("english");
-        _textContent = subtitleManager.getSubtitleById("002").content;
+        SubtitleManager.changeCurrentLanguage("english");
+        _textContent = SubtitleManager.getSubtitleById("002").content;
         StartCoroutine(showSubtitleText());
     }
 
