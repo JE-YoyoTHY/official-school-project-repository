@@ -48,4 +48,19 @@ public static class UIPerforming
 
         targetImage.color = newColor;
     }
+
+    public static void setUISize(GameObject ui, Vector2 newSize)
+    {
+        if (ui.GetComponent<RectTransform>() == null)
+        {
+            Debug.LogError("[setUISize()]: No RectTransform component found in the given GameObject.");
+            return;
+        }
+
+        RectTransform uiRect = ui.GetComponent<RectTransform>();
+        uiRect.sizeDelta = newSize;
+    }
+
+    
+
 }

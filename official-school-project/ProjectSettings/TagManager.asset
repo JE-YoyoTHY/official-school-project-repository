@@ -12,6 +12,7 @@ TagManager:
   - KillFireballWithoutExplode
   - OneWayPlatform
   - PerformanceTrigger
+  - InstructionCanvas
   layers:
   - Default
   - TransparentFX
