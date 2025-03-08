@@ -468,7 +468,7 @@ public class PlayerControlScript : MonoBehaviour
 		}
 
 		
-		leaveGround();
+		leaveGround(true);
 	}
 
 	private void jumpEnd()
@@ -575,9 +575,9 @@ public class PlayerControlScript : MonoBehaviour
 		}
 	}
 
-	private void leaveGround()
+	private void leaveGround(bool byJump)
 	{
-		groundTrigger.leaveGround();
+		groundTrigger.leaveGround(byJump);
 		onGround = false;
 
 		if (coyoteTimeCoroutine != null)
@@ -595,7 +595,7 @@ public class PlayerControlScript : MonoBehaviour
 				t -= Time.deltaTime;
 			yield return null;
 		}
-		leaveGround();
+		leaveGround(false);
 	}
 
 	#endregion
@@ -821,7 +821,7 @@ public class PlayerControlScript : MonoBehaviour
 
 			mySetGravity(fireballExplodeGravityScale, myNormalGravityMaxSpeed);
 			mySetFriction(fireballExplodeFriction, fireballExplodeAdjustFriction);
-			if (localVelocity.y > 0) leaveGround(); // for cancel coyote time
+			if (localVelocity.y > 0) leaveGround(false); // for cancel coyote time
 
 
 		//coroutine phase 3 -> wait until duration end

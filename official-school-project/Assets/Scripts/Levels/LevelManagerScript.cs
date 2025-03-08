@@ -60,7 +60,7 @@ public class LevelManagerScript : MonoBehaviour
 		{
 			if (transform.GetChild(2).GetChild(i).tag == "RechargeCrystal") levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<RechargeCrystalScript>().regainPower);
 			if (transform.GetChild(2).GetChild(i).tag == "Gate") levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<GateScript>().gateReset);
-			if (transform.GetChild(2).GetChild(i).tag == "BreakablePlatform") levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<BreakablePlatformScript>().restoreAfterBreak);
+			//if (transform.GetChild(2).GetChild(i).tag == "BreakablePlatform") levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<BreakablePlatformScript>().restoreAfterBreak);
 		}
 
 		//blockage -> when player exit this level, enable this to prevent player from returning
@@ -93,6 +93,7 @@ public class LevelManagerScript : MonoBehaviour
 		currentCam.Priority = 11;
 		player.transform.position = currentRespawnPoint.transform.position;
 		currentRespawnPoint.transform.parent.GetComponent<RespawnPointScript>().changeCameraAfterRespawn();
+
 	}
 
 	public void disableLevel() // means leave this level
@@ -110,6 +111,12 @@ public class LevelManagerScript : MonoBehaviour
 		player.transform.position = currentRespawnPoint.transform.position;
 		currentRespawnPoint.transform.parent.GetComponent<RespawnPointScript>().changeCameraAfterRespawn();
 		levelSetUpEvent.Invoke();
+
+		GameObject[] BreakablePlatforms = GameObject.FindGameObjectsWithTag("BreakablePlatform");
+		foreach (GameObject bp in BreakablePlatforms)
+		{
+			bp.GetComponent<BreakablePlatformScript>().restoreAfterBreak();
+		}
 	}
 
 	public void enableBlockage()
@@ -117,53 +124,6 @@ public class LevelManagerScript : MonoBehaviour
 		transform.GetChild(0).GetChild(2).gameObject.SetActive(true); // 0 -> basic, 2 -> blockage
 	}
 
-	/*private void cameraMain()
-	{
-		myCameraTarget.GetComponent<Rigidbody2D>().velocity = player.GetComponent<Rigidbody2D>().velocity;
-		//i want camera to move if player's pos has changed, or cam will move, while player stands still, for instance : shoot fb upwards while on ground
-
-		/*Vector3 deltaPos = player.transform.position - playerLastFramePos;
-		playerLastFramePosCounter++;
-		if(playerLastFramePosCounter >= playerLastFramePosUpdateRate)
-		{
-			playerLastFramePos = player.transform.position;
-			playerLastFramePosCounter = 0;
-		}
-		//Debug.Log(deltaPos);
-
-		if (Mathf.Abs(deltaPos.x) > 0) //0.001 can be changed
-			myCameraTarget.GetComponent<Rigidbody2D>().velocity = new Vector2(player.GetComponent<Rigidbody2D>().velocity.x, myCameraTarget.GetComponent<Rigidbody2D>().velocity.y);
-		else
-			//myCameraTarget.GetComponent<Rigidbody2D>().velocity = new Vector2(0, myCameraTarget.GetComponent<Rigidbody2D>().velocity.y);
-		
-		if (Mathf.Abs(deltaPos.y) > 0)
-			myCameraTarget.GetComponent<Rigidbody2D>().velocity = new Vector2(myCameraTarget.GetComponent<Rigidbody2D>().velocity.x, player.GetComponent<Rigidbody2D>().velocity.y);
-		else
-			//myCameraTarget.GetComponent<Rigidbody2D>().velocity = new Vector2(myCameraTarget.GetComponent<Rigidbody2D>().velocity.x, 0);
-			*/
-
-	/*if (myCameraTarget.transform.position.x < camLB.position.x || player.transform.position.x < camLB.position.x)
-	{
-		myCameraTarget.transform.position = new Vector3(camLB.position.x, myCameraTarget.transform.position.y, myCameraTarget.transform.position.z);
-		myCameraTarget.GetComponent<Rigidbody2D>().velocity = new Vector2(0, myCameraTarget.GetComponent<Rigidbody2D>().velocity.y);
-	}
-	if (myCameraTarget.transform.position.y < camLB.position.y || player.transform.position.y < camLB.position.y)
-	{
-		myCameraTarget.transform.position = new Vector3(myCameraTarget.transform.position.x, camLB.position.y, myCameraTarget.transform.position.z);
-		myCameraTarget.GetComponent<Rigidbody2D>().velocity = new Vector2(myCameraTarget.GetComponent<Rigidbody2D>().velocity.x, 0);
-	}
-
-	if (myCameraTarget.transform.position.x > camRT.position.x || player.transform.position.x > camRT.position.x)
-	{
-		myCameraTarget.transform.position = new Vector3(camRT.position.x, myCameraTarget.transform.position.y, myCameraTarget.transform.position.z);
-		myCameraTarget.GetComponent<Rigidbody2D>().velocity = new Vector2(0, myCameraTarget.GetComponent<Rigidbody2D>().velocity.y);
-	}
-	if (myCameraTarget.transform.position.y > camRT.position.y || player.transform.position.y > camRT.position.y)
-	{
-		myCameraTarget.transform.position = new Vector3(myCameraTarget.transform.position.x, camRT.position.y, myCameraTarget.transform.position.z);
-		myCameraTarget.GetComponent<Rigidbody2D>().velocity = new Vector2(myCameraTarget.GetComponent<Rigidbody2D>().velocity.x, 0);
-	}
-}*/
 
 
 	public void swapRespawnPoint(GameObject newRespawnPoint)

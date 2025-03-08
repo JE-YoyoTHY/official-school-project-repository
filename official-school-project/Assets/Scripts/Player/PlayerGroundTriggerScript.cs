@@ -7,6 +7,9 @@ public class PlayerGroundTriggerScript : MonoBehaviour
 
 	public bool isGrounded { get; private set; } = false;
 	private const int groundLayer = 6;
+
+	private BreakablePlatformScript currentBreakablePlatform;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,7 +30,8 @@ public class PlayerGroundTriggerScript : MonoBehaviour
 
 			if(collision.gameObject.tag == "BreakablePlatform")
 			{
-				collision.gameObject.GetComponent<BreakablePlatformScript>().touchPlayer();
+				currentBreakablePlatform = collision.gameObject.GetComponent<BreakablePlatformScript>();
+				currentBreakablePlatform.traversalThroughAdjacentTiles(null);
 			}
 		}
 	}
@@ -36,12 +40,20 @@ public class PlayerGroundTriggerScript : MonoBehaviour
 	{
 		if (collision.gameObject.layer == groundLayer)
 		{
+			if (collision.CompareTag("BreakablePlatform")) currentBreakablePlatform = null;
+
 			isGrounded = false;
 		}
 	}
 
-	public void leaveGround()
+	public void leaveGround(bool byJump)
 	{
+		if(isGrounded && byJump && currentBreakablePlatform != null)
+		{
+			currentBreakablePlatform.playerJumpOnThisTraversal(null);
+		}
+
+
 		isGrounded = false;
 	}
 

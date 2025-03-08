@@ -79,7 +79,7 @@ public class FireballScript : MonoBehaviour
 				{
 					if (hit.collider.gameObject.tag == "BreakablePlatform")
 					{
-						hit.collider.gameObject.GetComponent<BreakablePlatformScript>().breakStart();
+						hit.collider.gameObject.GetComponent<BreakablePlatformScript>().breakStart(true, null);
 					}
 
 					explode();
@@ -173,7 +173,7 @@ public class FireballScript : MonoBehaviour
 			{
 				if(collision.CompareTag("BreakablePlatform"))
 				{
-					collision.gameObject.GetComponent<BreakablePlatformScript>().breakStart();
+					collision.gameObject.GetComponent<BreakablePlatformScript>().breakStart(true, null);
 				}
 
 				// if is passing one way platform -> not explode
