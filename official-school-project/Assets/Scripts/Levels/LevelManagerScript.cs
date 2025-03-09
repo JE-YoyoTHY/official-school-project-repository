@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Windows.WebCam;
 
 
 public class LevelManagerScript : MonoBehaviour
@@ -90,7 +91,8 @@ public class LevelManagerScript : MonoBehaviour
 		levelSetUpEvent.Invoke();
 		//isCurrentLevel = true;
 		//transform.GetChild(3).GetComponent<CinemachineVirtualCamera>().Priority = 11;
-		currentCam.Priority = 11;
+		setCamera();
+
 		player.transform.position = currentRespawnPoint.transform.position;
 		currentRespawnPoint.transform.parent.GetComponent<RespawnPointScript>().changeCameraAfterRespawn();
 
@@ -143,9 +145,15 @@ public class LevelManagerScript : MonoBehaviour
 			if(currentCam != null)
 				currentCam.Priority = 10;
 			currentCam = newCam;
-			newCam.Priority = 11;
+			setCamera();
 		}
 		
+	}
+
+	private void setCamera()
+	{
+		currentCam.Priority = 11;
+		CameraShakeManagerScript.instance.changeImpulseListener(currentCam.GetComponent<CinemachineImpulseListener>());
 	}
 
 

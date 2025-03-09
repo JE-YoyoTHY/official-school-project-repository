@@ -20,7 +20,7 @@ public class InputManagerScript : MonoBehaviour
 	private InputAction moveLeftAction;
 	private InputAction moveRightAction;
 	private InputAction jumpAction;
-	private InputAction fireballCastByKeyboardAction;
+	//private InputAction fireballCastByKeyboardAction;
 	private InputAction fireballCastByMouseAction;
 	//private InputAction fireballDirAction;
 	private InputAction fireballDirUpAction;
@@ -59,7 +59,7 @@ public class InputManagerScript : MonoBehaviour
 		moveLeftAction = playerInput.actions["moveLeft"];
 		moveRightAction = playerInput.actions["moveRight"];
 		jumpAction = playerInput.actions["jump"];
-		fireballCastByKeyboardAction = playerInput.actions["fireballCastByKeyboard"];
+		//fireballCastByKeyboardAction = playerInput.actions["fireballCastByKeyboard"];
 		fireballCastByMouseAction = playerInput.actions["fireballCastByMouse"];
 		//fireballDirAction = playerInput.actions["fireballDir"];
 		fireballDirUpAction = playerInput.actions["fireballDirUp"];
@@ -74,12 +74,14 @@ public class InputManagerScript : MonoBehaviour
 		updateMoveInput();
 		if (jumpAction.WasPressedThisFrame()) jumpInput = InputState.press;
 		if (jumpAction.WasReleasedThisFrame()) jumpInput = InputState.release;
-		if (fireballCastByKeyboardAction.WasPressedThisFrame()) fireballCastByKeyboardInput = InputState.press;
-		if (fireballCastByKeyboardAction.WasReleasedThisFrame()) fireballCastByKeyboardInput = InputState.release;
+		//if (fireballCastByKeyboardAction.WasPressedThisFrame()) fireballCastByKeyboardInput = InputState.press;
+		//if (fireballCastByKeyboardAction.WasReleasedThisFrame()) fireballCastByKeyboardInput = InputState.release;
 		if (fireballCastByMouseAction.WasPressedThisFrame()) fireballCastByMouseInput = InputState.press;
 		if (fireballCastByMouseAction.WasReleasedThisFrame()) fireballCastByMouseInput = InputState.release;
 		//fireballDirInput = fireballDirAction.ReadValue<Vector2>();
 		updateFireballDirInput();
+		if (fireballDirInput.magnitude == 0) fireballCastByKeyboardInput = InputState.release;
+		if (fireballCastByKeyboardInput == InputState.release && fireballDirInput.magnitude > 0) fireballCastByKeyboardInput = InputState.press;
 	}
 
 	private void updateMoveInput()
