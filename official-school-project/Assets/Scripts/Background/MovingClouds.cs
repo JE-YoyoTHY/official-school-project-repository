@@ -13,7 +13,7 @@ public class CloudParallax : MonoBehaviour
 
     void Update(){
         float deltaX = cameraTransform.position.x - lastCameraPosition.x;
-        transform.position += new Vector3(deltaX * parallaxEffect, 0, 0);
+        transform.position += new Vector3(deltaX * parallaxEffect*-0.1f, 0);
         lastCameraPosition = cameraTransform.position;
     }
 }
