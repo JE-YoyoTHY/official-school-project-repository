@@ -11,10 +11,9 @@ GameObject:
   - component: {fileID: 806971858841479617}
   - component: {fileID: 4931631855795564187}
   - component: {fileID: 2529516885997762103}
-  - component: {fileID: 6459340029596535636}
-  - component: {fileID: -1417224455621182470}
+  - component: {fileID: -1895896173600619005}
   m_Layer: 0
-  m_Name: clouds
+  m_Name: CloudPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -95,7 +94,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7168991712813353455}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -114,7 +113,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &6459340029596535636
+--- !u!114 &-1895896173600619005
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -123,25 +122,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 7168991712813353455}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3b855f1e1ccc5f40985a407a2a25bc5, type: 3}
+  m_Script: {fileID: 11500000, guid: b0579dc8b9df8f4408e9749f98d76902, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   cloudPrefab: {fileID: 7168991712813353455}
-  cloudCount: 10
-  minY: 0
-  maxY: 0
-  minXOffset: 0
-  maxXOffset: 0
---- !u!114 &-1417224455621182470
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7168991712813353455}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e5d995a3770aa24fb4a77ec34c886aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  parallaxEffect: 0.5
+  spawnInterval: 2
+  cloudSpeed: 1
+  minY: -2
+  maxY: 2

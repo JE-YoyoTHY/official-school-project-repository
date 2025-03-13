@@ -2,38 +2,41 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+//by GPT, 還沒修過
 public class CloudSpawner : MonoBehaviour
 {
-    public GameObject cloudPrefab;
-    public int cloudCount = 10;
-    public float minY = -3f, maxY = 3f;
-    public float minXOffset = -5f, maxXOffset = 5f;
+    public GameObject cloudPrefab;  // 連結你的雲朵Prefab
+    public float spawnInterval = 2f; // 產生間隔
+    public float cloudSpeed = 1f; // 雲朵移動速度
+    public float minY = -2f, maxY = 2f; // 雲朵 Y 軸範圍
 
     private Camera mainCamera;
 
     void Start()
     {
         mainCamera = Camera.main;
-        SpawnClouds();
+        StartCoroutine(SpawnClouds());
     }
 
-    void SpawnClouds()
+    IEnumerator SpawnClouds()
     {
-        for (int i = 0; i < cloudCount; i++)
+        while (true)
         {
-            Vector2 spawnPosition = GetRandomPositionInView();
-            Instantiate(cloudPrefab, spawnPosition, Quaternion.identity);
+            SpawnCloud();
+            yield return new WaitForSeconds(spawnInterval);
         }
     }
 
-    Vector2 GetRandomPositionInView()
+    void SpawnCloud()
     {
-        float camHeight = 2f * mainCamera.orthographicSize;
-        float camWidth = camHeight * mainCamera.aspect;
+        float cameraRightEdge = mainCamera.ViewportToWorldPoint(new Vector3(1, 0, 0)).x;
+        float randomY = Random.Range(minY, maxY);
 
-        float randomX = Random.Range(-camWidth / 2, camWidth / 2) + mainCamera.transform.position.x;
-        float randomY = Random.Range(minY, maxY) + mainCamera.transform.position.y;
+        Vector3 spawnPosition = new Vector3(cameraRightEdge + 1f, randomY, 0);
+        GameObject cloud = Instantiate(cloudPrefab, spawnPosition, Quaternion.identity);
 
-        return new Vector2(randomX, randomY);
+        cloud.GetComponent<Rigidbody2D>().velocity = new Vector2(-cloudSpeed, 0);
+        Destroy(cloud, 10f); // 10秒後刪除，防止物件堆積
     }
 }
