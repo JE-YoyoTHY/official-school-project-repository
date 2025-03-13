@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RechargeCrystalScript : MonoBehaviour
 {
+	private Animator animator;
 	private LogicScript logic;
 	private PlayerControlScript player;
 	private SpriteRenderer sprite;
@@ -11,13 +13,14 @@ public class RechargeCrystalScript : MonoBehaviour
 	[SerializeField] private float cooldownDuration;
 	private float cooldownCounter;
 	private bool isPowerActive;
-	[SerializeField] private Color activeColor;
-	[SerializeField] private Color deactiveColor;
+	//[SerializeField] private Color activeColor;
+	//[SerializeField] private Color deactiveColor;
 
 
     // Start is called before the first frame update
     void Start()
     {
+		animator = GetComponent<Animator>();
 		logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
 		player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControlScript>();
 		sprite = GetComponent<SpriteRenderer>();
@@ -40,21 +43,26 @@ public class RechargeCrystalScript : MonoBehaviour
 		}
 	}
 
-	public void regainPower()
+    [ContextMenu("Regain Power")]
+    public void regainPower()
 	{
 		cooldownCounter = 0;
 		isPowerActive = true;
-		sprite.color = activeColor;
+		//sprite.color = activeColor;
+		animator.Play("ChargedFlameFlicker");
 	}
 
-	private void losePower()
+	//[Button]
+	[ContextMenu("Lose Power")]
+	public void losePower()
 	{
 		cooldownCounter = cooldownDuration;
 		isPowerActive = false;
-		sprite.color = deactiveColor;
-	}
+		//sprite.color = deactiveColor;
+        animator.Play("UnchargedFlameFlicker");
+    }
 
-	private void OnTriggerStay2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
 	{
 		if(collision.gameObject.tag == "Player" && isPowerActive && player.fireballChargeNeeded())
 		{
