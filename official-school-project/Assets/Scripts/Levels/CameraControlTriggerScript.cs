@@ -10,6 +10,8 @@ public class CameraControlTriggerScript : MonoBehaviour
 	private LevelManagerScript levelManager;
 	private Collider2D coll;
 
+	[SerializeField] private float cameraBlendTime = 1f;
+
 	[SerializeField] private CameraSwitchDirection cameraSwitchDir;
 
 	[Header("Vertical")]
@@ -43,22 +45,22 @@ public class CameraControlTriggerScript : MonoBehaviour
 				case CameraSwitchDirection.Vertical:
 					if(exitDirection.y < 0) //below
 					{
-						levelManager.swapCamera(cameraBelow);
+						levelManager.swapCamera(cameraBelow, cameraBlendTime);
 					}
 					else if(exitDirection.y > 0)
 					{
-						levelManager.swapCamera(cameraAbove);
+						levelManager.swapCamera(cameraAbove, cameraBlendTime);
 					}
 
 					break;
 				case CameraSwitchDirection.Horizontal:
 					if (exitDirection.x < 0) //left
 					{
-						levelManager.swapCamera(cameraOnLeft);
+						levelManager.swapCamera(cameraOnLeft, cameraBlendTime);
 					}
 					else if (exitDirection.x > 0)
 					{
-						levelManager.swapCamera(cameraOnRight);
+						levelManager.swapCamera(cameraOnRight, cameraBlendTime);
 					}
 					break;
 			}

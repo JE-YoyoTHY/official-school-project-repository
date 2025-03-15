@@ -12,40 +12,22 @@ public class LevelManagerScript : MonoBehaviour
 	//private LevelManagerScript previousLevel;
 	public LevelManagerScript nextLevel;
 
-	/*legacy below
-	//private GameObject myCameraTarget;
-	//private Transform camLB; // cam lb for camera left bottom boundary
-	//private Transform camRT; // cam rt for camera right top 
-	
-	//private CinemachineVirtualCamera myVirtualCam;*/
+	private CinemachineBrain cinemachineBrain;
 	private CinemachineVirtualCamera currentCam;
 	private PlayerControlScript player;
 
-	/*//camera
-	private Vector3 playerLastFramePos;
-	private const int playerLastFramePosUpdateRate = 4;
-	private int playerLastFramePosCounter;*/
-
-	//private bool isCurrentLevel;
-	//private Transform currentRespawnPoint; // idk 要放在Player還是level manager
 	private GameObject currentRespawnPoint; // default is child 0 -> 0-> 0-> 0 //basic -> respawn points -> trigger ->pos
 
 	[HideInInspector] public UnityEvent levelSetUpEvent; //set up crystal, gate ...
 
-	//change level
-	//[SerializeField] private float levelChangeFreezeTime;
+	//change camera
+	//[SerializeField] private float cameraSwapTime;
 
 	// Start is called before the first frame update
 	void Start()
 	{
-		/*//myCameraTarget = transform.GetChild(1).GetChild(3).gameObject; // 1 -> camera component, 3 -> camera target
-		//camLB = transform.GetChild(1).GetChild(0); // 1->camera component, 0 -> left bottom
-		//camRT = transform.GetChild(1).GetChild(1); // 1->camera component, 1 -> right top
-		//myVirtualCam = transform.GetChild(1).GetChild(0).GetComponent<CinemachineVirtualCamera>();  // child 1 -> camera component , 0 ->virtual cam*/
 		player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControlScript>();
-
-		//myVirtualCam.Follow = player.transform;
-		//myVirtualCam.GetComponent<CinemachineConfiner2D>().m_BoundingShape2D = myVirtualCam.transform.parent.GetChild(1).GetComponent<Collider2D>(); // my virtual cam parent -> cam component , child 1 -> boundary
+		cinemachineBrain = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CinemachineBrain>();
 
 		currentRespawnPoint = transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).gameObject;
 
@@ -70,24 +52,10 @@ public class LevelManagerScript : MonoBehaviour
 	}
 
 	// Update is called once per frame
-	void LateUpdate()
-	{
-		/*if (isCurrentLevel)
-		{
-			cameraMain();
-		}*/
-	}
-
-	/*void FixedUpdate()
-	{
-		if (isCurrentLevel)
-		{
-			cameraMain();
-		}
-	}*/
 
 	public void startLevel()
 	{
+		cinemachineBrain.m_DefaultBlend.m_Time = 0;
 		levelSetUpEvent.Invoke();
 		//isCurrentLevel = true;
 		//transform.GetChild(3).GetComponent<CinemachineVirtualCamera>().Priority = 11;
@@ -109,6 +77,8 @@ public class LevelManagerScript : MonoBehaviour
 
 	public void restartLevel()
 	{
+		cinemachineBrain.m_DefaultBlend.m_Time = 0;
+
 		//player.transform.position = transform.GetChild(0).GetChild(0).transform.position; //child 0 -> basic, 0 -> respawn
 		player.transform.position = currentRespawnPoint.transform.position;
 		currentRespawnPoint.transform.parent.GetComponent<RespawnPointScript>().changeCameraAfterRespawn();
@@ -138,8 +108,10 @@ public class LevelManagerScript : MonoBehaviour
 
 	#region camera
 
-	public void swapCamera(CinemachineVirtualCamera newCam)
+	public void swapCamera(CinemachineVirtualCamera newCam, float localCameraBlendTime)
 	{
+		cinemachineBrain.m_DefaultBlend.m_Time = localCameraBlendTime;
+
 		if(currentCam != newCam)
 		{
 			if(currentCam != null)

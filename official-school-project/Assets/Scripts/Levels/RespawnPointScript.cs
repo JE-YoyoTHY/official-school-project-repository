@@ -25,7 +25,7 @@ public class RespawnPointScript : MonoBehaviour
 	{
 		if(currentCameraAfterRespawn != null)
 		{
-			levelManager.swapCamera(currentCameraAfterRespawn);
+			levelManager.swapCamera(currentCameraAfterRespawn, 0);
 		}
 	}
 }
