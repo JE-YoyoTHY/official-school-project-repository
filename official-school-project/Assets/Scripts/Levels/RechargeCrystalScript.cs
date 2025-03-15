@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class RechargeCrystalScript : MonoBehaviour
 {
 	private Animator animator;
-	private LogicScript logic;
+	//private LogicScript logic;
 	private PlayerControlScript player;
 	private SpriteRenderer sprite;
 
@@ -16,30 +16,58 @@ public class RechargeCrystalScript : MonoBehaviour
 	//[SerializeField] private Color activeColor;
 	//[SerializeField] private Color deactiveColor;
 
+	//shake
+	private Vector3 defaultPos;
+	[SerializeField] private float shakeCooldown; //the interval of changing position
+	[SerializeField] private float shakeDistance; // the max shake distance from default
+	private Coroutine shakeCoroutine;
+
 
     // Start is called before the first frame update
     void Start()
     {
 		animator = GetComponent<Animator>();
-		logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
+		//logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
 		player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControlScript>();
 		sprite = GetComponent<SpriteRenderer>();
 
 		regainPower();
+		defaultPos = transform.position;
     }
 
     // Update is called once per frame
     void Update()
     {
         powerMain();
+
+		if (shakeCoroutine == null) StartCoroutine(shake());
     }
 
 	private void powerMain()
 	{
 		if(!isPowerActive)
 		{
-			if(!logic.isFreeze()) cooldownCounter -= Time.deltaTime;
+			if(!LogicScript.instance.isFreeze()) cooldownCounter -= Time.deltaTime;
 			if(cooldownCounter < 0 ) regainPower();
+		}
+	}
+
+	private IEnumerator shake()
+	{
+		//random pos
+		float randomAngle = Random.Range(0, 360f);
+		float randomDistance = Random.Range(0f, shakeDistance);
+
+		transform.position = defaultPos + new Vector3(randomDistance * Mathf.Cos(Mathf.Deg2Rad * randomAngle), randomDistance * Mathf.Sin(Mathf.Deg2Rad * randomAngle), 0f);
+
+		//wait for second
+		float t = shakeCooldown;
+		while (t > 0)
+		{
+			if(!LogicScript.instance.isFreeze())
+				t -= Time.deltaTime;
+			
+			yield return null;
 		}
 	}
 

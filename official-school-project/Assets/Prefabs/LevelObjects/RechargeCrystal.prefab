@@ -177,6 +177,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cooldownDuration: 2
+  shakeCooldown: 0.08
+  shakeDistance: 0.05
 --- !u!95 &8271236644750136056
 Animator:
   serializedVersion: 5
