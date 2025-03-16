@@ -4948,7 +4948,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -4993,14 +4993,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8537a5a824c26514c8416a2889d3aaca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  normalMoveSpeed: 20
-  fireballFriction: 15
+  normalMoveSpeed: 40
+  fireballFriction: 40
   explodeRadius: 4
   explodeDuration: 0.1
-  hitPlayerSpeedScale: 0.75
+  hitPlayerSpeedScale: 0.1
   impulseForce: 0.3
-  raycastMinSpeed: 20
-  exceedSpeedToDistanceScale: 0.1
   leavePlayerTime: 0.1
   explosionParticle: {fileID: 6197230993411093695, guid: bf4427dd5954bea4e9364f0cb4f67710, type: 3}
 --- !u!114 &2583024885239792354

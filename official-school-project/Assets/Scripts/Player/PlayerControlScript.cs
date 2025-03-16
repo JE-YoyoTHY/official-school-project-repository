@@ -789,12 +789,12 @@ public class PlayerControlScript : MonoBehaviour
 			if (moveKeyValue * localVelocity.x > 0) localVelocity = new Vector2(localVelocity.x * fireballExplodeMoveSameDirBoost, localVelocity.y);
 			else if (moveKeyValue * localVelocity.x < 0) localVelocity = new Vector2(localVelocity.x * fireballExplodeMoveDifferentDirDecrease, localVelocity.y);
 
-
+	
 			/* add fireball's Velocity if player was hit by fireball, 
 			 * this line of code's position will affect how player's action affect fb's velocity boost,
-			* currently, i decide to add fb velocity last, so it wont be affected by horizontal boost and move same dir boost
-			*/
-			localVelocity = localVelocity + fireballVelocity;
+			 * currently, i decide to add fb velocity last, so it wont be affected by horizontal boost and move same dir boost
+			 */
+			//localVelocity = localVelocity + fireballVelocity; // i move it after max speed so that it can actually work
 
 			//push up force
 			if (addPushUpForce) localVelocity += Vector2.up * fireballExplodeExtraPushUpForce;
@@ -810,6 +810,11 @@ public class PlayerControlScript : MonoBehaviour
 			if (localVelocity.x < 0 && rb.velocity.x < fireballExplodeForce * fireballExplodeMaxSpeedScale * fireballExplodeHorizontalScale * -1) mySetVx(fireballExplodeForce * fireballExplodeMaxSpeedScale * fireballExplodeHorizontalScale * -1);
 			if (localVelocity.y > 0 && rb.velocity.y > fireballExplodeForce * fireballExplodeMaxSpeedScale) mySetVy(fireballExplodeForce * fireballExplodeMaxSpeedScale);
 			if (localVelocity.y < 0 && rb.velocity.y < fireballExplodeForce * fireballExplodeMaxSpeedScale * -1) mySetVy(fireballExplodeForce * fireballExplodeMaxSpeedScale * -1);
+
+			//if hit by fireball (or fireball velocity = 0)
+			//print(fireballVelocity + " <-fb ; local -> " + localVelocity);
+			//localVelocity = localVelocity + fireballVelocity;
+			myImpulseAcceleration(fireballVelocity);
 
 			isFireballExplodeForceAdding = true;
 			//isMoving = false;
@@ -881,25 +886,6 @@ public class PlayerControlScript : MonoBehaviour
 		fireballCurrentCharges += localCharges;
 		fireballCurrentCharges = (fireballCurrentCharges > fireballMaxCharges) ? fireballMaxCharges : fireballCurrentCharges;
 	}
-
-	/*public void fireballInput(InputAction.CallbackContext ctx)
-	{
-		if (ctx.performed)
-		{
-			fireballKeyValue = 2;
-		}
-
-		if (ctx.canceled)
-		{
-			fireballKeyValue = -1;
-		}
-	}*/
-
-	/*public void fireballDirInput(InputAction.CallbackContext ctx)
-	{
-		//if (!isFireballPushForceAdding) fireballDir = ctx.ReadValue<Vector2>();
-		fireballDirValue = ctx.ReadValue<Vector2>();
-	}*/
 
 	private void fireballMouseDir()
 	{

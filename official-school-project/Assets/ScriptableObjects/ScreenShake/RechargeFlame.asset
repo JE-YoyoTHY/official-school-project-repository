@@ -12,12 +12,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20be2f1bb2404e040894d4e1b9fda8b7, type: 3}
   m_Name: RechargeFlame
   m_EditorClassIdentifier: 
-  impulseTime: 0.2
-  impulseForce: 1
-  defaultVelocity: {x: 0, y: -1, z: 0}
+  impulseTime: 0.14
+  impulseForce: 0.35
+  defaultVelocity: {x: -1, y: -1, z: 0}
   impulseCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0.29419658
+      outSlope: 0.29419658
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.44888654
+      value: 1.1320609
+      inSlope: 0.027285501
+      outSlope: 0.027285501
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: -0.23962557
+      outSlope: -0.23962557
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
