@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,7 +9,7 @@ public class RechargeCrystalScript : MonoBehaviour
 	private Animator animator;
 	//private LogicScript logic;
 	private PlayerControlScript player;
-	private SpriteRenderer sprite;
+	//private SpriteRenderer sprite;
 
 	[SerializeField] private float cooldownDuration;
 	private float cooldownCounter;
@@ -22,6 +23,10 @@ public class RechargeCrystalScript : MonoBehaviour
 	[SerializeField] private float shakeDistance; // the max shake distance from default
 	private Coroutine shakeCoroutine;
 
+	//screen shake
+	[SerializeField] private ScreenShakeProfile screenShakeProfile;
+	private CinemachineImpulseSource impulseSource;
+
 
     // Start is called before the first frame update
     void Start()
@@ -29,7 +34,9 @@ public class RechargeCrystalScript : MonoBehaviour
 		animator = GetComponent<Animator>();
 		//logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
 		player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControlScript>();
-		sprite = GetComponent<SpriteRenderer>();
+		//sprite = GetComponent<SpriteRenderer>();
+		impulseSource = GetComponent<CinemachineImpulseSource>();
+
 
 		regainPower();
 		defaultPos = transform.position;
@@ -88,6 +95,9 @@ public class RechargeCrystalScript : MonoBehaviour
 		isPowerActive = false;
 		//sprite.color = deactiveColor;
         animator.Play("UnchargedFlameFlicker");
+
+		//screen shake
+		CameraShakeManagerScript.instance.cameraShakeWithProfileWithRandomDirection(screenShakeProfile, impulseSource);
     }
 
     private void OnTriggerStay2D(Collider2D collision)

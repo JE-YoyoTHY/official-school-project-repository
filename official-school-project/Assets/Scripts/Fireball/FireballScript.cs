@@ -9,7 +9,7 @@ public class FireballScript : MonoBehaviour
 	private Rigidbody2D rb;
 	private CircleCollider2D coll;
 	private PlayerControlScript player;
-	private LogicScript logic;
+	//private LogicScript logic;
 
 	private Vector2 moveDir;
 	private float moveSpeed;
@@ -38,11 +38,16 @@ public class FireballScript : MonoBehaviour
 
 	[SerializeField] private float leavePlayerTime;
 
+	//particle
+	private ParticleSystem movingParticle;
+	[SerializeField] private ParticleSystem explosionParticle;
+	private ParticleSystem explosionParticleInstance;
+
 
     // Update is called once per frame
     void Update()
 	{
-		if (!logic.isFreeze() && !isExploding)
+		if (!LogicScript.instance.isFreeze() && !isExploding)
 		{
 			//if (!isExploding)
 			//{
@@ -104,12 +109,17 @@ public class FireballScript : MonoBehaviour
 		rb = GetComponent<Rigidbody2D>();
 		coll = GetComponent<CircleCollider2D>();
 		player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControlScript>();
-		logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
+		//logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
 		isExploding = false;
 		playerPushed = false;
 		leftPlayer = false;
 
+
 		moveSpeed = normalMoveSpeed;
+
+		//particle
+		movingParticle = transform.GetChild(0).GetComponent<ParticleSystem>(); // child 0 -> particle system
+		movingParticle.transform.rotation = Quaternion.FromToRotation(Vector3.left, moveDir * -1);
 	}
 
 	private void explode()
@@ -120,6 +130,9 @@ public class FireballScript : MonoBehaviour
 		rb.velocity = Vector2.zero;
 		//StopAllCoroutines();
 		StartCoroutine(destroyCoroutine(explodeDuration));
+
+		//particle
+		explosionParticleInstance = Instantiate(explosionParticle, transform.position, Quaternion.identity);
 	}
 
 	private void explodePushPlayer()
@@ -145,7 +158,7 @@ public class FireballScript : MonoBehaviour
 	{
 		while(t > 0)
 		{
-			if (!logic.isFreeze())
+			if (!LogicScript.instance.isFreeze())
 			{
 				t -= Time.deltaTime;
 			}
@@ -156,7 +169,7 @@ public class FireballScript : MonoBehaviour
 
 	private void OnTriggerStay2D(Collider2D collision)
 	{
-		if(!logic.isFreeze())
+		if(!LogicScript.instance.isFreeze())
 		{
 			if(collision.CompareTag("KillFireballWithoutExplode"))
 			{
@@ -215,13 +228,6 @@ public class FireballScript : MonoBehaviour
 
 	}
 
-	//private void OnTriggerExit2D(Collider2D collision)
-	//{
-	//	if(collision.CompareTag("Player"))
-	//	{
-	//		leftPlayer = true;
-	//	}
-	//}
 
 	public void springPush(Vector2 localDir, float localForce)
 	{

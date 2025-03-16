@@ -35,6 +35,17 @@ public class CameraShakeManagerScript : MonoBehaviour
 		impulseSource.GenerateImpulseWithForce(profile.impulseForce);
 	}
 
+	public void cameraShakeWithProfileWithRandomDirection(ScreenShakeProfile profile, CinemachineImpulseSource impulseSource)
+	{
+		setupScreenShakeSettings(profile, impulseSource);
+
+		//random
+		Vector2 randomDirection = new Vector2(Random.Range(-1.0f, 1f), Random.Range(-1.0f, 1f));
+		impulseSource.m_DefaultVelocity = profile.defaultVelocity;
+
+		impulseSource.GenerateImpulseWithForce(profile.impulseForce);
+	}
+
 	private void setupScreenShakeSettings(ScreenShakeProfile profile, CinemachineImpulseSource impulseSource)
 	{
 		impulseDefinition = impulseSource.m_ImpulseDefinition;

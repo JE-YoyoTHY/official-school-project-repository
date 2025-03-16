@@ -964,7 +964,7 @@ public class PlayerControlScript : MonoBehaviour
 		fireballPushForceStart();
 	}*/
 
-
+	[ContextMenu("Get Fireball Ability")]
 	public void fireballPlayerGetAbility()
 	{
 		fireballPlayerGotten = true;
