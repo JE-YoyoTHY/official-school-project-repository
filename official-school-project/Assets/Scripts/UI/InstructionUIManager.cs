@@ -10,18 +10,21 @@ using Unity.VisualScripting;
 public class InstructionUIManager : MonoBehaviour
 {
     public Transform instructionCanvasTransform;
-    public string currentInstruction { get; private set; }
-    public List<GameObject> prefabList = new List<GameObject>();  // 用於在Inspector拖曳進去
+    public List<GameObject> instructionsList = new List<GameObject>();  // 用於在Inspector拖曳進去
+    // string:該指示的名稱; GameObject:圖示的panel(instructionUIObj)
+    public Dictionary<string, GameObject> availableInstructionsUIObj = new Dictionary<string, GameObject>();
+    [SerializeField] public GameObject currentInstructionUIObj = null;
 
-
-    // string:該指示的名稱; GameObject:圖示的panel(prefab)
-    public Dictionary<string, GameObject> availablePrefabs = new Dictionary<string, GameObject>();
+    #region Deprecated Ref
 
     [SerializeField] private float showDuration;
     [SerializeField] private Ease showEaseType;
     [SerializeField] private float showBackgroundAlpha;
     [SerializeField] private float disappearDuration;
     [SerializeField] private Ease disappearEaseType;
+
+    public Shader dissolveShader;
+    #endregion
 
     [SerializeField] private float maskGrowDuration = 1.5f;
     [SerializeField] private Ease maskGrowEaseType = Ease.InOutExpo;
@@ -33,21 +36,23 @@ public class InstructionUIManager : MonoBehaviour
     [SerializeField] private float keyCodeImageAnimDuration = 1;
     [SerializeField] private Ease keyCodeImageAnimEaseType = Ease.InOutSine;
 
-    [SerializeField] public GameObject currentInstructionUIObj  = null;
-    public bool isProcessingDisappearInstructionUIObj = false;
 
-    #region Shader Ref
-    public Shader dissolveShader;
-    #endregion
+    public bool isProcessingDisappearUI = false;
+    private Tweener maskGrowTweener = null;
+    private Tweener maskShrinkTweener = null;
+
+
+
+
 
 
 
         
     void Start()
     {
-        foreach (GameObject prefab in prefabList)
+        foreach (GameObject instructionUIObj in instructionsList)
         {
-            availablePrefabs[prefab.name] = prefab;
+            availableInstructionsUIObj[instructionUIObj.name] = instructionUIObj;
         }
 
         
@@ -67,9 +72,9 @@ public class InstructionUIManager : MonoBehaviour
     #region DEPRECATED FUNCTION: showImagePanel()
     public GameObject showImagePanel(string prefabName, float duration, Ease easeType, float backgroundAlpha)
     {
-        if (availablePrefabs.ContainsKey(prefabName))
+        if (availableInstructionsUIObj.ContainsKey(prefabName))
         {
-            GameObject background = Instantiate(availablePrefabs[prefabName]);
+            GameObject background = Instantiate(availableInstructionsUIObj[prefabName]);
             Image imageComponent = background.GetComponent<Image>();
             UIPerforming.setImageTransparency(imageComponent, 0);  // 先讓他變全透明
 
@@ -89,16 +94,16 @@ public class InstructionUIManager : MonoBehaviour
 
             return background;
         }
-        else { Debug.LogError("[showImagePanel]: prefabName not match."); return null; } 
+        else { Debug.LogError("[showImagePanel]: instructionName not match."); return null; } 
     }
 
     public GameObject showImagePanel(string prefabName)
     {
         float duration = showDuration;
         Ease easeType = showEaseType;
-        if (availablePrefabs.ContainsKey(prefabName))
+        if (availableInstructionsUIObj.ContainsKey(prefabName))
         {
-            GameObject imagePanel = Instantiate(availablePrefabs[prefabName]);
+            GameObject imagePanel = Instantiate(availableInstructionsUIObj[prefabName]);
             Image imageComponent = imagePanel.GetComponent<Image>();
             UIPerforming.setImageTransparency(imageComponent, 0);  // 先讓他變全透明
 
@@ -118,42 +123,48 @@ public class InstructionUIManager : MonoBehaviour
 
             return imagePanel;
         }
-        else { Debug.LogError("[showImagePanel]: prefabName not match."); return null; }
+        else { Debug.LogError("[showImagePanel]: instructionName not match."); return null; }
     }
     #endregion
 
     #region FUNCTION: showInstructionUI()
-    public void showInstructionUI(string prefabName, Vector2 expandedMaskSize, float maskGrowDuration, Ease maskGrowEaseType)
+    public void showInstructionUI(string instructionName, Vector2 expandedMaskSize, float maskGrowDuration, Ease maskGrowEaseType)
     {
-        
-        if (availablePrefabs.ContainsKey(prefabName))
+        if (maskGrowTweener != null)
         {
-            
-            GameObject ui = Instantiate(availablePrefabs[prefabName]);
+            maskGrowTweener.Kill();
+        }
+
+        if (availableInstructionsUIObj.ContainsKey(instructionName))
+        {
+
+            GameObject ui = availableInstructionsUIObj[instructionName];
+            ui.SetActive(true);  // 將UI變為可見
             currentInstructionUIObj = ui;
 
             if (ui.GetComponent<RectTransform>() != null)
             {
                 #region Grow Mask
                 RectTransform uiRect = ui.GetComponent<RectTransform>();
-                Vector2 uiPos = uiRect.anchoredPosition;
+                Vector2 uiPos = uiRect.anchoredPosition;  // = local pos
 
                 if (ui.GetComponent<Mask>() == null)
                 {
                     Debug.LogError("[showInstructionUI()]: No Mask component found in the given GameObject.");
                 }
 
-                RectTransform rectTransform = ui.GetComponent<RectTransform>();
-                UIPerforming.setUISize(ui, new Vector2(rectTransform.sizeDelta.x, 0));  // 為了讓他可以從0到全展開，所以height先設為0
+                //RectTransform rectTransform = ui.GetComponent<RectTransform>();
+                UIPerforming.setUISize(ui, new Vector2(uiRect.sizeDelta.x, 0));  // 為了讓他可以從0到全展開，所以height先設為0
 
                 // 這時才讓他可以顯示在Canvas內
                 ui.transform.SetParent(GameObject.FindGameObjectWithTag("InstructionCanvas").transform);
                 uiRect.anchoredPosition = uiPos;
 
-                rectTransform.DOSizeDelta(expandedMaskSize, maskGrowDuration).SetEase(maskGrowEaseType);
+                maskGrowTweener = uiRect.DOSizeDelta(expandedMaskSize, maskGrowDuration).SetEase(maskGrowEaseType);
+                maskGrowTweener.onComplete = maskGrowTweenFinished;
                 #endregion
 
-                #region KeyCode Image Animation
+                    #region KeyCode Image Animation
                 keyCodeImageAnim(ui.transform.GetChild(0).transform.GetChild(1).gameObject);  // Mask -> BackGround -> KeyCodeImage
                 #endregion
             }
@@ -162,13 +173,19 @@ public class InstructionUIManager : MonoBehaviour
         
     }
 
-    public void showInstructionUI(string prefabName)
+    public void showInstructionUI(string instructionName)
     {
-        if (availablePrefabs.ContainsKey(prefabName))
+        if (maskGrowTweener != null)
         {
-            GameObject ui = Instantiate(availablePrefabs[prefabName]);
+            maskGrowTweener.Kill();
+        }
+
+        if (availableInstructionsUIObj.ContainsKey(instructionName))
+        {
+            GameObject ui = availableInstructionsUIObj[instructionName];
+            ui.SetActive(true);  // 將UI變為可見
             currentInstructionUIObj = ui;
-            print("set current instruction ui obj");
+            print("set current instructionUIObj ui obj");
 
             if (ui.GetComponent<RectTransform>() != null)
             {
@@ -181,15 +198,16 @@ public class InstructionUIManager : MonoBehaviour
                     Debug.LogError("[showInstructionUI()]: No Mask component found in the given GameObject.");
                 }
 
-                RectTransform rectTransform = ui.GetComponent<RectTransform>();
-                Vector2 expandedMaskSize = rectTransform.sizeDelta;
-                UIPerforming.setUISize(ui, new Vector2(rectTransform.sizeDelta.x, 0));  // 為了讓他可以從0到全展開，所以height先設為0
+                //RectTransform rectTransform = ui.GetComponent<RectTransform>();
+                Vector2 expandedMaskSize = uiRect.sizeDelta;  // 先記錄mask最大狀態
+                UIPerforming.setUISize(ui, new Vector2(uiRect.sizeDelta.x, 0));  // 為了讓他可以從0到全展開，所以height先設為0
 
                 // 這時才讓他可以顯示在Canvas內
                 ui.transform.SetParent(GameObject.FindGameObjectWithTag("InstructionCanvas").transform);
                 uiRect.anchoredPosition = uiPos;
 
-                rectTransform.DOSizeDelta(expandedMaskSize, maskGrowDuration).SetEase(maskGrowEaseType);
+                maskGrowTweener = uiRect.DOSizeDelta(expandedMaskSize, maskGrowDuration).SetEase(maskGrowEaseType);
+                maskGrowTweener.onComplete = maskGrowTweenFinished;
                 #endregion
 
                 #region KeyCode Image Animation
@@ -204,35 +222,48 @@ public class InstructionUIManager : MonoBehaviour
     #region FUNCTION: disappearInstructionUI()
     public void disappearInstructionUI()
     {
-        if (isProcessingDisappearInstructionUIObj == true)
+        if (maskShrinkTweener != null)
+        {
+            maskShrinkTweener.Kill();
+        }
+
+        if (isProcessingDisappearUI == true)
         {
             Debug.LogError("Already processing");
             return;
         }
 
-        isProcessingDisappearInstructionUIObj = true;
+        isProcessingDisappearUI = true;
         #region Shrink Mask
         if (currentInstructionUIObj == null)
         {
-            Debug.LogError("[disappearInstructionUI]: No existing instruction UI to delete.");
+            Debug.LogError("[disappearInstructionUI]: No existing instructionUIObj UI to delete.");
             return;
         }
         RectTransform uiRect = currentInstructionUIObj.GetComponent<RectTransform>();
         Vector2 uiPos = uiRect.anchoredPosition;
 
-        RectTransform rectTransform = currentInstructionUIObj.GetComponent<RectTransform>();
+        //RectTransform rectTransform = currentInstructionUIObj.GetComponent<RectTransform>();
 
-        rectTransform.DOSizeDelta(new Vector2(uiRect.sizeDelta.x, 0), maskShrinkDuration).SetEase(maskShrinkEaseType).onComplete = destroyCurrentInstructionUIObj;
-       
+        maskShrinkTweener = uiRect.DOSizeDelta(new Vector2(uiRect.sizeDelta.x, 0), maskShrinkDuration).SetEase(maskShrinkEaseType);
+        maskShrinkTweener.onComplete = maskShrinkTweenFinished;
+
         currentInstructionUIObj = null;
         #endregion
     }
     #endregion
 
-    public void destroyCurrentInstructionUIObj()
+    public void maskGrowTweenFinished()
     {
-        Destroy(currentInstructionUIObj);
-        isProcessingDisappearInstructionUIObj = false;
+        maskGrowTweener.Kill();
+        maskGrowTweener = null;
+    }
+    public void maskShrinkTweenFinished()
+    {
+        currentInstructionUIObj.SetActive(false);
+        isProcessingDisappearUI = false;
+        maskShrinkTweener.Kill();
+        maskShrinkTweener = null;
     }
 
     #region FUNCTION: keyCodeImageAnim()
