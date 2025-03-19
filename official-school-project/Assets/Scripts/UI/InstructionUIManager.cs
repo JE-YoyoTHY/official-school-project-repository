@@ -13,6 +13,7 @@ public class InstructionUIManager : MonoBehaviour
     public List<GameObject> instructionsList = new List<GameObject>();  // 用於在Inspector拖曳進去
     // string:該指示的名稱; GameObject:圖示的panel(instructionUIObj)
     public Dictionary<string, GameObject> availableInstructionsUIObj = new Dictionary<string, GameObject>();
+    private Dictionary<string, Vector2> expandedMaskSizeDict = new Dictionary<string, Vector2>();
     [SerializeField] public GameObject currentInstructionUIObj = null;
 
     #region Deprecated Ref
@@ -50,6 +51,7 @@ public class InstructionUIManager : MonoBehaviour
         
     void Start()
     {
+        expandedMaskSizeDict.Add("MoveInstruction", new Vector2(370, 213));
         foreach (GameObject instructionUIObj in instructionsList)
         {
             availableInstructionsUIObj[instructionUIObj.name] = instructionUIObj;
@@ -132,7 +134,16 @@ public class InstructionUIManager : MonoBehaviour
     {
         if (maskGrowTweener != null)
         {
-            maskGrowTweener.Kill();
+            Debug.Log("Already growing mask");
+            return;
+        }
+
+        // 如果mask正在縮小則停止縮小
+        if (maskShrinkTweener != null)
+        {
+            maskShrinkTweener.Kill();
+            maskShrinkTweener = null;
+            isProcessingDisappearUI = false;
         }
 
         if (availableInstructionsUIObj.ContainsKey(instructionName))
@@ -177,7 +188,16 @@ public class InstructionUIManager : MonoBehaviour
     {
         if (maskGrowTweener != null)
         {
-            maskGrowTweener.Kill();
+            Debug.Log("Already growing mask");
+            return;
+        }
+
+        // 如果mask正在縮小則停止縮小
+        if (maskShrinkTweener != null)
+        {
+            maskShrinkTweener.Kill();
+            maskShrinkTweener = null;
+            isProcessingDisappearUI = false;
         }
 
         if (availableInstructionsUIObj.ContainsKey(instructionName))
@@ -198,8 +218,8 @@ public class InstructionUIManager : MonoBehaviour
                     Debug.LogError("[showInstructionUI()]: No Mask component found in the given GameObject.");
                 }
 
-                //RectTransform rectTransform = ui.GetComponent<RectTransform>();
-                Vector2 expandedMaskSize = uiRect.sizeDelta;  // 先記錄mask最大狀態
+
+                Vector2 expandedMaskSize = expandedMaskSizeDict[instructionName];  // mask最大狀態
                 UIPerforming.setUISize(ui, new Vector2(uiRect.sizeDelta.x, 0));  // 為了讓他可以從0到全展開，所以height先設為0
 
                 // 這時才讓他可以顯示在Canvas內
@@ -222,15 +242,17 @@ public class InstructionUIManager : MonoBehaviour
     #region FUNCTION: disappearInstructionUI()
     public void disappearInstructionUI()
     {
-        if (maskShrinkTweener != null)
-        {
-            maskShrinkTweener.Kill();
-        }
-
         if (isProcessingDisappearUI == true)
         {
-            Debug.LogError("Already processing");
+            Debug.Log("Already disappearing");
             return;
+        }
+
+        // 如果mask正在擴大，停止擴大
+        if (maskGrowTweener != null)
+        {
+            maskGrowTweener.Kill();
+            maskGrowTweener = null;
         }
 
         isProcessingDisappearUI = true;
@@ -248,7 +270,7 @@ public class InstructionUIManager : MonoBehaviour
         maskShrinkTweener = uiRect.DOSizeDelta(new Vector2(uiRect.sizeDelta.x, 0), maskShrinkDuration).SetEase(maskShrinkEaseType);
         maskShrinkTweener.onComplete = maskShrinkTweenFinished;
 
-        currentInstructionUIObj = null;
+
         #endregion
     }
     #endregion
@@ -259,11 +281,13 @@ public class InstructionUIManager : MonoBehaviour
         maskGrowTweener = null;
     }
     public void maskShrinkTweenFinished()
-    {
-        currentInstructionUIObj.SetActive(false);
-        isProcessingDisappearUI = false;
+    {   
         maskShrinkTweener.Kill();
         maskShrinkTweener = null;
+        currentInstructionUIObj.SetActive(false);
+        currentInstructionUIObj = null;
+        isProcessingDisappearUI = false;
+
     }
 
     #region FUNCTION: keyCodeImageAnim()
