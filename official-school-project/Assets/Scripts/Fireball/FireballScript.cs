@@ -42,8 +42,8 @@ public class FireballScript : MonoBehaviour
 
 	//particle
 	private ParticleSystem movingParticle;
-	[SerializeField] private ParticleSystem explosionParticle;
-	private ParticleSystem explosionParticleInstance;
+	//[SerializeField] private ParticleSystem explosionParticle;
+	//private ParticleSystem explosionParticleInstance;
 
 
     // Update is called once per frame
@@ -142,7 +142,9 @@ public class FireballScript : MonoBehaviour
 		StartCoroutine(destroyCoroutine(explodeDuration));
 
 		//particle
-		explosionParticleInstance = Instantiate(explosionParticle, transform.position, Quaternion.identity);
+		//explosionParticleInstance = Instantiate(explosionParticle, transform.position, Quaternion.identity);
+		GetComponent<ParticleCommonScript>().emitParticle();
+
 
 		//collision
 		myIgnoreCollision(false);

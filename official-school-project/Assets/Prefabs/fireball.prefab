@@ -4844,6 +4844,7 @@ GameObject:
   - component: {fileID: 7035451593442834699}
   - component: {fileID: 7102305856373415312}
   - component: {fileID: 2583024885239792354}
+  - component: {fileID: 6321299773648668926}
   m_Layer: 0
   m_Name: fireball
   m_TagString: Fireball
@@ -5000,7 +5001,6 @@ MonoBehaviour:
   hitPlayerSpeedScale: 0.1
   impulseForce: 0.3
   leavePlayerTime: 0.1
-  explosionParticle: {fileID: 6197230993411093695, guid: bf4427dd5954bea4e9364f0cb4f67710, type: 3}
 --- !u!114 &2583024885239792354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5126,3 +5126,16 @@ MonoBehaviour:
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
   m_DefaultVelocity: {x: 0, y: -1, z: 0}
+--- !u!114 &6321299773648668926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5748096341067494691}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70a7ff187abf65e4092204759db5485b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ParticleSystem: {fileID: 6197230993411093695, guid: bf4427dd5954bea4e9364f0cb4f67710, type: 3}

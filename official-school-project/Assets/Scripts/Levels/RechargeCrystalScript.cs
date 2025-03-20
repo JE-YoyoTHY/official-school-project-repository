@@ -98,6 +98,9 @@ public class RechargeCrystalScript : MonoBehaviour
 
 		//screen shake
 		CameraShakeManagerScript.instance.cameraShakeWithProfileWithRandomDirection(screenShakeProfile, impulseSource);
+
+		//particle
+		GetComponent<ParticleCommonScript>().emitParticle();
     }
 
     private void OnTriggerStay2D(Collider2D collision)
