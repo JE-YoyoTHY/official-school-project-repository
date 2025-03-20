@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 8271236644750136056}
   - component: {fileID: 7734196362712654385}
   - component: {fileID: -677297939419107358}
+  - component: {fileID: -272394501360311311}
   m_Layer: 0
   m_Name: RechargeCrystal
   m_TagString: RechargeCrystal
@@ -290,3 +291,16 @@ MonoBehaviour:
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
   m_DefaultVelocity: {x: 0, y: -1, z: 0}
+--- !u!114 &-272394501360311311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1726728266399503930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70a7ff187abf65e4092204759db5485b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ParticleSystem: {fileID: 6125809822843756596, guid: 7e13e061389603e4a97c4d0b75d99c00, type: 3}
