@@ -6,6 +6,7 @@ using UnityEngine.Events;
 using UnityEngine.Windows.WebCam;
 
 
+
 public class LevelManagerScript : MonoBehaviour
 {
 	//reference
@@ -129,6 +130,22 @@ public class LevelManagerScript : MonoBehaviour
 	}
 
 
+
+	#endregion
+
+	#region debug function
+
+	[ContextMenu("Test This Level")]
+	private void testThisLevel()
+	{
+		PlayerControlScript.instance.fireballPlayerGetAbility();
+
+		PlayerControlScript.instance.currentLevel.disableLevel();
+
+		PlayerControlScript.instance.testLevel(this);
+
+		startLevel();
+	}
 
 	#endregion
 

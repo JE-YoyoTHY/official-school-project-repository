@@ -146,7 +146,7 @@ public class PlayerControlScript : MonoBehaviour
     [SerializeField] private float playerControlRegainMinHoleRadius;
 	private Coroutine deathRespawnDelayCoroutine;
 	private Coroutine deathRespawnPlayerControlRegainCoroutine;
-	private LevelManagerScript currentLevel;
+	public LevelManagerScript currentLevel { get; private set; }
 	//private GameObject currentRespawnPoint; // idk 要放在Player還是level manager
 	private const int killZoneLayer = 7;
 	private const int levelTriggerLayer = 8;
@@ -1418,5 +1418,16 @@ public class PlayerControlScript : MonoBehaviour
 			fireballMouseValue = -1;
 		}
 	}*/
+	#endregion
+
+
+	#region debug function
+
+	public void testLevel(LevelManagerScript levelToBeTest)
+	{
+		currentLevel = levelToBeTest;
+		changeLevel();
+	}
+
 	#endregion
 }

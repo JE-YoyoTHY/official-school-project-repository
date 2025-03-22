@@ -15,7 +15,6 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
-[System.Serializable]
 public partial class @GameInputControl: IInputActionCollection2, IDisposable
 {
     public InputActionAsset asset { get; }
