@@ -26,7 +26,7 @@ public class SpringScript : MonoBehaviour
         
     }
 
-	private void OnTriggerEnter2D(Collider2D collision)
+	/*private void OnTriggerEnter2D(Collider2D collision)
 	{
 		if(collision.gameObject.tag == "Player")
 		{
@@ -34,6 +34,22 @@ public class SpringScript : MonoBehaviour
 		}
 
 		if(collision.gameObject.tag == "Fireball")
+		{
+			//Vector2 localDir = transform.GetChild(0).localPosition;
+			Vector3 deltaPos = transform.GetChild(0).position - transform.position;
+			Vector2 localDir = new Vector2(deltaPos.x, deltaPos.y).normalized;
+			collision.gameObject.GetComponent<FireballScript>().springPush(localDir.normalized, fireballSpeedScale);
+		}
+	}*/
+
+	private void OnCollisionEnter2D(Collision2D collision)
+	{
+		if (collision.gameObject.tag == "Player")
+		{
+			springPlayerTrigger();
+		}
+
+		if (collision.gameObject.tag == "Fireball")
 		{
 			//Vector2 localDir = transform.GetChild(0).localPosition;
 			Vector3 deltaPos = transform.GetChild(0).position - transform.position;
