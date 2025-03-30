@@ -2,29 +2,60 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+[ExecuteInEditMode]
 public class SpringScript : MonoBehaviour
 {
-	private PlayerControlScript player;
+	private Vector2 pushDir;
 
-	[SerializeField] private float pushForce;
-	[SerializeField] private float fireballSpeedScale;
+	[Header("Common Settings")]
+	[SerializeField] private float pushForce = 30;
+	[SerializeField] private float fireballSpeedScale = 2;
 
-	[SerializeField] private bool removePlayerMoveAbility;
-	[SerializeField] private float springDuration;
-	[SerializeField] private float springGravityScale;
-	[SerializeField] private float springFriction;
+	[Header("Remove Ability")]
+	[SerializeField] private bool removePlayerMoveAbility = false;
+	[SerializeField] private float springDuration = 0.3f;
+	[SerializeField] private float springGravityScale = 20;
+	[SerializeField] private float springFriction = 20;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-		player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControlScript>();
+	[Header("Trajectory Preview")]
+	[SerializeField] private float pointTimeInterval = 0.05f;
+	
+	private Vector2[] segments;
+	private LineRenderer lineRenderer;
+
+	private void Awake()
+	{
+		//push dir
+		//Vector3 deltaPos = transform.GetChild(0).position - transform.position;
+		//pushDir = new Vector2(deltaPos.x, deltaPos.y).normalized;
+
+
+		//trajectory
+		lineRenderer = GetComponent<LineRenderer>();
+
+		int _segCount = (int)(springDuration / pointTimeInterval);// print(_segCount);
+		segments = new Vector2[_segCount];
+		lineRenderer.positionCount = segments.Length;
 	}
 
-    // Update is called once per frame
+	// Start is called before the first frame update
+	void Start()
+    {
+		Vector3 deltaPos = transform.GetChild(0).position - transform.position;
+		pushDir = new Vector2(deltaPos.x, deltaPos.y).normalized;
+
+		lineRenderer.enabled = false;
+	}
+
     void Update()
     {
-        
-    }
+		Vector3 deltaPos = transform.GetChild(0).position - transform.position;
+		pushDir = new Vector2(deltaPos.x, deltaPos.y).normalized;
+		if (removePlayerMoveAbility)
+			drawTrajectory();
+		else lineRenderer.positionCount = 0;
+	}
 
 	/*private void OnTriggerEnter2D(Collider2D collision)
 	{
@@ -52,20 +83,20 @@ public class SpringScript : MonoBehaviour
 		if (collision.gameObject.tag == "Fireball")
 		{
 			//Vector2 localDir = transform.GetChild(0).localPosition;
-			Vector3 deltaPos = transform.GetChild(0).position - transform.position;
-			Vector2 localDir = new Vector2(deltaPos.x, deltaPos.y).normalized;
-			collision.gameObject.GetComponent<FireballScript>().springPush(localDir.normalized, fireballSpeedScale);
+			//Vector3 deltaPos = transform.GetChild(0).position - transform.position;
+			//Vector2 localDir = new Vector2(deltaPos.x, deltaPos.y).normalized;
+			collision.gameObject.GetComponent<FireballScript>().springPush(pushDir.normalized, fireballSpeedScale);
 		}
 	}
 
 	private void springPlayerTrigger()
 	{
 		//Vector2 localDir = transform.GetChild(0).localPosition; // child 0 for target
-		Vector3 deltaPos = transform.GetChild(0).position - transform.position;
-		Vector2 localDir = new Vector2(deltaPos.x, deltaPos.y).normalized;
+		//Vector3 deltaPos = transform.GetChild(0).position - transform.position;
+		//Vector2 localDir = new Vector2(deltaPos.x, deltaPos.y).normalized;
 		//Debug.Log(deltaPos + ", " + localDir);
 		//player.springPush(localDir.normalized * pushForce, removePlayerMoveAbility, transform.position, transform.GetChild(0).position);
-		player.springPush(localDir.normalized * pushForce, removePlayerMoveAbility, springDuration, springGravityScale, springFriction);
+		PlayerControlScript.instance.springPush(pushDir.normalized * pushForce, removePlayerMoveAbility, springDuration, springGravityScale, springFriction);
 	}
 
 	/*private void springFireballTrigger()
@@ -74,4 +105,32 @@ public class SpringScript : MonoBehaviour
 
 	}*/
 
+
+	#region debug function
+
+	private void drawTrajectory()
+	{
+		int _segCount = (int)(springDuration / pointTimeInterval);
+		segments = new Vector2[_segCount];
+		lineRenderer.positionCount = segments.Length;
+
+		Vector2 startPos = transform.position, 
+			initialVelocity = pushDir * pushForce, 
+			localAcceleration = new Vector2(springFriction, -springGravityScale);
+		if (pushDir.x > 0) localAcceleration.x *= -1;
+		segments[0] = startPos;
+		lineRenderer.SetPosition(0, startPos);
+
+		for(int i = 1; i < segments.Length; i++)
+		{
+			// X = x0 + v0t + (1/2)a(t^2), delta t = point time interval * i
+			segments[i] = startPos + 
+				initialVelocity * pointTimeInterval * i + 
+				localAcceleration * Mathf.Pow(pointTimeInterval * i, 2) * 0.5f;
+			lineRenderer.SetPosition(i, segments[i]);
+		}
+
+	}
+
+	#endregion
 }

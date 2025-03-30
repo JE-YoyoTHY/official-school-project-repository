@@ -188,7 +188,7 @@ public class PlayerControlScript : MonoBehaviour
 		if (!logic.isFreeze())
 		{
 			groundHitCheckMain();
-			myGravityMain();
+			//myGravityMain();
 			moveMain();
 			jumpMain();
 			fireballMain();
@@ -202,10 +202,20 @@ public class PlayerControlScript : MonoBehaviour
 		
     }
 
-    #region physic function
+	//gravity use fixed update can make jump height more constant
+	private void FixedUpdate()
+	{
+		if (!logic.isFreeze())
+		{
+			myGravityMain();
+			
+		}
+	}
+
+	#region physic function
 
 
-    private void myAcceleration(Vector2 localAcceleration, Vector2 localMaxVelocity)
+	private void myAcceleration(Vector2 localAcceleration, Vector2 localMaxVelocity)
 	{
 		// x
 		if(localAcceleration.x > 0)
@@ -413,7 +423,21 @@ public class PlayerControlScript : MonoBehaviour
 				mySetGravity(myNormalGravityScale, myNormalGravityMaxSpeed);
 		}
 
-		myAcceleration(Vector2.down * myGravityScale, Vector2.down * myGravityMaxSpeed);
+		//myAcceleration(Vector2.down * myGravityScale, Vector2.down * myGravityMaxSpeed);
+
+		
+		
+		if (rb.velocity.y > -myGravityMaxSpeed)
+		{
+			rb.AddForce(new Vector2(0, Mathf.Max(-myGravityScale * Time.fixedDeltaTime, -myGravityMaxSpeed - rb.velocity.y)) * rb.mass, ForceMode2D.Impulse);
+		}
+
+		if (rb.velocity.y < -myGravityMaxSpeed && isFrictionActive)
+		{
+			rb.AddForce(Mathf.Min(myAdjustFriction * Time.fixedDeltaTime, -myGravityMaxSpeed - rb.velocity.y) * Vector2.up * rb.mass, ForceMode2D.Impulse);
+		}
+		
+
 	}
 
 	#endregion
@@ -453,6 +477,8 @@ public class PlayerControlScript : MonoBehaviour
 
 	private void jumpStart()
 	{
+		if (jumpExtraHangTimeCoroutine != null) StopCoroutine(jumpExtraHangTimeCoroutine);
+
 		isJumping = true;
 		if(isFireballExplodeForceAdding)
 		{
@@ -761,13 +787,6 @@ public class PlayerControlScript : MonoBehaviour
 
 
 		//coroutine phase 2 -> apply explode force and do some setup
-			//legacy below
-			/*//enter hang time
-		mySetGravity(0, myGravityMaxSpeed);
-		if (localVelocity.x > 0) fireballHangTimeMoveBoostDir = 1;
-		else if (localVelocity.x < 0) fireballHangTimeMoveBoostDir = -1;
-		else fireballHangTimeMoveBoostDir = 0;
-		mySetFriction(myNormalFrictionAcceleration * fireballHangTimeFrictionScale, myNormalAdjustFriction * fireballHangTimeFrictionScale);*/
 		
 			fireballPushForceEnd();
 			if (fireballHangTimeCoroutine != null) StopCoroutine(fireballHangTimeCoroutine);
@@ -1134,8 +1153,8 @@ public class PlayerControlScript : MonoBehaviour
 
 
 	/*if player's move ability is removed, 
-	 * i want to return their ability after they pass the "target", or player cast a fireball, 
-	 * during this, player cant move, jump, and have no gravity
+	 * during the remove time
+	 * player cant move and will have a special gravity and friction
 	 */
 	public void springPush(Vector2 localForce, bool isControlRemoved, float springDuration, float springGravityScale, float springFriction/*, Vector3 springPos, Vector3 springTargetPos*/)
 	{

@@ -160,6 +160,7 @@ public class FireballScript : MonoBehaviour
 		//localForce = new Vector2(localForce.x * explodeHorizontalScale, localForce.y);
 
 
+		//print("pushDir : " + pushDir);
 		PlayerControlScript.instance.fireballExplodeStart(pushDir, rb.velocity * hitPlayerSpeedScale);
 		playerPushed = true;
 
