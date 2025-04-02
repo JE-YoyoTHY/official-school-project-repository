@@ -21,10 +21,17 @@ public class FireballScript : MonoBehaviour
 	//[SerializeField] private float explodeHorizontalScale;
 	//[SerializeField] private float explodeFreezeTime;
 	[SerializeField] private float explodeDuration;
-	[SerializeField] private float hitPlayerSpeedScale; // i want to add fb's velocity * this scale to player when player is hit by fb
+	//[SerializeField] private float hitPlayerSpeedScale; // i want to add fb's velocity * this scale to player when player is hit by fb
 	public bool isExploding { get; private set; }
 	private bool playerPushed;
 	private bool leftPlayer;
+
+	/* i want to add this vector2 to player if they are hit, 
+	 * in place of hit player speed scale, 
+	 * because physic collision make it hard to control the speed
+	 * and this value is set by spring when pushed
+	 */
+	private Vector2 hitPlayerSpeedModifier; 
 
 	private const int groundLayer = 6;
 
@@ -120,6 +127,8 @@ public class FireballScript : MonoBehaviour
 		playerPushed = false;
 		leftPlayer = false;
 
+		hitPlayerSpeedModifier = Vector2.zero;
+
 		myIgnoreCollision(true);
 
 
@@ -138,6 +147,7 @@ public class FireballScript : MonoBehaviour
 		transform.localScale = new Vector3(explodeRadius / coll.radius, explodeRadius / coll.radius, 1);
 
 		rb.velocity = Vector2.zero;
+		hitPlayerSpeedModifier = Vector2.zero;
 		//StopAllCoroutines();
 		StartCoroutine(destroyCoroutine(explodeDuration));
 
@@ -161,7 +171,8 @@ public class FireballScript : MonoBehaviour
 
 
 		//print("pushDir : " + pushDir);
-		PlayerControlScript.instance.fireballExplodeStart(pushDir, rb.velocity * hitPlayerSpeedScale);
+		//PlayerControlScript.instance.fireballExplodeStart(pushDir, rb.velocity * hitPlayerSpeedScale);
+		PlayerControlScript.instance.fireballExplodeStart(pushDir, hitPlayerSpeedModifier);
 		playerPushed = true;
 
 
@@ -291,12 +302,13 @@ public class FireballScript : MonoBehaviour
 	}
 
 
-	public void springPush(Vector2 localDir, float localForce)
+	public void springPush(Vector2 localDir, float localForce, Vector2 localHitPlayerSpeedModifier)
 	{
 		if(!isExploding)
 		{
 			moveDir = localDir;
 			moveSpeed = moveSpeed * localForce;
+			hitPlayerSpeedModifier = localHitPlayerSpeedModifier;
 		}
 
 		leftPlayer = true;

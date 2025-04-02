@@ -4965,7 +4965,7 @@ Rigidbody2D:
   m_GameObject: {fileID: 5748096341067494691}
   m_BodyType: 0
   m_Simulated: 1
-  m_UseFullKinematicContacts: 0
+  m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
@@ -4998,7 +4998,7 @@ MonoBehaviour:
   fireballFriction: 40
   explodeRadius: 4
   explodeDuration: 0.1
-  hitPlayerSpeedScale: 0.1
+  hitPlayerSpeedScale: -0.275
   impulseForce: 0.3
   leavePlayerTime: 0.1
 --- !u!114 &2583024885239792354

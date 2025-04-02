@@ -793,7 +793,7 @@ public class PlayerControlScript : MonoBehaviour
 			fireballHangTimeMoveBoostDir = 0;
 
 
-			/* extra push up force
+			/* extra push up force for horizontal only
 			 * and because of this, jump will be disabled while explode duration
 			 */
 			bool addPushUpForce = (localVelocity.y >= Mathf.Sin(0 - fireballExplodeExtraPushUpAngle * Mathf.Deg2Rad) && localVelocity.y <= Mathf.Sin(fireballExplodeExtraPushUpAngle * Mathf.Deg2Rad)) ? true : false;

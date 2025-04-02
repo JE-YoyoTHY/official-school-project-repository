@@ -18,6 +18,9 @@ public class SpringScript : MonoBehaviour
 	[SerializeField] private float springGravityScale = 20;
 	[SerializeField] private float springFriction = 20;
 
+	[Header("Fireball Settings")]
+	[SerializeField] private Vector2 hitPlayerVelocity;
+
 	[Header("Trajectory Preview")]
 	[SerializeField] private float pointTimeInterval = 0.05f;
 	
@@ -85,7 +88,7 @@ public class SpringScript : MonoBehaviour
 			//Vector2 localDir = transform.GetChild(0).localPosition;
 			//Vector3 deltaPos = transform.GetChild(0).position - transform.position;
 			//Vector2 localDir = new Vector2(deltaPos.x, deltaPos.y).normalized;
-			collision.gameObject.GetComponent<FireballScript>().springPush(pushDir.normalized, fireballSpeedScale);
+			collision.gameObject.GetComponent<FireballScript>().springPush(pushDir.normalized, fireballSpeedScale, hitPlayerVelocity);
 		}
 	}
 
