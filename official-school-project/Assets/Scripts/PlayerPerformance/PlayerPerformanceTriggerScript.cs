@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEditor;
 using UnityEngine.Events;
 using static UnityEngine.RuleTile.TilingRuleOutput;
+using Unity.VisualScripting;
+using Cinemachine;
 
 [ExecuteInEditMode]
 public class PlayerPerformanceTriggerScript : MonoBehaviour
@@ -11,11 +13,17 @@ public class PlayerPerformanceTriggerScript : MonoBehaviour
 	//variable
 	public PerformanceTriggerInspectorObject performanceTriggerInspectorObject;
 
+	private Rigidbody2D playerRB;
+	private CinemachineImpulseSource impulseSource;
 
+	private void Start()
+	{
+		//playerRB = PlayerControlScript.instance.GetComponent<Rigidbody2D>();
+		//impulseSource = GetComponent<CinemachineImpulseSource>();
+	}
 
-
-    // Update is called once per frame
-    void Update()
+	// Update is called once per frame
+	void Update()
     {
         if(performanceTriggerInspectorObject.action == PerformanceAction.move)
 		{
@@ -41,11 +49,20 @@ public class PlayerPerformanceTriggerScript : MonoBehaviour
 
 	public void enableTrigger()
 	{
+		playerRB = PlayerControlScript.instance.GetComponent<Rigidbody2D>();
+		impulseSource = GetComponent<CinemachineImpulseSource>();
+
 		performanceTriggerInspectorObject.startEvent.Invoke();
 
 		if (performanceTriggerInspectorObject.isEndPoint)
 		{
 			PlayerPerformanceSystemScript.instance.controlEnd();
+		}
+
+		//trigger action if needed
+		if (performanceTriggerInspectorObject.action == PerformanceAction.waitForSecond)
+		{
+			StartCoroutine(waitForSecondMain());
 		}
 	}
 
@@ -130,6 +147,58 @@ public class PlayerPerformanceTriggerScript : MonoBehaviour
 
 	#endregion
 
+
+	#region wait for sec
+
+	//private void waitForSecondMain()
+	//{
+	//	if (!LogicScript.instance.isFreeze())
+	//	{
+	//		enableNextTrigger();
+	//	}
+	//}
+
+	//private void waitForSecondStart()
+	//{
+	//	LogicScript.instance.setFreezeTime(performanceTriggerInspectorObject.waitTime);
+	//}
+
+	private IEnumerator waitForSecondMain()
+	{
+		float t = performanceTriggerInspectorObject.waitTime;
+		PlayerControlScript.instance.performanceGravity(performanceTriggerInspectorObject.waitWithNoGravity);
+
+		while (t > 0)
+		{
+			t -= Time.deltaTime;
+
+			playerRB.velocity = Vector2.zero;
+
+			if (performanceTriggerInspectorObject.waitWithScreenShake)
+				CameraShakeManagerScript.instance.cameraShakeWithProfileWithRandomDirection(performanceTriggerInspectorObject.screenShakeProfile, impulseSource);
+
+			yield return null;
+		}
+
+		PlayerControlScript.instance.performanceGravity(false);
+		enableNextTrigger();
+	}
+
+	#endregion
+
+	#region secondary function for unity event
+
+	public void jump()
+	{
+		playerRB.velocity = new Vector2(playerRB.velocity.x, performanceTriggerInspectorObject.jumpStrength);
+	}
+
+	public void screenShake()
+	{
+		CameraShakeManagerScript.instance.cameraShakeWithProfile(performanceTriggerInspectorObject.screenShakeProfile, impulseSource);
+	}
+
+	#endregion
 }
 
 [System.Serializable]
@@ -147,6 +216,10 @@ public class PerformanceTriggerInspectorObject
 	public UnityEvent startEvent;
 	public UnityEvent endEvent;
 
+	[Header("Secondary Functions")]
+	public float jumpStrength;
+	public ScreenShakeProfile screenShakeProfile;
+
 
 	//move
 	[HideInInspector] public float moveSpeed;
@@ -154,6 +227,11 @@ public class PerformanceTriggerInspectorObject
 	//wait for inputs
 	[HideInInspector] public PerformanceWaitInputAction waitInputAction;
 	[HideInInspector] public Vector2 waitFireballDir;
+
+	//wait for second
+	[HideInInspector] public float waitTime;
+	[HideInInspector] public bool waitWithNoGravity;
+	[HideInInspector] public bool waitWithScreenShake;
 }
 
 public enum PerformanceAction
@@ -161,6 +239,7 @@ public enum PerformanceAction
 	noControl, //no control for trigger and player, so player will maintain the speed they should have
 	move,
 	waitForInput,
+	waitForSecond
 }
 
 public enum PerformanceWaitInputAction
@@ -209,6 +288,16 @@ public class PerformanceScriptEditor : Editor
 				if (playerPerformanceTrigger.performanceTriggerInspectorObject.waitInputAction == PerformanceWaitInputAction.fireball)
 					playerPerformanceTrigger.performanceTriggerInspectorObject.waitFireballDir =
 						EditorGUILayout.Vector2Field("Wait fireball direction (Not normalized)", playerPerformanceTrigger.performanceTriggerInspectorObject.waitFireballDir);
+			}
+
+			if (playerPerformanceTrigger.performanceTriggerInspectorObject.action == PerformanceAction.waitForSecond)
+			{
+				playerPerformanceTrigger.performanceTriggerInspectorObject.waitTime =
+					EditorGUILayout.FloatField("Wait Time", playerPerformanceTrigger.performanceTriggerInspectorObject.waitTime);
+				playerPerformanceTrigger.performanceTriggerInspectorObject.waitWithNoGravity =
+					EditorGUILayout.Toggle("Wait With No Gravity", playerPerformanceTrigger.performanceTriggerInspectorObject.waitWithNoGravity);
+				playerPerformanceTrigger.performanceTriggerInspectorObject.waitWithScreenShake =
+					EditorGUILayout.Toggle("Wait With Screen Shake", playerPerformanceTrigger.performanceTriggerInspectorObject.waitWithScreenShake);
 			}
 		}
 

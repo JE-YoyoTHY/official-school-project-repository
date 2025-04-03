@@ -148,12 +148,18 @@ public class PlayerControlScript : MonoBehaviour
 	private Coroutine deathRespawnPlayerControlRegainCoroutine;
 	public LevelManagerScript currentLevel { get; private set; }
 	//private GameObject currentRespawnPoint; // idk 要放在Player還是level manager
+	
+	//const layer
 	private const int killZoneLayer = 7;
 	private const int levelTriggerLayer = 8;
 	private const int respawnTriggerLayer = 9;
 
+	//spring
 	private bool isControlBySpring;
 	private Coroutine springCoroutine;
+
+	//performance
+	private bool performanceWithNoGravity;
 	#endregion
 
 
@@ -425,17 +431,20 @@ public class PlayerControlScript : MonoBehaviour
 
 		//myAcceleration(Vector2.down * myGravityScale, Vector2.down * myGravityMaxSpeed);
 
-		
-		
-		if (rb.velocity.y > -myGravityMaxSpeed)
-		{
-			rb.AddForce(new Vector2(0, Mathf.Max(-myGravityScale * Time.fixedDeltaTime, -myGravityMaxSpeed - rb.velocity.y)) * rb.mass, ForceMode2D.Impulse);
-		}
 
-		if (rb.velocity.y < -myGravityMaxSpeed && isFrictionActive)
+		if (!performanceWithNoGravity)
 		{
-			rb.AddForce(Mathf.Min(myAdjustFriction * Time.fixedDeltaTime, -myGravityMaxSpeed - rb.velocity.y) * Vector2.up * rb.mass, ForceMode2D.Impulse);
+			if (rb.velocity.y > -myGravityMaxSpeed)
+			{
+				rb.AddForce(new Vector2(0, Mathf.Max(-myGravityScale * Time.fixedDeltaTime, -myGravityMaxSpeed - rb.velocity.y)) * rb.mass, ForceMode2D.Impulse);
+			}
+
+			if (rb.velocity.y < -myGravityMaxSpeed && isFrictionActive)
+			{
+				rb.AddForce(Mathf.Min(myAdjustFriction * Time.fixedDeltaTime, -myGravityMaxSpeed - rb.velocity.y) * Vector2.up * rb.mass, ForceMode2D.Impulse);
+			}
 		}
+		
 		
 
 	}
@@ -1272,6 +1281,11 @@ public class PlayerControlScript : MonoBehaviour
 		if (fireballExplodeCoroutine != null) StopCoroutine(fireballExplodeCoroutine);
 		if (moveLessCoroutine != null) StopCoroutine(moveLessCoroutine);
 		if (jumpLessCoroutine != null) StopCoroutine(jumpLessCoroutine);
+	}
+
+	public void performanceGravity(bool localPerformanceWithNoGravity)
+	{
+		performanceWithNoGravity = localPerformanceWithNoGravity;
 	}
 
 	#endregion

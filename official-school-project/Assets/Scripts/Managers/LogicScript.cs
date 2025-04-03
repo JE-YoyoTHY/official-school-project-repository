@@ -79,7 +79,7 @@ public class LogicScript : MonoBehaviour
 
 	#endregion
 
-	#region grid set up
+	#region grid
 
 	private void gridColor()
 	{
@@ -88,6 +88,16 @@ public class LogicScript : MonoBehaviour
 		{
 			if (killFbZone.GetComponent<Tilemap>() != null)
 				killFbZone.GetComponent<Tilemap>().color = Color.clear;
+		}
+	}
+
+	public void performanceTileDestroy(string name)
+	{
+		GameObject[] performanceTiles = GameObject.FindGameObjectsWithTag("PerformanceTile");
+		foreach(GameObject performanceTile in performanceTiles)
+		{
+			PlayerPerformanceBreakableGround breakableGround = performanceTile.GetComponent<PlayerPerformanceBreakableGround>();
+			if (breakableGround.m_tileName == name) breakableGround.groundBreak();
 		}
 	}
 
