@@ -172,7 +172,7 @@ public class PlayerPerformanceTriggerScript : MonoBehaviour
 		{
 			t -= Time.deltaTime;
 
-			playerRB.velocity = Vector2.zero;
+			//playerRB.velocity = Vector2.zero;
 
 			if (performanceTriggerInspectorObject.waitWithScreenShake)
 				CameraShakeManagerScript.instance.cameraShakeWithProfileWithRandomDirection(performanceTriggerInspectorObject.screenShakeProfile, impulseSource);
@@ -195,7 +195,7 @@ public class PlayerPerformanceTriggerScript : MonoBehaviour
 
 	public void screenShake()
 	{
-		CameraShakeManagerScript.instance.cameraShakeWithProfile(performanceTriggerInspectorObject.screenShakeProfile, impulseSource);
+		CameraShakeManagerScript.instance.cameraShakeWithProfileWithRandomDirection(performanceTriggerInspectorObject.screenShakeProfile, impulseSource);
 	}
 
 	#endregion

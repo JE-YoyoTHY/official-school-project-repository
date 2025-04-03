@@ -1286,6 +1286,7 @@ public class PlayerControlScript : MonoBehaviour
 	public void performanceGravity(bool localPerformanceWithNoGravity)
 	{
 		performanceWithNoGravity = localPerformanceWithNoGravity;
+		rb.velocity = Vector2.zero;
 	}
 
 	#endregion
