@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,10 +8,12 @@ using UnityEngine;
 public class SpringScript : MonoBehaviour
 {
 	private Vector2 pushDir;
+	private CinemachineImpulseSource impulseSource;
 
 	[Header("Common Settings")]
 	[SerializeField] private float pushForce = 30;
 	[SerializeField] private float fireballSpeedScale = 2;
+	[SerializeField] private ScreenShakeProfile screenShakeProfile;
 
 	[Header("Remove Ability")]
 	[SerializeField] private bool removePlayerMoveAbility = false;
@@ -49,15 +52,21 @@ public class SpringScript : MonoBehaviour
 		pushDir = new Vector2(deltaPos.x, deltaPos.y).normalized;
 
 		lineRenderer.enabled = false;
+
+		impulseSource = GetComponent<CinemachineImpulseSource>();
 	}
 
     void Update()
     {
+		//lineRenderer.enabled = true;
+
 		Vector3 deltaPos = transform.GetChild(0).position - transform.position;
 		pushDir = new Vector2(deltaPos.x, deltaPos.y).normalized;
 		if (removePlayerMoveAbility)
 			drawTrajectory();
 		else lineRenderer.positionCount = 0;
+
+		//Debug.DrawRay(transform.position, Vector2.down * transform.localScale.y * 0.5f, Color.green);
 	}
 
 	/*private void OnTriggerEnter2D(Collider2D collision)
@@ -94,11 +103,18 @@ public class SpringScript : MonoBehaviour
 
 	private void springPlayerTrigger()
 	{
-		//Vector2 localDir = transform.GetChild(0).localPosition; // child 0 for target
-		//Vector3 deltaPos = transform.GetChild(0).position - transform.position;
-		//Vector2 localDir = new Vector2(deltaPos.x, deltaPos.y).normalized;
-		//Debug.Log(deltaPos + ", " + localDir);
-		//player.springPush(localDir.normalized * pushForce, removePlayerMoveAbility, transform.position, transform.GetChild(0).position);
+		//screen shake
+		CameraShakeManagerScript.instance.cameraShakeWithProfileWithGivenDirection(screenShakeProfile, impulseSource, pushDir);
+
+		//player position, teleport player if player's y position is lower or greater than spring's height, only happen when take player's control
+		Vector3 playerPos = PlayerControlScript.instance.transform.position;
+		if (removePlayerMoveAbility)
+		{
+			if (playerPos.y < transform.position.y + transform.localScale.y * -0.5f) PlayerControlScript.instance.transform.position = new Vector3(playerPos.x, transform.position.y + transform.localScale.y * -0.5f, playerPos.z);
+			if (playerPos.y > transform.position.y + transform.localScale.y * 0.5f) PlayerControlScript.instance.transform.position = new Vector3(playerPos.x, transform.position.y + transform.localScale.y * 0.5f, playerPos.z);
+		}
+
+		//player push
 		PlayerControlScript.instance.springPush(pushDir.normalized * pushForce, removePlayerMoveAbility, springDuration, springGravityScale, springFriction);
 	}
 
@@ -113,6 +129,8 @@ public class SpringScript : MonoBehaviour
 
 	private void drawTrajectory()
 	{
+		//lineRenderer.enabled = true;
+
 		int _segCount = (int)(springDuration / pointTimeInterval);
 		segments = new Vector2[_segCount];
 		lineRenderer.positionCount = segments.Length;
