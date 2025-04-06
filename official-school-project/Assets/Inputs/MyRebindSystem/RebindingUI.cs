@@ -36,6 +36,7 @@ public class RebindingUI : MonoBehaviour
     [SerializeField] private InputActionAsset inputAsset;
     [SerializeField] private InputActionReference targetActionRef;
     [SerializeField] private Canvas rebindCanvas;
+    [SerializeField] private BindingChangedEventBroadcaster broadCaster;  // 只要有就會Invoke, 不論是一個還是全部
 
     [Header("--- Read Only ---")]
     [SerializeField] private GameObject overlay;
@@ -64,7 +65,7 @@ public class RebindingUI : MonoBehaviour
 
     private InputActionRebindingExtensions.RebindingOperation rebindOperation;
 
-    public UnityEvent bindingChangedEvent;  // 只要有就會Invoke, 不論是一個還是全部
+    
     private void Awake()
     {
         promptStrings = new Dictionary<promptStringsNames, string>()
@@ -153,7 +154,7 @@ public class RebindingUI : MonoBehaviour
                 operation.Dispose();
                 targetActionRef.action.Enable();
                 updateKeyDisplay();
-                bindingChangedEvent.Invoke();
+                broadCaster.broadCast();
 
                 promptLabel.SetActive(false);
                 overlay.SetActive(false);
@@ -178,7 +179,7 @@ public class RebindingUI : MonoBehaviour
     public void resetRebind()
     {
         targetActionRef.action.RemoveAllBindingOverrides();
-        bindingChangedEvent.Invoke();
+        broadCaster.broadCast();
         updateKeyDisplay();
     }
 
@@ -208,7 +209,7 @@ public class RebindingUI : MonoBehaviour
     public void resetAllRebindButton_OnClick()
     {
         resetAllRebind(inputAsset.FindActionMap("Player"));
-        bindingChangedEvent.Invoke();
+        broadCaster.broadCast();
     }
 
     public void updateAllKeyDisplay()

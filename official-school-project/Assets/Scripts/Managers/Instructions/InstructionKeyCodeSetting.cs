@@ -20,7 +20,8 @@ public class InstructionKeyCodeSetting : MonoBehaviour
         _None,
         MoveInstruction,
         JumpInstruction,
-        ShootFireballInstruction
+        ShootFireballInstruction_1, 
+        ShootFireballInstruction_2, 
     }
 
 
@@ -69,7 +70,7 @@ public class InstructionKeyCodeSetting : MonoBehaviour
             return;
         }
 
-        if (currentInstruction == InstructionsTypeEnum.MoveInstruction)
+        else if (currentInstruction == InstructionsTypeEnum.MoveInstruction)
         {
             print(getAllKeyCodeLabel()[0].GetComponent<TextMeshProUGUI>().text);
 
@@ -82,12 +83,12 @@ public class InstructionKeyCodeSetting : MonoBehaviour
 
         }
 
-        if (currentInstruction == InstructionsTypeEnum.JumpInstruction)
+        else if (currentInstruction == InstructionsTypeEnum.JumpInstruction)
         {
             getAllKeyCodeLabel()[0].GetComponent<TextMeshProUGUI>().text = rebindingUI.convertBindingNameToReadableName(inputActions[ActionsEnum.Jump].bindings[0]);
         }
 
-        if (currentInstruction == InstructionsTypeEnum.ShootFireballInstruction)
+        else if (currentInstruction == InstructionsTypeEnum.ShootFireballInstruction_1)
         {
             // shoot left
             getAllKeyCodeLabel()[0].GetComponent<TextMeshProUGUI>().text = rebindingUI.convertBindingNameToReadableName(inputActions[ActionsEnum.LeftShootFireball].bindings[0]);
@@ -95,6 +96,12 @@ public class InstructionKeyCodeSetting : MonoBehaviour
             // shoot down
             getAllKeyCodeLabel()[1].GetComponent<TextMeshProUGUI>().text = rebindingUI.convertBindingNameToReadableName(inputActions[ActionsEnum.DownShootFireball].bindings[0]);
 
+        }
+
+        else if (currentInstruction == InstructionsTypeEnum.ShootFireballInstruction_2)
+        {
+            // shoot left
+            getAllKeyCodeLabel()[0].GetComponent<TextMeshProUGUI>().text = rebindingUI.convertBindingNameToReadableName(inputActions[ActionsEnum.LeftShootFireball].bindings[0]);
         }
     }
 

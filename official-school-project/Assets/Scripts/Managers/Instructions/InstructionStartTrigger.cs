@@ -10,7 +10,8 @@ public class InstructionStartTrigger : MonoBehaviour
         _None, 
         MoveInstruction, 
         JumpInstruction, 
-        ShootFireballInstruction
+        ShootFireballInstruction_1, 
+        ShootFireballInstruction_2,
     }
     [SerializeField] public InstructionsEnum currentInstruction; // ¥Îinspector¿ï¾Ü
     [SerializeField] private bool hadStarted = false;
