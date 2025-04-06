@@ -4862,7 +4862,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3107047999610833545}
@@ -4998,7 +4998,6 @@ MonoBehaviour:
   fireballFriction: 40
   explodeRadius: 4
   explodeDuration: 0.1
-  hitPlayerSpeedScale: -0.275
   impulseForce: 0.3
   leavePlayerTime: 0.1
 --- !u!114 &2583024885239792354
