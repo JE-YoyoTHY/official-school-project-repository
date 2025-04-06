@@ -9,15 +9,6 @@ public class BindingChangedEventBroadcaster : MonoBehaviour
 {
     public UnityEvent BindingChangedEvent;
 
-    private void Awake()
-    {
-        BindingChangedEvent = new UnityEvent();
-    }
-    private void Start()
-    {
-        
-    }
-
     public void broadCast()
     {
         BindingChangedEvent.Invoke();

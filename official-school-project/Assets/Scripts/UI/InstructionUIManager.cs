@@ -54,7 +54,8 @@ public class InstructionUIManager : MonoBehaviour
     {
         expandedMaskSizeDict.Add("MoveInstruction", new Vector2(370, 213));
         expandedMaskSizeDict.Add("JumpInstruction", new Vector2(370, 213));
-        expandedMaskSizeDict.Add("ShootFireballInstruction", new Vector2(700, 300));
+        expandedMaskSizeDict.Add("ShootFireballInstruction_1", new Vector2(700, 300));
+        expandedMaskSizeDict.Add("ShootFireballInstruction_2", new Vector2(477.5f, 269.4f));
 
         foreach (GameObject instructionUIObj in instructionsList)
         {
