@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using UnityEditor;
 using Unity.VisualScripting;
+using TMPro;
 
 public class InstructionUIManager : MonoBehaviour
 {
@@ -33,9 +34,9 @@ public class InstructionUIManager : MonoBehaviour
     [SerializeField] private Ease maskShrinkEaseType = Ease.InOutExpo;
 
 
-    [SerializeField] private float keyCodeImageAnimScale = 1.1f;
-    [SerializeField] private float keyCodeImageAnimDuration = 1;
-    [SerializeField] private Ease keyCodeImageAnimEaseType = Ease.InOutSine;
+    [SerializeField] private float keyCodeVisualDisplayAnimScale = 1.1f;
+    [SerializeField] private float keyCodeVisualDisplayAnimDuration = 1;
+    [SerializeField] private Ease keyCodeDisplayAnimEaseType = Ease.InOutSine;
 
 
     public bool isProcessingDisappearUI = false;
@@ -52,6 +53,9 @@ public class InstructionUIManager : MonoBehaviour
     void Start()
     {
         expandedMaskSizeDict.Add("MoveInstruction", new Vector2(370, 213));
+        expandedMaskSizeDict.Add("JumpInstruction", new Vector2(370, 213));
+        expandedMaskSizeDict.Add("ShootFireballInstruction", new Vector2(700, 300));
+
         foreach (GameObject instructionUIObj in instructionsList)
         {
             availableInstructionsUIObj[instructionUIObj.name] = instructionUIObj;
@@ -176,7 +180,7 @@ public class InstructionUIManager : MonoBehaviour
                 #endregion
 
                     #region KeyCode Image Animation
-                keyCodeImageAnim(ui.transform.GetChild(0).transform.GetChild(1).gameObject);  // Mask -> BackGround -> KeyCodeImage
+                keyCodeVisualDisplayAnim(ui.transform.GetChild(0).transform.GetChild(1).gameObject);  // Mask -> BackGround -> KeyCodeImage
                 #endregion
             }
 
@@ -231,7 +235,15 @@ public class InstructionUIManager : MonoBehaviour
                 #endregion
 
                 #region KeyCode Image Animation
-                keyCodeImageAnim(ui.transform.GetChild(0).transform.GetChild(1).gameObject);  // Mask -> BackGround -> KeyCodeImage
+                for (int i=1; i< ui.transform.GetChild(0).transform.childCount; i++)
+                {
+                    // 從i=1開始是因為第一個是ActionNameLabel，要跳過
+                    // Instruction(即這裡的ui)
+                    // -> Background
+                    //    -> ActionNameLabel
+                    //    -> ...(很多圖片)
+                    keyCodeVisualDisplayAnim(ui.transform.GetChild(0).transform.GetChild(i).transform.gameObject);
+                };
                 #endregion
             }
         }
@@ -241,6 +253,40 @@ public class InstructionUIManager : MonoBehaviour
 
     #region FUNCTION: disappearInstructionUI()
     public void disappearInstructionUI()
+    {
+        if (isProcessingDisappearUI == true)
+        {
+            Debug.Log("Already disappearing");
+            return;
+        }
+
+        // 如果mask正在擴大，停止擴大
+        if (maskGrowTweener != null)
+        {
+            maskGrowTweener.Kill();
+            maskGrowTweener = null;
+        }
+
+        isProcessingDisappearUI = true;
+        #region Shrink Mask
+        if (currentInstructionUIObj == null)
+        {
+            Debug.LogError("[disappearInstructionUI]: No existing instructionUIObj UI to delete.");
+            return;
+        }
+        RectTransform uiRect = currentInstructionUIObj.GetComponent<RectTransform>();
+        Vector2 uiPos = uiRect.anchoredPosition;
+
+        //RectTransform rectTransform = currentInstructionUIObj.GetComponent<RectTransform>();
+
+        maskShrinkTweener = uiRect.DOSizeDelta(new Vector2(uiRect.sizeDelta.x, 0), maskShrinkDuration).SetEase(maskShrinkEaseType);
+        maskShrinkTweener.onComplete = maskShrinkTweenFinished;
+
+
+        #endregion
+    }
+
+    public void disappearInstructionUI(string instructionName)
     {
         if (isProcessingDisappearUI == true)
         {
@@ -301,14 +347,28 @@ public class InstructionUIManager : MonoBehaviour
                 .SetEase(keyCodeImageAnimEaseType);
         }
     }
-    public void keyCodeImageAnim(GameObject ui)
+    public void keyCodeVisualDisplayAnim(GameObject ui)
     {
         if (ui.GetComponent<RectTransform>() != null)
         {
             ui.GetComponent<RectTransform>()
-                .DOScale(keyCodeImageAnimScale, keyCodeImageAnimDuration)
+                .DOScale(keyCodeVisualDisplayAnimScale, keyCodeVisualDisplayAnimDuration)
                 .SetLoops(-1, LoopType.Yoyo)
-                .SetEase(keyCodeImageAnimEaseType);
+                .SetEase(keyCodeDisplayAnimEaseType);
+
+            // 讓圖片底下的文字也會一起改變大小
+            if (ui.transform.childCount > 0 && ui.transform.GetChild(0).transform.gameObject.GetComponent<TextMeshProUGUI>() != null)
+            {
+                TextMeshProUGUI m_tmp = ui.transform.GetChild(0).transform.gameObject.GetComponent<TextMeshProUGUI>();
+                DOTween.To
+                (
+                    () => m_tmp.fontSize,
+                    x => m_tmp.fontSize = x, m_tmp.fontSize * keyCodeVisualDisplayAnimScale, keyCodeVisualDisplayAnimDuration
+                )
+                .SetLoops(-1, LoopType.Yoyo)
+                .SetEase(keyCodeDisplayAnimEaseType);
+                
+            }
         }
     }
 
