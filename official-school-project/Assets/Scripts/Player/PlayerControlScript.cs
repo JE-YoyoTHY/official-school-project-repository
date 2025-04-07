@@ -147,6 +147,7 @@ public class PlayerControlScript : MonoBehaviour
 	private Coroutine deathRespawnDelayCoroutine;
 	private Coroutine deathRespawnPlayerControlRegainCoroutine;
 	public LevelManagerScript currentLevel { get; private set; }
+	public bool isDying { get; private set; } = false;
 	//private GameObject currentRespawnPoint; // idk 要放在Player還是level manager
 	
 	//const layer
@@ -199,7 +200,7 @@ public class PlayerControlScript : MonoBehaviour
 			jumpMain();
 			fireballMain();
 
-			myFrictionMain();
+			//myFrictionMain();
 		}
 		else
 		{
@@ -213,6 +214,7 @@ public class PlayerControlScript : MonoBehaviour
 	{
 		if (!logic.isFreeze())
 		{
+			myFrictionMain();
 			myGravityMain();
 			
 		}
@@ -274,6 +276,67 @@ public class PlayerControlScript : MonoBehaviour
 			if (rb.velocity.y < localMaxVelocity.y && isFrictionActive)
 			{
 				rb.AddForce(Mathf.Min(myAdjustFriction * Time.deltaTime, localMaxVelocity.y - rb.velocity.y) * Vector2.up * rb.mass, ForceMode2D.Impulse);
+			}
+		}
+
+		//idk if it is needed, but if not, camera might move down even player stands still
+		//if (groundTrigger.onGround() && rb.velocity.y < 0)
+		//	mySetVy(0);
+	}
+
+	private void myAccelerationWithFixedDeltatime(Vector2 localAcceleration, Vector2 localMaxVelocity)
+	{
+		// x
+		if (localAcceleration.x > 0)
+		{
+			if (rb.velocity.x < localMaxVelocity.x)
+			{
+				rb.AddForce(new Vector2(Mathf.Min(localAcceleration.x * Time.fixedDeltaTime, localMaxVelocity.x - rb.velocity.x), 0) * rb.mass, ForceMode2D.Impulse);
+			}
+
+			if (rb.velocity.x > localMaxVelocity.x && isFrictionActive)
+			{
+				rb.AddForce(Mathf.Max(myAdjustFriction * Time.fixedDeltaTime * -1, localMaxVelocity.x - rb.velocity.x) * Vector2.right * rb.mass, ForceMode2D.Impulse);
+
+			}
+		}
+		else if (localAcceleration.x < 0)
+		{
+			if (rb.velocity.x > localMaxVelocity.x)
+			{
+				rb.AddForce(new Vector2(Mathf.Max(localAcceleration.x * Time.fixedDeltaTime, localMaxVelocity.x - rb.velocity.x), 0) * rb.mass, ForceMode2D.Impulse);
+			}
+
+			if (rb.velocity.x < localMaxVelocity.x && isFrictionActive)
+			{
+				rb.AddForce(Mathf.Min(myAdjustFriction * Time.fixedDeltaTime, localMaxVelocity.x - rb.velocity.x) * Vector2.right * rb.mass, ForceMode2D.Impulse);
+
+			}
+		}
+
+		// y
+		if (localAcceleration.y > 0)
+		{
+			if (rb.velocity.y < localMaxVelocity.y)
+			{
+				rb.AddForce(new Vector2(0, Mathf.Min(localAcceleration.y * Time.fixedDeltaTime, localMaxVelocity.y - rb.velocity.y)) * rb.mass, ForceMode2D.Impulse);
+			}
+
+			if (rb.velocity.y > localMaxVelocity.y && isFrictionActive)
+			{
+				rb.AddForce(Mathf.Max(myAdjustFriction * Time.fixedDeltaTime * -1, localMaxVelocity.y - rb.velocity.y) * Vector2.up * rb.mass, ForceMode2D.Impulse);
+			}
+		}
+		else if (localAcceleration.y < 0)
+		{
+			if (rb.velocity.y > localMaxVelocity.y)
+			{
+				rb.AddForce(new Vector2(0, Mathf.Max(localAcceleration.y * Time.fixedDeltaTime, localMaxVelocity.y - rb.velocity.y)) * rb.mass, ForceMode2D.Impulse);
+			}
+
+			if (rb.velocity.y < localMaxVelocity.y && isFrictionActive)
+			{
+				rb.AddForce(Mathf.Min(myAdjustFriction * Time.fixedDeltaTime, localMaxVelocity.y - rb.velocity.y) * Vector2.up * rb.mass, ForceMode2D.Impulse);
 			}
 		}
 
@@ -396,12 +459,12 @@ public class PlayerControlScript : MonoBehaviour
 		{
 			if(rb.velocity.x < 0)
 			{
-				myAcceleration(new Vector2(myFrictionAcceleration * 1, 0), Vector2.zero);
+				myAccelerationWithFixedDeltatime(new Vector2(myFrictionAcceleration * 1, 0), Vector2.zero);
 			}
 
 			if (rb.velocity.x > 0)
 			{
-				myAcceleration(new Vector2(myFrictionAcceleration * -1, 0), Vector2.zero);
+				myAccelerationWithFixedDeltatime(new Vector2(myFrictionAcceleration * -1, 0), Vector2.zero);
 			}
 		}
 	}
@@ -429,10 +492,10 @@ public class PlayerControlScript : MonoBehaviour
 				mySetGravity(myNormalGravityScale, myNormalGravityMaxSpeed);
 		}
 
-		//myAcceleration(Vector2.down * myGravityScale, Vector2.down * myGravityMaxSpeed);
+		myAccelerationWithFixedDeltatime(Vector2.down * myGravityScale, Vector2.down * myGravityMaxSpeed);
 
 
-		if (!performanceWithNoGravity)
+		/*if (!performanceWithNoGravity)
 		{
 			if (rb.velocity.y > -myGravityMaxSpeed)
 			{
@@ -443,7 +506,7 @@ public class PlayerControlScript : MonoBehaviour
 			{
 				rb.AddForce(Mathf.Min(myAdjustFriction * Time.fixedDeltaTime, -myGravityMaxSpeed - rb.velocity.y) * Vector2.up * rb.mass, ForceMode2D.Impulse);
 			}
-		}
+		}*/
 		
 		
 
@@ -1064,6 +1127,7 @@ public class PlayerControlScript : MonoBehaviour
 		levelTransitionHoleScript.closeHole();
 	}
 
+	//reset state, call when hole close finish
 	public void playerDeath()
 	{
 		rb.velocity = Vector2.zero;
@@ -1106,8 +1170,12 @@ public class PlayerControlScript : MonoBehaviour
 		StopAllCoroutines();
 
 		PlayerPerformanceSystemScript.instance.controlEnd();
+
 	}
 
+	//call when hole close finish, called at the same time as player death,
+	//but these two must be separate because enter new level dont call player death
+	//regain player control when whole is opening -> call playerRespawnControlRegain coroutine
 	public void playerRespawn()
 	{
 		deathRespawnDelayCoroutine = null;
@@ -1115,12 +1183,16 @@ public class PlayerControlScript : MonoBehaviour
 		deathRespawnPlayerControlRegainCoroutine = StartCoroutine(playerRespawnControlRegain());
     }
 
+	//call when player touch killzone, the actual death start
 	private void playerDeathDelayStart()
 	{
 		if(deathRespawnDelayCoroutine != null) StopCoroutine(deathRespawnDelayCoroutine);
 		deathRespawnDelayCoroutine = StartCoroutine(playerDeathDelayMain(deathRespawnDelayTime));
+
+		isDying = true;
 	}
 
+	//wait for a short time before the hole close, to play animation
 	private IEnumerator playerDeathDelayMain(float t)
 	{
 		//initial
@@ -1145,6 +1217,7 @@ public class PlayerControlScript : MonoBehaviour
 
 	}
 
+	//to give player control while the hole is opening
 	private IEnumerator playerRespawnControlRegain()
 	{
 		while (deathHoleScript.holeRect.sizeDelta.x < playerControlRegainMinHoleRadius)
@@ -1153,6 +1226,7 @@ public class PlayerControlScript : MonoBehaviour
 		}
 
         isFrictionActive = true; isMoveActive = true; isJumpActive = true; isFireballActive = true;
+		isDying = false; //currently is only to prevent getting wrong camera if player dies in swap trigger
     }
 
 

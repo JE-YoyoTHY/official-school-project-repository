@@ -119,6 +119,8 @@ public class LevelManagerScript : MonoBehaviour
 				currentCam.Priority = 10;
 			currentCam = newCam;
 			setCamera();
+
+			//print(newCam.gameObject);
 		}
 		
 	}

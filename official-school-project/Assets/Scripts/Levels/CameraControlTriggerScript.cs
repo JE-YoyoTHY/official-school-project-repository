@@ -40,29 +40,32 @@ public class CameraControlTriggerScript : MonoBehaviour
 		{
 			Vector2 exitDirection = (collision.transform.position - coll.bounds.center).normalized;
 
-			switch(cameraSwitchDir)
+			if (!PlayerControlScript.instance.isDying)
 			{
-				case CameraSwitchDirection.Vertical:
-					if(exitDirection.y < 0) //below
-					{
-						levelManager.swapCamera(cameraBelow, cameraBlendTime);
-					}
-					else if(exitDirection.y > 0)
-					{
-						levelManager.swapCamera(cameraAbove, cameraBlendTime);
-					}
+				switch (cameraSwitchDir)
+				{
+					case CameraSwitchDirection.Vertical:
+						if (exitDirection.y < 0) //below
+						{
+							levelManager.swapCamera(cameraBelow, cameraBlendTime);
+						}
+						else if (exitDirection.y > 0)
+						{
+							levelManager.swapCamera(cameraAbove, cameraBlendTime);
+						}
 
-					break;
-				case CameraSwitchDirection.Horizontal:
-					if (exitDirection.x < 0) //left
-					{
-						levelManager.swapCamera(cameraOnLeft, cameraBlendTime);
-					}
-					else if (exitDirection.x > 0)
-					{
-						levelManager.swapCamera(cameraOnRight, cameraBlendTime);
-					}
-					break;
+						break;
+					case CameraSwitchDirection.Horizontal:
+						if (exitDirection.x < 0) //left
+						{
+							levelManager.swapCamera(cameraOnLeft, cameraBlendTime);
+						}
+						else if (exitDirection.x > 0)
+						{
+							levelManager.swapCamera(cameraOnRight, cameraBlendTime);
+						}
+						break;
+				}
 			}
 		}
 	}
