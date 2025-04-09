@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d1514134bc4fbd41bb739b1b9a49231, type: 3}
   m_Name: BreakablePlatform
   m_EditorClassIdentifier: 
-  m_DefaultSprite: {fileID: 21300000, guid: a3faa69273e58e0478befeb98c542585, type: 3}
+  m_DefaultSprite: {fileID: -1057320074, guid: d130824b676817449898a5954f7a3c20, type: 3}
   m_DefaultGameObject: {fileID: 8474844541828075697, guid: 2be2d5e71fb689046b2c70ad0e93124c, type: 3}
   m_DefaultColliderType: 1
   m_TilingRules: []
