@@ -415,7 +415,7 @@
             ]
         },
         {
-            "name": "Menu",
+            "name": "UINavigation",
             "id": "20a322a6-a5e7-45da-833a-ca2f321dfb1c",
             "actions": [
                 {
@@ -497,34 +497,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "exit",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
-        },
-        {
-            "name": "PlayerControlRebinding",
-            "id": "36e88f6b-06e6-4371-b8ee-4a400081b7ed",
-            "actions": [
-                {
-                    "name": "New action",
-                    "type": "Button",
-                    "id": "b6badd46-6119-4634-8326-47f6a366a37f",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "8563803f-387c-4268-8dac-66eccb11528a",
-                    "path": "",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "New action",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
