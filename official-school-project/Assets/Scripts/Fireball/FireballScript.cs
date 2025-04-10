@@ -76,7 +76,6 @@ public class FireballScript : MonoBehaviour
 		{
 			moveSpeed = Mathf.Max(moveSpeed - fireballFriction * Time.deltaTime, normalMoveSpeed);
 		}
-		animator.Play("FireballFly");
 
 		rb.velocity = moveDir * moveSpeed;
 
@@ -118,6 +117,8 @@ public class FireballScript : MonoBehaviour
 		}
 	}
 
+	
+
 	public void summon(Vector2 localDir)
 	{
 		moveDir = localDir;
@@ -142,15 +143,23 @@ public class FireballScript : MonoBehaviour
 		//particle
 		movingParticle = transform.GetChild(0).GetComponent<ParticleSystem>(); // child 0 -> particle system
 		movingParticle.transform.rotation = Quaternion.FromToRotation(Vector3.left, moveDir * -1);
+
+		animator.Play("FireballFly");
 	}
 
 	private void explode()
 	{
 		isExploding = true;
-		transform.localScale = new Vector3(explodeRadius / coll.radius, explodeRadius / coll.radius, 1);
+
+		
+		//transform.localScale = new Vector3(explodeRadius / coll.radius, explodeRadius / coll.radius, 1);
+		transform.localScale = new Vector3(1f, 1f, 1f);
+
 
 		rb.velocity = Vector2.zero;
 		hitPlayerSpeedModifier = Vector2.zero;
+
+		animator.Play("Explode");
 		//StopAllCoroutines();
 		StartCoroutine(destroyCoroutine(explodeDuration));
 
@@ -197,6 +206,9 @@ public class FireballScript : MonoBehaviour
 			yield return null;
 		}
 		Destroy(gameObject);
+		animator.enabled = false;
+		animator.enabled = false;
+		GetComponent<SpriteRenderer>().enabled = false;
 	}
 
 	private void OnTriggerStay2D(Collider2D collision)
