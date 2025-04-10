@@ -8,6 +8,7 @@ public class FireballScript : MonoBehaviour
 	//variable
 	private Rigidbody2D rb;
 	private CircleCollider2D coll;
+	private Animator animator;
 	//private PlayerControlScript player;
 	//private LogicScript logic;
 
@@ -75,6 +76,7 @@ public class FireballScript : MonoBehaviour
 		{
 			moveSpeed = Mathf.Max(moveSpeed - fireballFriction * Time.deltaTime, normalMoveSpeed);
 		}
+		animator.Play("FireballFly");
 
 		rb.velocity = moveDir * moveSpeed;
 
@@ -121,6 +123,7 @@ public class FireballScript : MonoBehaviour
 		moveDir = localDir;
 		rb = GetComponent<Rigidbody2D>();
 		coll = GetComponent<CircleCollider2D>();
+		animator = GetComponent<Animator>();
 		//player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControlScript>();
 		//logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
 		isExploding = false;

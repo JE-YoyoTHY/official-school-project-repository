@@ -9,6 +9,7 @@ public class SpringScript : MonoBehaviour
 {
 	private Vector2 pushDir;
 	private CinemachineImpulseSource impulseSource;
+	private Animator animator;
 
 	[Header("Common Settings")]
 	[SerializeField] private float pushForce = 30;
@@ -20,6 +21,7 @@ public class SpringScript : MonoBehaviour
 	[SerializeField] private float springDuration = 0.3f;
 	[SerializeField] private float springGravityScale = 20;
 	[SerializeField] private float springFriction = 20;
+	
 
 	[Header("Fireball Settings")]
 	[SerializeField] private Vector2 hitPlayerVelocity;
@@ -39,6 +41,7 @@ public class SpringScript : MonoBehaviour
 
 		//trajectory
 		lineRenderer = GetComponent<LineRenderer>();
+		animator = GetComponent<Animator>();
 
 		int _segCount = (int)(springDuration / pointTimeInterval);// print(_segCount);
 		segments = new Vector2[_segCount];
@@ -113,7 +116,7 @@ public class SpringScript : MonoBehaviour
 			if (playerPos.y < transform.position.y + transform.localScale.y * -0.5f) PlayerControlScript.instance.transform.position = new Vector3(playerPos.x, transform.position.y + transform.localScale.y * -0.5f, playerPos.z);
 			if (playerPos.y > transform.position.y + transform.localScale.y * 0.5f) PlayerControlScript.instance.transform.position = new Vector3(playerPos.x, transform.position.y + transform.localScale.y * 0.5f, playerPos.z);
 		}
-
+		animator.Play("SheepBounce");
 		//player push
 		PlayerControlScript.instance.springPush(pushDir.normalized * pushForce, removePlayerMoveAbility, springDuration, springGravityScale, springFriction);
 	}
