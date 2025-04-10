@@ -437,7 +437,7 @@ public partial class @GameInputControl: IInputActionCollection2, IDisposable
             ]
         },
         {
-            ""name"": ""Menu"",
+            ""name"": ""UINavigation"",
             ""id"": ""20a322a6-a5e7-45da-833a-ca2f321dfb1c"",
             ""actions"": [
                 {
@@ -523,34 +523,6 @@ public partial class @GameInputControl: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
-        },
-        {
-            ""name"": ""PlayerControlRebinding"",
-            ""id"": ""36e88f6b-06e6-4371-b8ee-4a400081b7ed"",
-            ""actions"": [
-                {
-                    ""name"": ""New action"",
-                    ""type"": ""Button"",
-                    ""id"": ""b6badd46-6119-4634-8326-47f6a366a37f"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                }
-            ],
-            ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""8563803f-387c-4268-8dac-66eccb11528a"",
-                    ""path"": """",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""New action"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                }
-            ]
         }
     ],
     ""controlSchemes"": []
@@ -569,15 +541,12 @@ public partial class @GameInputControl: IInputActionCollection2, IDisposable
         m_Player_Legacy = m_Player.FindAction("Legacy", throwIfNotFound: true);
         m_Player_fireballDir = m_Player.FindAction("fireballDir", throwIfNotFound: true);
         m_Player_move = m_Player.FindAction("move", throwIfNotFound: true);
-        // Menu
-        m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
-        m_Menu_nextSelection = m_Menu.FindAction("nextSelection", throwIfNotFound: true);
-        m_Menu_previousSelection = m_Menu.FindAction("previousSelection", throwIfNotFound: true);
-        m_Menu_confirm = m_Menu.FindAction("confirm", throwIfNotFound: true);
-        m_Menu_exit = m_Menu.FindAction("exit", throwIfNotFound: true);
-        // PlayerControlRebinding
-        m_PlayerControlRebinding = asset.FindActionMap("PlayerControlRebinding", throwIfNotFound: true);
-        m_PlayerControlRebinding_Newaction = m_PlayerControlRebinding.FindAction("New action", throwIfNotFound: true);
+        // UINavigation
+        m_UINavigation = asset.FindActionMap("UINavigation", throwIfNotFound: true);
+        m_UINavigation_nextSelection = m_UINavigation.FindAction("nextSelection", throwIfNotFound: true);
+        m_UINavigation_previousSelection = m_UINavigation.FindAction("previousSelection", throwIfNotFound: true);
+        m_UINavigation_confirm = m_UINavigation.FindAction("confirm", throwIfNotFound: true);
+        m_UINavigation_exit = m_UINavigation.FindAction("exit", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -770,30 +739,30 @@ public partial class @GameInputControl: IInputActionCollection2, IDisposable
     }
     public PlayerActions @Player => new PlayerActions(this);
 
-    // Menu
-    private readonly InputActionMap m_Menu;
-    private List<IMenuActions> m_MenuActionsCallbackInterfaces = new List<IMenuActions>();
-    private readonly InputAction m_Menu_nextSelection;
-    private readonly InputAction m_Menu_previousSelection;
-    private readonly InputAction m_Menu_confirm;
-    private readonly InputAction m_Menu_exit;
-    public struct MenuActions
+    // UINavigation
+    private readonly InputActionMap m_UINavigation;
+    private List<IUINavigationActions> m_UINavigationActionsCallbackInterfaces = new List<IUINavigationActions>();
+    private readonly InputAction m_UINavigation_nextSelection;
+    private readonly InputAction m_UINavigation_previousSelection;
+    private readonly InputAction m_UINavigation_confirm;
+    private readonly InputAction m_UINavigation_exit;
+    public struct UINavigationActions
     {
         private @GameInputControl m_Wrapper;
-        public MenuActions(@GameInputControl wrapper) { m_Wrapper = wrapper; }
-        public InputAction @nextSelection => m_Wrapper.m_Menu_nextSelection;
-        public InputAction @previousSelection => m_Wrapper.m_Menu_previousSelection;
-        public InputAction @confirm => m_Wrapper.m_Menu_confirm;
-        public InputAction @exit => m_Wrapper.m_Menu_exit;
-        public InputActionMap Get() { return m_Wrapper.m_Menu; }
+        public UINavigationActions(@GameInputControl wrapper) { m_Wrapper = wrapper; }
+        public InputAction @nextSelection => m_Wrapper.m_UINavigation_nextSelection;
+        public InputAction @previousSelection => m_Wrapper.m_UINavigation_previousSelection;
+        public InputAction @confirm => m_Wrapper.m_UINavigation_confirm;
+        public InputAction @exit => m_Wrapper.m_UINavigation_exit;
+        public InputActionMap Get() { return m_Wrapper.m_UINavigation; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(MenuActions set) { return set.Get(); }
-        public void AddCallbacks(IMenuActions instance)
+        public static implicit operator InputActionMap(UINavigationActions set) { return set.Get(); }
+        public void AddCallbacks(IUINavigationActions instance)
         {
-            if (instance == null || m_Wrapper.m_MenuActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_MenuActionsCallbackInterfaces.Add(instance);
+            if (instance == null || m_Wrapper.m_UINavigationActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_UINavigationActionsCallbackInterfaces.Add(instance);
             @nextSelection.started += instance.OnNextSelection;
             @nextSelection.performed += instance.OnNextSelection;
             @nextSelection.canceled += instance.OnNextSelection;
@@ -808,7 +777,7 @@ public partial class @GameInputControl: IInputActionCollection2, IDisposable
             @exit.canceled += instance.OnExit;
         }
 
-        private void UnregisterCallbacks(IMenuActions instance)
+        private void UnregisterCallbacks(IUINavigationActions instance)
         {
             @nextSelection.started -= instance.OnNextSelection;
             @nextSelection.performed -= instance.OnNextSelection;
@@ -824,67 +793,21 @@ public partial class @GameInputControl: IInputActionCollection2, IDisposable
             @exit.canceled -= instance.OnExit;
         }
 
-        public void RemoveCallbacks(IMenuActions instance)
+        public void RemoveCallbacks(IUINavigationActions instance)
         {
-            if (m_Wrapper.m_MenuActionsCallbackInterfaces.Remove(instance))
+            if (m_Wrapper.m_UINavigationActionsCallbackInterfaces.Remove(instance))
                 UnregisterCallbacks(instance);
         }
 
-        public void SetCallbacks(IMenuActions instance)
+        public void SetCallbacks(IUINavigationActions instance)
         {
-            foreach (var item in m_Wrapper.m_MenuActionsCallbackInterfaces)
+            foreach (var item in m_Wrapper.m_UINavigationActionsCallbackInterfaces)
                 UnregisterCallbacks(item);
-            m_Wrapper.m_MenuActionsCallbackInterfaces.Clear();
+            m_Wrapper.m_UINavigationActionsCallbackInterfaces.Clear();
             AddCallbacks(instance);
         }
     }
-    public MenuActions @Menu => new MenuActions(this);
-
-    // PlayerControlRebinding
-    private readonly InputActionMap m_PlayerControlRebinding;
-    private List<IPlayerControlRebindingActions> m_PlayerControlRebindingActionsCallbackInterfaces = new List<IPlayerControlRebindingActions>();
-    private readonly InputAction m_PlayerControlRebinding_Newaction;
-    public struct PlayerControlRebindingActions
-    {
-        private @GameInputControl m_Wrapper;
-        public PlayerControlRebindingActions(@GameInputControl wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Newaction => m_Wrapper.m_PlayerControlRebinding_Newaction;
-        public InputActionMap Get() { return m_Wrapper.m_PlayerControlRebinding; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(PlayerControlRebindingActions set) { return set.Get(); }
-        public void AddCallbacks(IPlayerControlRebindingActions instance)
-        {
-            if (instance == null || m_Wrapper.m_PlayerControlRebindingActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_PlayerControlRebindingActionsCallbackInterfaces.Add(instance);
-            @Newaction.started += instance.OnNewaction;
-            @Newaction.performed += instance.OnNewaction;
-            @Newaction.canceled += instance.OnNewaction;
-        }
-
-        private void UnregisterCallbacks(IPlayerControlRebindingActions instance)
-        {
-            @Newaction.started -= instance.OnNewaction;
-            @Newaction.performed -= instance.OnNewaction;
-            @Newaction.canceled -= instance.OnNewaction;
-        }
-
-        public void RemoveCallbacks(IPlayerControlRebindingActions instance)
-        {
-            if (m_Wrapper.m_PlayerControlRebindingActionsCallbackInterfaces.Remove(instance))
-                UnregisterCallbacks(instance);
-        }
-
-        public void SetCallbacks(IPlayerControlRebindingActions instance)
-        {
-            foreach (var item in m_Wrapper.m_PlayerControlRebindingActionsCallbackInterfaces)
-                UnregisterCallbacks(item);
-            m_Wrapper.m_PlayerControlRebindingActionsCallbackInterfaces.Clear();
-            AddCallbacks(instance);
-        }
-    }
-    public PlayerControlRebindingActions @PlayerControlRebinding => new PlayerControlRebindingActions(this);
+    public UINavigationActions @UINavigation => new UINavigationActions(this);
     public interface IPlayerActions
     {
         void OnMoveLeft(InputAction.CallbackContext context);
@@ -900,15 +823,11 @@ public partial class @GameInputControl: IInputActionCollection2, IDisposable
         void OnFireballDir(InputAction.CallbackContext context);
         void OnMove(InputAction.CallbackContext context);
     }
-    public interface IMenuActions
+    public interface IUINavigationActions
     {
         void OnNextSelection(InputAction.CallbackContext context);
         void OnPreviousSelection(InputAction.CallbackContext context);
         void OnConfirm(InputAction.CallbackContext context);
         void OnExit(InputAction.CallbackContext context);
-    }
-    public interface IPlayerControlRebindingActions
-    {
-        void OnNewaction(InputAction.CallbackContext context);
     }
 }
