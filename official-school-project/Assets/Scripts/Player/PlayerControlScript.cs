@@ -161,6 +161,7 @@ public class PlayerControlScript : MonoBehaviour
 
 	//performance
 	private bool performanceWithNoGravity;
+	private bool performanceWithNoFriction;
 	#endregion
 
 
@@ -455,7 +456,7 @@ public class PlayerControlScript : MonoBehaviour
 	//friction
 	private void myFrictionMain() // horizontal
 	{
-		if(!isMoving && isFrictionActive && !(isFireballPushForceAdding && fireballDir.x != 0) /*&& !isControlBySpring*/)
+		if(!isMoving && isFrictionActive && !(isFireballPushForceAdding && fireballDir.x != 0) && !(PlayerPerformanceSystemScript.instance.isBeingControl && performanceWithNoFriction) /*&& !isControlBySpring*/)
 		{
 			if(rb.velocity.x < 0)
 			{
@@ -492,7 +493,8 @@ public class PlayerControlScript : MonoBehaviour
 				mySetGravity(myNormalGravityScale, myNormalGravityMaxSpeed);
 		}
 
-		myAccelerationWithFixedDeltatime(Vector2.down * myGravityScale, Vector2.down * myGravityMaxSpeed);
+		if(!performanceWithNoGravity)
+			myAccelerationWithFixedDeltatime(Vector2.down * myGravityScale, Vector2.down * myGravityMaxSpeed);
 
 
 		/*if (!performanceWithNoGravity)
@@ -1247,7 +1249,9 @@ public class PlayerControlScript : MonoBehaviour
 		if (jumpExtraHangTimeCoroutine != null) StopCoroutine(jumpExtraHangTimeCoroutine);
 
 		if (isFireballPushForceAdding) fireballPushForceEnd();
-		//if (fireballHangTimeCoroutine != null) StopCoroutine(fireballHangTimeCoroutine);
+		if (fireballHangTimeCoroutine != null) StopCoroutine(fireballHangTimeCoroutine);
+		
+		if (isFireballExplodeForceAdding) fireballExplodeEnd();
 
 		if (myFrictionLessCoroutine != null) StopCoroutine(myFrictionLessCoroutine);
 
@@ -1360,7 +1364,13 @@ public class PlayerControlScript : MonoBehaviour
 	public void performanceGravity(bool localPerformanceWithNoGravity)
 	{
 		performanceWithNoGravity = localPerformanceWithNoGravity;
-		rb.velocity = Vector2.zero;
+		if(performanceWithNoGravity)
+			rb.velocity = Vector2.zero;
+	}
+
+	public void performanceFriction(bool localPerformanceWithNoFriction)
+	{
+		performanceWithNoFriction = localPerformanceWithNoFriction;
 	}
 
 	#endregion
