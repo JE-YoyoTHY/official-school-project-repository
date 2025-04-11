@@ -70,6 +70,9 @@ public class FireballScript : MonoBehaviour
 		}
     }
 
+
+
+	
 	private void moveMain()
 	{
 		if(moveSpeed > normalMoveSpeed) //apply friction

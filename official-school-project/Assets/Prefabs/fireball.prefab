@@ -4998,7 +4998,7 @@ MonoBehaviour:
   normalMoveSpeed: 40
   fireballFriction: 40
   explodeRadius: 4
-  explodeDuration: 0.1
+  explodeDuration: 0.2
   impulseForce: 0.3
   leavePlayerTime: 0.1
 --- !u!114 &2583024885239792354
