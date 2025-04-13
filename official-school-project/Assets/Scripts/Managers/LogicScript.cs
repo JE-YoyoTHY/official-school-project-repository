@@ -30,6 +30,14 @@ public class LogicScript : MonoBehaviour
 	void Start()
     {
 		gridColor();
+
+		GameObject[] shades = GameObject.FindGameObjectsWithTag("TutorialShade");
+		foreach (GameObject shade in shades)
+		{
+			freezeEndEvent.AddListener(shade.GetComponent<TutorialShadeScript>().freezeEnd);
+		}
+
+		
     }
 
     // Update is called once per frame
@@ -59,6 +67,12 @@ public class LogicScript : MonoBehaviour
 		if (freezeTimer <= 0) // from not freeze to freeze -> set up player
 		{
 			PlayerControlScript.instance.freezeStart();
+
+			GameObject[] shades = GameObject.FindGameObjectsWithTag("TutorialShade");
+			foreach(GameObject shade in shades)
+			{
+				shade.GetComponent<TutorialShadeScript>().freezeStart();
+			}
 		}
 
 		freezeTimer = t;

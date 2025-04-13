@@ -164,6 +164,48 @@ public class PlayerControlScript : MonoBehaviour
 	private bool performanceWithNoFriction;
 	#endregion
 
+	#region public data
+
+	public float m_myNormalGravityScale { get { return myNormalGravityScale; } }
+	public float m_myNormalGravityMaxSpeed { get { return myNormalGravityMaxSpeed; } }
+
+	public float m_myNormalFrictionAcceleration { get { return myNormalFrictionAcceleration; } }
+	public float m_myNormalAdjustFriction { get { return myNormalAdjustFriction; } }
+
+	public float m_moveMaxSpeed {  get { return moveMaxSpeed; } }
+	public float m_moveAcceleration { get { return moveAcceleration; } }
+	
+	public float m_jumpStrength { get { return jumpStrength; } }
+	public float m_jumpGravity { get { return jumpGravity; } }
+	public float m_jumpMinSpeed { get { return jumpMinSpeed; } }
+
+	public float m_jumpExtraHangTimeGravityScale { get { return jumpExtraHangTimeGravityScale; } }
+	
+	public float m_fireballPushForceAcceleration { get { return fireballPushForceAcceleration; } }
+	public float m_fireballPushForceMaxSpeed { get { return fireballPushForceMaxSpeed; } }
+	public float m_fireballPushForceDuration { get { return fireballPushForceDuration; } }
+	public float m_fireballPushUpForceScale { get { return fireballPushUpForceScale; } }
+	public float m_fireballPushForceHangTimeDuration { get { return fireballPushForceDuration; } }
+	
+	public float m_fireballHangTimeFrictionScale { get { return fireballHangTimeFrictionScale; } }
+	public float m_fireballHangTimeMoveSameDirBoost { get { return fireballHangTimeMoveSameDirBoost; } }
+	public float m_fireballHangTimeMoveDifferentDirDecrease { get { return fireballHangTimeMoveDifferentDirDecrease; } }
+	
+	public float m_fireballExplodeForce { get { return fireballExplodeForce; } }
+	public float m_fireballExplodeHorizontalScale { get { return fireballExplodeHorizontalScale; } }
+	public float m_fireballExplodeMoveSameDirBoost { get { return fireballExplodeMoveSameDirBoost; } }
+	public float m_fireballExplodeMoveDifferentDirDecrease { get { return fireballExplodeMoveDifferentDirDecrease; } }
+	public float m_fireballExplodeGuaranteeSpeedScale { get { return fireballExplodeGuaranteeSpeedScale; } }
+	public float m_fireballExplodeMaxSpeedScale { get { return fireballExplodeMaxSpeedScale; } }
+	public float m_fireballExplodeExtraPushUpForce { get { return fireballExplodeExtraPushUpForce; } }
+	public float m_fireballExplodeExtraPushUpAngle { get { return fireballExplodeExtraPushUpAngle; } }
+	public float m_fireballExplodeDuration { get { return fireballExplodeDuration; } }
+	public float m_fireballExplodeGravityScale { get { return fireballExplodeGravityScale; } }
+	public float m_fireballExplodeFriction { get { return fireballExplodeFriction; } }
+	public float m_fireballExplodeAdjustFriction { get { return fireballExplodeAdjustFriction; } }
+	public float m_fireballExplodeMoveAccelerationScale {  get { return fireballExplodeMoveAccelerationScale; } }
+	#endregion
+
 
 
 	// Start is called before the first frame update
@@ -1549,3 +1591,5 @@ public class PlayerControlScript : MonoBehaviour
 
 	#endregion
 }
+
+

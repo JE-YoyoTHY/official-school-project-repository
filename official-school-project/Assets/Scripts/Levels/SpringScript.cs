@@ -99,6 +99,22 @@ public class SpringScript : MonoBehaviour
 			//Vector2 localDir = new Vector2(deltaPos.x, deltaPos.y).normalized;
 			collision.gameObject.GetComponent<FireballScript>().springPush(pushDir.normalized, fireballSpeedScale, hitPlayerVelocity);
 		}
+
+		if (collision.gameObject.tag == "TutorialShade")
+		{
+			TutorialShadeScript shade = collision.gameObject.GetComponent<TutorialShadeScript>();
+
+			//player position, teleport player if player's y position is lower or greater than spring's height, only happen when take player's control
+			Vector3 playerPos = shade.transform.position;
+			if (removePlayerMoveAbility)
+			{
+				if (playerPos.y < transform.position.y + transform.localScale.y * -0.5f) shade.transform.position = new Vector3(playerPos.x, transform.position.y + transform.localScale.y * -0.5f, playerPos.z);
+				if (playerPos.y > transform.position.y + transform.localScale.y * 0.5f) shade.transform.position = new Vector3(playerPos.x, transform.position.y + transform.localScale.y * 0.5f, playerPos.z);
+			}
+
+			//player push
+			shade.springPush(pushDir.normalized * pushForce, removePlayerMoveAbility, springDuration, springGravityScale, springFriction);
+		}
 	}
 
 	private void springPlayerTrigger()
