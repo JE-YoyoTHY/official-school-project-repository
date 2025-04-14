@@ -14,6 +14,8 @@ public class BreakablePlatformScript : MonoBehaviour
 	private bool isRestoreing;
 	private bool playerJumpThisFrame;
 
+	private bool isLeftMost;
+
 	//make breakable platform use tile to set
 	public BreakablePlatformScript tileOnLeft;
 	public BreakablePlatformScript tileOnRight;
@@ -27,7 +29,7 @@ public class BreakablePlatformScript : MonoBehaviour
 	{
 		//StartCoroutine(startInitialization());
 		restoreAfterBreak();
-		//StartCoroutine(mergeCollider());
+		StartCoroutine(mergeCollider());
     }
 
     // Update is called once per frame
@@ -168,7 +170,8 @@ public class BreakablePlatformScript : MonoBehaviour
 		isBreaking = false;
 		isRestoreing = false;
 
-		GetComponent<CompositeCollider2D>().enabled = true;
+		if(isLeftMost)
+			GetComponent<CompositeCollider2D>().enabled = true;
 		transform.GetChild(0).localScale = new Vector3(1, 1, 1);
 	}
 
@@ -188,14 +191,16 @@ public class BreakablePlatformScript : MonoBehaviour
 	{
 		yield return new WaitForSeconds(1);
 
+		
 		if (tileOnLeft != null) yield break;
+		isLeftMost = true;
 
 		int d = depth(1);
 
 		GetComponent<BoxCollider2D>().enabled = true;
 		GetComponent<BoxCollider2D>().usedByComposite = true;
 
-		print(d);
+		//print(d);
 
 		for(int i = 1; i < d; i++)
 		{
