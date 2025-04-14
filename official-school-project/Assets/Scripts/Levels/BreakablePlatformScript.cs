@@ -27,6 +27,7 @@ public class BreakablePlatformScript : MonoBehaviour
 	{
 		//StartCoroutine(startInitialization());
 		restoreAfterBreak();
+		//StartCoroutine(mergeCollider());
     }
 
     // Update is called once per frame
@@ -69,7 +70,7 @@ public class BreakablePlatformScript : MonoBehaviour
 	{
 		if (collision.CompareTag("BreakablePlatform"))
 		{
-			print("s;fja;sldfja");
+			//print("s;fja;sldfja");
 
 			tileOnRight = collision.GetComponent<BreakablePlatformScript>();
 			tileOnRight.tileOnLeft = this;
@@ -151,7 +152,7 @@ public class BreakablePlatformScript : MonoBehaviour
 
 		transform.GetChild(0).localScale = new Vector3(1, 0, 1);
 
-		GetComponent<Collider2D>().enabled = false;
+		GetComponent<CompositeCollider2D>().enabled = false;
 
 		if (byFireball)
 		{
@@ -167,7 +168,7 @@ public class BreakablePlatformScript : MonoBehaviour
 		isBreaking = false;
 		isRestoreing = false;
 
-		GetComponent<Collider2D>().enabled = true;
+		GetComponent<CompositeCollider2D>().enabled = true;
 		transform.GetChild(0).localScale = new Vector3(1, 1, 1);
 	}
 
@@ -181,5 +182,38 @@ public class BreakablePlatformScript : MonoBehaviour
 			if (tileOnLeft != lastTile && tileOnLeft != null) tileOnLeft.playerJumpOnThisTraversal(this);
 			if (tileOnRight != lastTile && tileOnRight != null) tileOnRight.playerJumpOnThisTraversal(this);
 		}
+	}
+
+	private IEnumerator mergeCollider() // merge by disable other collider nearby and add new collider to the leftmost one
+	{
+		yield return new WaitForSeconds(1);
+
+		if (tileOnLeft != null) yield break;
+
+		int d = depth(1);
+
+		GetComponent<BoxCollider2D>().enabled = true;
+		GetComponent<BoxCollider2D>().usedByComposite = true;
+
+		print(d);
+
+		for(int i = 1; i < d; i++)
+		{
+			//Collider2D newColl = gameObject.AddComponent(typeof(Collider2D)) as Collider2D;
+			BoxCollider2D newColl = gameObject.AddComponent<BoxCollider2D>() as BoxCollider2D;
+			newColl.enabled = true;
+			newColl.usedByComposite = true;
+			newColl.offset = Vector2.right * i;
+		}
+
+
+	}
+
+	public int depth(int d) // d for current depth
+	{
+		GetComponent<BoxCollider2D>().enabled = false;
+
+		if (tileOnRight != null) return tileOnRight.depth(d + 1);
+		else return d;
 	}
 }
