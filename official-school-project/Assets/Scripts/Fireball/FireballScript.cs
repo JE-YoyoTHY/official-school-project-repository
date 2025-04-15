@@ -155,8 +155,8 @@ public class FireballScript : MonoBehaviour
 		isExploding = true;
 
 		
-		//transform.localScale = new Vector3(explodeRadius / coll.radius, explodeRadius / coll.radius, 1);
-		transform.localScale = new Vector3(1f, 1f, 1f);
+		transform.localScale = new Vector3(explodeRadius / coll.radius, explodeRadius / coll.radius, 1);
+		//transform.localScale = new Vector3(1f, 1f, 1f);
 
 
 		rb.velocity = Vector2.zero;
@@ -209,9 +209,9 @@ public class FireballScript : MonoBehaviour
 			yield return null;
 		}
 		Destroy(gameObject);
-		animator.enabled = false;
-		animator.enabled = false;
-		GetComponent<SpriteRenderer>().enabled = false;
+		//animator.enabled = false;
+		//animator.enabled = false;
+		//GetComponent<SpriteRenderer>().enabled = false;
 	}
 
 	private void OnTriggerStay2D(Collider2D collision)
