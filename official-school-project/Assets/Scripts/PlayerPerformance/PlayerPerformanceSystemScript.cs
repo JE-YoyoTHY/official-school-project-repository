@@ -37,6 +37,7 @@ public class PlayerPerformanceSystemScript : MonoBehaviour
         if (currentController != null)
 		{
 			currentController.controlMain();
+			//print(currentController.gameObject);
 		}
     }
 

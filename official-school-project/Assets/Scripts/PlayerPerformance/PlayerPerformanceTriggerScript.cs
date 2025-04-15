@@ -59,16 +59,31 @@ public class PlayerPerformanceTriggerScript : MonoBehaviour
 			PlayerPerformanceSystemScript.instance.controlEnd();
 		}
 
+		//gravity and friction
+		PlayerControlScript.instance.performanceGravity(performanceTriggerInspectorObject.performWithNoGravity);
+		PlayerControlScript.instance.performanceFriction(performanceTriggerInspectorObject.performWithNoFriction);
+
 		//trigger action if needed
 		if (performanceTriggerInspectorObject.action == PerformanceAction.waitForSecond)
 		{
 			StartCoroutine(waitForSecondMain());
 		}
+
+		if (performanceTriggerInspectorObject.action == PerformanceAction.move)
+		{
+			PlayerControlScript.instance.performanceFriction(true);
+		}
+
+		
 	}
 
 	public void disableTrigger()
 	{
 		performanceTriggerInspectorObject.endEvent.Invoke();
+
+		//gravity and friction
+		PlayerControlScript.instance.performanceGravity(performanceTriggerInspectorObject.performWithNoGravity);
+		PlayerControlScript.instance.performanceFriction(performanceTriggerInspectorObject.performWithNoFriction);
 	}
 
 	public void enableNextTrigger()
@@ -166,7 +181,7 @@ public class PlayerPerformanceTriggerScript : MonoBehaviour
 	private IEnumerator waitForSecondMain()
 	{
 		float t = performanceTriggerInspectorObject.waitTime;
-		PlayerControlScript.instance.performanceGravity(performanceTriggerInspectorObject.waitWithNoGravity);
+		//PlayerControlScript.instance.performanceGravity(performanceTriggerInspectorObject.waitWithNoGravity);
 
 		while (t > 0)
 		{
@@ -180,7 +195,7 @@ public class PlayerPerformanceTriggerScript : MonoBehaviour
 			yield return null;
 		}
 
-		PlayerControlScript.instance.performanceGravity(false);
+		//PlayerControlScript.instance.performanceGravity(false);
 		enableNextTrigger();
 	}
 
@@ -219,6 +234,8 @@ public class PerformanceTriggerInspectorObject
 	[Header("Secondary Functions")]
 	public float jumpStrength;
 	public ScreenShakeProfile screenShakeProfile;
+	public bool performWithNoGravity;
+	public bool performWithNoFriction;
 
 
 	//move
@@ -230,7 +247,7 @@ public class PerformanceTriggerInspectorObject
 
 	//wait for second
 	[HideInInspector] public float waitTime;
-	[HideInInspector] public bool waitWithNoGravity;
+	//[HideInInspector] public bool waitWithNoGravity;
 	[HideInInspector] public bool waitWithScreenShake;
 }
 
@@ -294,8 +311,8 @@ public class PerformanceScriptEditor : Editor
 			{
 				playerPerformanceTrigger.performanceTriggerInspectorObject.waitTime =
 					EditorGUILayout.FloatField("Wait Time", playerPerformanceTrigger.performanceTriggerInspectorObject.waitTime);
-				playerPerformanceTrigger.performanceTriggerInspectorObject.waitWithNoGravity =
-					EditorGUILayout.Toggle("Wait With No Gravity", playerPerformanceTrigger.performanceTriggerInspectorObject.waitWithNoGravity);
+				//playerPerformanceTrigger.performanceTriggerInspectorObject.waitWithNoGravity =
+					//EditorGUILayout.Toggle("Wait With No Gravity", playerPerformanceTrigger.performanceTriggerInspectorObject.waitWithNoGravity);
 				playerPerformanceTrigger.performanceTriggerInspectorObject.waitWithScreenShake =
 					EditorGUILayout.Toggle("Wait With Screen Shake", playerPerformanceTrigger.performanceTriggerInspectorObject.waitWithScreenShake);
 			}

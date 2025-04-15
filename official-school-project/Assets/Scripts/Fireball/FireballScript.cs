@@ -341,6 +341,18 @@ public class FireballScript : MonoBehaviour
 		{
 			Physics2D.IgnoreCollision(coll, playerColl, ignore);
 		}
+
+		GameObject[] tutor_objs = GameObject.FindGameObjectsWithTag("TutorialShade");
+		foreach (GameObject obj in tutor_objs)
+		{
+			Physics2D.IgnoreCollision(coll, obj.GetComponent<Collider2D>(), true);
+		}
+
+		tutor_objs = GameObject.FindGameObjectsWithTag("TutorialShadeFireball");
+		foreach (GameObject obj in tutor_objs)
+		{
+			Physics2D.IgnoreCollision(coll, obj.GetComponent<Collider2D>(), true);
+		}
 	}
 
 }
