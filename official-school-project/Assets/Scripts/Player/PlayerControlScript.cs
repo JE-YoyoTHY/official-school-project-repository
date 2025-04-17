@@ -123,10 +123,10 @@ public class PlayerControlScript : MonoBehaviour
 	[SerializeField] private float fireballExplodeFreezeTime;
 	[SerializeField] private float fireballExplodeMoveSameDirBoost;
 	[SerializeField] private float fireballExplodeMoveDifferentDirDecrease;
-	[SerializeField] private float fireballExplodeGuaranteeSpeedScale; // ¤õ²yÃz¬µªºÄ_©³³t«×¡A¦]¬°¤õ²y³t«×¬O¥Î¥[ªº, ¥H³o¦¸­n¥[ªº³t«×¬°°ò·Ç
-	[SerializeField] private float fireballExplodeMaxSpeedScale; // ¥Hexplode force¬°°ò·Ç, x y ¤À§O³B²z
+	[SerializeField] private float fireballExplodeGuaranteeSpeedScale; // ï¿½ï¿½ï¿½yï¿½zï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½tï¿½×¡Aï¿½]ï¿½ï¿½ï¿½ï¿½ï¿½yï¿½tï¿½×¬Oï¿½Î¥[ï¿½ï¿½, ï¿½Hï¿½oï¿½ï¿½ï¿½nï¿½[ï¿½ï¿½ï¿½tï¿½×¬ï¿½ï¿½ï¿½ï¿½
+	[SerializeField] private float fireballExplodeMaxSpeedScale; // ï¿½Hexplode forceï¿½ï¿½ï¿½ï¿½ï¿½, x y ï¿½ï¿½ï¿½Oï¿½Bï¿½z
 	[SerializeField] private float fireballExplodeExtraPushUpForce;
-	[SerializeField] private float fireballExplodeExtraPushUpAngle; //¦pªG¤è¦V¦V¶qªº­Á¨¤»P¥õ¨¤¦b¦¹¼Æ­È¤§¶¡¡A·|µ¹¤©¤@¦V¤W³t«×
+	[SerializeField] private float fireballExplodeExtraPushUpAngle; //ï¿½pï¿½Gï¿½ï¿½Vï¿½Vï¿½qï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Pï¿½ï¿½ï¿½ï¿½ï¿½bï¿½ï¿½ï¿½Æ­È¤ï¿½ï¿½ï¿½ï¿½Aï¿½|ï¿½ï¿½ï¿½ï¿½ï¿½@ï¿½Vï¿½Wï¿½tï¿½ï¿½
 	[SerializeField] private float fireballExplodeDuration;
 	[SerializeField] private float fireballExplodeGravityScale;
 	[SerializeField] private float fireballExplodeFriction;
@@ -148,7 +148,7 @@ public class PlayerControlScript : MonoBehaviour
 	private Coroutine deathRespawnPlayerControlRegainCoroutine;
 	public LevelManagerScript currentLevel { get; private set; }
 	public bool isDying { get; private set; } = false;
-	//private GameObject currentRespawnPoint; // idk ­n©ñ¦bPlayerÁÙ¬Olevel manager
+	//private GameObject currentRespawnPoint; // idk ï¿½nï¿½ï¿½bPlayerï¿½Ù¬Olevel manager
 	
 	//const layer
 	private const int killZoneLayer = 7;
@@ -433,7 +433,7 @@ public class PlayerControlScript : MonoBehaviour
 					{
 						myAcceleration(new Vector2(moveAcceleration * moveKeyValue, 0), new Vector2(moveMaxSpeed * moveKeyValue, 0));
 					}
-					else  // moveKeyValue * rb.velocity.x < 0, ¤£¦P¤è¦V
+					else  // moveKeyValue * rb.velocity.x < 0, ï¿½ï¿½ï¿½Pï¿½ï¿½V
 					{
 						/* inspired by celeste, that player is hard to turn around in air
 						 * and i dont want player is harder to stop when they try to turn than stop moving
@@ -761,9 +761,9 @@ public class PlayerControlScript : MonoBehaviour
 		fireballChargeMain();
 	}
 
-	/* ·íª±®a«ö¤U«öÁä«á¥BcanCastFireball°õ¦æ
-	 * --¶i¤J­áµ²´V
-	 * --­áµ²´Vµ²§ô«á°õ¦æfireballSummon and fireballPushStart
+	/* ï¿½ï¿½ï¿½ï¿½ï¿½aï¿½ï¿½ï¿½Uï¿½ï¿½ï¿½ï¿½ï¿½BcanCastFireballï¿½ï¿½ï¿½ï¿½
+	 * --ï¿½iï¿½Jï¿½áµ²ï¿½V
+	 * --ï¿½áµ²ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½fireballSummon and fireballPushStart
 	 */
 	public void fireballStart(bool isCastByKeyboard) 
 	{
@@ -1116,8 +1116,21 @@ public class PlayerControlScript : MonoBehaviour
 	{
 		if (collision.gameObject.layer == killZoneLayer)
 		{
-			if(deathRespawnDelayCoroutine == null)
-			playerDeathDelayStart();
+			if (collision.CompareTag("DeadZoneSpike"))
+			{
+				DeadZoneScript deadZone = collision.GetComponent<DeadZoneScript>();
+				if (deadZone.deadZoneDirection.x * rb.velocity.x < 0 || deadZone.deadZoneDirection.y * rb.velocity.y < 0)
+				{
+					if(deathRespawnDelayCoroutine == null)
+					playerDeathDelayStart();
+				}
+			}
+			else
+			{
+				if(deathRespawnDelayCoroutine == null)
+				playerDeathDelayStart();
+			}
+			
 		}
 
 		if (collision.gameObject.layer == levelTriggerLayer)
@@ -1459,11 +1472,11 @@ public class PlayerControlScript : MonoBehaviour
 		//fireball dir
 		//player can change fb dir in freeze frame,
 		//case 1:
-		//	ª±®a¤@ª½¨S¸I¤è¦VÁä->ª±®a³Ì«áÄ²¸Iªº¤ô¥­¤è¦V
+		//	ï¿½ï¿½ï¿½aï¿½@ï¿½ï¿½ï¿½Sï¿½Iï¿½ï¿½Vï¿½ï¿½->ï¿½ï¿½ï¿½aï¿½Ì«ï¿½Ä²ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½V
 		//case 2:
-		//	ª±®a¦b­áµ²´V´Á¶¡§ïÅÜ¤è¦VÁä->ª±®a·s«öªº¤è¦V
+		//	ï¿½ï¿½ï¿½aï¿½bï¿½áµ²ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü¤ï¿½Vï¿½ï¿½->ï¿½ï¿½ï¿½aï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½V
 		//case 3:
-		//	ª±®a¦b­áµ²´V´Á¶¡©ñ¶}¤è¦VÁä->ª±®a³Ì«áÄ²¸Iªº¤è¦V
+		//	ï¿½ï¿½ï¿½aï¿½bï¿½áµ²ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½}ï¿½ï¿½Vï¿½ï¿½->ï¿½ï¿½ï¿½aï¿½Ì«ï¿½Ä²ï¿½Iï¿½ï¿½ï¿½ï¿½V
 		if (!isFireballPushForceAdding)
 		{
 			fireballDir = InputManagerScript.instance.fireballDirInput;
@@ -1510,9 +1523,9 @@ public class PlayerControlScript : MonoBehaviour
 
 			//fireball dir
 			player can change fb dir in freeze frame, 
-			case 1:ª±®a¤@ª½¨S¸I¤è¦VÁä -> ª±®a³Ì«áÄ²¸Iªº¤ô¥­¤è¦V
-			case 2:ª±®a¦b­áµ²´V´Á¶¡§ïÅÜ¤è¦VÁä -> ª±®a·s«öªº¤è¦V
-			case 3:ª±®a¦b­áµ²´V´Á¶¡©ñ¶}¤è¦VÁä -> ª±®a³Ì«áÄ²¸Iªº¤è¦V
+			case 1:ï¿½ï¿½ï¿½aï¿½@ï¿½ï¿½ï¿½Sï¿½Iï¿½ï¿½Vï¿½ï¿½ -> ï¿½ï¿½ï¿½aï¿½Ì«ï¿½Ä²ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½V
+			case 2:ï¿½ï¿½ï¿½aï¿½bï¿½áµ²ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü¤ï¿½Vï¿½ï¿½ -> ï¿½ï¿½ï¿½aï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½V
+			case 3:ï¿½ï¿½ï¿½aï¿½bï¿½áµ²ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½}ï¿½ï¿½Vï¿½ï¿½ -> ï¿½ï¿½ï¿½aï¿½Ì«ï¿½Ä²ï¿½Iï¿½ï¿½ï¿½ï¿½V
 
 			if (!isFireballPushForceAdding)
 			{

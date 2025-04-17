@@ -71,6 +71,9 @@ public class CloudSpawner : MonoBehaviour
 	[SerializeField] private float prefabMoveSpeedMin, prefabMoveSpeedMax;
 	private float moveSpeed;
 	//[SerializeField] private Object[] images;
+	[SerializeField] private GameObject spawnPos;
+
+	[SerializeField] private Sprite[] imgs;
 
 
 	private void Start()
@@ -126,7 +129,7 @@ public class CloudSpawner : MonoBehaviour
 
 		//spawn
 		prefabInstance = Instantiate(cloudPrefab, transform.parent);
-		prefabInstance.GetComponent<CloudSpawner>().prefabInit(Random.Range(prefabMoveSpeedMin, prefabMoveSpeedMax), Random.Range(-YRange, YRange));
+		prefabInstance.GetComponent<CloudSpawner>().prefabInit(Random.Range(prefabMoveSpeedMin, prefabMoveSpeedMax), Random.Range(-YRange, YRange), spawnPos);
 
 		//inner cycle
 		spawnAmountCounter--;
@@ -145,19 +148,26 @@ public class CloudSpawner : MonoBehaviour
 
 	private void moveMain()
 	{
-		rect.position = rect.position - new Vector3(moveSpeed, 0, 0);
+		rect.position = rect.position - new Vector3(moveSpeed * Time.deltaTime, 0, 0);
 
-		if (rect.position.x < -3000)
+		//print(rect.anchoredPosition);
+		
+		if (rect.anchoredPosition.x < -3000)
 		{
 			Destroy(gameObject);
 		}
 	}
 
-	public void prefabInit(float speed, float y)
+	public void prefabInit(float speed, float y, GameObject pos)
 	{
 		moveSpeed = speed * Time.deltaTime;
 		rect = GetComponent<RectTransform>();
-		rect.position = new Vector3(1000f, y, 0f);
+		//rect.position = new Vector3(1000f, y, 0f);
+		rect.anchoredPosition = pos.GetComponent<RectTransform>().anchoredPosition;
+		rect.anchoredPosition = new Vector3(rect.anchoredPosition.x, rect.anchoredPosition.y + y, 0);
+
+		//GetComponent<Image>().sourceImage = imgs[Random.Range(0, imgs.Length)];
+		//print(rect.position);
 	}
 
 	#endregion

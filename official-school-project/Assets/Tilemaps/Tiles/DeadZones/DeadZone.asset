@@ -13,18 +13,18 @@ MonoBehaviour:
   m_Name: DeadZone
   m_EditorClassIdentifier: 
   m_DefaultSprite: {fileID: 21300000, guid: 303ad16f4830a23478bfa713f8da8223, type: 3}
-  m_DefaultGameObject: {fileID: 8394977813273698232, guid: 9805d981c69488743b6e1d7c07403210, type: 3}
-  m_DefaultColliderType: 2
+  m_DefaultGameObject: {fileID: 0}
+  m_DefaultColliderType: 1
   m_TilingRules:
   - m_Id: 0
     m_Sprites:
-    - {fileID: 21300000, guid: 303ad16f4830a23478bfa713f8da8223, type: 3}
+    - {fileID: 0}
     m_GameObject: {fileID: 8394977813273698232, guid: 9805d981c69488743b6e1d7c07403210, type: 3}
     m_MinAnimationSpeed: 1
     m_MaxAnimationSpeed: 1
     m_PerlinScale: 0.5
     m_Output: 0
-    m_ColliderType: 1
+    m_ColliderType: 2
     m_RandomTransform: 0
     m_Neighbors: 0200000001000000
     m_NeighborPositions:
@@ -33,8 +33,8 @@ MonoBehaviour:
     m_RuleTransform: 0
   - m_Id: 1
     m_Sprites:
-    - {fileID: 21300000, guid: 15c547080f478e34ab4099c1703c8700, type: 3}
-    m_GameObject: {fileID: 8394977813273698232, guid: 9805d981c69488743b6e1d7c07403210, type: 3}
+    - {fileID: 0}
+    m_GameObject: {fileID: 232183815878308001, guid: b4892eb32f074ad439a970c00d02ca8c, type: 3}
     m_MinAnimationSpeed: 1
     m_MaxAnimationSpeed: 1
     m_PerlinScale: 0.5
@@ -45,4 +45,34 @@ MonoBehaviour:
     m_NeighborPositions:
     - {x: 0, y: -1, z: 0}
     - {x: 0, y: 1, z: 0}
+    m_RuleTransform: 0
+  - m_Id: 2
+    m_Sprites:
+    - {fileID: 0}
+    m_GameObject: {fileID: 7835763529166648840, guid: 7c17b3dc757df7e4f8f4f7f22f1f5600, type: 3}
+    m_MinAnimationSpeed: 1
+    m_MaxAnimationSpeed: 1
+    m_PerlinScale: 0.5
+    m_Output: 0
+    m_ColliderType: 2
+    m_RandomTransform: 0
+    m_Neighbors: 0200000001000000
+    m_NeighborPositions:
+    - {x: 1, y: 0, z: 0}
+    - {x: -1, y: 0, z: 0}
+    m_RuleTransform: 0
+  - m_Id: 3
+    m_Sprites:
+    - {fileID: 0}
+    m_GameObject: {fileID: 1675985972952561037, guid: c90b91335acb9ab4cad98be9a691fdc9, type: 3}
+    m_MinAnimationSpeed: 1
+    m_MaxAnimationSpeed: 1
+    m_PerlinScale: 0.5
+    m_Output: 0
+    m_ColliderType: 2
+    m_RandomTransform: 0
+    m_Neighbors: 0100000002000000
+    m_NeighborPositions:
+    - {x: 1, y: 0, z: 0}
+    - {x: -1, y: 0, z: 0}
     m_RuleTransform: 0

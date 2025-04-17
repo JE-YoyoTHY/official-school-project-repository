@@ -5,6 +5,10 @@ using UnityEngine;
 
 public class FireballScript : MonoBehaviour
 {
+	[Header("Collision")]
+	[SerializeField] private FireballTriggerScript triggerOnLeft;
+	[SerializeField] private FireballTriggerScript triggerOnRight;
+
 	//variable
 	private Rigidbody2D rb;
 	private CircleCollider2D coll;
@@ -14,6 +18,8 @@ public class FireballScript : MonoBehaviour
 
 	private Vector2 moveDir;
 	private float moveSpeed;
+
+	[Header("Fireball Settings")]
 	[SerializeField] private float normalMoveSpeed;
 	[SerializeField] private float fireballFriction; // reduce its speed to normal when speed is greater than normal, for example : spring
 	//[SerializeField] private float explodeForce;
@@ -147,6 +153,8 @@ public class FireballScript : MonoBehaviour
 		movingParticle = transform.GetChild(0).GetComponent<ParticleSystem>(); // child 0 -> particle system
 		movingParticle.transform.rotation = Quaternion.FromToRotation(Vector3.left, moveDir * -1);
 
+		//animation
+		transform.rotation = Quaternion.FromToRotation(Vector3.up, moveDir);
 		animator.Play("FireballFly");
 	}
 
@@ -174,6 +182,12 @@ public class FireballScript : MonoBehaviour
 		//collision
 		myIgnoreCollision(false);
 		coll.isTrigger = true;
+
+		triggerOnLeft.gameObject.SetActive(false);
+		triggerOnRight.gameObject.SetActive(false);
+
+		//animation
+		transform.rotation = Quaternion.identity;
 
 	}
 
@@ -287,7 +301,7 @@ public class FireballScript : MonoBehaviour
 			 * and my solution to make fb pass through is
 			 * when it touch one way platform and move upwards
 			 */
-			if ((collision.gameObject.layer == groundLayer || collision.gameObject.tag == "Fireball" /*|| (collision.gameObject.tag == "Player" && leftPlayer)*/) && !isExploding)
+			if (((collision.gameObject.layer == groundLayer && triggerOnLeft.isColliding && triggerOnRight.isColliding) || collision.gameObject.tag == "Fireball" /*|| (collision.gameObject.tag == "Player" && leftPlayer)*/) && !isExploding)
 			{
 				if (collision.gameObject.tag == "BreakablePlatform")
 				{
@@ -331,6 +345,9 @@ public class FireballScript : MonoBehaviour
 
 		leftPlayer = true;
 		myIgnoreCollision(false);
+
+		//rotation
+		transform.rotation = Quaternion.FromToRotation(Vector3.up, moveDir);
 	}
 
 	private void myIgnoreCollision(bool ignore)

@@ -154,7 +154,11 @@ public class BreakablePlatformScript : MonoBehaviour
 
 		transform.GetChild(0).localScale = new Vector3(1, 0, 1);
 
-		GetComponent<CompositeCollider2D>().enabled = false;
+		//GetComponent<CompositeCollider2D>().enabled = false;
+		Collider2D[] colls2D = GetComponents<BoxCollider2D>();
+		foreach (var coll2D in colls2D){
+			coll2D.enabled = false;
+		}
 
 		if (byFireball)
 		{
@@ -170,8 +174,12 @@ public class BreakablePlatformScript : MonoBehaviour
 		isBreaking = false;
 		isRestoreing = false;
 
-		if(isLeftMost)
-			GetComponent<CompositeCollider2D>().enabled = true;
+		//if(isLeftMost)
+		//	GetComponent<CompositeCollider2D>().enabled = true;
+		Collider2D[] colls2D = GetComponents<BoxCollider2D>();
+		foreach (var coll2D in colls2D){
+			coll2D.enabled = true;
+		}
 		transform.GetChild(0).localScale = new Vector3(1, 1, 1);
 	}
 
