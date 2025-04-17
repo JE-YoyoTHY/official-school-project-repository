@@ -375,12 +375,7 @@ public class InstructionUIManager : MonoBehaviour
 
     #endregion
 
-    #region FUNCTION: setInstructionSize()
-    public void setInstructionSize()
-    {
 
-    }
-    #endregion
 
 
 
