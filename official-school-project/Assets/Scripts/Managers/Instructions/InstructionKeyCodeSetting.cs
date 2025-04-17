@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class InstructionKeyCodeSetting : MonoBehaviour
 {
@@ -85,6 +86,9 @@ public class InstructionKeyCodeSetting : MonoBehaviour
 
         else if (currentInstruction == InstructionsTypeEnum.JumpInstruction)
         {
+            print(inputActions[ActionsEnum.Jump]);
+            print(inputActions[ActionsEnum.Jump].bindings[0]);
+
             getAllKeyCodeLabel()[0].GetComponent<TextMeshProUGUI>().text = rebindingUI.convertBindingNameToReadableName(inputActions[ActionsEnum.Jump].bindings[0]);
         }
 
@@ -109,10 +113,12 @@ public class InstructionKeyCodeSetting : MonoBehaviour
     {
         List<GameObject> result = new List<GameObject>();
 
-        GameObject background = gameObject.transform.GetChild(0).transform.gameObject;
-        for (int i = 1; i < background.transform.childCount; i++)
+        GameObject background = transform.GetChild(0).transform.gameObject;
+        GameObject horizontalLayout = background.transform.GetChild(1).transform.gameObject;  // child 0: ActionNameLabel | child 1: KeyboardKeyImage_HorizontalLayout
+        
+        for (int i = 0; i < horizontalLayout.transform.childCount; i++)
         {
-            GameObject keyboardKeyImage = background.transform.GetChild(i).transform.gameObject;
+            GameObject keyboardKeyImage = horizontalLayout.transform.GetChild(i).transform.gameObject;
 
             if (keyboardKeyImage.transform.childCount > 0)
             {
@@ -126,4 +132,52 @@ public class InstructionKeyCodeSetting : MonoBehaviour
 
         return result;
     }
+
+    #region FUNCTION: setInstructionSize()
+    [ContextMenu("set instruction size")]
+    public void setInstructionSize()
+    {
+        const string imageFilterName = "KeyboardKeyImage";
+        const float charWidth = 26.5f;
+        const float margin = 46.0f;
+
+        GameObject background = transform.GetChild(0).transform.gameObject;
+        GameObject horizontalLayout = background.transform.GetChild(1).transform.gameObject;  // child 0: ActionNameLabel | child 1: KeyboardKeyImage_HorizontalLayout
+        List<GameObject> horizontalLayout_AllChildren = GameObjectMethods.GetAllChildren(background);
+        List<GameObject> horizontalLayout_AllKeyboardKeyImage = new List<GameObject>();
+        foreach (GameObject child in horizontalLayout_AllChildren)
+        {
+            if (child.name.IndexOf(imageFilterName) != -1)
+            {
+                // 不是按鍵圖片
+                horizontalLayout_AllKeyboardKeyImage.Add(child);
+                print(child.name);
+            }
+        }
+
+        float totalDiffWidth = 0;
+        foreach(GameObject keyboardKeyImage in horizontalLayout_AllKeyboardKeyImage)
+        {
+            GameObject keyCodeLabel = keyboardKeyImage.transform.GetChild(0).transform.gameObject;
+            if (keyCodeLabel.GetComponent<TextMeshProUGUI>() != null)
+            {
+                int charCount = keyCodeLabel.GetComponent<TextMeshProUGUI>().text.Length;
+                print($"{keyCodeLabel.GetComponent<TextMeshProUGUI>().text}: {charCount}");
+                float oldWidth = keyboardKeyImage.GetComponent<RectTransform>().sizeDelta.x;
+                float newWidth = charWidth * charCount + margin;
+                float diffWidth = newWidth - oldWidth;
+                totalDiffWidth += diffWidth;
+
+                keyboardKeyImage.GetComponent<RectTransform>().sizeDelta += new Vector2(diffWidth, 0);
+
+
+            }
+        }
+
+        GetComponent<RectTransform>().sizeDelta += new Vector2(totalDiffWidth, 0);
+        background.GetComponent<RectTransform>().sizeDelta += new Vector2(totalDiffWidth, 0);
+
+
+    }
+    #endregion
 }
