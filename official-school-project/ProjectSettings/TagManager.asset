@@ -17,6 +17,7 @@ TagManager:
   - RebindCanvas
   - TutorialShade
   - TutorialShadeFireball
+  - DeadZoneSpike
   layers:
   - Default
   - TransparentFX

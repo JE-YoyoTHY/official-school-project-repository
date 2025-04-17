@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Windows.WebCam;
+using UnityEditor;
 
 
 
@@ -138,7 +139,7 @@ public class LevelManagerScript : MonoBehaviour
 	#region debug function
 
 	[ContextMenu("Test This Level")]
-	private void testThisLevel()
+	public void testThisLevel()
 	{
 		PlayerControlScript.instance.fireballPlayerGetAbility();
 
@@ -153,3 +154,28 @@ public class LevelManagerScript : MonoBehaviour
 
 
 }
+
+
+#if UNITY_EDITOR
+[CustomEditor(typeof(LevelManagerScript))]
+public class LevelManagerCustomInspector : Editor
+{
+	public override void OnInspectorGUI()
+	{
+		base.OnInspectorGUI();
+
+		LevelManagerScript Level = (LevelManagerScript)target;
+
+		
+		if(GUILayout.Button("Test This Level", GUILayout.Width(180f)))
+		{
+			Level.testThisLevel();
+		}
+
+		
+	}
+
+
+}
+
+#endif
