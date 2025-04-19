@@ -34,7 +34,7 @@ public class PlayerControlScript : MonoBehaviour
 	private Rigidbody2D rb;
 	private PlayerGroundTriggerScript groundTrigger;
 	private GameObject fireballMeter;
-	private LogicScript logic;
+	//private LogicScript logic;
 
 
 
@@ -215,7 +215,7 @@ public class PlayerControlScript : MonoBehaviour
 		rb = GetComponent<Rigidbody2D>();
 		groundTrigger = transform.GetChild(0).GetComponent<PlayerGroundTriggerScript>();
 		fireballMeter = transform.GetChild(1).gameObject;
-		logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
+		//logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
 
 		myGravityScale = myNormalGravityScale;
 		myGravityMaxSpeed = myNormalGravityMaxSpeed;
@@ -235,7 +235,7 @@ public class PlayerControlScript : MonoBehaviour
     void Update()
     {
 		inputMain();
-		if (!logic.isFreeze())
+		if (!LogicScript.instance.isFreeze())
 		{
 			groundHitCheckMain();
 			//myGravityMain();
@@ -255,10 +255,13 @@ public class PlayerControlScript : MonoBehaviour
 	//gravity use fixed update can make jump height more constant
 	private void FixedUpdate()
 	{
-		if (!logic.isFreeze())
+		if (!LogicScript.instance.isFreeze())
 		{
 			myFrictionMain();
 			myGravityMain();
+
+			addMoveForce();
+			addFireballPushForce();
 			
 		}
 	}
@@ -421,7 +424,57 @@ public class PlayerControlScript : MonoBehaviour
 
 	private void moveMain()
 	{
-		if(moveKeyValue != 0)
+		//if(moveKeyValue != 0)
+		//{
+		//	if (canMove())
+		//	{
+		//		isMoving = true;
+		//		//normal
+		//		if (fireballHangTimeMoveBoostDir == 0 && !isFireballExplodeForceAdding)
+		//		{
+		//			if (moveKeyValue * rb.velocity.x >= 0) // same direction
+		//			{
+		//				myAcceleration(new Vector2(moveAcceleration * moveKeyValue, 0), new Vector2(moveMaxSpeed * moveKeyValue, 0));
+		//			}
+		//			else  // moveKeyValue * rb.velocity.x < 0, ���P��V
+		//			{
+		//				/* inspired by celeste, that player is hard to turn around in air
+		//				 * and i dont want player is harder to stop when they try to turn than stop moving
+		//				 * so i canceled turn speed scale, and add friction acceleration instead
+		//				 * but that only happen when player is on ground
+		//				 */
+		//				//myAcceleration(new Vector2(moveAcceleration * moveKeyValue * moveTurnSpeedScale, 0), new Vector2(moveMaxSpeed * moveKeyValue, 0));
+		//				if(onGround) myAcceleration(new Vector2((moveAcceleration + myFrictionAcceleration) * moveKeyValue, 0), new Vector2(moveMaxSpeed * moveKeyValue, 0));
+		//				else myAcceleration(new Vector2(moveAcceleration * moveKeyValue, 0), new Vector2(moveMaxSpeed * moveKeyValue, 0));
+		//			}
+		//		}
+		//		else if (fireballHangTimeMoveBoostDir != 0)// fireball hang time boost
+		//		{
+		//			if(moveKeyValue * fireballHangTimeMoveBoostDir > 0) // same dir
+		//			{
+		//				myAcceleration(new Vector2(moveAcceleration * moveKeyValue * fireballHangTimeMoveSameDirBoost, 0), new Vector2(moveMaxSpeed * moveKeyValue * fireballHangTimeMoveSameDirBoost, 0));
+		//			}
+		//			else
+		//			{
+		//				myAcceleration(new Vector2(moveAcceleration * moveKeyValue * fireballHangTimeMoveDifferentDirDecrease, 0), new Vector2(moveMaxSpeed * moveKeyValue * fireballHangTimeMoveDifferentDirDecrease, 0));
+		//			}
+		//		}
+		//		else if (isFireballExplodeForceAdding)
+		//		{
+		//			myAcceleration(new Vector2(moveAcceleration * moveKeyValue * fireballExplodeMoveAccelerationScale, 0), new Vector2(moveMaxSpeed * moveKeyValue, 0));
+		//		}
+		//	}
+		//}
+
+		if(moveKeyValue == 0 || !canMove())
+		{
+			isMoving = false;
+		}
+	}
+
+	private void addMoveForce()
+	{
+		if (moveKeyValue != 0)
 		{
 			if (canMove())
 			{
@@ -431,7 +484,7 @@ public class PlayerControlScript : MonoBehaviour
 				{
 					if (moveKeyValue * rb.velocity.x >= 0) // same direction
 					{
-						myAcceleration(new Vector2(moveAcceleration * moveKeyValue, 0), new Vector2(moveMaxSpeed * moveKeyValue, 0));
+						myAccelerationWithFixedDeltatime(new Vector2(moveAcceleration * moveKeyValue, 0), new Vector2(moveMaxSpeed * moveKeyValue, 0));
 					}
 					else  // moveKeyValue * rb.velocity.x < 0, ���P��V
 					{
@@ -441,50 +494,40 @@ public class PlayerControlScript : MonoBehaviour
 						 * but that only happen when player is on ground
 						 */
 						//myAcceleration(new Vector2(moveAcceleration * moveKeyValue * moveTurnSpeedScale, 0), new Vector2(moveMaxSpeed * moveKeyValue, 0));
-						if(onGround) myAcceleration(new Vector2((moveAcceleration + myFrictionAcceleration) * moveKeyValue, 0), new Vector2(moveMaxSpeed * moveKeyValue, 0));
-						else myAcceleration(new Vector2(moveAcceleration * moveKeyValue, 0), new Vector2(moveMaxSpeed * moveKeyValue, 0));
+						if (onGround) myAccelerationWithFixedDeltatime(new Vector2((moveAcceleration + myFrictionAcceleration) * moveKeyValue, 0), new Vector2(moveMaxSpeed * moveKeyValue, 0));
+						else myAccelerationWithFixedDeltatime(new Vector2(moveAcceleration * moveKeyValue, 0), new Vector2(moveMaxSpeed * moveKeyValue, 0));
 					}
 				}
 				else if (fireballHangTimeMoveBoostDir != 0)// fireball hang time boost
 				{
-					if(moveKeyValue * fireballHangTimeMoveBoostDir > 0) // same dir
+					if (moveKeyValue * fireballHangTimeMoveBoostDir > 0) // same dir
 					{
-						myAcceleration(new Vector2(moveAcceleration * moveKeyValue * fireballHangTimeMoveSameDirBoost, 0), new Vector2(moveMaxSpeed * moveKeyValue * fireballHangTimeMoveSameDirBoost, 0));
+						myAccelerationWithFixedDeltatime(new Vector2(moveAcceleration * moveKeyValue * fireballHangTimeMoveSameDirBoost, 0), new Vector2(moveMaxSpeed * moveKeyValue * fireballHangTimeMoveSameDirBoost, 0));
 					}
 					else
 					{
-						myAcceleration(new Vector2(moveAcceleration * moveKeyValue * fireballHangTimeMoveDifferentDirDecrease, 0), new Vector2(moveMaxSpeed * moveKeyValue * fireballHangTimeMoveDifferentDirDecrease, 0));
+						myAccelerationWithFixedDeltatime(new Vector2(moveAcceleration * moveKeyValue * fireballHangTimeMoveDifferentDirDecrease, 0), new Vector2(moveMaxSpeed * moveKeyValue * fireballHangTimeMoveDifferentDirDecrease, 0));
 					}
 				}
 				else if (isFireballExplodeForceAdding)
 				{
-					myAcceleration(new Vector2(moveAcceleration * moveKeyValue * fireballExplodeMoveAccelerationScale, 0), new Vector2(moveMaxSpeed * moveKeyValue, 0));
+					myAccelerationWithFixedDeltatime(new Vector2(moveAcceleration * moveKeyValue * fireballExplodeMoveAccelerationScale, 0), new Vector2(moveMaxSpeed * moveKeyValue, 0));
 				}
 			}
-		}
-
-		if(moveKeyValue == 0 || !canMove())
-		{
-			isMoving = false;
 		}
 	}
 
 	private bool canMove()
 	{
-		if (!isFireballPushForceAdding && !logic.isFreeze() && isMoveActive && !isControlBySpring && !PlayerPerformanceSystemScript.instance.isBeingControl) return true;
+		if (!isFireballPushForceAdding && !LogicScript.instance.isFreeze() && isMoveActive && !isControlBySpring && !PlayerPerformanceSystemScript.instance.isBeingControl) return true;
 		else return false;
 	}
-
-	/*public void moveInput(InputAction.CallbackContext ctx)
-	{
-		moveKeyValue = (sbyte)ctx.ReadValue<float>();
-	}*/
 
 	IEnumerator moveLess(float t)
 	{
 		while (t > 0)
 		{
-			if (!logic.isFreeze())
+			if (!LogicScript.instance.isFreeze())
 				t -= Time.deltaTime;
 			yield return null;
 		}
@@ -516,7 +559,7 @@ public class PlayerControlScript : MonoBehaviour
 	{
 		while(t > 0)
 		{
-			if (!logic.isFreeze())
+			if (!LogicScript.instance.isFreeze())
 				t -= Time.deltaTime;
 			yield return null;
 		}
@@ -639,7 +682,7 @@ public class PlayerControlScript : MonoBehaviour
 
 	private bool canJump()
 	{
-		if (!isJumping && onGround && !isFireballPushForceAdding && !logic.isFreeze() && isJumpActive && !isControlBySpring && !PlayerPerformanceSystemScript.instance.isBeingControl) return true;
+		if (!isJumping && onGround && !isFireballPushForceAdding && !LogicScript.instance.isFreeze() && isJumpActive && !isControlBySpring && !PlayerPerformanceSystemScript.instance.isBeingControl) return true;
 		else return false;
 	}
 
@@ -660,7 +703,7 @@ public class PlayerControlScript : MonoBehaviour
 	{
 		while(t > 0)
 		{
-			//if (!logic.isFreeze())
+			//if (!LogicScript.instance.isFreeze())
 				t -= Time.deltaTime;
 
 			if(canJump())
@@ -686,7 +729,7 @@ public class PlayerControlScript : MonoBehaviour
 	{
 		while (t > 0)
 		{
-			if (!logic.isFreeze())
+			if (!LogicScript.instance.isFreeze())
 				t -= Time.deltaTime;
 			yield return null;
 		}
@@ -733,7 +776,7 @@ public class PlayerControlScript : MonoBehaviour
 	{
 		while(t > 0)
 		{
-			if (!logic.isFreeze())
+			if (!LogicScript.instance.isFreeze())
 				t -= Time.deltaTime;
 			yield return null;
 		}
@@ -746,16 +789,6 @@ public class PlayerControlScript : MonoBehaviour
 
 	private void fireballMain()
 	{
-		/*if(fireballKeyValue == 2)
-		{
-			fireballKeyValue = 1;
-
-			if(fireballInputCoroutine != null)
-			{
-				StopCoroutine(fireballInputCoroutine);
-			}
-			fireballInputCoroutine = StartCoroutine(fireballPreInput(fireballPreInputTime));	
-		}*/
 
 		fireballPushForceMain();
 		fireballChargeMain();
@@ -795,7 +828,7 @@ public class PlayerControlScript : MonoBehaviour
 
 	private bool canCastFireball()
 	{
-		if (fireballCurrentCharges > 0 && !isFireballPushForceAdding && !logic.isFreeze() && !PlayerPerformanceSystemScript.instance.isBeingControl && fireballPlayerGotten && isFireballActive) return true;
+		if (fireballCurrentCharges > 0 && !isFireballPushForceAdding && !LogicScript.instance.isFreeze() && !PlayerPerformanceSystemScript.instance.isBeingControl && fireballPlayerGotten && isFireballActive) return true;
 		else return false;
 	}
 
@@ -809,30 +842,53 @@ public class PlayerControlScript : MonoBehaviour
 			fireballStartAfterFreezeTimeActive = false;
 		}
 
-		if (isFireballPushForceAdding)
-		{
-			if(fireballDir.magnitude == 0)
-			{
-				myAcceleration(new Vector2(fireballPushForceAcceleration * fireballDirLastHorizontal * -1,0), new Vector2(fireballPushForceMaxSpeed * fireballDirLastHorizontal * -1, 0));
-			}
-            else
-            {
-				Vector2 pushDir = fireballDir.normalized;
-				if (pushDir.y < 0) pushDir = new Vector2(fireballDir.x, fireballDir.y * fireballPushUpForceScale);
-				myAcceleration(pushDir * fireballPushForceAcceleration * -1, pushDir * fireballPushForceMaxSpeed * -1);
-            }
-			fireballPushForceDurationCounter -= Time.deltaTime;
+		//if (isFireballPushForceAdding)
+		//{
+		//	if(fireballDir.magnitude == 0)
+		//	{
+		//		myAcceleration(new Vector2(fireballPushForceAcceleration * fireballDirLastHorizontal * -1,0), new Vector2(fireballPushForceMaxSpeed * fireballDirLastHorizontal * -1, 0));
+		//	}
+  //          else
+  //          {
+		//		Vector2 pushDir = fireballDir.normalized;
+		//		if (pushDir.y < 0) pushDir = new Vector2(fireballDir.x, fireballDir.y * fireballPushUpForceScale);
+		//		myAcceleration(pushDir * fireballPushForceAcceleration * -1, pushDir * fireballPushForceMaxSpeed * -1);
+  //          }
+		//	fireballPushForceDurationCounter -= Time.deltaTime;
 
-			if (fireballPushForceDurationCounter < 0)
-			{
-				fireballPushForceEnd();
-			}
-        }
+		//	if (fireballPushForceDurationCounter < 0)
+		//	{
+		//		fireballPushForceEnd();
+		//	}
+        //}
 		/*else // direction
 		{
 			fireballDir = fireballDirValue;
 			if (fireballDir.x != 0) fireballDirLastHorizontal = (sbyte)fireballDir.x;
 		}*/
+	}
+
+	private void addFireballPushForce()
+	{
+		if (isFireballPushForceAdding)
+		{
+			if (fireballDir.magnitude == 0)
+			{
+				myAccelerationWithFixedDeltatime(new Vector2(fireballPushForceAcceleration * fireballDirLastHorizontal * -1, 0), new Vector2(fireballPushForceMaxSpeed * fireballDirLastHorizontal * -1, 0));
+			}
+			else
+			{
+				Vector2 pushDir = fireballDir.normalized;
+				if (pushDir.y < 0) pushDir = new Vector2(fireballDir.x, fireballDir.y * fireballPushUpForceScale);
+				myAccelerationWithFixedDeltatime(pushDir * fireballPushForceAcceleration * -1, pushDir * fireballPushForceMaxSpeed * -1);
+			}
+			fireballPushForceDurationCounter -= Time.fixedDeltaTime;
+
+			if (fireballPushForceDurationCounter < 0)
+			{
+				fireballPushForceEnd();
+			}
+		}
 	}
 
 	/* friction:
@@ -899,7 +955,7 @@ public class PlayerControlScript : MonoBehaviour
 	IEnumerator fireballExplode(Vector2 localVelocity, Vector2 fireballVelocity) // will end fireball push force and enter hangtime
 	{
 		//coroutine phase 1 -> wait until freezeEnd
-			while(logic.isFreeze()) yield return null;
+			while(LogicScript.instance.isFreeze()) yield return null;
 
 
 		//coroutine phase 2 -> apply explode force and do some setup
@@ -968,7 +1024,7 @@ public class PlayerControlScript : MonoBehaviour
 			float t = fireballExplodeDuration;
 			while(t > 0)
 			{
-				if (!logic.isFreeze())
+				if (!LogicScript.instance.isFreeze())
 					t -= Time.deltaTime;
 				yield return null;
 			}
@@ -1051,7 +1107,7 @@ public class PlayerControlScript : MonoBehaviour
 	{
 		while (t > 0)
 		{
-			//if (!logic.isFreeze())
+			//if (!LogicScript.instance.isFreeze())
 				t -= Time.deltaTime;
 			
 			if (canCastFireball())
@@ -1069,7 +1125,7 @@ public class PlayerControlScript : MonoBehaviour
 	{
 		while(t > 0)
 		{
-			if (!logic.isFreeze())
+			if (!LogicScript.instance.isFreeze())
 				t -= Time.deltaTime;
 			yield return null;
 		}
@@ -1080,7 +1136,7 @@ public class PlayerControlScript : MonoBehaviour
 
 	/*IEnumerator fireballStartAfterFreezeTime()
 	{
-		while(logic.isFreeze()) yield return null;
+		while(LogicScript.instance.isFreeze()) yield return null;
 		fireballSummon();
 		fireballPushForceStart();
 	}*/
@@ -1099,7 +1155,7 @@ public class PlayerControlScript : MonoBehaviour
 	{
 		freezeVelocity = rb.velocity;
 		rb.velocity = Vector2.zero;
-		//logic.setFreezeTime(t);
+		//LogicScript.instance.setFreezeTime(t);
 	}
 
 	public void freezeEnd()
@@ -1119,7 +1175,7 @@ public class PlayerControlScript : MonoBehaviour
 			if (collision.CompareTag("DeadZoneSpike"))
 			{
 				DeadZoneScript deadZone = collision.GetComponent<DeadZoneScript>();
-				if (deadZone.deadZoneDirection.x * rb.velocity.x < 0 || deadZone.deadZoneDirection.y * rb.velocity.y < 0)
+				if (deadZone.noDirection || (deadZone.deadZoneDirection.x * rb.velocity.x < 0 || deadZone.deadZoneDirection.y * rb.velocity.y < 0))
 				{
 					if(deathRespawnDelayCoroutine == null)
 					playerDeathDelayStart();
@@ -1209,7 +1265,7 @@ public class PlayerControlScript : MonoBehaviour
 		if (myFrictionLessCoroutine != null) StopCoroutine(myFrictionLessCoroutine);
 
 		//freeze frame
-		if (logic.isFreeze()) logic.setFreezeTime(0);
+		if (LogicScript.instance.isFreeze()) LogicScript.instance.setFreezeTime(0);
 
 		//physic state
 		mySetGravity(myNormalGravityScale, myNormalGravityMaxSpeed);
@@ -1347,7 +1403,7 @@ public class PlayerControlScript : MonoBehaviour
 
 		while(springDuration > 0)
 		{
-			if(!logic.isFreeze())
+			if(!LogicScript.instance.isFreeze())
 				springDuration -= Time.deltaTime;
 
 			if (localForce.x > 0 && rb.velocity.x < moveMaxSpeed) mySetVx(moveMaxSpeed);
@@ -1399,7 +1455,7 @@ public class PlayerControlScript : MonoBehaviour
 		if (myFrictionLessCoroutine != null) StopCoroutine(myFrictionLessCoroutine);
 
 		//freeze frame
-		//if (logic.isFreeze()) logic.setFreezeTime(0);
+		//if (LogicScript.instance.isFreeze()) LogicScript.instance.setFreezeTime(0);
 
 		//physic state
 		mySetGravity(myNormalGravityScale, myNormalGravityMaxSpeed);
@@ -1484,8 +1540,8 @@ public class PlayerControlScript : MonoBehaviour
 		}
 		else
 		{
-			if (logic.isFreeze() && InputManagerScript.instance.fireballDirInput.magnitude != 0 && fireballCastByKeyboard && !PlayerPerformanceSystemScript.instance.isBeingControl) fireballDir = InputManagerScript.instance.fireballDirInput;
-			if (logic.isFreeze() && fireballMouseDirValue.magnitude != 0 && !fireballCastByKeyboard && !PlayerPerformanceSystemScript.instance.isBeingControl) fireballDir = fireballMouseDirValue;
+			if (LogicScript.instance.isFreeze() && InputManagerScript.instance.fireballDirInput.magnitude != 0 && fireballCastByKeyboard && !PlayerPerformanceSystemScript.instance.isBeingControl) fireballDir = InputManagerScript.instance.fireballDirInput;
+			if (LogicScript.instance.isFreeze() && fireballMouseDirValue.magnitude != 0 && !fireballCastByKeyboard && !PlayerPerformanceSystemScript.instance.isBeingControl) fireballDir = fireballMouseDirValue;
 		}
 		if (fireballDir.x != 0) fireballDirLastHorizontal = (sbyte)fireballDir.x;
 
@@ -1534,8 +1590,8 @@ public class PlayerControlScript : MonoBehaviour
 			}
 			else
 			{
-				if (logic.isFreeze() && fireballDirValue.magnitude != 0 && fireballCastByKeyboard) fireballDir = fireballDirValue;
-				if (logic.isFreeze() && fireballMouseDirValue.magnitude != 0 && !fireballCastByKeyboard) fireballDir = fireballMouseDirValue;
+				if (LogicScript.instance.isFreeze() && fireballDirValue.magnitude != 0 && fireballCastByKeyboard) fireballDir = fireballDirValue;
+				if (LogicScript.instance.isFreeze() && fireballMouseDirValue.magnitude != 0 && !fireballCastByKeyboard) fireballDir = fireballMouseDirValue;
 			}
 			if (fireballDir.x != 0) fireballDirLastHorizontal = (sbyte)fireballDir.x;
 

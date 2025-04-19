@@ -5,5 +5,6 @@ using UnityEngine;
 public class DeadZoneScript : MonoBehaviour
 {
     public Vector2 deadZoneDirection;
+	public bool noDirection;
 
 }

@@ -7,7 +7,7 @@ using static UnityEngine.RuleTile.TilingRuleOutput;
 using Unity.VisualScripting;
 using Cinemachine;
 
-[ExecuteInEditMode]
+//[ExecuteInEditMode]
 public class PlayerPerformanceTriggerScript : MonoBehaviour
 {
 	//variable
@@ -23,7 +23,7 @@ public class PlayerPerformanceTriggerScript : MonoBehaviour
 	}
 
 	// Update is called once per frame
-	void Update()
+	void OnDrawGizmos()
     {
         if(performanceTriggerInspectorObject.action == PerformanceAction.move)
 		{
