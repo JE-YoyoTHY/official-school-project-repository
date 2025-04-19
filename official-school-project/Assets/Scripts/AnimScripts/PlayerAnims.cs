@@ -13,7 +13,7 @@ public class PlayerAnims : MonoBehaviour
     private PlayerGroundTriggerScript playerGroundTriggerScript;
 
     #region States
-    // states, ¦P®É¤]¬O°Êµeªº¦WºÙ
+    // states, ï¿½Pï¿½É¤]ï¿½Oï¿½Êµeï¿½ï¿½ï¿½Wï¿½ï¿½
     public string currentState;
     public string STATE_IDLE { get; private set; } = "PlayerIdle";
     public string STATE_RUN { get; private set; } = "PlayerRun";
@@ -33,8 +33,8 @@ public class PlayerAnims : MonoBehaviour
     private Rigidbody2D playerRb2D;
     [SerializeField] private Vector2 previousVelocity;
     [SerializeField] private Vector2 currentVelocity;
-    [SerializeField] private float hardLandMinVy = 10f;  // ­n²Å¦XHardLand©Ò»Ýªº³Ì¤pY³t«×
-    [SerializeField] private float parkourRollMinVx = 10f;  // ­n²Å¦XHardLand¦P®É¤S­n¦³³Ì¤pX³t«×¤~·|Â½ºu
+    [SerializeField] private float hardLandMinVy = 10f;  // ï¿½nï¿½Å¦XHardLandï¿½Ò»Ýªï¿½ï¿½Ì¤pYï¿½tï¿½ï¿½
+    [SerializeField] private float parkourRollMinVx = 10f;  // ï¿½nï¿½Å¦XHardLandï¿½Pï¿½É¤Sï¿½nï¿½ï¿½ï¿½Ì¤pXï¿½tï¿½×¤~ï¿½|Â½ï¿½u
     [SerializeField] private bool previousIsGrounded;
     [SerializeField] private bool currentIsGrounded;
     private sbyte facingDir;
@@ -46,7 +46,7 @@ public class PlayerAnims : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         player = GameObject.FindGameObjectWithTag("Player");
         playerControlScript = player.GetComponent<PlayerControlScript>();
-        playerGroundTriggerScript = player.GetComponentInChildren<PlayerGroundTriggerScript>(false);  // false ¥Nªí¥u°»´úactiveªº¤lª«¥ó
+        playerGroundTriggerScript = player.GetComponentInChildren<PlayerGroundTriggerScript>(false);  // false ï¿½Nï¿½ï¿½ï¿½uï¿½ï¿½ï¿½ï¿½activeï¿½ï¿½ï¿½lï¿½ï¿½ï¿½ï¿½
         playerRb2D = playerControlScript.gameObject.GetComponent<Rigidbody2D>();
         currentVelocity = playerRb2D.velocity;
         refreshStateCondition();
@@ -54,7 +54,9 @@ public class PlayerAnims : MonoBehaviour
 
     void Update()
     {
-        transform.position = GameObject.Find("Player").transform.position;
+        //transform.position = GameObject.Find("Player").transform.position;
+        Vector3 playerPos = GameObject.Find("Player").transform.position;
+        transform.position = new Vector3(playerPos.x, playerPos.y+0.5f, transform.position.z);
         facingDir = playerControlScript.moveKeyValue;
         flipPlayerSprite(facingDir);
 
@@ -135,14 +137,14 @@ public class PlayerAnims : MonoBehaviour
         previousIsGrounded = currentIsGrounded;
         currentIsGrounded = playerGroundTriggerScript.isGrounded;
 
-        if (previousIsGrounded == false && currentIsGrounded == true)  // ¥Nªí­è¸¨¦a
+        if (previousIsGrounded == false && currentIsGrounded == true)  // ï¿½Nï¿½ï¿½ï¿½è¸¨ï¿½a
         {
             //print($"previousVelocity{previousVelocity}");
             return previousVelocity;
         }
         else
         {
-            return Vector2.zero;  // ¥Nªí¨S¦³¸¨¦a
+            return Vector2.zero;  // ï¿½Nï¿½ï¿½ï¿½Sï¿½ï¿½ï¿½ï¿½ï¿½a
         }
     }
 
