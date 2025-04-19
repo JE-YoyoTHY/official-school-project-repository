@@ -111,7 +111,8 @@ public class PlayerPerformanceTriggerScript : MonoBehaviour
 	private void moveMain()
 	{
 		Rigidbody2D playerRB = PlayerControlScript.instance.GetComponent<Rigidbody2D>();
-		Vector3 deltaPos = performanceTriggerInspectorObject.nextTrigger.transform.GetChild(0).position - transform.GetChild(0).position;
+		//Vector3 deltaPos = performanceTriggerInspectorObject.nextTrigger.transform.GetChild(0).position - transform.GetChild(0).position;
+		Vector3 deltaPos = performanceTriggerInspectorObject.nextTrigger.transform.GetChild(0).position - PlayerControlScript.instance.transform.position;
 		int moveDir = 0;
 		if (deltaPos.x > 0) moveDir = 1; else if (deltaPos.x < 0) moveDir = -1;
 		playerRB.velocity = new Vector2(performanceTriggerInspectorObject.moveSpeed * moveDir, playerRB.velocity.y);
