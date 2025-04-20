@@ -95,6 +95,7 @@ public class PlayerControlScript : MonoBehaviour
 	private sbyte fireballDirLastHorizontal;
 	private Coroutine fireballInputCoroutine;
 	private bool isFireballActive;
+	private Coroutine fireballLessCoroutine;
 
 	private bool fireballPlayerGotten;
 
@@ -1134,6 +1135,17 @@ public class PlayerControlScript : MonoBehaviour
 		mySetFriction(myNormalFrictionAcceleration, myNormalAdjustFriction);
 	}
 
+	IEnumerator fireballLess(float t)
+	{
+		while (t > 0)
+		{
+			if (!LogicScript.instance.isFreeze())
+				t -= Time.deltaTime;
+			yield return null;
+		}
+		isFireballActive = true;
+	}
+
 	/*IEnumerator fireballStartAfterFreezeTime()
 	{
 		while(LogicScript.instance.isFreeze()) yield return null;
@@ -1280,6 +1292,7 @@ public class PlayerControlScript : MonoBehaviour
 		if (fireballExplodeCoroutine != null) StopCoroutine(fireballExplodeCoroutine);
 		if (moveLessCoroutine != null) StopCoroutine(moveLessCoroutine);
 		if (jumpLessCoroutine != null) StopCoroutine(jumpLessCoroutine);
+		if (fireballLessCoroutine != null) StopCoroutine(fireballLessCoroutine);
 		StopAllCoroutines();
 
 		PlayerPerformanceSystemScript.instance.controlEnd();
@@ -1352,7 +1365,7 @@ public class PlayerControlScript : MonoBehaviour
 	 * during the remove time
 	 * player cant move and will have a special gravity and friction
 	 */
-	public void springPush(Vector2 localForce, bool isControlRemoved, float springDuration, float springGravityScale, float springFriction/*, Vector3 springPos, Vector3 springTargetPos*/)
+	public void springPush(Vector2 localForce, bool isControlRemoved, float springDuration, float springGravityScale, float springFriction/*, Vector3 springPos, Vector3 springTargetPos*/, float springFireballLessTime)
 	{
 		//reset player state
 		isMoving = false;
@@ -1370,6 +1383,10 @@ public class PlayerControlScript : MonoBehaviour
 		mySetFriction(myNormalFrictionAcceleration, myNormalAdjustFriction);
 		fireballHangTimeMoveBoostDir = 0;
 		isFrictionActive = true;
+
+		isFireballActive = false;
+		if (fireballLessCoroutine != null) StopCoroutine(fireballLessCoroutine);
+		fireballLessCoroutine = StartCoroutine(fireballLess(springFireballLessTime));
 
 		//push
 		rb.velocity = localForce;
@@ -1467,9 +1484,10 @@ public class PlayerControlScript : MonoBehaviour
 		if (jumpCoroutine != null) StopCoroutine(jumpCoroutine);
 		if (fireballInputCoroutine != null) StopCoroutine(fireballInputCoroutine);
 		if (fireballExplodeCoroutine != null) StopCoroutine(fireballExplodeCoroutine);
-		if (fireballExplodeCoroutine != null) StopCoroutine(fireballExplodeCoroutine);
+		//if (fireballExplodeCoroutine != null) StopCoroutine(fireballExplodeCoroutine);
 		if (moveLessCoroutine != null) StopCoroutine(moveLessCoroutine);
 		if (jumpLessCoroutine != null) StopCoroutine(jumpLessCoroutine);
+		if (fireballLessCoroutine != null) StopCoroutine(fireballLessCoroutine);
 	}
 
 	public void performanceGravity(bool localPerformanceWithNoGravity)

@@ -15,6 +15,7 @@ public class SpringScript : MonoBehaviour
 	[SerializeField] private float pushForce = 30;
 	[SerializeField] private float fireballSpeedScale = 2;
 	[SerializeField] private ScreenShakeProfile screenShakeProfile;
+	[SerializeField] private float fireballLessTime;
 
 	[Header("Remove Ability")]
 	[SerializeField] private bool removePlayerMoveAbility = false;
@@ -134,7 +135,7 @@ public class SpringScript : MonoBehaviour
 		}
 		animator.Play("SheepBounce");
 		//player push
-		PlayerControlScript.instance.springPush(pushDir.normalized * pushForce, removePlayerMoveAbility, springDuration, springGravityScale, springFriction);
+		PlayerControlScript.instance.springPush(pushDir.normalized * pushForce, removePlayerMoveAbility, springDuration, springGravityScale, springFriction, fireballLessTime);
 	}
 
 	/*private void springFireballTrigger()

@@ -35,7 +35,7 @@ public class TutorialShadeScript : MonoBehaviour
 	private bool isJumping;
 	private Coroutine jumpExtraHangTimeCoroutine;
 	//private float PlayerControlScript.instance.m_jumpExtraHangTimeGravityScale;
-	private bool isJumpActive;
+	//private bool isJumpActive;
 
 	//fireball basic
 	[SerializeField] private GameObject fireballPrefab;
@@ -112,7 +112,7 @@ public class TutorialShadeScript : MonoBehaviour
 		myAdjustFriction = PlayerControlScript.instance.m_myNormalAdjustFriction;
 		isFrictionActive = true;
 		isMoveActive = true;
-		isJumpActive = true;
+		//isJumpActive = true;
 
 		myIgnoreCollision();
 	}
@@ -124,7 +124,7 @@ public class TutorialShadeScript : MonoBehaviour
 		{
 			moveMain();
 			jumpMain();
-			fireballMain();
+			//fireballMain();
 
 			//myGravityMain();
 			//myFrictionMain();
@@ -142,6 +142,8 @@ public class TutorialShadeScript : MonoBehaviour
 			myFrictionMain();
 			myGravityMain();
 
+			addMoveForce();
+			fireballMain();
 		}
 	}
 
@@ -355,6 +357,57 @@ public class TutorialShadeScript : MonoBehaviour
 
 	private void moveMain() //set move dir
 	{
+		//if (moveDir != 0)
+		//{
+		//	if (canMove())
+		//	{
+		//		isMoving = true;
+
+		//		//normal
+		//		if (fireballHangTimeMoveBoostDir == 0 && !isFireballExplodeForceAdding)
+		//		{
+		//			if (moveDir * rb.velocity.x >= 0) // same direction
+		//			{
+		//				myAcceleration(new Vector2(PlayerControlScript.instance.m_moveAcceleration * moveDir, 0), new Vector2(PlayerControlScript.instance.m_moveMaxSpeed * moveDir, 0));
+		//			}
+		//			else  // moveDir * rb.velocity.x < 0, 不同方向
+		//			{
+		//				/* inspired by celeste, that player is hard to turn around in air
+		//				 * and i dont want player is harder to stop when they try to turn than stop moving
+		//				 * so i canceled turn speed scale, and add friction acceleration instead
+		//				 * but that only happen when player is on ground
+		//				 */
+		//				//myAcceleration(new Vector2(PlayerControlScript.instance.m_moveAcceleration * moveDir * moveTurnSpeedScale, 0), new Vector2(PlayerControlScript.instance.m_moveMaxSpeed * moveDir, 0));
+		//				/*if (onGround)*/ myAcceleration(new Vector2((PlayerControlScript.instance.m_moveAcceleration + myFrictionAcceleration) * moveDir, 0), new Vector2(PlayerControlScript.instance.m_moveMaxSpeed * moveDir, 0));
+		//				//else myAcceleration(new Vector2(PlayerControlScript.instance.m_moveAcceleration * moveDir, 0), new Vector2(PlayerControlScript.instance.m_moveMaxSpeed * moveDir, 0));
+		//			}
+		//		}
+		//		else if (fireballHangTimeMoveBoostDir != 0)// fireball hang time boost
+		//		{
+		//			if (moveDir * fireballHangTimeMoveBoostDir > 0) // same dir
+		//			{
+		//				myAcceleration(new Vector2(PlayerControlScript.instance.m_moveAcceleration * moveDir * PlayerControlScript.instance.m_fireballHangTimeMoveSameDirBoost, 0), new Vector2(PlayerControlScript.instance.m_moveMaxSpeed * moveDir * PlayerControlScript.instance.m_fireballHangTimeMoveSameDirBoost, 0));
+		//			}
+		//			else
+		//			{
+		//				myAcceleration(new Vector2(PlayerControlScript.instance.m_moveAcceleration * moveDir * PlayerControlScript.instance.m_fireballHangTimeMoveDifferentDirDecrease, 0), new Vector2(PlayerControlScript.instance.m_moveMaxSpeed * moveDir * PlayerControlScript.instance.m_fireballHangTimeMoveDifferentDirDecrease, 0));
+		//			}
+		//		}
+		//		else if (isFireballExplodeForceAdding)
+		//		{
+		//			myAcceleration(new Vector2(PlayerControlScript.instance.m_moveAcceleration * moveDir * PlayerControlScript.instance.m_fireballExplodeMoveAccelerationScale, 0), new Vector2(PlayerControlScript.instance.m_moveMaxSpeed * moveDir, 0));
+		//		}
+		//	}
+		//}
+
+		if(moveDir == 0 || !canMove())
+		{
+			isMoving = false;
+		}
+	}
+
+	private void addMoveForce()
+	{
 		if (moveDir != 0)
 		{
 			if (canMove())
@@ -366,7 +419,7 @@ public class TutorialShadeScript : MonoBehaviour
 				{
 					if (moveDir * rb.velocity.x >= 0) // same direction
 					{
-						myAcceleration(new Vector2(PlayerControlScript.instance.m_moveAcceleration * moveDir, 0), new Vector2(PlayerControlScript.instance.m_moveMaxSpeed * moveDir, 0));
+						myAccelerationWithFixedDeltatime(new Vector2(PlayerControlScript.instance.m_moveAcceleration * moveDir, 0), new Vector2(PlayerControlScript.instance.m_moveMaxSpeed * moveDir, 0));
 					}
 					else  // moveDir * rb.velocity.x < 0, 不同方向
 					{
@@ -376,7 +429,8 @@ public class TutorialShadeScript : MonoBehaviour
 						 * but that only happen when player is on ground
 						 */
 						//myAcceleration(new Vector2(PlayerControlScript.instance.m_moveAcceleration * moveDir * moveTurnSpeedScale, 0), new Vector2(PlayerControlScript.instance.m_moveMaxSpeed * moveDir, 0));
-						/*if (onGround)*/ myAcceleration(new Vector2((PlayerControlScript.instance.m_moveAcceleration + myFrictionAcceleration) * moveDir, 0), new Vector2(PlayerControlScript.instance.m_moveMaxSpeed * moveDir, 0));
+						/*if (onGround)*/
+						myAccelerationWithFixedDeltatime(new Vector2((PlayerControlScript.instance.m_moveAcceleration + myFrictionAcceleration) * moveDir, 0), new Vector2(PlayerControlScript.instance.m_moveMaxSpeed * moveDir, 0));
 						//else myAcceleration(new Vector2(PlayerControlScript.instance.m_moveAcceleration * moveDir, 0), new Vector2(PlayerControlScript.instance.m_moveMaxSpeed * moveDir, 0));
 					}
 				}
@@ -384,23 +438,18 @@ public class TutorialShadeScript : MonoBehaviour
 				{
 					if (moveDir * fireballHangTimeMoveBoostDir > 0) // same dir
 					{
-						myAcceleration(new Vector2(PlayerControlScript.instance.m_moveAcceleration * moveDir * PlayerControlScript.instance.m_fireballHangTimeMoveSameDirBoost, 0), new Vector2(PlayerControlScript.instance.m_moveMaxSpeed * moveDir * PlayerControlScript.instance.m_fireballHangTimeMoveSameDirBoost, 0));
+						myAccelerationWithFixedDeltatime(new Vector2(PlayerControlScript.instance.m_moveAcceleration * moveDir * PlayerControlScript.instance.m_fireballHangTimeMoveSameDirBoost, 0), new Vector2(PlayerControlScript.instance.m_moveMaxSpeed * moveDir * PlayerControlScript.instance.m_fireballHangTimeMoveSameDirBoost, 0));
 					}
 					else
 					{
-						myAcceleration(new Vector2(PlayerControlScript.instance.m_moveAcceleration * moveDir * PlayerControlScript.instance.m_fireballHangTimeMoveDifferentDirDecrease, 0), new Vector2(PlayerControlScript.instance.m_moveMaxSpeed * moveDir * PlayerControlScript.instance.m_fireballHangTimeMoveDifferentDirDecrease, 0));
+						myAccelerationWithFixedDeltatime(new Vector2(PlayerControlScript.instance.m_moveAcceleration * moveDir * PlayerControlScript.instance.m_fireballHangTimeMoveDifferentDirDecrease, 0), new Vector2(PlayerControlScript.instance.m_moveMaxSpeed * moveDir * PlayerControlScript.instance.m_fireballHangTimeMoveDifferentDirDecrease, 0));
 					}
 				}
 				else if (isFireballExplodeForceAdding)
 				{
-					myAcceleration(new Vector2(PlayerControlScript.instance.m_moveAcceleration * moveDir * PlayerControlScript.instance.m_fireballExplodeMoveAccelerationScale, 0), new Vector2(PlayerControlScript.instance.m_moveMaxSpeed * moveDir, 0));
+					myAccelerationWithFixedDeltatime(new Vector2(PlayerControlScript.instance.m_moveAcceleration * moveDir * PlayerControlScript.instance.m_fireballExplodeMoveAccelerationScale, 0), new Vector2(PlayerControlScript.instance.m_moveMaxSpeed * moveDir, 0));
 				}
 			}
-		}
-
-		if(moveDir == 0 || !canMove())
-		{
-			isMoving = false;
 		}
 	}
 
@@ -503,7 +552,7 @@ public class TutorialShadeScript : MonoBehaviour
 			
 			Vector2 pushDir = fireballDir.normalized;
 			if (pushDir.y < 0) pushDir = new Vector2(fireballDir.x, fireballDir.y * PlayerControlScript.instance.m_fireballPushUpForceScale);
-			myAcceleration(pushDir * PlayerControlScript.instance.m_fireballPushForceAcceleration * -1, pushDir * PlayerControlScript.instance.m_fireballPushForceMaxSpeed * -1);
+			myAccelerationWithFixedDeltatime(pushDir * PlayerControlScript.instance.m_fireballPushForceAcceleration * -1, pushDir * PlayerControlScript.instance.m_fireballPushForceMaxSpeed * -1);
 			
 			fireballPushForceDurationCounter -= Time.deltaTime;
 
@@ -535,7 +584,7 @@ public class TutorialShadeScript : MonoBehaviour
 		//isFireballPushForceAdding = true;
 		fireballPushForceDurationCounter = PlayerControlScript.instance.m_fireballPushForceDuration;
 
-		isFrictionActive = true; isMoveActive = true; isJumpActive = true;
+		isFrictionActive = true; isMoveActive = true; //isJumpActive = true;
 
 		//move boost
 		if (fireballDir.x > 0) fireballHangTimeMoveBoostDir = -1;
@@ -637,7 +686,7 @@ public class TutorialShadeScript : MonoBehaviour
 	{
 		isFireballExplodeForceAdding = false;
 
-		isMoveActive = true; isJumpActive = true;
+		isMoveActive = true; //isJumpActive = true;
 
 		if (fireballExplodeCoroutine != null) StopCoroutine(fireballExplodeCoroutine);
 

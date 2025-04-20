@@ -14,7 +14,7 @@ public class BreakablePlatformScript : MonoBehaviour
 	private bool isRestoreing;
 	private bool playerJumpThisFrame;
 
-	private bool isLeftMost;
+	//private bool isLeftMost;
 
 	//make breakable platform use tile to set
 	public BreakablePlatformScript tileOnLeft;
@@ -201,7 +201,7 @@ public class BreakablePlatformScript : MonoBehaviour
 
 		
 		if (tileOnLeft != null) yield break;
-		isLeftMost = true;
+		//isLeftMost = true;
 
 		int d = depth(1);
 
