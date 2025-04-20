@@ -7,7 +7,10 @@ public class TutorialShadeControlTriggerScript : MonoBehaviour
 	private TutorialShadeScript currentShade;
 	private Collider2D coll;
 
-	[SerializeField] private TutorialShadeAction action;
+	private bool inTrigger;
+
+	public TutorialShadeAction action;
+	public TutorialShadeControlTriggerScript nextMoveTrigger;
 
 	[Header("move")]
 	[SerializeField] private sbyte moveDir;
@@ -35,7 +38,7 @@ public class TutorialShadeControlTriggerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-  //      if(currentShade != null)
+  //      if(inTrigger)
 		//{
 		//	stayTrigger();
 		//}
@@ -46,6 +49,7 @@ public class TutorialShadeControlTriggerScript : MonoBehaviour
 	private void enterTrigger(TutorialShadeScript shade)
 	{
 		currentShade = shade;
+		inTrigger = true;
 
 		//if (action == TutorialShadeAction.move)
 		//{
@@ -69,7 +73,7 @@ public class TutorialShadeControlTriggerScript : MonoBehaviour
 		}
 	}
 
-	private void stayTrigger()
+	public void stayTrigger()
 	{
 		if (action == TutorialShadeAction.move)
 		{
@@ -88,6 +92,7 @@ public class TutorialShadeControlTriggerScript : MonoBehaviour
 		}
 
 		//currentShade = null;
+		inTrigger = false;
 	}
 
 	private void myIgnoreCollision(bool ignore)
@@ -161,7 +166,7 @@ public class TutorialShadeControlTriggerScript : MonoBehaviour
 
 	private void OnTriggerStay2D(Collider2D collision)
 	{
-		stayTrigger();
+		//stayTrigger();
 	}
 
 	private void OnTriggerExit2D(Collider2D collision)

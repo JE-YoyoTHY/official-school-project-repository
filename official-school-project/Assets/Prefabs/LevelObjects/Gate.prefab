@@ -192,8 +192,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 930d438da2a352542a1c870f52efdded, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  notObtainedColor: {r: 0.3886792, g: 0.3886792, b: 0.3886792, a: 1}
-  obtainedColor: {r: 0, g: 0.59923553, b: 1, a: 1}
+  notObtainedColor: {r: 0.8415094, g: 0.30326095, b: 0.30326095, a: 1}
+  obtainedColor: {r: 0, g: 1, b: 0.17050171, a: 1}
 --- !u!1 &6459561449076992739
 GameObject:
   m_ObjectHideFlags: 0

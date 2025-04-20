@@ -186,7 +186,7 @@ public class PlayerControlScript : MonoBehaviour
 	public float m_fireballPushForceMaxSpeed { get { return fireballPushForceMaxSpeed; } }
 	public float m_fireballPushForceDuration { get { return fireballPushForceDuration; } }
 	public float m_fireballPushUpForceScale { get { return fireballPushUpForceScale; } }
-	public float m_fireballPushForceHangTimeDuration { get { return fireballPushForceDuration; } }
+	public float m_fireballPushForceHangTimeDuration { get { return fireballPushForceHangTimeDuration; } }
 	
 	public float m_fireballHangTimeFrictionScale { get { return fireballHangTimeFrictionScale; } }
 	public float m_fireballHangTimeMoveSameDirBoost { get { return fireballHangTimeMoveSameDirBoost; } }

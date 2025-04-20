@@ -85,6 +85,7 @@ public class TutorialShadeScript : MonoBehaviour
 
 	//Control
 	public bool isWaiting;
+	private TutorialShadeControlTriggerScript currentController;
 
 
 	/*private void Awake()
@@ -128,6 +129,11 @@ public class TutorialShadeScript : MonoBehaviour
 
 			//myGravityMain();
 			//myFrictionMain();
+
+			if (currentController != null)
+			{
+				currentController.stayTrigger();
+			}
 		}
 		else
 		{
@@ -336,7 +342,7 @@ public class TutorialShadeScript : MonoBehaviour
 		if (!isJumping && !isFireballPushForceAdding && !isFireballExplodeForceAdding && !isControlBySpring)
 		{
 			if (rb.velocity.y < PlayerControlScript.instance.m_jumpMinSpeed && rb.velocity.y > -PlayerControlScript.instance.m_jumpMinSpeed)
-				mySetGravity(PlayerControlScript.instance.m_jumpStrength * PlayerControlScript.instance.m_jumpExtraHangTimeGravityScale, PlayerControlScript.instance.m_myNormalGravityMaxSpeed);
+				mySetGravity(PlayerControlScript.instance.m_jumpGravity * PlayerControlScript.instance.m_jumpExtraHangTimeGravityScale, PlayerControlScript.instance.m_myNormalGravityMaxSpeed);
 			else if (rb.velocity.y < -PlayerControlScript.instance.m_jumpMinSpeed)
 				mySetGravity(PlayerControlScript.instance.m_myNormalGravityScale, PlayerControlScript.instance.m_myNormalGravityMaxSpeed);
 		}
@@ -554,7 +560,7 @@ public class TutorialShadeScript : MonoBehaviour
 			if (pushDir.y < 0) pushDir = new Vector2(fireballDir.x, fireballDir.y * PlayerControlScript.instance.m_fireballPushUpForceScale);
 			myAccelerationWithFixedDeltatime(pushDir * PlayerControlScript.instance.m_fireballPushForceAcceleration * -1, pushDir * PlayerControlScript.instance.m_fireballPushForceMaxSpeed * -1);
 			
-			fireballPushForceDurationCounter -= Time.deltaTime;
+			fireballPushForceDurationCounter -= Time.fixedDeltaTime;
 
 			if (fireballPushForceDurationCounter < 0)
 			{
@@ -790,6 +796,30 @@ public class TutorialShadeScript : MonoBehaviour
 		mySetGravity(PlayerControlScript.instance.m_myNormalGravityScale, PlayerControlScript.instance.m_myNormalGravityMaxSpeed);
 		mySetFriction(PlayerControlScript.instance.m_myNormalFrictionAcceleration, PlayerControlScript.instance.m_myNormalAdjustFriction);
 
+	}
+
+	#endregion
+
+	#region performance
+
+	private void OnTriggerEnter2D(Collider2D collision)
+	{
+		TutorialShadeControlTriggerScript tutorialTrigger = collision.GetComponent<TutorialShadeControlTriggerScript>();
+		if (tutorialTrigger != null)
+		{
+			if(tutorialTrigger.action == TutorialShadeAction.move)
+			{
+				if (currentController == null)
+				{
+					currentController = tutorialTrigger;
+				}
+				else if(currentController.nextMoveTrigger == tutorialTrigger)
+				{
+					currentController = tutorialTrigger;
+				}
+			}
+			
+		}
 	}
 
 	#endregion
