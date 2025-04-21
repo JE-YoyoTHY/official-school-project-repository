@@ -28,7 +28,6 @@ public class InstructionStartTrigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        print(instructionUIManager.currentInstructionUIObj);
         if (collision.CompareTag("Player") && hadStarted == false)  // 從來沒有出現過
         {
             if (currentInstruction == InstructionsEnum._None)

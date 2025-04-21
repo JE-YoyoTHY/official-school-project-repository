@@ -150,7 +150,7 @@ public class RebindingUI : MonoBehaviour
             .WithControlsExcluding("Keyboard/escape")
             .OnComplete(operation =>
             {
-                Debug.Log("綁定完成");
+                //Debug.Log("綁定完成");
                 operation.Dispose();
                 targetActionRef.action.Enable();
                 updateKeyDisplay();

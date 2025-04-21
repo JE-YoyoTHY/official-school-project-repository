@@ -73,23 +73,19 @@ public class InstructionKeyCodeSetting : MonoBehaviour
 
         else if (currentInstruction == InstructionsTypeEnum.MoveInstruction)
         {
-            print(getAllKeyCodeLabel()[0].GetComponent<TextMeshProUGUI>().text);
-
             // left
             getAllKeyCodeLabel()[0].GetComponent<TextMeshProUGUI>().text = rebindingUI.convertBindingNameToReadableName(inputActions[ActionsEnum.MoveLeft].bindings[0]);
-            print(getAllKeyCodeLabel()[0].name);
+
             // right
             getAllKeyCodeLabel()[1].GetComponent<TextMeshProUGUI>().text = rebindingUI.convertBindingNameToReadableName(inputActions[ActionsEnum.MoveRight].bindings[0]);
-            print(getAllKeyCodeLabel()[1].name);
 
+            setInstructionSize();
         }
 
         else if (currentInstruction == InstructionsTypeEnum.JumpInstruction)
         {
-            print(inputActions[ActionsEnum.Jump]);
-            print(inputActions[ActionsEnum.Jump].bindings[0]);
-
             getAllKeyCodeLabel()[0].GetComponent<TextMeshProUGUI>().text = rebindingUI.convertBindingNameToReadableName(inputActions[ActionsEnum.Jump].bindings[0]);
+            setInstructionSize();
         }
 
         else if (currentInstruction == InstructionsTypeEnum.ShootFireballInstruction_1)
@@ -99,13 +95,16 @@ public class InstructionKeyCodeSetting : MonoBehaviour
 
             // shoot down
             getAllKeyCodeLabel()[1].GetComponent<TextMeshProUGUI>().text = rebindingUI.convertBindingNameToReadableName(inputActions[ActionsEnum.DownShootFireball].bindings[0]);
-
+            
+            setInstructionSize();
         }
 
         else if (currentInstruction == InstructionsTypeEnum.ShootFireballInstruction_2)
         {
             // shoot left
             getAllKeyCodeLabel()[0].GetComponent<TextMeshProUGUI>().text = rebindingUI.convertBindingNameToReadableName(inputActions[ActionsEnum.LeftShootFireball].bindings[0]);
+
+            setInstructionSize();
         }
     }
 
@@ -137,13 +136,13 @@ public class InstructionKeyCodeSetting : MonoBehaviour
     [ContextMenu("set instruction size")]
     public void setInstructionSize()
     {
+        print("set instru");
         const string imageFilterName = "KeyboardKeyImage";
-        const float charWidth = 26.5f;
-        const float margin = 46.0f;
+        const float padding = 60.0f;
 
         GameObject background = transform.GetChild(0).transform.gameObject;
         GameObject horizontalLayout = background.transform.GetChild(1).transform.gameObject;  // child 0: ActionNameLabel | child 1: KeyboardKeyImage_HorizontalLayout
-        List<GameObject> horizontalLayout_AllChildren = GameObjectMethods.GetAllChildren(background);
+        List<GameObject> horizontalLayout_AllChildren = GameObjectMethods.GetAllChildren(horizontalLayout);
         List<GameObject> horizontalLayout_AllKeyboardKeyImage = new List<GameObject>();
         foreach (GameObject child in horizontalLayout_AllChildren)
         {
@@ -159,12 +158,11 @@ public class InstructionKeyCodeSetting : MonoBehaviour
         foreach(GameObject keyboardKeyImage in horizontalLayout_AllKeyboardKeyImage)
         {
             GameObject keyCodeLabel = keyboardKeyImage.transform.GetChild(0).transform.gameObject;
+            print(keyCodeLabel.name);
             if (keyCodeLabel.GetComponent<TextMeshProUGUI>() != null)
             {
-                int charCount = keyCodeLabel.GetComponent<TextMeshProUGUI>().text.Length;
-                print($"{keyCodeLabel.GetComponent<TextMeshProUGUI>().text}: {charCount}");
                 float oldWidth = keyboardKeyImage.GetComponent<RectTransform>().sizeDelta.x;
-                float newWidth = charWidth * charCount + margin;
+                float newWidth = keyCodeLabel.GetComponent<TextMeshProUGUI>().preferredWidth + padding;
                 float diffWidth = newWidth - oldWidth;
                 totalDiffWidth += diffWidth;
 
@@ -180,4 +178,7 @@ public class InstructionKeyCodeSetting : MonoBehaviour
 
     }
     #endregion
+
+
+
 }
