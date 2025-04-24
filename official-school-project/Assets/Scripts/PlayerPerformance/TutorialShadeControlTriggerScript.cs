@@ -7,7 +7,7 @@ public class TutorialShadeControlTriggerScript : MonoBehaviour
 	private TutorialShadeScript currentShade;
 	private Collider2D coll;
 
-	private bool inTrigger;
+	//private bool inTrigger;
 
 	public TutorialShadeAction action;
 	//public TutorialShadeControlTriggerScript nextMoveTrigger;
@@ -51,7 +51,7 @@ public class TutorialShadeControlTriggerScript : MonoBehaviour
 	public void enterTrigger(TutorialShadeScript shade)
 	{
 		currentShade = shade;
-		inTrigger = true;
+		//inTrigger = true;
 
 		//print("enter tutor");
 
@@ -93,13 +93,13 @@ public class TutorialShadeControlTriggerScript : MonoBehaviour
 	private void exitTrigger()
 	{
 
-		if (action == TutorialShadeAction.move)
+		if (action == TutorialShadeAction.move && currentShade != null)
 		{
 			currentShade.setMoveDir(0);
 		}
 
 		//currentShade = null;
-		inTrigger = false;
+		//inTrigger = false;
 	}
 
 	private void myIgnoreCollision(bool ignore)
@@ -159,6 +159,7 @@ public class TutorialShadeControlTriggerScript : MonoBehaviour
 		}
 
 		currentShade.isWaiting = false;
+		//currentShade.currentController = currentShade.firstController;
 
 	}
 

@@ -1065,6 +1065,10 @@ public class PlayerControlScript : MonoBehaviour
 	private IEnumerator fireballExplodeShadeMain()
 	{
 		for(int i = 0; i < fireballExplodeShadeCount; i++){
+			
+			GameObject explodeShade = Instantiate(fireballExplodeShade, transform.position, transform.rotation);
+			explodeShade.GetComponent<ExplodeShadeScript>().summon();	
+			
 			float t = fireballExplodeShadeInterval;
 			while (t > 0){
 				if(!LogicScript.instance.isFreeze()){
@@ -1073,8 +1077,7 @@ public class PlayerControlScript : MonoBehaviour
 				yield return null;
 			}
 
-			GameObject explodeShade = Instantiate(fireballExplodeShade, transform.position, transform.rotation);
-			explodeShade.GetComponent<ExplodeShadeScript>().summon();
+
 		}
 	}
 
@@ -1216,7 +1219,7 @@ public class PlayerControlScript : MonoBehaviour
 			if (collision.CompareTag("DeadZoneSpike"))
 			{
 				DeadZoneScript deadZone = collision.GetComponent<DeadZoneScript>();
-				if (deadZone.noDirection || (deadZone.deadZoneDirection.x * rb.velocity.x < 0 || deadZone.deadZoneDirection.y * rb.velocity.y < 0))
+				if (deadZone.noDirection || (deadZone.deadZoneDirection.x * rb.velocity.x <= 0 || deadZone.deadZoneDirection.y * rb.velocity.y <= 0))
 				{
 					if(deathRespawnDelayCoroutine == null)
 					playerDeathDelayStart();

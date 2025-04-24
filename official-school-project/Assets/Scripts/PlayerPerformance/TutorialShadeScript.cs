@@ -122,8 +122,8 @@ public class TutorialShadeScript : MonoBehaviour
 		myIgnoreCollision();
 
 		//controller
-		currentController = firstController;
-		currentController.enterTrigger(this);
+		//currentController = firstController;
+		//currentController.enterTrigger(this);
 	}
 
     // Update is called once per frame
@@ -829,20 +829,31 @@ public class TutorialShadeScript : MonoBehaviour
 				}
 			}*/
 			
+			
+
+			if (tutorialTrigger.previousMoveTrigger == currentController)
+			{
+				//print("shade enter tutorial");
+				/*if(tutorialTrigger.action == TutorialShadeAction.move)
+					currentController = tutorialTrigger;
+				else tutorialTrigger.enterTrigger(this);*/
+				tutorialTrigger.enterTrigger(this);
+
+				//print(tutorialTrigger.action == TutorialShadeAction.move);
+
+				if (tutorialTrigger.action == TutorialShadeAction.move)
+				{
+					currentController = tutorialTrigger;
+					print("action = move");
+				}
+					
+			}
+
 			if (currentController == null && tutorialTrigger.action == TutorialShadeAction.move)
 			{
 				currentController = tutorialTrigger;
 				//print(currentController.gameObject);
 			}
-
-			if (tutorialTrigger.previousMoveTrigger == currentController)
-			{
-				//print("shade enter tutorial");
-				if(tutorialTrigger.action == TutorialShadeAction.move)
-					currentController = tutorialTrigger;
-				else tutorialTrigger.enterTrigger(this);
-			}
-
 		}
 	}
 
@@ -850,7 +861,8 @@ public class TutorialShadeScript : MonoBehaviour
 		transform.position = startPoint.transform.position;
 		//isWaiting = true;
 		tutorialStarted = true;
-
+		currentController = firstController;
+		currentController.enterTrigger(this);
 		//print("akjlasjf");
 	}
 

@@ -29,8 +29,12 @@ public class ExplodeShadeScript : MonoBehaviour
             if(!LogicScript.instance.isFreeze()){
                 t -= Time.deltaTime;
             }
+
+			//spriteRenderer.color -= Color.black * (Time.deltaTime / fadeOutTime);
+
             yield return null;
         }
+
 
         Destroy(gameObject);
     }

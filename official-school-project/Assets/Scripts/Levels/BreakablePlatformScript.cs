@@ -204,7 +204,7 @@ public class BreakablePlatformScript : MonoBehaviour
 		spriteRenderer.enabled = true;
 
 		//continuous particle
-		//transform.GetChild(2).gameObject.SetActive(false); // child 2 -> particle
+		transform.GetChild(2).gameObject.SetActive(false); // child 2 -> particle
 	}
 
 	public void playerJumpOnThisTraversal(BreakablePlatformScript lastTile)
