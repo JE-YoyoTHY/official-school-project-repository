@@ -54,7 +54,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Magnitude: 0.1
+    - _Magnitude: -0.1
+    - _Radius: 0.17
     - _Speed: 1
     - _Thickness: 0.06
     m_Colors:

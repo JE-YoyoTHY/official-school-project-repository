@@ -16,6 +16,7 @@ public class SpringScript : MonoBehaviour
 	[SerializeField] private float fireballSpeedScale = 2;
 	[SerializeField] private ScreenShakeProfile screenShakeProfile;
 	[SerializeField] private float fireballLessTime;
+	[SerializeField] private VFXManager m_VFXManager;
 
 	[Header("Remove Ability")]
 	[SerializeField] private bool removePlayerMoveAbility = false;
@@ -133,7 +134,9 @@ public class SpringScript : MonoBehaviour
 			if (playerPos.y < transform.position.y + transform.localScale.y * -0.5f) PlayerControlScript.instance.transform.position = new Vector3(playerPos.x, transform.position.y + transform.localScale.y * -0.5f, playerPos.z);
 			if (playerPos.y > transform.position.y + transform.localScale.y * 0.5f) PlayerControlScript.instance.transform.position = new Vector3(playerPos.x, transform.position.y + transform.localScale.y * 0.5f, playerPos.z);
 		}
-		animator.Play("SheepBounce");
+        m_VFXManager.performVFX();
+        animator.Play("SheepBounce");
+		
 		//player push
 		PlayerControlScript.instance.springPush(pushDir.normalized * pushForce, removePlayerMoveAbility, springDuration, springGravityScale, springFriction, fireballLessTime);
 	}
