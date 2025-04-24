@@ -171,5 +171,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9de35921fa69edd4291ef998bbb2c1bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startPoint: {fileID: 0}
   fireballPrefab: {fileID: 8726215106808522622, guid: 2806ee27e50b261429381745d29f614b, type: 3}
-  isWaiting: 0
+  isWaiting: 1

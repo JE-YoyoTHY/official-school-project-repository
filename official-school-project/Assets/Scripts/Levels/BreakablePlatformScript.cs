@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class BreakablePlatformScript : MonoBehaviour
 {
+
+	[SerializeField] private Sprite[] sprites;
+	private SpriteRenderer spriteRenderer;
+
 	[SerializeField] private float breakTime; // how long it will break after player stands on it
 	[SerializeField] private float restoreTime; // how long it will restore after breaks
 	[SerializeField] private float playerJumpBreakTime; // if player jump on this tile, decrease the lifespan
@@ -27,6 +31,8 @@ public class BreakablePlatformScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
 	{
+		spriteRenderer = GetComponent<SpriteRenderer>();
+
 		//StartCoroutine(startInitialization());
 		restoreAfterBreak();
 		StartCoroutine(mergeCollider());
@@ -113,13 +119,21 @@ public class BreakablePlatformScript : MonoBehaviour
 				breakTimeCounter -= Time.deltaTime;
 
 				//change indicator
-				transform.GetChild(0).localScale = new Vector3(1, breakTimeCounter / breakTime, 1);
+				//transform.GetChild(0).localScale = new Vector3(1, breakTimeCounter / breakTime, 1);
+
+				float i = (1 - (breakTimeCounter / breakTime)) * (sprites.Length-1);
+				//spriteRenderer.sprite = sprites[(int)Mathf.Floor(i) + 1];
+				if(i >= sprites.Length-1) spriteRenderer.sprite = sprites[sprites.Length-1];
+				else spriteRenderer.sprite = sprites[(int)Mathf.Floor(i) + 1];
+
 			}
 			else
 			{
 				if(!isRestoreing)
 				{
 					breakStart(false, null);
+					//continuous particle
+					transform.GetChild(2).gameObject.SetActive(false); // child 2 -> particle
 				}
 			}
 		}
@@ -142,6 +156,8 @@ public class BreakablePlatformScript : MonoBehaviour
 	{
 		isBreaking = true;
 		breakTimeCounter = breakTime;
+
+		transform.GetChild(2).gameObject.SetActive(true); // child 2 -> particle
 	}
 
 	public void breakStart(bool byFireball, BreakablePlatformScript lastTile)
@@ -152,7 +168,10 @@ public class BreakablePlatformScript : MonoBehaviour
 		//isBreaking = false;
 		restoreTimeCounter = restoreTime;
 
-		transform.GetChild(0).localScale = new Vector3(1, 0, 1);
+		//transform.GetChild(0).localScale = new Vector3(1, 0, 1);
+		spriteRenderer.sprite = sprites[sprites.Length-1];
+		spriteRenderer.enabled = false;
+		GetComponent<ParticleCommonScript>().emitParticle();
 
 		//GetComponent<CompositeCollider2D>().enabled = false;
 		Collider2D[] colls2D = GetComponents<BoxCollider2D>();
@@ -180,7 +199,12 @@ public class BreakablePlatformScript : MonoBehaviour
 		foreach (var coll2D in colls2D){
 			coll2D.enabled = true;
 		}
-		transform.GetChild(0).localScale = new Vector3(1, 1, 1);
+		//transform.GetChild(0).localScale = new Vector3(1, 1, 1);
+		spriteRenderer.sprite = sprites[0];
+		spriteRenderer.enabled = true;
+
+		//continuous particle
+		//transform.GetChild(2).gameObject.SetActive(false); // child 2 -> particle
 	}
 
 	public void playerJumpOnThisTraversal(BreakablePlatformScript lastTile)

@@ -10,7 +10,9 @@ public class TutorialShadeControlTriggerScript : MonoBehaviour
 	private bool inTrigger;
 
 	public TutorialShadeAction action;
-	public TutorialShadeControlTriggerScript nextMoveTrigger;
+	//public TutorialShadeControlTriggerScript nextMoveTrigger;
+	public TutorialShadeControlTriggerScript previousMoveTrigger;
+
 
 	[Header("move")]
 	[SerializeField] private sbyte moveDir;
@@ -23,7 +25,7 @@ public class TutorialShadeControlTriggerScript : MonoBehaviour
 	[SerializeField] private float endWaitTime;
 	[SerializeField] private float endDisappearTime;
 	[SerializeField] private float startWaitTime;
-	[SerializeField] private GameObject startPoint;
+	//[SerializeField] private GameObject startPoint;
 	private Coroutine waitCoroutine;
 	//private bool isWaiting;
 
@@ -46,10 +48,12 @@ public class TutorialShadeControlTriggerScript : MonoBehaviour
 
 	#region basic
 
-	private void enterTrigger(TutorialShadeScript shade)
+	public void enterTrigger(TutorialShadeScript shade)
 	{
 		currentShade = shade;
 		inTrigger = true;
+
+		//print("enter tutor");
 
 		//if (action == TutorialShadeAction.move)
 		//{
@@ -75,12 +79,15 @@ public class TutorialShadeControlTriggerScript : MonoBehaviour
 
 	public void stayTrigger()
 	{
-		if (action == TutorialShadeAction.move)
+		if (action == TutorialShadeAction.move && currentShade != null)
 		{
-			if(!currentShade.isWaiting)
+			//print("aksjlaksjf");
+			if(!currentShade.isWaiting && ! currentShade.tutorialStarted)
 				currentShade.setMoveDir(moveDir);
 			else currentShade.setMoveDir(0);
 		}
+
+		//print("aksjlaksjf");
 	}
 
 	private void exitTrigger()
@@ -141,7 +148,7 @@ public class TutorialShadeControlTriggerScript : MonoBehaviour
 		t = startWaitTime;
 		currentShade.GetComponent<SpriteRenderer>().enabled = true;
 		//teleport
-		currentShade.transform.position = startPoint.transform.position;
+		currentShade.transform.position = currentShade.startPoint.transform.position;
 
 		while (t >= 0)
 		{
@@ -158,11 +165,11 @@ public class TutorialShadeControlTriggerScript : MonoBehaviour
 	#endregion
 
 	#region on trigger
-	private void OnTriggerEnter2D(Collider2D collision)
-	{
-		if(collision.CompareTag("TutorialShade"))
-			enterTrigger(collision.GetComponent<TutorialShadeScript>());
-	}
+	// private void OnTriggerEnter2D(Collider2D collision)
+	// {
+	// 	if(collision.CompareTag("TutorialShade"))
+	// 		enterTrigger(collision.GetComponent<TutorialShadeScript>());
+	// }
 
 	private void OnTriggerStay2D(Collider2D collision)
 	{

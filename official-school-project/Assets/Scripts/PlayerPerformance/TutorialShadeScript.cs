@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class TutorialShadeScript : MonoBehaviour
 {
+
 	//variable
 	private Rigidbody2D rb;
 	private Collider2D coll;
@@ -63,10 +64,10 @@ public class TutorialShadeScript : MonoBehaviour
 	//private float PlayerControlScript.instance.m_fireballExplodeHorizontalScale;
 	//private float PlayerControlScript.instance.m_fireballExplodeMoveSameDirBoost;
 	//private float PlayerControlScript.instance.m_fireballExplodeMoveDifferentDirDecrease;
-	//private float PlayerControlScript.instance.m_fireballExplodeGuaranteeSpeedScale; // ¤õ²yÃz¬µªºÄ_©³³t«×¡A¦]¬°¤õ²y³t«×¬O¥Î¥[ªº, ¥H³o¦¸­n¥[ªº³t«×¬°°ò·Ç
-	//private float PlayerControlScript.instance.m_fireballExplodeMaxSpeedScale; // ¥Hexplode force¬°°ò·Ç, x y ¤À§O³B²z
+	//private float PlayerControlScript.instance.m_fireballExplodeGuaranteeSpeedScale; // ï¿½ï¿½ï¿½yï¿½zï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½tï¿½×¡Aï¿½]ï¿½ï¿½ï¿½ï¿½ï¿½yï¿½tï¿½×¬Oï¿½Î¥[ï¿½ï¿½, ï¿½Hï¿½oï¿½ï¿½ï¿½nï¿½[ï¿½ï¿½ï¿½tï¿½×¬ï¿½ï¿½ï¿½ï¿½
+	//private float PlayerControlScript.instance.m_fireballExplodeMaxSpeedScale; // ï¿½Hexplode forceï¿½ï¿½ï¿½ï¿½ï¿½, x y ï¿½ï¿½ï¿½Oï¿½Bï¿½z
 	//private float PlayerControlScript.instance.m_fireballExplodeExtraPushUpForce;
-	//private float PlayerControlScript.instance.m_fireballExplodeExtraPushUpAngle; //¦pªG¤è¦V¦V¶qªº­Á¨¤»P¥õ¨¤¦b¦¹¼Æ­È¤§¶¡¡A·|µ¹¤©¤@¦V¤W³t«×
+	//private float PlayerControlScript.instance.m_fireballExplodeExtraPushUpAngle; //ï¿½pï¿½Gï¿½ï¿½Vï¿½Vï¿½qï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Pï¿½ï¿½ï¿½ï¿½ï¿½bï¿½ï¿½ï¿½Æ­È¤ï¿½ï¿½ï¿½ï¿½Aï¿½|ï¿½ï¿½ï¿½ï¿½ï¿½@ï¿½Vï¿½Wï¿½tï¿½ï¿½
 	//private float PlayerControlScript.instance.m_fireballExplodeDuration;
 	//private float PlayerControlScript.instance.m_fireballExplodeGravityScale;
 	//private float PlayerControlScript.instance.m_fireballExplodeFriction;
@@ -84,8 +85,11 @@ public class TutorialShadeScript : MonoBehaviour
 
 
 	//Control
+	public GameObject startPoint;
 	public bool isWaiting;
+	public bool tutorialStarted = false;
 	private TutorialShadeControlTriggerScript currentController;
+	[SerializeField] private TutorialShadeControlTriggerScript firstController;
 
 
 	/*private void Awake()
@@ -116,6 +120,10 @@ public class TutorialShadeScript : MonoBehaviour
 		//isJumpActive = true;
 
 		myIgnoreCollision();
+
+		//controller
+		currentController = firstController;
+		currentController.enterTrigger(this);
 	}
 
     // Update is called once per frame
@@ -133,6 +141,8 @@ public class TutorialShadeScript : MonoBehaviour
 			if (currentController != null)
 			{
 				currentController.stayTrigger();
+
+				//print(currentController);
 			}
 		}
 		else
@@ -376,7 +386,7 @@ public class TutorialShadeScript : MonoBehaviour
 		//			{
 		//				myAcceleration(new Vector2(PlayerControlScript.instance.m_moveAcceleration * moveDir, 0), new Vector2(PlayerControlScript.instance.m_moveMaxSpeed * moveDir, 0));
 		//			}
-		//			else  // moveDir * rb.velocity.x < 0, ¤£¦P¤è¦V
+		//			else  // moveDir * rb.velocity.x < 0, ï¿½ï¿½ï¿½Pï¿½ï¿½V
 		//			{
 		//				/* inspired by celeste, that player is hard to turn around in air
 		//				 * and i dont want player is harder to stop when they try to turn than stop moving
@@ -427,7 +437,7 @@ public class TutorialShadeScript : MonoBehaviour
 					{
 						myAccelerationWithFixedDeltatime(new Vector2(PlayerControlScript.instance.m_moveAcceleration * moveDir, 0), new Vector2(PlayerControlScript.instance.m_moveMaxSpeed * moveDir, 0));
 					}
-					else  // moveDir * rb.velocity.x < 0, ¤£¦P¤è¦V
+					else  // moveDir * rb.velocity.x < 0, ï¿½ï¿½ï¿½Pï¿½ï¿½V
 					{
 						/* inspired by celeste, that player is hard to turn around in air
 						 * and i dont want player is harder to stop when they try to turn than stop moving
@@ -807,20 +817,46 @@ public class TutorialShadeScript : MonoBehaviour
 		TutorialShadeControlTriggerScript tutorialTrigger = collision.GetComponent<TutorialShadeControlTriggerScript>();
 		if (tutorialTrigger != null)
 		{
-			if(tutorialTrigger.action == TutorialShadeAction.move)
+			/*if(tutorialTrigger.action == TutorialShadeAction.move)
 			{
 				if (currentController == null)
 				{
 					currentController = tutorialTrigger;
 				}
-				else if(currentController.nextMoveTrigger == tutorialTrigger)
+				else if(tutorialTrigger.previousMoveTrigger == currentController)
 				{
 					currentController = tutorialTrigger;
 				}
-			}
+			}*/
 			
+			if (currentController == null && tutorialTrigger.action == TutorialShadeAction.move)
+			{
+				currentController = tutorialTrigger;
+				//print(currentController.gameObject);
+			}
+
+			if (tutorialTrigger.previousMoveTrigger == currentController)
+			{
+				//print("shade enter tutorial");
+				if(tutorialTrigger.action == TutorialShadeAction.move)
+					currentController = tutorialTrigger;
+				else tutorialTrigger.enterTrigger(this);
+			}
+
 		}
 	}
+
+	public void resetTutorial(){
+		transform.position = startPoint.transform.position;
+		//isWaiting = true;
+		tutorialStarted = true;
+
+		//print("akjlasjf");
+	}
+
+	// public void startLoop(){
+	// 	isWaiting = false;
+	// }
 
 	#endregion
 
@@ -880,10 +916,10 @@ public class TutorialShadeScript : MonoBehaviour
 		private float PlayerControlScript.instance.m_fireballExplodeHorizontalScale;
 		private float PlayerControlScript.instance.m_fireballExplodeMoveSameDirBoost;
 		private float PlayerControlScript.instance.m_fireballExplodeMoveDifferentDirDecrease;
-		private float PlayerControlScript.instance.m_fireballExplodeGuaranteeSpeedScale; // ¤õ²yÃz¬µªºÄ_©³³t«×¡A¦]¬°¤õ²y³t«×¬O¥Î¥[ªº, ¥H³o¦¸­n¥[ªº³t«×¬°°ò·Ç
-		private float PlayerControlScript.instance.m_fireballExplodeMaxSpeedScale; // ¥Hexplode force¬°°ò·Ç, x y ¤À§O³B²z
+		private float PlayerControlScript.instance.m_fireballExplodeGuaranteeSpeedScale; // ï¿½ï¿½ï¿½yï¿½zï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½tï¿½×¡Aï¿½]ï¿½ï¿½ï¿½ï¿½ï¿½yï¿½tï¿½×¬Oï¿½Î¥[ï¿½ï¿½, ï¿½Hï¿½oï¿½ï¿½ï¿½nï¿½[ï¿½ï¿½ï¿½tï¿½×¬ï¿½ï¿½ï¿½ï¿½
+		private float PlayerControlScript.instance.m_fireballExplodeMaxSpeedScale; // ï¿½Hexplode forceï¿½ï¿½ï¿½ï¿½ï¿½, x y ï¿½ï¿½ï¿½Oï¿½Bï¿½z
 		private float PlayerControlScript.instance.m_fireballExplodeExtraPushUpForce;
-		private float PlayerControlScript.instance.m_fireballExplodeExtraPushUpAngle; //¦pªG¤è¦V¦V¶qªº­Á¨¤»P¥õ¨¤¦b¦¹¼Æ­È¤§¶¡¡A·|µ¹¤©¤@¦V¤W³t«×
+		private float PlayerControlScript.instance.m_fireballExplodeExtraPushUpAngle; //ï¿½pï¿½Gï¿½ï¿½Vï¿½Vï¿½qï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Pï¿½ï¿½ï¿½ï¿½ï¿½bï¿½ï¿½ï¿½Æ­È¤ï¿½ï¿½ï¿½ï¿½Aï¿½|ï¿½ï¿½ï¿½ï¿½ï¿½@ï¿½Vï¿½Wï¿½tï¿½ï¿½
 		private float PlayerControlScript.instance.m_fireballExplodeDuration;
 		private float PlayerControlScript.instance.m_fireballExplodeGravityScale;
 		private float PlayerControlScript.instance.m_fireballExplodeFriction;
