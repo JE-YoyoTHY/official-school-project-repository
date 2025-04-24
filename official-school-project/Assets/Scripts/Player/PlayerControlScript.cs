@@ -136,6 +136,12 @@ public class PlayerControlScript : MonoBehaviour
 	private bool isFireballExplodeForceAdding;
 	private Coroutine fireballExplodeCoroutine;
 
+	[Header("Explode shade")]
+	[SerializeField] private GameObject fireballExplodeShade;
+	[SerializeField] private float fireballExplodeShadeInterval;
+	[SerializeField] private int fireballExplodeShadeCount;
+	private Coroutine fireballExplodeShadeCoroutine;
+
 	//freeze frame
 	private Vector2 freezeVelocity;
 
@@ -950,6 +956,10 @@ public class PlayerControlScript : MonoBehaviour
 
 		if (fireballExplodeCoroutine != null) StopCoroutine(fireballExplodeCoroutine);
 		fireballExplodeCoroutine = StartCoroutine(fireballExplode(localVelocity, fireballVelocity));
+
+		//shade
+		if (fireballExplodeShadeCoroutine != null) StopCoroutine(fireballExplodeShadeCoroutine);
+		fireballExplodeShadeCoroutine = StartCoroutine(fireballExplodeShadeMain());
 	}
 
 	//public void fireballExplode(Vector2 localVelocity/*, float frictionLessDuration, float localFreezeTime*/)
@@ -1047,6 +1057,25 @@ public class PlayerControlScript : MonoBehaviour
 
 		mySetGravity(myNormalGravityScale, myNormalGravityMaxSpeed);
 		mySetFriction(myNormalFrictionAcceleration, myNormalAdjustFriction);
+
+		//shade
+		if (fireballExplodeShadeCoroutine != null) StopCoroutine(fireballExplodeShadeCoroutine);
+	}
+
+	private IEnumerator fireballExplodeShadeMain()
+	{
+		for(int i = 0; i < fireballExplodeShadeCount; i++){
+			float t = fireballExplodeShadeInterval;
+			while (t > 0){
+				if(!LogicScript.instance.isFreeze()){
+					t -= Time.deltaTime;
+				}
+				yield return null;
+			}
+
+			GameObject explodeShade = Instantiate(fireballExplodeShade, transform.position, transform.rotation);
+			explodeShade.GetComponent<ExplodeShadeScript>().summon();
+		}
 	}
 
 	//i tried to write this part in fireballExplode
