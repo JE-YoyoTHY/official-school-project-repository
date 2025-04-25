@@ -828,8 +828,7 @@ public class TutorialShadeScript : MonoBehaviour
 					currentController = tutorialTrigger;
 				}
 			}*/
-			
-			
+
 
 			if (tutorialTrigger.previousMoveTrigger == currentController)
 			{
@@ -840,11 +839,12 @@ public class TutorialShadeScript : MonoBehaviour
 				tutorialTrigger.enterTrigger(this);
 
 				//print(tutorialTrigger.action == TutorialShadeAction.move);
+				//print(tutorialTrigger.action);
 
 				if (tutorialTrigger.action == TutorialShadeAction.move)
 				{
 					currentController = tutorialTrigger;
-					print("action = move");
+					//print("action = move");
 				}
 					
 			}

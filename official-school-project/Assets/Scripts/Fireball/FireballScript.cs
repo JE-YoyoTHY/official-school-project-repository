@@ -28,10 +28,12 @@ public class FireballScript : MonoBehaviour
 	//[SerializeField] private float explodeHorizontalScale;
 	//[SerializeField] private float explodeFreezeTime;
 	[SerializeField] private float explodeDuration;
+	[SerializeField] private float explodeSpriteDuration;
 	//[SerializeField] private float hitPlayerSpeedScale; // i want to add fb's velocity * this scale to player when player is hit by fb
 	public bool isExploding { get; private set; }
 	private bool playerPushed;
 	private bool leftPlayer;
+	private bool isExplodeDurationExpired = false;
 
 	/* i want to add this vector2 to player if they are hit, 
 	 * in place of hit player speed scale, 
@@ -214,11 +216,25 @@ public class FireballScript : MonoBehaviour
 
 	IEnumerator destroyCoroutine(float t)
 	{
+		float tForSprite = explodeSpriteDuration;
 		while(t > 0)
 		{
 			if (!LogicScript.instance.isFreeze())
 			{
 				t -= Time.deltaTime;
+				tForSprite -= Time.deltaTime;
+			}
+			yield return null;
+		}
+
+
+		//make sprite last longer but have no effect
+		isExplodeDurationExpired = true;
+		while(tForSprite > 0)
+		{
+			if (!LogicScript.instance.isFreeze())
+			{
+				tForSprite -= Time.deltaTime;
 			}
 			yield return null;
 		}
@@ -267,7 +283,7 @@ public class FireballScript : MonoBehaviour
 			//	explode();
 			//}
 
-			if(collision.CompareTag("Player") && isExploding && !playerPushed)
+			if(collision.CompareTag("Player") && isExploding && !playerPushed && !isExplodeDurationExpired)
 			{
 				/*Vector3 dis = player.transform.position - transform.position;
 				Vector2 localForce = new Vector2(dis.x, dis.y).normalized;
