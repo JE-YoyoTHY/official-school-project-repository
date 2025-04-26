@@ -283,12 +283,12 @@ MonoBehaviour:
   fireballPushForceAcceleration: 200
   fireballPushForceMaxSpeed: 14.5
   fireballPushForceDuration: 0.22
-  fireballPushUpForceScale: 0.45
+  fireballPushUpForceScale: 0.5
   fireballPushScreenShakeForce: 0.25
-  fireballPushForceHangTimeDuration: 0.1
+  fireballPushForceHangTimeDuration: 0.12
   fireballCastFreezeTime: 0.05
   fireballHangTimeFrictionScale: 0.4
-  fireballHangTimeMoveSameDirBoost: 1.2
+  fireballHangTimeMoveSameDirBoost: 1.35
   fireballHangTimeMoveDifferentDirDecrease: 0.8
   fireballExplodeForce: 19.5
   fireballExplodeHorizontalScale: 0.77
