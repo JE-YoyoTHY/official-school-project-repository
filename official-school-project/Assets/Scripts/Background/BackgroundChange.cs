@@ -6,7 +6,16 @@ public class BackgroundChange : MonoBehaviour
     [SerializeField] private GameObject[] backgroundImages;
     private int currentIndex = 0;
 
-    public void swapBackground(int i){ //from current to i
+	private void Start()
+	{
+		//Camera cam = Camera.main;
+		transform.GetChild(0).GetComponent<Canvas>().worldCamera = Camera.main; //child 0 for canvas
+		//transform.GetComponentInChildren<Canvas>().worldCamera = Camera.main;
+	}
+
+
+
+	public void swapBackground(int i){ //from current to i
         //disable current
         backgroundImages[i].SetActive(false);
 

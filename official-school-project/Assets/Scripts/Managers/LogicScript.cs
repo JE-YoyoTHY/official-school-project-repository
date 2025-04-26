@@ -24,18 +24,20 @@ public class LogicScript : MonoBehaviour
 	//variable
 	public UnityEvent freezeEndEvent;
 
+	public List<TutorialShadeScript> tutorialShades;
+
 	private float freezeTimer;
 
 	// Start is called before the first frame update
 	void Start()
     {
-		gridColor();
+		//gridColor();
 
-		GameObject[] shades = GameObject.FindGameObjectsWithTag("TutorialShade");
-		foreach (GameObject shade in shades)
-		{
-			freezeEndEvent.AddListener(shade.GetComponent<TutorialShadeScript>().freezeEnd);
-		}
+		//GameObject[] shades = GameObject.FindGameObjectsWithTag("TutorialShade");
+		//foreach (GameObject shade in shades)
+		//{
+		//	freezeEndEvent.AddListener(shade.GetComponent<TutorialShadeScript>().freezeEnd);
+		//}
 
 		
     }
@@ -68,11 +70,22 @@ public class LogicScript : MonoBehaviour
 		{
 			PlayerControlScript.instance.freezeStart();
 
-			GameObject[] shades = GameObject.FindGameObjectsWithTag("TutorialShade");
-			foreach(GameObject shade in shades)
+			//GameObject[] shades = GameObject.FindGameObjectsWithTag("TutorialShade");
+			//foreach(GameObject shade in shades)
+			//{
+			//	shade.GetComponent<TutorialShadeScript>().freezeStart();
+			//}
+			//print(tutorialShades.Count);
+
+			if(tutorialShades.Count > 0)
 			{
-				shade.GetComponent<TutorialShadeScript>().freezeStart();
+				foreach(var shade in tutorialShades)
+				{
+					//print(shade);
+					shade.freezeStart();
+				}
 			}
+
 		}
 
 		freezeTimer = t;
@@ -95,7 +108,7 @@ public class LogicScript : MonoBehaviour
 
 	#region grid
 
-	private void gridColor()
+	public void gridColor()
 	{
 		GameObject[] killFbZones = GameObject.FindGameObjectsWithTag("KillFireballWithoutExplode");
 		foreach (GameObject killFbZone in killFbZones)
@@ -113,6 +126,18 @@ public class LogicScript : MonoBehaviour
 			PlayerPerformanceBreakableGround breakableGround = performanceTile.GetComponent<PlayerPerformanceBreakableGround>();
 			if (breakableGround.m_tileName == name) breakableGround.groundBreak();
 		}
+	}
+
+	public void tutorialShadeFreezeTime(TutorialShadeScript shade)
+	{
+		//GameObject[] shades = GameObject.FindGameObjectsWithTag("TutorialShade");
+		//foreach (GameObject shade in shades)
+		//{
+		//	freezeEndEvent.AddListener(shade.GetComponent<TutorialShadeScript>().freezeEnd);
+		//}
+
+		tutorialShades.Add(shade);
+		freezeEndEvent.AddListener(shade.freezeEnd);
 	}
 
 	#endregion

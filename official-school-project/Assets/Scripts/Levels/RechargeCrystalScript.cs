@@ -8,7 +8,7 @@ public class RechargeCrystalScript : MonoBehaviour
 {
 	private Animator animator;
 	//private LogicScript logic;
-	private PlayerControlScript player;
+	//private PlayerControlScript player;
 	//private SpriteRenderer sprite;
 
 	[SerializeField] private float cooldownDuration;
@@ -33,7 +33,7 @@ public class RechargeCrystalScript : MonoBehaviour
     {
 		animator = GetComponent<Animator>();
 		//logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
-		player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControlScript>();
+		//player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControlScript>();
 		//sprite = GetComponent<SpriteRenderer>();
 		impulseSource = GetComponent<CinemachineImpulseSource>();
 
@@ -105,10 +105,10 @@ public class RechargeCrystalScript : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
 	{
-		if(collision.gameObject.tag == "Player" && isPowerActive && player.fireballChargeNeeded())
+		if(collision.gameObject.tag == "Player" && isPowerActive && PlayerControlScript.instance.fireballChargeNeeded())
 		{
 			losePower();
-			player.fireballChargeGain(3);
+			PlayerControlScript.instance.fireballChargeGain(3);
 		}
 	}
 }

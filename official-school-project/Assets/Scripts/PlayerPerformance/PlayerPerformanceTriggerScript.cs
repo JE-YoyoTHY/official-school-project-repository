@@ -214,6 +214,16 @@ public class PlayerPerformanceTriggerScript : MonoBehaviour
 		CameraShakeManagerScript.instance.cameraShakeWithProfileWithRandomDirection(performanceTriggerInspectorObject.screenShakeProfile, impulseSource);
 	}
 
+	public void performanceTileDestroy(string name)
+	{
+		LogicScript.instance.performanceTileDestroy(name);
+	}
+
+	public void enablePlayerFireball()
+	{
+		PlayerControlScript.instance.fireballPlayerGetAbility();
+	}
+
 	#endregion
 }
 

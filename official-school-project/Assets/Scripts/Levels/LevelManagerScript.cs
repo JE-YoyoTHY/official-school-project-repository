@@ -16,7 +16,7 @@ public class LevelManagerScript : MonoBehaviour
 
 	private CinemachineBrain cinemachineBrain;
 	private CinemachineVirtualCamera currentCam;
-	private PlayerControlScript player;
+	//private PlayerControlScript player;
 
 	private GameObject currentRespawnPoint; // default is child 0 -> 0-> 0-> 0 //basic -> respawn points -> trigger ->pos
 
@@ -28,7 +28,7 @@ public class LevelManagerScript : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-		player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControlScript>();
+		//player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControlScript>();
 		cinemachineBrain = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CinemachineBrain>();
 
 		currentRespawnPoint = transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).gameObject;
@@ -37,7 +37,7 @@ public class LevelManagerScript : MonoBehaviour
 		{
 			//if (i == 0) swapCamera(transform.GetChild(1).GetChild(0).GetChild(i).GetComponent<CinemachineVirtualCamera>());
 			currentCam = transform.GetChild(1).GetChild(0).GetChild(0).GetComponent<CinemachineVirtualCamera>();
-			transform.GetChild(1).GetChild(0).GetChild(i).GetComponent<CinemachineVirtualCamera>().Follow = player.transform;
+			transform.GetChild(1).GetChild(0).GetChild(i).GetComponent<CinemachineVirtualCamera>().Follow = PlayerControlScript.instance.transform;
 			//transform.GetChild(1).GetChild(0).GetChild(i).GetComponent<CinemachineConfiner2D>().m_BoundingShape2D = transform.GetChild(1).GetChild(2).GetComponent<Collider2D>(); // 1 -> cam component, 2 -> boundary
 		}
 
@@ -45,7 +45,13 @@ public class LevelManagerScript : MonoBehaviour
 		{
 			if (transform.GetChild(2).GetChild(i).tag == "RechargeCrystal") levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<RechargeCrystalScript>().regainPower);
 			if (transform.GetChild(2).GetChild(i).tag == "Gate") levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<GateScript>().gateReset);
-			if (transform.GetChild(2).GetChild(i).tag == "TutorialShade") levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<TutorialShadeScript>().resetTutorial);
+			if (transform.GetChild(2).GetChild(i).tag == "TutorialShade")
+			{
+				levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<TutorialShadeScript>().resetTutorial);
+				LogicScript.instance.tutorialShadeFreezeTime(transform.GetChild(2).GetChild(i).GetComponent<TutorialShadeScript>());
+
+			}
+			
 			//if (transform.GetChild(2).GetChild(i).tag == "BreakablePlatform") levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<BreakablePlatformScript>().restoreAfterBreak);
 		}
 
@@ -64,8 +70,12 @@ public class LevelManagerScript : MonoBehaviour
 		//transform.GetChild(3).GetComponent<CinemachineVirtualCamera>().Priority = 11;
 		setCamera();
 
-		player.transform.position = currentRespawnPoint.transform.position;
+		PlayerControlScript.instance.transform.position = currentRespawnPoint.transform.position;
 		currentRespawnPoint.transform.parent.GetComponent<RespawnPointScript>().changeCameraAfterRespawn();
+
+
+		//call logic to set up
+		LogicScript.instance.gridColor();
 
 	}
 
@@ -83,7 +93,7 @@ public class LevelManagerScript : MonoBehaviour
 		cinemachineBrain.m_DefaultBlend.m_Time = 0;
 
 		//player.transform.position = transform.GetChild(0).GetChild(0).transform.position; //child 0 -> basic, 0 -> respawn
-		player.transform.position = currentRespawnPoint.transform.position;
+		PlayerControlScript.instance.transform.position = currentRespawnPoint.transform.position;
 		currentRespawnPoint.transform.parent.GetComponent<RespawnPointScript>().changeCameraAfterRespawn();
 		levelSetUpEvent.Invoke();
 
