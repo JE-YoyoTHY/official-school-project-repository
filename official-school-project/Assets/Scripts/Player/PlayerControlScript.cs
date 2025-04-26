@@ -927,9 +927,9 @@ public class PlayerControlScript : MonoBehaviour
 		if (moveLessCoroutine != null) StopCoroutine(moveLessCoroutine);
 		if (jumpLessCoroutine != null) StopCoroutine(jumpLessCoroutine);
 
-		//move boost
-		if (fireballDir.x > 0) fireballHangTimeMoveBoostDir = -1;
-		else if (fireballDir.x < 0) fireballHangTimeMoveBoostDir = 1;
+		//move boost , only horizontal has now
+		if (fireballDir.x > 0 && fireballDir.y == 0) fireballHangTimeMoveBoostDir = -1;
+		else if (fireballDir.x < 0 && fireballDir.y == 0) fireballHangTimeMoveBoostDir = 1;
 		else fireballHangTimeMoveBoostDir = 0;
 
 		mySetFriction(myNormalFrictionAcceleration, myNormalAdjustFriction);

@@ -185,7 +185,7 @@ MonoBehaviour:
   springDuration: 0.3
   springGravityScale: 20
   springFriction: 20
-  hitPlayerVelocity: {x: 0, y: -17}
+  hitPlayerVelocity: {x: 0, y: 0}
   pointTimeInterval: 0.02
 --- !u!120 &1587411442087083937
 LineRenderer:

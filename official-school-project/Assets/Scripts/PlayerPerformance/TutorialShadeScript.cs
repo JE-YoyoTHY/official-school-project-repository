@@ -603,8 +603,8 @@ public class TutorialShadeScript : MonoBehaviour
 		isFrictionActive = true; isMoveActive = true; //isJumpActive = true;
 
 		//move boost
-		if (fireballDir.x > 0) fireballHangTimeMoveBoostDir = -1;
-		else if (fireballDir.x < 0) fireballHangTimeMoveBoostDir = 1;
+		if (fireballDir.x > 0 && fireballDir.y == 0) fireballHangTimeMoveBoostDir = -1;
+		else if (fireballDir.x < 0 && fireballDir.y == 0) fireballHangTimeMoveBoostDir = 1;
 		else fireballHangTimeMoveBoostDir = 0;
 
 		mySetFriction(PlayerControlScript.instance.m_myNormalFrictionAcceleration, PlayerControlScript.instance.m_myNormalAdjustFriction);
@@ -873,80 +873,4 @@ public class TutorialShadeScript : MonoBehaviour
 	#endregion
 
 
-	#region setup
-
-	/*private void setupVariable()
-	{
-	
-		PlayerControlScript.instance.m_myNormalGravityScale = PlayerControlScript.;
-		PlayerControlScript.instance.m_myNormalGravityMaxSpeed;
-		myFrictionAcceleration;
-		myAdjustFriction; // when player has acceleration and speed greater than max, apply this force
-		PlayerControlScript.instance.m_myNormalFrictionAcceleration;
-		PlayerControlScript.instance.m_myNormalAdjustFriction;
-		private bool isFrictionActive;
-
-		//move
-		private float PlayerControlScript.instance.m_moveMaxSpeed;
-		private float PlayerControlScript.instance.m_moveAcceleration;
-		private bool isMoving;
-		private sbyte moveDir;
-		private bool isMoveActive;
-
-		//jump
-		private float PlayerControlScript.instance.m_jumpStrength;
-		private float PlayerControlScript.instance.m_jumpStrength;
-		private float PlayerControlScript.instance.m_jumpMinSpeed;
-		private bool isJumping;
-		private Coroutine jumpExtraHangTimeCoroutine;
-		private float PlayerControlScript.instance.m_jumpExtraHangTimeGravityScale;
-		private bool isJumpActive;
-
-		//fireball basic
-		[SerializeField] private GameObject fireballPrefab;
-		private Vector2 fireballDir;
-		//private bool isFireballActive;
-
-		//fireball push
-		private float PlayerControlScript.instance.m_fireballPushForceAcceleration;
-		private float PlayerControlScript.instance.m_fireballPushForceMaxSpeed;
-		private float fireballPushForceDuration;
-		private float PlayerControlScript.instance.m_fireballPushUpForceScale;
-		private bool isFireballPushForceAdding;
-		private float fireballPushForceDurationCounter;
-		private float PlayerControlScript.instance.m_fireballPushForceHangTimeDuration;
-		private Coroutine fireballHangTimeCoroutine;
-
-		//fireball hangtime
-		private float PlayerControlScript.instance.m_fireballHangTimeFrictionScale;
-		private float PlayerControlScript.instance.m_fireballHangTimeMoveSameDirBoost;
-		private float fireballHangTimeMoveDifferentDirDecrease;
-		private sbyte fireballHangTimeMoveBoostDir; // if player try to move this dir, they'll get boost, else decrease
-
-		//fireball explode
-		private float PlayerControlScript.instance.m_fireballExplodeForce;
-		private float PlayerControlScript.instance.m_fireballExplodeHorizontalScale;
-		private float PlayerControlScript.instance.m_fireballExplodeMoveSameDirBoost;
-		private float PlayerControlScript.instance.m_fireballExplodeMoveDifferentDirDecrease;
-		private float PlayerControlScript.instance.m_fireballExplodeGuaranteeSpeedScale; // ���y�z�����_���t�סA�]�����y�t�׬O�Υ[��, �H�o���n�[���t�׬����
-		private float PlayerControlScript.instance.m_fireballExplodeMaxSpeedScale; // �Hexplode force�����, x y ���O�B�z
-		private float PlayerControlScript.instance.m_fireballExplodeExtraPushUpForce;
-		private float PlayerControlScript.instance.m_fireballExplodeExtraPushUpAngle; //�p�G��V�V�q�������P�����b���ƭȤ����A�|�����@�V�W�t��
-		private float PlayerControlScript.instance.m_fireballExplodeDuration;
-		private float PlayerControlScript.instance.m_fireballExplodeGravityScale;
-		private float PlayerControlScript.instance.m_fireballExplodeFriction;
-		private float PlayerControlScript.instance.m_fireballExplodeAdjustFriction;
-		private float fireballExplodePlayerControlScript.instance.m_moveAccelerationScale;
-		private bool isPlayerControlScript.instance.m_fireballExplodeForceAdding;
-		private Coroutine fireballExplodeCoroutine;
-
-		//freeze velocity
-		private Vector2 freezeVelocity;
-
-		//spring
-		private bool isControlBySpring;
-		private Coroutine springCoroutine;
-}*/
-
-	#endregion
 }

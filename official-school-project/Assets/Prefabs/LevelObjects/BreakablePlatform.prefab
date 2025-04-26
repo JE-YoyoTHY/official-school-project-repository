@@ -5365,7 +5365,7 @@ MonoBehaviour:
   - {fileID: 986574246, guid: d130824b676817449898a5954f7a3c20, type: 3}
   - {fileID: 986574246, guid: d130824b676817449898a5954f7a3c20, type: 3}
   breakTime: 1
-  restoreTime: 1.4
+  restoreTime: 1.5
   playerJumpBreakTime: 0.2
   tileOnLeft: {fileID: 0}
   tileOnRight: {fileID: 0}
