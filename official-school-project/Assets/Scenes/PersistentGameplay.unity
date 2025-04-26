@@ -838,6 +838,9 @@ MonoBehaviour:
   fireballExplodeFriction: 30
   fireballExplodeAdjustFriction: 15
   fireballExplodeMoveAccelerationScale: 0.4
+  fireballExplodeShade: {fileID: 0}
+  fireballExplodeShadeInterval: 0
+  fireballExplodeShadeCount: 0
   deathRespawnDelayTime: 0.05
   deathHoleScript: {fileID: 0}
   levelTransitionHoleScript: {fileID: 0}
@@ -1391,6 +1394,13 @@ MonoBehaviour:
   fireballCastByKeyboardInput: 3
   fireballCastByMouseInput: 3
   fireballDirInput: {x: 0, y: 0}
+  inputAsset: {fileID: -944628639613478452, guid: fafb337cfa4dba94584c1db912a56d83, type: 3}
+  playerMap:
+    m_Name: Player Map
+    m_Id: b14b0169-f474-4e65-9ac1-8d6860e5c86c
+    m_Asset: {fileID: 0}
+    m_Actions: []
+    m_Bindings: []
 --- !u!114 &1529293492
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1418,7 +1428,7 @@ MonoBehaviour:
   m_ActionEvents: []
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: PlayerNormal
+  m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!4 &1529293493

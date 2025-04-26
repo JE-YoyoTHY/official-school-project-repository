@@ -15,7 +15,9 @@ public class InputManagerScript : MonoBehaviour
 	public InputState fireballCastByMouseInput;
 	public Vector2 fireballDirInput = Vector2.zero;
 
-	private PlayerInput playerInput;
+    [SerializeField] private InputActionAsset inputAsset;
+    [SerializeField] private InputActionMap playerMap;
+    private PlayerInput playerInput;
 	//private InputAction moveAction;
 	private InputAction moveLeftAction;
 	private InputAction moveRightAction;
@@ -41,6 +43,7 @@ public class InputManagerScript : MonoBehaviour
 		{
 			instance = this;
 		}
+		playerMap = inputAsset.FindActionMap("Player");
 
 		playerInput = GetComponent<PlayerInput>();
 
@@ -55,18 +58,30 @@ public class InputManagerScript : MonoBehaviour
 
 	private void setupInputAction()
 	{
-		//moveAction = playerInput.actions["move"];
-		moveLeftAction = playerInput.actions["moveLeft"];
-		moveRightAction = playerInput.actions["moveRight"];
-		jumpAction = playerInput.actions["jump"];
-		//fireballCastByKeyboardAction = playerInput.actions["fireballCastByKeyboard"];
-		fireballCastByMouseAction = playerInput.actions["fireballCastByMouse"];
-		//fireballDirAction = playerInput.actions["fireballDir"];
-		fireballDirUpAction = playerInput.actions["fireballDirUp"];
-		fireballDirDownAction = playerInput.actions["fireballDirDown"];
-		fireballDirLeftAction = playerInput.actions["fireballDirLeft"];
-		fireballDirRightAction = playerInput.actions["fireballDirRight"];
-	}
+		//////////moveAction = playerInput.actions["move"];
+		//moveLeftAction = playerInput.actions["moveLeft"];
+		//moveRightAction = playerInput.actions["moveRight"];
+		//jumpAction = playerInput.actions["jump"];
+		//////////fireballCastByKeyboardAction = playerInput.actions["fireballCastByKeyboard"];
+		//fireballCastByMouseAction = playerInput.actions["fireballCastByMouse"];
+		//////////fireballDirAction = playerInput.actions["fireballDir"];
+		//fireballDirUpAction = playerInput.actions["fireballDirUp"];
+		//fireballDirDownAction = playerInput.actions["fireballDirDown"];
+		//fireballDirLeftAction = playerInput.actions["fireballDirLeft"];
+		//fireballDirRightAction = playerInput.actions["fireballDirRight"];
+
+
+		moveLeftAction = playerMap.FindAction("moveLeft");
+        moveRightAction = playerMap.FindAction("moveRight");
+        jumpAction = playerMap.FindAction("jump");
+
+        fireballCastByMouseAction = playerMap.FindAction("fireballCastByMouse");
+
+        fireballDirUpAction = playerMap.FindAction("fireballDirUp");
+        fireballDirDownAction = playerMap.FindAction("fireballDirDown");
+        fireballDirLeftAction = playerMap.FindAction("fireballDirLeft");
+        fireballDirRightAction = playerMap.FindAction("fireballDirRight");
+    }
 
 	private void updateInputs()
 	{

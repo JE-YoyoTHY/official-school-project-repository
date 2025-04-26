@@ -37,11 +37,10 @@ public class RebindingUI : MonoBehaviour
     [SerializeField] private InputActionReference targetActionRef;
     [SerializeField] private Canvas rebindCanvas;
     [SerializeField] private BindingChangedEventBroadcaster broadCaster;  // 只要有就會Invoke, 不論是一個還是全部
+    [SerializeField] private GameObject overlay;
 
     [Header("--- Read Only ---")]
-    [SerializeField] private GameObject overlay;
     [SerializeField] private GameObject promptLabel;
-
     [SerializeField] private GameObject rebindUIPrefab;
     [SerializeField] private GameObject actionLabel;
     [SerializeField] private GameObject startRebindButton;
@@ -83,7 +82,10 @@ public class RebindingUI : MonoBehaviour
         if (inputAsset == null) { Debug.LogError("inputAsset is null"); }
 
         // rebind canvas's
-        overlay = rebindCanvas.transform.GetChild(rebindCanvas.transform.childCount - 1).transform.gameObject;
+        if (overlay == null)
+        {
+            overlay = rebindCanvas.transform.GetChild(rebindCanvas.transform.childCount - 1).transform.gameObject;
+        }
         promptLabel = overlay.transform.GetChild(0).transform.gameObject;
 
         // rebind UI prefab's
