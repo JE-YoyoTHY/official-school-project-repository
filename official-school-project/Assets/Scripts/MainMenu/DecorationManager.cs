@@ -16,7 +16,7 @@ public class DecorationManager : MonoBehaviour
 
     private GameObject currentDecorationObj;
     private MainMenuDecorationOptions currentDecorationEnum;
-    private Tweener currentTweener;
+    public Tweener currentTweener;
     private float maxRadius = 1.5f;
 
     [Header("Colorize")]
@@ -40,51 +40,87 @@ public class DecorationManager : MonoBehaviour
     }
     void Start()
     {
-        
+        initDecoration(MainMenuDecorationOptions.PlaySelection);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-    public void changeDecoration(MainMenuDecorationOptions whichDecoratoin)
+    public void initDecoration(MainMenuDecorationOptions whichDecoration)
+    {
+        currentDecorationEnum = whichDecoration;
+        currentDecorationObj = decorationDict[whichDecoration].Item1;
+    }
+
+    public void changeDecoration(MainMenuDecorationOptions whichDecoration)
     {
         currentDecorationObj.SetActive(false);
-        currentDecorationEnum = whichDecoratoin;
-        currentDecorationObj = decorationDict[whichDecoratoin].Item1;
+        currentDecorationEnum = whichDecoration;
+        currentDecorationObj = decorationDict[whichDecoration].Item1;
     }
 
     public void performDecorationColorize()
     {
         Material currentMAT = decorationDict[currentDecorationEnum].Item2;
         currentMAT.SetFloat("_Mode", 1f);  // colorize mode, shows color when radius > 0
+
+        if (currentTweener != null)
+        {
+            currentTweener.Kill();
+        }
         currentTweener = currentMAT.DOFloat(maxRadius, "_Radius", colorizeDuration).SetEase(colorizeEase);
+        currentTweener.onComplete = performImmersiveDecoration;
     }
 
-    public void performDecorationToGray()
+    public void performDecorationToGrayInstantly()
     {
         Material currentMAT = decorationDict[currentDecorationEnum].Item2;
-        currentTweener.Kill();
+        if (currentTweener != null)
+        {
+            currentTweener.Kill();
+        }
         currentMAT.SetFloat("_Mode", 0f);  // gray mode
         currentMAT.SetFloat("_Radius", 0f);  // prepare for future use
 
-        if (currentDecorationEnum == MainMenuDecorationOptions.PlaySelection)
+        stopImmersiveDecoration();
+    }
+    public void performDecorationToGrayGradually()
+    {
+        Material currentMAT = decorationDict[currentDecorationEnum].Item2;
+
+        if (currentTweener != null)
         {
-            DecorationCloudSpawner decorCloudSpawner = transform.Find("PlaySelection").transform.GetComponent<DecorationCloudSpawner>();
-            decorCloudSpawner.canSpawn = false;
-            decorCloudSpawner.cloudSpeedMultiplier = 0f;  // stop the clouds from moving
+            currentTweener.Kill();
         }
+        currentTweener = currentMAT.DOFloat(0, "_Radius", colorizeDuration).SetEase(colorizeEase);
+        currentTweener.onComplete = stopImmersiveDecoration;
+
+
     }
 
     public void performImmersiveDecoration()
     {
         if (currentDecorationEnum == MainMenuDecorationOptions.PlaySelection)
         {
-            DecorationCloudSpawner decorCloudSpawner = transform.Find("PlaySelection").transform.GetComponent<DecorationCloudSpawner>();
+            DecorationCloudSpawner decorCloudSpawner = transform.Find("PlaySelection").transform.Find("DecorationCloudSpawner").GetComponent<DecorationCloudSpawner>();
             decorCloudSpawner.canSpawn = true;
             decorCloudSpawner.cloudSpeedMultiplier = 1f;  // make the clouds move again
+        }
+    }
+
+    public void stopImmersiveDecoration()
+    {
+        if (currentDecorationEnum == MainMenuDecorationOptions.PlaySelection)
+        {
+            if (currentDecorationEnum == MainMenuDecorationOptions.PlaySelection)
+            {
+                DecorationCloudSpawner decorCloudSpawner = transform.Find("PlaySelection").transform.Find("DecorationCloudSpawner").GetComponent<DecorationCloudSpawner>();
+                decorCloudSpawner.canSpawn = false;
+                decorCloudSpawner.cloudSpeedMultiplier = 0f;  // stop the clouds from moving
+            }
         }
     }
 }

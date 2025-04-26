@@ -36,6 +36,7 @@ public class DecorationCloud : MonoBehaviour
     {
         cloudDeadCheck();
         cloudMove();
+        cloudSpeedMultiplier = decorCloudSpawner.cloudSpeedMultiplier;
     }
 
     public void cloudMove()

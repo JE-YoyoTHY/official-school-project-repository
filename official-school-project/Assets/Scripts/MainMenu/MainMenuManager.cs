@@ -8,6 +8,7 @@ using DG.Tweening;
 public class MainMenuManager : MonoBehaviour
 {
 	[Header("Main Menu Objects")]
+	[SerializeField] private DecorationManager decorManager;
 	[SerializeField] private GameObject loadingBar;
 	[SerializeField] private Image loadingBarImage;
 	[SerializeField] private GameObject[] objectsToHide;
@@ -30,6 +31,11 @@ public class MainMenuManager : MonoBehaviour
 
 	public void startGame()
 	{
+		if (decorManager != null)
+		{
+			decorManager.currentTweener.Kill();
+		}
+
 		//hide menu
 		hideMenu();
 

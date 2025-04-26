@@ -55,17 +55,25 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
         else if (whichButton == ButtonTypes.CloseSettingButton)
         {
+            if (startGameButton != null)
+            {
+                startGameButton.SetActive(true);
+                openSettingButton.SetActive(true);
+                openCreditButton.SetActive(true);
+            }
             settingTab.SetActive(false);
-            startGameButton.SetActive(true);
-            openSettingButton.SetActive(true);
-            openCreditButton.SetActive(true);
+
         }
         else if (whichButton == ButtonTypes.OpenSettingButton)
         {
+            if (startGameButton != null)
+            {
+                startGameButton.SetActive(false);
+                openSettingButton.SetActive(false);
+                openCreditButton.SetActive(false);
+            }
             settingTab.SetActive(true);
-            startGameButton.SetActive(false);
-            openSettingButton.SetActive(false);
-            openCreditButton.SetActive(false);
+
         }
         else if (whichButton == ButtonTypes.StartGameButton)
         {
@@ -77,7 +85,7 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         if (whichButton == ButtonTypes.StartGameButton)
         {
-            
+            decorManager.performDecorationColorize();
         }
         else if (whichButton == ButtonTypes.OpenSettingButton)
         {
@@ -92,7 +100,7 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         if (whichButton == ButtonTypes.StartGameButton)
         {
-
+            decorManager.performDecorationToGrayGradually();
         }
         else if (whichButton == ButtonTypes.OpenSettingButton)
         {
