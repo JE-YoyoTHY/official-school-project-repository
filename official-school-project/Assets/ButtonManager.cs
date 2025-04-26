@@ -2,27 +2,43 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class ButtonManager : MonoBehaviour
+public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public enum ButtonTypes
     {
         _None,
-        RebindSwitch
+        StartGameButton,
+        RebindSwitch,
+        OpenSettingButton,
+        CloseSettingButton, 
+        OpenCreditButton, 
+        CloseCreditButton,
     }
 
-    [Header("Drag-Needed")]
+    [Header("General (Might be used multiple times)")]
     // buttons
     [SerializeField] private ButtonTypes whichButton;  // inspector
+    [SerializeField] private DecorationManager decorManager;
 
     // targets
+    [Header("Rebind Switch")]
     [SerializeField] private GameObject rebindCanvas;
+
+    [Header("Open / Close Setting Button")]
+    [SerializeField] private GameObject settingTab;
+    [SerializeField] private GameObject startGameButton;
+    [SerializeField] private GameObject openSettingButton;
+    [SerializeField] private GameObject openCreditButton;
+
+    [Header("Start Game Button")]
+    [SerializeField] MainMenuManager mainMenuManager;
 
     // Start is called before the first frame update
     void Start()
     {
         if (whichButton == ButtonTypes._None) { Debug.LogError("ButtonType 未設置"); }
-        if (rebindCanvas == null) { Debug.LogError("Rebind Canvas 未設置"); }
     }
 
     // Update is called once per frame
@@ -37,5 +53,55 @@ public class ButtonManager : MonoBehaviour
         {
             rebindCanvas.SetActive(!rebindCanvas.activeSelf);
         }
+        else if (whichButton == ButtonTypes.CloseSettingButton)
+        {
+            settingTab.SetActive(false);
+            startGameButton.SetActive(true);
+            openSettingButton.SetActive(true);
+            openCreditButton.SetActive(true);
+        }
+        else if (whichButton == ButtonTypes.OpenSettingButton)
+        {
+            settingTab.SetActive(true);
+            startGameButton.SetActive(false);
+            openSettingButton.SetActive(false);
+            openCreditButton.SetActive(false);
+        }
+        else if (whichButton == ButtonTypes.StartGameButton)
+        {
+            mainMenuManager.startGame();
+        }
     }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (whichButton == ButtonTypes.StartGameButton)
+        {
+            
+        }
+        else if (whichButton == ButtonTypes.OpenSettingButton)
+        {
+
+        }
+        else if (whichButton == ButtonTypes.OpenCreditButton)
+        {
+
+        }
+    }
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (whichButton == ButtonTypes.StartGameButton)
+        {
+
+        }
+        else if (whichButton == ButtonTypes.OpenSettingButton)
+        {
+
+        }
+        else if (whichButton == ButtonTypes.OpenCreditButton)
+        {
+
+        }
+    }
+
 }

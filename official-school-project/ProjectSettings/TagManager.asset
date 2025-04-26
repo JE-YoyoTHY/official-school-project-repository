@@ -18,6 +18,7 @@ TagManager:
   - TutorialShade
   - TutorialShadeFireball
   - DeadZoneSpike
+  - Decoratoin_PlaySelection
   layers:
   - Default
   - TransparentFX
@@ -60,4 +61,13 @@ TagManager:
     locked: 0
   - name: UI
     uniqueID: 4264060363
+    locked: 0
+  - name: MainMenu_Decor_Back
+    uniqueID: 1200451329
+    locked: 0
+  - name: MainMenu_Decor_Middle
+    uniqueID: 713470951
+    locked: 0
+  - name: MainMenu_Decor_Front
+    uniqueID: 1762020439
     locked: 0

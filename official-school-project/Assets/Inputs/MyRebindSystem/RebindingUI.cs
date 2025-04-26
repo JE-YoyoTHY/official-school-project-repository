@@ -42,6 +42,7 @@ public class RebindingUI : MonoBehaviour
     [Header("--- Read Only ---")]
     [SerializeField] private GameObject promptLabel;
     [SerializeField] private GameObject rebindUIPrefab;
+    [SerializeField] private GameObject buttonOutline;
     [SerializeField] private GameObject actionLabel;
     [SerializeField] private GameObject startRebindButton;
     [SerializeField] private GameObject bindingLabel;
@@ -69,7 +70,7 @@ public class RebindingUI : MonoBehaviour
     {
         promptStrings = new Dictionary<promptStringsNames, string>()
         {
-            {promptStringsNames.waitForInput, "Press a new key..." },
+            {promptStringsNames.waitForInput, "Press a new key... (Esc to cancel)" },
             {promptStringsNames.rebindCanceled, "Rebind canceled." }
         };
 
@@ -90,10 +91,11 @@ public class RebindingUI : MonoBehaviour
 
         // rebind UI prefab's
         rebindUIPrefab = gameObject;
-        actionLabel = rebindUIPrefab.transform.GetChild(0).transform.gameObject;
-        startRebindButton = rebindUIPrefab.transform.GetChild(1).transform.gameObject;
+        buttonOutline = rebindUIPrefab.transform.GetChild(0).transform.gameObject;
+        actionLabel = rebindUIPrefab.transform.GetChild(1).transform.gameObject;
+        startRebindButton = rebindUIPrefab.transform.GetChild(2).transform.gameObject;
         bindingLabel = startRebindButton.transform.GetChild(0).transform.gameObject;
-        resetButton = rebindUIPrefab.transform.GetChild(2).transform.gameObject;
+        resetButton = rebindUIPrefab.transform.GetChild(3).transform.gameObject;
         resetLabel = resetButton.transform.GetChild(0).transform.gameObject;
 
         #endregion

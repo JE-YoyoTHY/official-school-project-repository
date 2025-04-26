@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using DG.Tweening;
 
-public class MainMenuManagerScript : MonoBehaviour
+public class MainMenuManager : MonoBehaviour
 {
 	[Header("Main Menu Objects")]
 	[SerializeField] private GameObject loadingBar;
@@ -30,9 +30,6 @@ public class MainMenuManagerScript : MonoBehaviour
 
 	public void startGame()
 	{
-		//set up
-		loadingBar.SetActive(true);
-
 		//hide menu
 		hideMenu();
 
@@ -41,7 +38,12 @@ public class MainMenuManagerScript : MonoBehaviour
 		sceneToLoad.Add(SceneManager.LoadSceneAsync(level, LoadSceneMode.Additive));
 
 		//loading bar
-		StartCoroutine(progressLoadingBar());
+		if (loadingBar != null)
+		{
+            loadingBar.SetActive(true);
+            StartCoroutine(progressLoadingBar());
+		}
+		
 	}
 
 	private void hideMenu()
