@@ -975,6 +975,11 @@ public class PlayerControlScript : MonoBehaviour
 			if (fireballHangTimeCoroutine != null) StopCoroutine(fireballHangTimeCoroutine);
 			fireballHangTimeMoveBoostDir = 0;
 
+			//if hit by fireball, reset vy if its below 0
+			if (fireballVelocity.magnitude > 0 && rb.velocity.y < 0)
+			{
+				mySetVy(0);
+			}
 
 			/* extra push up force for horizontal only
 			 * and because of this, jump will be disabled while explode duration
