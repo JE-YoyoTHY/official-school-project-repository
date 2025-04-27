@@ -46,13 +46,15 @@ public class DecorationCloudSpawner : MonoBehaviour
         Vector3 spawnPosition = getRandomSpawnPos();
         DecorationCloud cloudScript = Instantiate(cloudPrefab, getRandomSpawnPos(), new Quaternion(0, 0, 0, 0), spawnerTransform);
         GameObject cloudObj = cloudScript.gameObject;
+        SpriteRenderer cloudSprite = cloudObj.GetComponent<SpriteRenderer>();
         cloudObj.GetComponent<SpriteRenderer>().sprite = cloudImages[Random.Range(0, cloudImages.Count)];
         cloudObj.GetComponent<SpriteRenderer>().sortingLayerName = sortingLayerNames[Random.Range(0, sortingLayerNames.Count)];
+        cloudSprite.color = new Color(0.15f, 0.1f, 0.4f ,1f);
     }
 
     public Vector3 getRandomSpawnPos()
     {
-        Vector3 spawnPos = new Vector3(gameObject.transform.position.x, Random.Range(cloudSpawnYMin, cloudSpawnYMax), 0);
+        Vector3 spawnPos = new Vector3(gameObject.transform.position.x, Random.Range(cloudSpawnYMin, cloudSpawnYMax), Random.Range(1, -1));
         return spawnPos;
     }
     

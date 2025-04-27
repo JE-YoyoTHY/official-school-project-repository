@@ -57,6 +57,7 @@ MonoBehaviour:
   cloudSpawnYMin: -1.5
   cloudSpawnYMax: 3
   canSpawn: 0
+  cloudSpeedMultiplier: 1
 --- !u!212 &5625488338377952705
 SpriteRenderer:
   m_ObjectHideFlags: 0
