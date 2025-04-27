@@ -179,9 +179,14 @@ public class FireballScript : MonoBehaviour
 		//particle
 		//explosionParticleInstance = Instantiate(explosionParticle, transform.position, Quaternion.identity);
 		GetComponent<ParticleCommonScript>().emitParticle();
-
+		transform.GetChild(0).gameObject.SetActive(false); // child 0 -> constant particle
 
 		//collision
+
+		//if only triggers touch breakable Platform -> break it
+		if (triggerOnLeft.collidingBreakablePlatform != null && triggerOnRight.collidingBreakablePlatform != null)
+			triggerOnRight.collidingBreakablePlatform.breakStart(true, null);
+
 		myIgnoreCollision(false);
 		coll.isTrigger = true;
 

@@ -863,7 +863,41 @@ public class TutorialShadeScript : MonoBehaviour
 		tutorialStarted = true;
 		currentController = firstController;
 		currentController.enterTrigger(this);
-		//print("akjlasjf");
+
+
+		//reset
+
+		rb.velocity = Vector2.zero;
+
+		//jump
+		if (isJumping) jumpEnd();
+		//if (jumpExtraHangTimeCoroutine != null) StopCoroutine(jumpExtraHangTimeCoroutine);
+
+		//fireball
+		if (isFireballPushForceAdding) fireballPushForceEnd();
+		if (isFireballExplodeForceAdding) fireballExplodeEnd();
+		//if (fireballHangTimeCoroutine != null) StopCoroutine(fireballHangTimeCoroutine);
+		GameObject[] fbs;
+		fbs = GameObject.FindGameObjectsWithTag("TutorialShadeFireball");
+		foreach (GameObject fb in fbs) Destroy(fb);
+
+
+		//physic state
+		mySetGravity(PlayerControlScript.instance.m_myNormalGravityScale, PlayerControlScript.instance.m_myNormalGravityMaxSpeed);
+		mySetFriction(PlayerControlScript.instance.m_myNormalFrictionAcceleration, PlayerControlScript.instance.m_myNormalAdjustFriction);
+		fireballHangTimeMoveBoostDir = 0;
+		//isFrictionActive = true; isMoveActive = true; isJumpActive = true; isFireballActive = true;
+
+		//coroutine
+		//if (jumpCoroutine != null) StopCoroutine(jumpCoroutine);
+		//if (fireballInputCoroutine != null) StopCoroutine(fireballInputCoroutine);
+		//if (fireballExplodeCoroutine != null) StopCoroutine(fireballExplodeCoroutine);
+		//if (fireballExplodeCoroutine != null) StopCoroutine(fireballExplodeCoroutine);
+		//if (moveLessCoroutine != null) StopCoroutine(moveLessCoroutine);
+		//if (jumpLessCoroutine != null) StopCoroutine(jumpLessCoroutine);
+		//if (fireballLessCoroutine != null) StopCoroutine(fireballLessCoroutine);
+		StopAllCoroutines();
+		isFrictionActive = true; isMoveActive = true;// isJumpActive = true; isFireballActive = true;
 	}
 
 	// public void startLoop(){

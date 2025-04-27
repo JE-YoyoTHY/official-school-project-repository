@@ -2,11 +2,13 @@ using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
 public class RechargeCrystalScript : MonoBehaviour
 {
 	private Animator animator;
+	private Light2D light;
 	//private LogicScript logic;
 	//private PlayerControlScript player;
 	//private SpriteRenderer sprite;
@@ -32,6 +34,7 @@ public class RechargeCrystalScript : MonoBehaviour
     void Start()
     {
 		animator = GetComponent<Animator>();
+		light = GetComponent<Light2D>();
 		//logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
 		//player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControlScript>();
 		//sprite = GetComponent<SpriteRenderer>();
@@ -85,6 +88,7 @@ public class RechargeCrystalScript : MonoBehaviour
 		isPowerActive = true;
 		//sprite.color = activeColor;
 		animator.Play("ChargedFlameFlicker");
+		light.enabled = true;
 	}
 
 	//[Button]
@@ -101,6 +105,9 @@ public class RechargeCrystalScript : MonoBehaviour
 
 		//particle
 		GetComponent<ParticleCommonScript>().emitParticle();
+
+		//light
+		light.enabled = false;
     }
 
     private void OnTriggerStay2D(Collider2D collision)

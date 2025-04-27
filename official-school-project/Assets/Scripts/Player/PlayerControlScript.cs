@@ -1102,6 +1102,14 @@ public class PlayerControlScript : MonoBehaviour
 
 		//display
 		fireballMeter.transform.localScale = new Vector3(1, (float)fireballCurrentCharges / fireballMaxCharges, 1);
+
+		//light, child 2 -> light
+		if(transform.childCount > 2)
+		{
+			if (fireballCurrentCharges == fireballMaxCharges && fireballPlayerGotten) transform.GetChild(2).gameObject.SetActive(true);
+			else transform.GetChild(2).gameObject.SetActive(false);
+		}
+		
 	}
 
 	public bool fireballChargeNeeded()

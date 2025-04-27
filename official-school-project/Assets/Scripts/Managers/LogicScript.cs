@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.Tilemaps;
 
 public class LogicScript : MonoBehaviour
@@ -25,6 +26,8 @@ public class LogicScript : MonoBehaviour
 	public UnityEvent freezeEndEvent;
 
 	public List<TutorialShadeScript> tutorialShades;
+
+	[SerializeField] private Light2D globalLight;
 
 	private float freezeTimer;
 
@@ -127,6 +130,8 @@ public class LogicScript : MonoBehaviour
 			if (breakableGround.m_tileName == name) breakableGround.groundBreak();
 		}
 	}
+	#endregion
+
 
 	public void tutorialShadeFreezeTime(TutorialShadeScript shade)
 	{
@@ -140,6 +145,9 @@ public class LogicScript : MonoBehaviour
 		freezeEndEvent.AddListener(shade.freezeEnd);
 	}
 
-	#endregion
+	public void setGlobalLightIntensity(float intensity)
+	{
+		globalLight.intensity = intensity;
+	}
 
 }
