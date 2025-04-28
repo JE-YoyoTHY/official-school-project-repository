@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d1514134bc4fbd41bb739b1b9a49231, type: 3}
   m_Name: DeadZoneDownward
   m_EditorClassIdentifier: 
-  m_DefaultSprite: {fileID: 0}
-  m_DefaultGameObject: {fileID: 0}
-  m_DefaultColliderType: 1
+  m_DefaultSprite: {fileID: 21300000, guid: 15c547080f478e34ab4099c1703c8700, type: 3}
+  m_DefaultGameObject: {fileID: 232183815878308001, guid: b4892eb32f074ad439a970c00d02ca8c, type: 3}
+  m_DefaultColliderType: 2
   m_TilingRules: []

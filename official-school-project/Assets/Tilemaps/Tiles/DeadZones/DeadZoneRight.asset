@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d1514134bc4fbd41bb739b1b9a49231, type: 3}
+  m_Name: DeadZoneRight
+  m_EditorClassIdentifier: 
+  m_DefaultSprite: {fileID: 21300000, guid: 961499dc39683f447a2d40d4a10b24f1, type: 3}
+  m_DefaultGameObject: {fileID: 7835763529166648840, guid: 7c17b3dc757df7e4f8f4f7f22f1f5600, type: 3}
+  m_DefaultColliderType: 2
+  m_TilingRules: []
