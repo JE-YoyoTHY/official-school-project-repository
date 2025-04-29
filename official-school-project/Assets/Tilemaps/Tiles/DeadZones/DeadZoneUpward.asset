@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d1514134bc4fbd41bb739b1b9a49231, type: 3}
   m_Name: DeadZoneUpward
   m_EditorClassIdentifier: 
-  m_DefaultSprite: {fileID: 21300000, guid: 303ad16f4830a23478bfa713f8da8223, type: 3}
+  m_DefaultSprite: {fileID: 21300000, guid: 019783b87085a204d87edc314e28be7b, type: 3}
   m_DefaultGameObject: {fileID: 8394977813273698232, guid: 9805d981c69488743b6e1d7c07403210, type: 3}
   m_DefaultColliderType: 2
   m_TilingRules: []

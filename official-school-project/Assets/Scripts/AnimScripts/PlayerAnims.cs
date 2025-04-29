@@ -124,9 +124,9 @@ public class PlayerAnims : MonoBehaviour
     public void flipPlayerSprite(sbyte facingDir)
     {
         bool shouldFlip = false;
-        if (facingDir == 0) { return; }
-        if (facingDir == 1) { shouldFlip = false; }
-        else if (facingDir == -1) { shouldFlip = true; }
+        if (facingDir == 0 && currentVelocity.x == 0) { return; }
+        if (facingDir == 1 || currentVelocity.x > 0.05f) { shouldFlip = false; }
+        else if (facingDir == -1 || currentVelocity.x < -0.05f) { shouldFlip = true; }
 
         spriteRenderer.flipX = shouldFlip;
 
@@ -165,13 +165,13 @@ public class PlayerAnims : MonoBehaviour
 
         stateCondition = new Dictionary<string, bool>
         {
-            {"run",  playerControlScript.isMoving == true && playerGroundTriggerScript.isGrounded == true},
+            {"run",  Mathf.Abs(currentVelocity.x) > 0.05f && playerGroundTriggerScript.isGrounded == true},//{"run",  playerControlScript.isMoving == true && playerGroundTriggerScript.isGrounded == true}以前的run判別式
             {"jump", playerControlScript.isJumping == true},
             {"fall", currentVelocity.y <= 0 && playerGroundTriggerScript.isGrounded == false},
             {"land", getLandVelocity() != Vector2.zero && Mathf.Abs(getLandVelocity().y) <= hardLandMinVy},
             {"hard_land", getLandVelocity() != Vector2.zero && Mathf.Abs(getLandVelocity().y) <= hardLandMinVy},
             {"parkour_roll", getLandVelocity() != Vector2.zero && Mathf.Abs(getLandVelocity().y) > hardLandMinVy && Mathf.Abs(currentVelocity.x) > parkourRollMinVx},
-            {"idle", playerGroundTriggerScript.isGrounded == true && playerControlScript.isMoving == false && playerControlScript.isJumping == false}
+            {"idle", Mathf.Abs(currentVelocity.x) <= 0.05f && playerGroundTriggerScript.isGrounded == true && playerControlScript.isMoving == false && playerControlScript.isJumping == false}
         };
     }
 }
