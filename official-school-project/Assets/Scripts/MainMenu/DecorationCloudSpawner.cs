@@ -49,7 +49,6 @@ public class DecorationCloudSpawner : MonoBehaviour
         SpriteRenderer cloudSprite = cloudObj.GetComponent<SpriteRenderer>();
         cloudObj.GetComponent<SpriteRenderer>().sprite = cloudImages[Random.Range(0, cloudImages.Count)];
         cloudObj.GetComponent<SpriteRenderer>().sortingLayerName = sortingLayerNames[Random.Range(0, sortingLayerNames.Count)];
-        cloudSprite.color = new Color(0.15f, 0.1f, 0.4f ,1f);
     }
 
     public Vector3 getRandomSpawnPos()
