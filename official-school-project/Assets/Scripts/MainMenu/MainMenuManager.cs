@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using DG.Tweening;
+using Cinemachine;
 
 public class MainMenuManager : MonoBehaviour
 {
@@ -12,14 +13,23 @@ public class MainMenuManager : MonoBehaviour
 	[SerializeField] private GameObject loadingBar;
 	[SerializeField] private Image loadingBarImage;
 	[SerializeField] private GameObject[] objectsToHide;
+	[SerializeField] private CinemachineVirtualCamera mainMenuCam;
+	[SerializeField] private GameObject m_mainCamera;
+	
 
 	[Header("Scene field")]
+	[SerializeField] private SceneField mainMenu;
 	[SerializeField] private SceneField persistentGameplay;
 	[SerializeField] private SceneField level;
 
 	[Header("Modify")]
 	[SerializeField] private float loadAnimDuration;
 	private List<AsyncOperation> sceneToLoad = new List<AsyncOperation>();
+
+	[Header("Start Performance")]
+	//private Coroutine startPerformanceCoroutine;
+	[SerializeField] private CinemachineVirtualCamera slabCam;
+	[SerializeField] private float slabWaitTime;
 
 	
 
@@ -31,17 +41,58 @@ public class MainMenuManager : MonoBehaviour
 
 	public void startGame()
 	{
+		//if (decorManager != null)
+		//{
+		//	decorManager.currentTweener.Kill();
+		//}
+
+		//hide menu
+		//hideMenu();
+
+		//load scene
+		//sceneToLoad.Add(SceneManager.LoadSceneAsync(persistentGameplay));
+		//sceneToLoad.Add(SceneManager.LoadSceneAsync(level, LoadSceneMode.Additive));
+
+		//loading bar
+		//if (loadingBar != null)
+		//{
+        //    loadingBar.SetActive(true);
+        //    StartCoroutine(progressLoadingBar());
+		//}
+
+		StartCoroutine(startGamePerformance());
+		
+	}
+
+	private IEnumerator startGamePerformance()
+	{
+		//setup
+		hideMenu();
+
+		// slab
+		mainMenuCam.enabled = false;
+		slabCam.enabled = true;
+
+		float t = slabWaitTime;
+		yield return new WaitForSeconds(t);
+
+
+		#region change scene in coroutine
+
+		//change scene
 		if (decorManager != null)
 		{
 			decorManager.currentTweener.Kill();
 		}
 
 		//hide menu
-		hideMenu();
+		//hideMenu();
 
 		//load scene
-		sceneToLoad.Add(SceneManager.LoadSceneAsync(persistentGameplay));
+		sceneToLoad.Add(SceneManager.LoadSceneAsync(persistentGameplay, LoadSceneMode.Additive));
+		//m_mainCamera.SetActive(false);
 		sceneToLoad.Add(SceneManager.LoadSceneAsync(level, LoadSceneMode.Additive));
+		SceneManager.UnloadScene(mainMenu);
 
 		//loading bar
 		if (loadingBar != null)
@@ -49,7 +100,8 @@ public class MainMenuManager : MonoBehaviour
             loadingBar.SetActive(true);
             StartCoroutine(progressLoadingBar());
 		}
-		
+
+		#endregion
 	}
 
 	private void hideMenu()
@@ -66,6 +118,8 @@ public class MainMenuManager : MonoBehaviour
 
 		for(int i = 0; i < sceneToLoad.Count; i++)
 		{
+			if(sceneToLoad[0].isDone) m_mainCamera.SetActive(false);
+
 			while (!sceneToLoad[i].isDone)
 			{
 				loadProgress += sceneToLoad[i].progress;
