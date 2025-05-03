@@ -89,11 +89,14 @@ public class MainMenuManager : MonoBehaviour
 		//hideMenu();
 
 		//load scene
-		sceneToLoad.Add(SceneManager.LoadSceneAsync(persistentGameplay, LoadSceneMode.Additive));
-		//m_mainCamera.SetActive(false);
-		sceneToLoad.Add(SceneManager.LoadSceneAsync(level, LoadSceneMode.Additive));
-		SceneManager.UnloadScene(mainMenu);
 
+		sceneToLoad.Add(SceneManager.LoadSceneAsync(persistentGameplay, LoadSceneMode.Additive));
+		//sceneToLoad.Add(SceneManager.LoadSceneAsync(persistentGameplay));
+		//m_mainCamera.SetActive(false);
+
+		sceneToLoad.Add(SceneManager.LoadSceneAsync(level, LoadSceneMode.Additive));
+		//sceneToLoad.Add(SceneManager.UnloadSceneAsync(mainMenu));
+		SceneManager.UnloadScene(mainMenu);
 		//loading bar
 		if (loadingBar != null)
 		{
