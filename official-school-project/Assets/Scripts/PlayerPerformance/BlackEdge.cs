@@ -8,26 +8,24 @@ public class BlackEdge : MonoBehaviour
 
     [SerializeField] private Transform cameraTransform;
 
-    [SerializeField] private float outerOffsetY;
-    [SerializeField] private float innerOffsetY;
+    private float outerOffsetY = 13;
+    private float innerOffsetY = 10;
 
     [SerializeField] private float slideDuration = 0.5f;
     private float currentOffsetY;
 
     void Start()
     {
-        // 預設 cameraTransform
         if (cameraTransform == null)
             cameraTransform = Camera.main.transform;
 
-        // 起始位置（畫面外）
         currentOffsetY = outerOffsetY * (edgeType == EdgeType.Top ? 1 : -1);
     }
 
     void FixedUpdate()
     {
-        Vector3 camPos = cameraTransform.position;
-        transform.position = new Vector3(camPos.x, camPos.y + currentOffsetY, -1f);
+        Vector3 cameraPosition = cameraTransform.position;
+        transform.position = new Vector3(cameraPosition.x, cameraPosition.y + currentOffsetY, -5f);
     }
 
     public void StartSlideIn()
