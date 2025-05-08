@@ -53,7 +53,10 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            settingTab.SetActive(!settingTab.activeSelf);
+        }
     }
 
     public void buttonOnClick()
@@ -100,7 +103,10 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
         else if (whichButton == ButtonTypes.OpenSettingButton)
         {
-            pointerEnterEffect_SlideAndGrow(new Vector2(mainMenuButtonDisplacement, 0), mainMenuButtonScale);
+            if (startGameButton != null)
+            {
+                pointerEnterEffect_SlideAndGrow(new Vector2(mainMenuButtonDisplacement, 0), mainMenuButtonScale);
+            }
         }
         else if (whichButton == ButtonTypes.OpenCreditButton)
         {
