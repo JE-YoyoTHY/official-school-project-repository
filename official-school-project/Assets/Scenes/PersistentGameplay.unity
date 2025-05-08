@@ -195,6 +195,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cb71e1f465c53044a7c3211baab5088, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mainMenu:
+    m_SceneAsset: {fileID: 102900000, guid: 9ace83e038168a84f941947ca7f84bd1, type: 3}
+    m_SceneName: MainMenu
   freezeEndEvent:
     m_PersistentCalls:
       m_Calls:

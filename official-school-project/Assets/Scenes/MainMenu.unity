@@ -1474,8 +1474,10 @@ MonoBehaviour:
   - {fileID: 922796342}
   - {fileID: 1136678566}
   - {fileID: 1839063693}
+  objectsToHideWhenSceneIsLoading:
+  - {fileID: 45498344}
+  - {fileID: 1206519979}
   mainMenuCam: {fileID: 2126631269}
-  m_mainCamera: {fileID: 45498344}
   mainMenu:
     m_SceneAsset: {fileID: 102900000, guid: 9ace83e038168a84f941947ca7f84bd1, type: 3}
     m_SceneName: MainMenu

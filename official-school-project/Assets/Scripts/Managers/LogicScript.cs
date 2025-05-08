@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 public class LogicScript : MonoBehaviour
@@ -23,6 +24,8 @@ public class LogicScript : MonoBehaviour
 
 
 	//variable
+	[SerializeField] private SceneField mainMenu;
+
 	public UnityEvent freezeEndEvent;
 
 	public List<TutorialShadeScript> tutorialShades;
@@ -42,7 +45,7 @@ public class LogicScript : MonoBehaviour
 		//	freezeEndEvent.AddListener(shade.GetComponent<TutorialShadeScript>().freezeEnd);
 		//}
 
-		
+		SceneManager.UnloadSceneAsync(mainMenu);
     }
 
     // Update is called once per frame
