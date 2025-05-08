@@ -13,8 +13,9 @@ public class MainMenuManager : MonoBehaviour
 	[SerializeField] private GameObject loadingBar;
 	[SerializeField] private Image loadingBarImage;
 	[SerializeField] private GameObject[] objectsToHide;
+	[SerializeField] private GameObject[] objectsToHideWhenSceneIsLoading;
 	[SerializeField] private CinemachineVirtualCamera mainMenuCam;
-	[SerializeField] private GameObject m_mainCamera;
+	//[SerializeField] private GameObject m_mainCamera;
 	
 
 	[Header("Scene field")]
@@ -96,7 +97,7 @@ public class MainMenuManager : MonoBehaviour
 
 		sceneToLoad.Add(SceneManager.LoadSceneAsync(level, LoadSceneMode.Additive));
 		//sceneToLoad.Add(SceneManager.UnloadSceneAsync(mainMenu));
-		SceneManager.UnloadScene(mainMenu);
+		//SceneManager.UnloadSceneAsync(mainMenu);
 		//loading bar
 		if (loadingBar != null)
 		{
@@ -121,7 +122,12 @@ public class MainMenuManager : MonoBehaviour
 
 		for(int i = 0; i < sceneToLoad.Count; i++)
 		{
-			if(sceneToLoad[0].isDone) m_mainCamera.SetActive(false);
+			//if(sceneToLoad[0].isDone) m_mainCamera.SetActive(false);
+			if (sceneToLoad[0].isDone)
+			{
+				foreach (var obj in objectsToHideWhenSceneIsLoading)
+					obj.SetActive(false);
+			}
 
 			while (!sceneToLoad[i].isDone)
 			{
