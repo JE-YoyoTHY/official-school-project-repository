@@ -8,8 +8,10 @@ public class BlackEdge : MonoBehaviour
 
     [SerializeField] private Transform cameraTransform;
 
-    private float outerOffsetY = 13;
-    private float innerOffsetY = 10;
+    private RectTransform rect;
+
+    private float outerOffsetY = 0;
+    private float innerOffsetY = 135;
 
     [SerializeField] private float slideDuration = 0.5f;
     private float currentOffsetY;
@@ -20,12 +22,18 @@ public class BlackEdge : MonoBehaviour
             cameraTransform = Camera.main.transform;
 
         currentOffsetY = outerOffsetY * (edgeType == EdgeType.Top ? 1 : -1);
+        //Vector3 anchoredPosition = cameraTransform.position;
+
+        rect = GetComponent<RectTransform>();
+
+        transform.parent.GetComponent<Canvas>().worldCamera = Camera.main;
+        rect.anchoredPosition = new Vector3(0, 140*(edgeType == EdgeType.Top ? 1 : -1), 0);
     }
 
     void FixedUpdate()
     {
-        Vector3 cameraPosition = cameraTransform.position;
-        transform.position = new Vector3(cameraPosition.x, cameraPosition.y + currentOffsetY, -5f);
+        rect.anchoredPosition = new Vector3(0, 140*(edgeType == EdgeType.Top ? 1 : -1) - currentOffsetY, 0);
+        //transform.position = new Vector3(rect.anchoredPosition.x, rect.anchoredPosition.y + 135*(edgeType == EdgeType.Top ? 1 : -1), -5f);
     }
 
     public void StartSlideIn()
