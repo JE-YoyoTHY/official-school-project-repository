@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using DG.Tweening;
 
 public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -16,6 +17,10 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         OpenCreditButton, 
         CloseCreditButton,
     }
+    
+    private Vector2 originalPosition;
+    private float mainMenuButtonDisplacement = 50.0f;
+    private float mainMenuButtonScale = 1.1f;
 
     [Header("General (Might be used multiple times)")]
     // buttons
@@ -35,7 +40,11 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     [Header("Start Game Button")]
     [SerializeField] MainMenuManager mainMenuManager;
 
-    // Start is called before the first frame update
+    private void Awake()
+    {
+        originalPosition = transform.position;
+    }
+
     void Start()
     {
         if (whichButton == ButtonTypes._None) { Debug.LogError("ButtonType ¥¼³]¸m"); }
@@ -66,6 +75,7 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
         else if (whichButton == ButtonTypes.OpenSettingButton)
         {
+            backToOriginalInstantly();
             if (startGameButton != null)
             {
                 startGameButton.SetActive(false);
@@ -73,10 +83,10 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 openCreditButton.SetActive(false);
             }
             settingTab.SetActive(true);
-
         }
         else if (whichButton == ButtonTypes.StartGameButton)
         {
+            backToOriginalInstantly();
             mainMenuManager.startGame();
         }
     }
@@ -86,14 +96,15 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         if (whichButton == ButtonTypes.StartGameButton)
         {
             decorManager.performDecorationColorize();
+            pointerEnterEffect_SlideAndGrow(new Vector2(mainMenuButtonDisplacement, 0), mainMenuButtonScale);
         }
         else if (whichButton == ButtonTypes.OpenSettingButton)
         {
-
+            pointerEnterEffect_SlideAndGrow(new Vector2(mainMenuButtonDisplacement, 0), mainMenuButtonScale);
         }
         else if (whichButton == ButtonTypes.OpenCreditButton)
         {
-
+            pointerEnterEffect_SlideAndGrow(new Vector2(mainMenuButtonDisplacement, 0), mainMenuButtonScale);
         }
     }
     public void OnPointerExit(PointerEventData eventData)
@@ -101,14 +112,37 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         if (whichButton == ButtonTypes.StartGameButton)
         {
             decorManager.performDecorationToGrayGradually();
+            pointerEnterEffect_SlideAndGrow(new Vector2(mainMenuButtonDisplacement, 0), mainMenuButtonScale, true);
         }
         else if (whichButton == ButtonTypes.OpenSettingButton)
         {
-
+            pointerEnterEffect_SlideAndGrow(new Vector2(mainMenuButtonDisplacement, 0), mainMenuButtonScale, true);
         }
         else if (whichButton == ButtonTypes.OpenCreditButton)
         {
+            pointerEnterEffect_SlideAndGrow(new Vector2(mainMenuButtonDisplacement, 0), mainMenuButtonScale, true);
+        }
+    }
 
+    private void backToOriginalInstantly()
+    {
+        transform.position = originalPosition;
+        transform.DOScale(1, 0);
+    }
+    private void pointerEnterEffect_SlideAndGrow(Vector2 displacement, float growScale, bool isReverse = false, float duration = 0.2f, Ease easeType = Ease.Linear)
+    {
+        if (isReverse == false)
+        {
+            Vector2 destination = originalPosition + displacement;
+            transform.DOMove(destination, duration).SetEase(easeType);
+            transform.DOScale(growScale, duration).SetEase(easeType);
+        }
+
+        if (isReverse == true)
+        {
+            Vector2 destination = originalPosition;
+            transform.DOMove(destination, duration).SetEase(easeType);
+            transform.DOScale(1, duration).SetEase(easeType);
         }
     }
 
