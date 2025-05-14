@@ -51,6 +51,8 @@ public class LevelManagerScript : MonoBehaviour
 				LogicScript.instance.tutorialShadeFreezeTime(transform.GetChild(2).GetChild(i).GetComponent<TutorialShadeScript>());
 
 			}
+			if (transform.GetChild(2).GetChild(i).tag == "BossAttackManager") levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<BossLightningManagerScript>().resetManager);
+			if (transform.GetChild(2).GetChild(i).tag == "ZeusCrystalManager") levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<ZeusPowerCrystalManagerScript>().resetZeusPowerCrystal);
 			
 			//if (transform.GetChild(2).GetChild(i).tag == "BreakablePlatform") levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<BreakablePlatformScript>().restoreAfterBreak);
 		}

@@ -19,6 +19,10 @@ TagManager:
   - TutorialShadeFireball
   - DeadZoneSpike
   - Decoratoin_PlaySelection
+  - BossAttackManager
+  - ZeusCrystalInstance
+  - ZeusCrystalManager
+  - LightningAttackInstance
   layers:
   - Default
   - TransparentFX

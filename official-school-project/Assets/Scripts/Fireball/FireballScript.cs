@@ -317,6 +317,12 @@ public class FireballScript : MonoBehaviour
 				return;
 			}
 
+			if (collision.gameObject.tag == "ZeusCrystalInstance")
+			{
+				collision.gameObject.GetComponent<ZeusPowerCrystalInstanceScript>().crystalInstanceDestroy();
+				explode();
+			}
+
 
 			/* currently, one way platform is using tilemap, 
 			 * and my solution to make fb pass through is
