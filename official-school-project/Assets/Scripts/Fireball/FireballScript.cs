@@ -317,12 +317,24 @@ public class FireballScript : MonoBehaviour
 				return;
 			}
 
+			if (collision.gameObject.tag == "ZeusCrystalInstance")
+			{
+				collision.gameObject.GetComponent<ZeusPowerCrystalInstanceScript>().crystalInstanceDestroy();
+				explode();
+			}
 
-			/* currently, one way platform is using tilemap, 
+            if (collision.gameObject.tag == "ZeusPhaseOne")
+            {
+				collision.gameObject.GetComponent<ZeusPhaseOneScript>().zeusDamaged();
+                explode();
+            }
+
+
+            /* currently, one way platform is using tilemap, 
 			 * and my solution to make fb pass through is
 			 * when it touch one way platform and move upwards
 			 */
-			if (((collision.gameObject.layer == groundLayer && triggerOnLeft.isColliding && triggerOnRight.isColliding) || collision.gameObject.tag == "Fireball" /*|| (collision.gameObject.tag == "Player" && leftPlayer)*/) && !isExploding)
+            if (((collision.gameObject.layer == groundLayer && triggerOnLeft.isColliding && triggerOnRight.isColliding) || collision.gameObject.tag == "Fireball" /*|| (collision.gameObject.tag == "Player" && leftPlayer)*/) && !isExploding)
 			{
 				if (collision.gameObject.tag == "BreakablePlatform")
 				{
