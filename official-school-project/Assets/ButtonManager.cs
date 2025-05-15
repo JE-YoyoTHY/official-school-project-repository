@@ -26,6 +26,7 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     // buttons
     [SerializeField] private ButtonTypes whichButton;  // inspector
     [SerializeField] private DecorationManager decorManager;
+    [SerializeField] UIIndicators selectionTriangle;
 
     // targets
     [Header("Rebind Switch")]
@@ -39,6 +40,7 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     [Header("Start Game Button")]
     [SerializeField] MainMenuManager mainMenuManager;
+
 
     private void Awake()
     {
@@ -74,21 +76,25 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 openCreditButton.SetActive(true);
             }
             settingTab.SetActive(false);
+            openSettingButton.SetActive(true);
 
         }
         else if (whichButton == ButtonTypes.OpenSettingButton)
         {
-            backToOriginalInstantly();
+            
             if (startGameButton != null)
-            {
+            {   
+                backToOriginalInstantly();
+                selectionTriangle.disappear();
                 startGameButton.SetActive(false);
-                openSettingButton.SetActive(false);
                 openCreditButton.SetActive(false);
             }
+            openSettingButton.SetActive(false);
             settingTab.SetActive(true);
         }
         else if (whichButton == ButtonTypes.StartGameButton)
         {
+            selectionTriangle.disappear();
             backToOriginalInstantly();
             mainMenuManager.startGame();
         }
@@ -98,6 +104,8 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         if (whichButton == ButtonTypes.StartGameButton)
         {
+            selectionTriangle.gameObject.SetActive(true);
+            selectionTriangle.showSelectionTriangle(UIIndicators.UIIndicatorReferencesEnum.playSelection);
             decorManager.performDecorationColorize();
             pointerEnterEffect_SlideAndGrow(new Vector2(mainMenuButtonDisplacement, 0), mainMenuButtonScale);
         }
@@ -105,11 +113,15 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         {
             if (startGameButton != null)
             {
+                selectionTriangle.gameObject.SetActive(true);
+                selectionTriangle.showSelectionTriangle(UIIndicators.UIIndicatorReferencesEnum.settingSelection);
                 pointerEnterEffect_SlideAndGrow(new Vector2(mainMenuButtonDisplacement, 0), mainMenuButtonScale);
             }
         }
         else if (whichButton == ButtonTypes.OpenCreditButton)
         {
+            selectionTriangle.gameObject.SetActive(true);
+            selectionTriangle.showSelectionTriangle(UIIndicators.UIIndicatorReferencesEnum.creditSelection);
             pointerEnterEffect_SlideAndGrow(new Vector2(mainMenuButtonDisplacement, 0), mainMenuButtonScale);
         }
     }
@@ -117,15 +129,22 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         if (whichButton == ButtonTypes.StartGameButton)
         {
+            selectionTriangle.disappear();
             decorManager.performDecorationToGrayGradually();
             pointerEnterEffect_SlideAndGrow(new Vector2(mainMenuButtonDisplacement, 0), mainMenuButtonScale, true);
         }
         else if (whichButton == ButtonTypes.OpenSettingButton)
         {
-            pointerEnterEffect_SlideAndGrow(new Vector2(mainMenuButtonDisplacement, 0), mainMenuButtonScale, true);
+            if (selectionTriangle != null)
+            {
+                selectionTriangle.disappear();
+                pointerEnterEffect_SlideAndGrow(new Vector2(mainMenuButtonDisplacement, 0), mainMenuButtonScale, true);
+            }
+            
         }
         else if (whichButton == ButtonTypes.OpenCreditButton)
         {
+            selectionTriangle.disappear();
             pointerEnterEffect_SlideAndGrow(new Vector2(mainMenuButtonDisplacement, 0), mainMenuButtonScale, true);
         }
     }
