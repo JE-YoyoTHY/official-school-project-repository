@@ -5,6 +5,7 @@ using UnityEngine;
 public class BossLightningManagerScript : MonoBehaviour
 {
     [SerializeField] private GameObject attackPrefab;
+    [SerializeField] private BossAttackState initialState;
 
     [Header("Loop")]
     [SerializeField] private float attackInterval;
@@ -28,7 +29,7 @@ public class BossLightningManagerScript : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (!LogicScript.instance.isFreeze())
         {
@@ -50,7 +51,7 @@ public class BossLightningManagerScript : MonoBehaviour
         }
         else
         {
-            attackTimeCounter -= Time.deltaTime;
+            attackTimeCounter -= Time.fixedDeltaTime;
         }
     }
 
@@ -71,6 +72,15 @@ public class BossLightningManagerScript : MonoBehaviour
      */
     private IEnumerator expelAttackMain()
     {
+        //kill all existing lighting
+        GameObject[] lightningAttacks = GameObject.FindGameObjectsWithTag("LightningAttackInstance");
+        foreach (GameObject lightningAttack in lightningAttacks)
+        {
+            if (!lightningAttack.GetComponent<BossLightningInstanceScript>().isStaticWall)
+                Destroy(lightningAttack.gameObject);
+        }
+
+
         float current_x = expelAttackLeftMost.transform.position.x;
 
         while(current_x < expelAttackRightMost.transform.position.x)
@@ -114,15 +124,18 @@ public class BossLightningManagerScript : MonoBehaviour
     public void resetManager()
     {
         //isAttackActive = true;
-        attackState = BossAttackState.Loop;
+        //attackState = BossAttackState.Loop;
+        attackState = initialState;
         attackTimeCounter = attackInterval;
+        gameObject.SetActive(true);
 
         StopAllCoroutines();
 
         GameObject[] lightningAttacks = GameObject.FindGameObjectsWithTag("LightningAttackInstance");
         foreach(GameObject lightningAttack in lightningAttacks)
         {
-            Destroy(lightningAttack.gameObject);
+            if(!lightningAttack.GetComponent<BossLightningInstanceScript>().isStaticWall)
+                Destroy(lightningAttack.gameObject);
         }
     }
     #endregion

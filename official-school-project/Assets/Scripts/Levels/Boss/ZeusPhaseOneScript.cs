@@ -5,12 +5,15 @@ using UnityEngine.Events;
 
 public class ZeusPhaseOneScript : MonoBehaviour
 {
-    public UnityEvent damagedEvent;
+    //public UnityEvent damagedEvent;
+    [SerializeField] private BossLightningManagerScript bossLightningManager;
+    [SerializeField] private BossLightningInstanceScript bossLightningInstance;
 
     // Start is called before the first frame update
     void Start()
     {
         myIgnoreCollision(true);
+        gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -26,7 +29,9 @@ public class ZeusPhaseOneScript : MonoBehaviour
 
     public void zeusDamaged()
     {
-        damagedEvent.Invoke();
+        //damagedEvent.Invoke();
+        bossLightningManager.setAttackState("Expel");
+        bossLightningInstance.setStaticWallState(false);
         gameObject.SetActive(false);
     }
 

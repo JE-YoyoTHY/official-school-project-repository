@@ -22,6 +22,8 @@ public class LevelManagerScript : MonoBehaviour
 
 	[HideInInspector] public UnityEvent levelSetUpEvent; //set up crystal, gate ...
 
+	[HideInInspector] public List<GameObject> objectsToHideWhenDisable;
+
 	//change camera
 	//[SerializeField] private float cameraSwapTime;
 
@@ -51,11 +53,16 @@ public class LevelManagerScript : MonoBehaviour
 				LogicScript.instance.tutorialShadeFreezeTime(transform.GetChild(2).GetChild(i).GetComponent<TutorialShadeScript>());
 
 			}
-			if (transform.GetChild(2).GetChild(i).tag == "BossAttackManager") levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<BossLightningManagerScript>().resetManager);
+			if (transform.GetChild(2).GetChild(i).tag == "BossAttackManager")
+			{
+                levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<BossLightningManagerScript>().resetManager);
+				objectsToHideWhenDisable.Add(transform.GetChild(2).GetChild(i).gameObject);
+            }
 			if (transform.GetChild(2).GetChild(i).tag == "ZeusCrystalManager") levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<ZeusPowerCrystalManagerScript>().resetZeusPowerCrystal);
-			
-			//if (transform.GetChild(2).GetChild(i).tag == "BreakablePlatform") levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<BreakablePlatformScript>().restoreAfterBreak);
-		}
+			if (transform.GetChild(2).GetChild(i).tag == "ZeusPhaseTwo") levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<ZeusPhaseTwoScript>().resetBoss);
+
+            //if (transform.GetChild(2).GetChild(i).tag == "BreakablePlatform") levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<BreakablePlatformScript>().restoreAfterBreak);
+        }
 
 		//blockage -> when player exit this level, enable this to prevent player from returning
 		transform.GetChild(0).GetChild(2).GetComponent<SpriteRenderer>().color = Color.clear; // 0 -> basic, 2 -> blockage
@@ -88,6 +95,12 @@ public class LevelManagerScript : MonoBehaviour
 		//transform.GetChild(0).GetChild(2).gameObject.SetActive(true); // 0 -> basic, 2 -> blockage
 
 		//player.freezeStart(levelChangeFreezeTime);
+
+		//hide obj
+		foreach (var obj in objectsToHideWhenDisable)
+		{
+			obj.gameObject.SetActive(false);
+		}
 	}
 
 	public void restartLevel()

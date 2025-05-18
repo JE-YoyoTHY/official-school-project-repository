@@ -24,6 +24,7 @@ TagManager:
   - ZeusCrystalManager
   - LightningAttackInstance
   - ZeusPhaseOne
+  - ZeusPhaseTwo
   layers:
   - Default
   - TransparentFX

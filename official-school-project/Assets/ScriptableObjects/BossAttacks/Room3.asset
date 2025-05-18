@@ -1,0 +1,155 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5918c0e7f0819b429ce01e8f6774693, type: 3}
+  m_Name: Room3
+  m_EditorClassIdentifier: 
+  fightDatas:
+  - lightningAttackData:
+      attackSize: {x: 20, y: 25}
+      attackPosFromAxis: {x: 0, y: 0}
+      attackPrepareTime: 1.2
+      attackDuration: 0.12
+    attackPos: {x: -877.34, y: -549.1, z: 0}
+    waitTimeAfterAttack: 1.7
+  - lightningAttackData:
+      attackSize: {x: 20, y: 25}
+      attackPosFromAxis: {x: 0, y: 0}
+      attackPrepareTime: 1.2
+      attackDuration: 0.12
+    attackPos: {x: -891.59, y: -549.1, z: 0}
+    waitTimeAfterAttack: 1.7
+  - lightningAttackData:
+      attackSize: {x: 40, y: 3}
+      attackPosFromAxis: {x: 0, y: 0}
+      attackPrepareTime: 1.2
+      attackDuration: 0.12
+    attackPos: {x: -885.09, y: -555.6, z: 0}
+    waitTimeAfterAttack: 0.2
+  - lightningAttackData:
+      attackSize: {x: 24, y: 25}
+      attackPosFromAxis: {x: 0, y: 0}
+      attackPrepareTime: 1.2
+      attackDuration: 0.12
+    attackPos: {x: -891.09, y: -549.1, z: 0}
+    waitTimeAfterAttack: 0
+  - lightningAttackData:
+      attackSize: {x: 10, y: 25}
+      attackPosFromAxis: {x: 0, y: 0}
+      attackPrepareTime: 1.2
+      attackDuration: 0.12
+    attackPos: {x: -869.59, y: -549.1, z: 0}
+    waitTimeAfterAttack: 1.7
+  - lightningAttackData:
+      attackSize: {x: 40, y: 3}
+      attackPosFromAxis: {x: 0, y: 0}
+      attackPrepareTime: 1.2
+      attackDuration: 0.12
+    attackPos: {x: -885.09, y: -555.6, z: 0}
+    waitTimeAfterAttack: 0.2
+  - lightningAttackData:
+      attackSize: {x: 15, y: 25}
+      attackPosFromAxis: {x: 0, y: 0}
+      attackPrepareTime: 1.2
+      attackDuration: 0.12
+    attackPos: {x: -874.09, y: -549.1, z: 0}
+    waitTimeAfterAttack: 0
+  - lightningAttackData:
+      attackSize: {x: 15, y: 25}
+      attackPosFromAxis: {x: 0, y: 0}
+      attackPrepareTime: 1.2
+      attackDuration: 0.12
+    attackPos: {x: -894.84, y: -549.1, z: 0}
+    waitTimeAfterAttack: 1.7
+  - lightningAttackData:
+      attackSize: {x: 40, y: 3}
+      attackPosFromAxis: {x: 0, y: 0}
+      attackPrepareTime: 1.2
+      attackDuration: 0.12
+    attackPos: {x: -885.09, y: -555.6, z: 0}
+    waitTimeAfterAttack: 0.2
+  - lightningAttackData:
+      attackSize: {x: 24, y: 25}
+      attackPosFromAxis: {x: 0, y: 0}
+      attackPrepareTime: 1.2
+      attackDuration: 0.12
+    attackPos: {x: -877.59, y: -549.1, z: 0}
+    waitTimeAfterAttack: 0
+  - lightningAttackData:
+      attackSize: {x: 10, y: 25}
+      attackPosFromAxis: {x: 0, y: 0}
+      attackPrepareTime: 1.2
+      attackDuration: 0.12
+    attackPos: {x: -899.34, y: -549.1, z: 0}
+    waitTimeAfterAttack: 1.7
+  - lightningAttackData:
+      attackSize: {x: 40, y: 15}
+      attackPosFromAxis: {x: 0, y: 0}
+      attackPrepareTime: 1.2
+      attackDuration: 0.12
+    attackPos: {x: -885.09, y: -546.1, z: 0}
+    waitTimeAfterAttack: 1.7
+  - lightningAttackData:
+      attackSize: {x: 40, y: 3}
+      attackPosFromAxis: {x: 0, y: 0}
+      attackPrepareTime: 1.2
+      attackDuration: 0.12
+    attackPos: {x: -885.09, y: -555.35, z: 0}
+    waitTimeAfterAttack: 0.1
+  - lightningAttackData:
+      attackSize: {x: 40, y: 10}
+      attackPosFromAxis: {x: 0, y: 0}
+      attackPrepareTime: 1.2
+      attackDuration: 0.12
+    attackPos: {x: -885.09, y: -542.1, z: 0}
+    waitTimeAfterAttack: 1.7
+  - lightningAttackData:
+      attackSize: {x: 40, y: 10}
+      attackPosFromAxis: {x: 0, y: 0}
+      attackPrepareTime: 1.2
+      attackDuration: 0.12
+    attackPos: {x: -885.09, y: -552.85, z: 0}
+    waitTimeAfterAttack: 0.1
+  - lightningAttackData:
+      attackSize: {x: 40, y: 5}
+      attackPosFromAxis: {x: 0, y: 0}
+      attackPrepareTime: 1.2
+      attackDuration: 0.12
+    attackPos: {x: -885.09, y: -539.6, z: 0}
+    waitTimeAfterAttack: 1.7
+  - lightningAttackData:
+      attackSize: {x: 20, y: 25}
+      attackPosFromAxis: {x: 0, y: 0}
+      attackPrepareTime: 1.2
+      attackDuration: 0.12
+    attackPos: {x: -884.59, y: -547.6, z: 0}
+    waitTimeAfterAttack: 1.7
+  - lightningAttackData:
+      attackSize: {x: 15, y: 25}
+      attackPosFromAxis: {x: 0, y: 0}
+      attackPrepareTime: 1.2
+      attackDuration: 0.12
+    attackPos: {x: -894.84, y: -547.6, z: 0}
+    waitTimeAfterAttack: 0
+  - lightningAttackData:
+      attackSize: {x: 15, y: 25}
+      attackPosFromAxis: {x: 0, y: 0}
+      attackPrepareTime: 1.2
+      attackDuration: 0.12
+    attackPos: {x: -874.09, y: -547.6, z: 0}
+    waitTimeAfterAttack: 1.7
+  - lightningAttackData:
+      attackSize: {x: 20, y: 25}
+      attackPosFromAxis: {x: 0, y: 0}
+      attackPrepareTime: 1.2
+      attackDuration: 0.8
+    attackPos: {x: -884.59, y: -547.6, z: 0}
+    waitTimeAfterAttack: 1.7

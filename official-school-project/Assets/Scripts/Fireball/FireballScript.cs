@@ -329,6 +329,12 @@ public class FireballScript : MonoBehaviour
                 explode();
             }
 
+			if (collision.gameObject.tag == "ZeusPhaseTwo")
+			{
+				collision.gameObject.GetComponent<ZeusPhaseTwoScript>().zeusDamaged();
+				explode();
+			}
+
 
             /* currently, one way platform is using tilemap, 
 			 * and my solution to make fb pass through is
