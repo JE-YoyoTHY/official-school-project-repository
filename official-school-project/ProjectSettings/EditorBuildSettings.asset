@@ -14,4 +14,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/PersistentGameplay.unity
     guid: c108e694ec3293d43aca8796ec50af62
+  - enabled: 1
+    path: Assets/Scenes/Levels/Chapter1.unity
+    guid: 83385c1874ce8fe45bd7485339d27a51
+  - enabled: 1
+    path: Assets/Scenes/Levels/Chapter2.unity
+    guid: c563e7eaf94aea34bb6ccd44602bebed
+  - enabled: 1
+    path: Assets/Scenes/Levels/Chapter3.unity
+    guid: e1e9116e4aa60a1459f69aa4b764c150
   m_configObjects: {}

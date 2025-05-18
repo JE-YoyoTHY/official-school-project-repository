@@ -9,6 +9,8 @@ public class BossLightningInstanceScript : MonoBehaviour
     private SpriteRenderer spriteRenderer;
 
     [SerializeField] private AnimationCurve flickerCurve;
+    public bool isStaticWall;
+    //[SerializeField] private bool initialActiveState;
     /*[SerializeField]*/ private float myAttackPrepareTime;
     /*[SerializeField]*/ private float myAttackDuration;
 
@@ -17,7 +19,7 @@ public class BossLightningInstanceScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        //gameObject.SetActive(initialActiveState);
     }
 
     // Update is called once per frame
@@ -55,7 +57,7 @@ public class BossLightningInstanceScript : MonoBehaviour
         }
 
         t = myAttackDuration;
-        spriteRenderer.color = Color.black;
+        spriteRenderer.color = Color.yellow;
         gameObject.layer = killZoneLayer;
         GetComponent<Collider2D>().enabled = true;
         while (t > 0)
@@ -67,6 +69,12 @@ public class BossLightningInstanceScript : MonoBehaviour
         }
 
         Destroy(gameObject);
+    }
+
+    public void setStaticWallState(bool active)
+    {
+        //Destroy(gameObject);
+        gameObject.SetActive(active);
     }
 }
 

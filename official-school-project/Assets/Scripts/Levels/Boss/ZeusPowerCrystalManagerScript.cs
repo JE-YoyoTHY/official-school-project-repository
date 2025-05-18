@@ -5,7 +5,9 @@ using UnityEngine.Events;
 
 public class ZeusPowerCrystalManagerScript : MonoBehaviour
 {
-    public UnityEvent allCrystalGoneEvent;
+    //public UnityEvent allCrystalGoneEvent;
+    [SerializeField] private ZeusPhaseOneScript zeusInstance;
+    [SerializeField] private BossLightningManagerScript bossLightningManager;
 
     private int currentDestroyedCount; // child -> all crystal, child count -> crystal count
 
@@ -26,7 +28,9 @@ public class ZeusPowerCrystalManagerScript : MonoBehaviour
         currentDestroyedCount++;
         if (currentDestroyedCount == transform.childCount)
         {
-            allCrystalGoneEvent.Invoke();
+            //allCrystalGoneEvent.Invoke();
+            zeusInstance.showUp();
+            bossLightningManager.setAttackState("Wait");
         }
     }
 

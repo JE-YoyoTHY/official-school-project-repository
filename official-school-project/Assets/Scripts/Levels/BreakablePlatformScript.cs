@@ -172,9 +172,10 @@ public class BreakablePlatformScript : MonoBehaviour
 		spriteRenderer.sprite = sprites[sprites.Length-1];
 		spriteRenderer.enabled = false;
 		GetComponent<ParticleCommonScript>().emitParticle();
+        transform.GetChild(2).gameObject.SetActive(false); // child 2 -> particle
 
-		//GetComponent<CompositeCollider2D>().enabled = false;
-		Collider2D[] colls2D = GetComponents<BoxCollider2D>();
+        //GetComponent<CompositeCollider2D>().enabled = false;
+        Collider2D[] colls2D = GetComponents<BoxCollider2D>();
 		foreach (var coll2D in colls2D){
 			coll2D.enabled = false;
 		}

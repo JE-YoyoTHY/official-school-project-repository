@@ -47,24 +47,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackPrefab: {fileID: 5833963133122008353, guid: 42614aab85d55954ea939ebe7fdea726, type: 3}
-  attackInterval: 8
+  initialState: 1
+  attackInterval: 5
   attackDatas:
-  - attackSize: {x: 8, y: 40}
+  - attackSize: {x: 4, y: 60}
     attackPosFromAxis: {x: 0, y: 0}
     attackPrepareTime: 1.2
-    attackDuration: 0.25
-  - attackSize: {x: 60, y: 6}
+    attackDuration: 0.12
+  - attackSize: {x: 100, y: 3}
     attackPosFromAxis: {x: 0, y: 0}
     attackPrepareTime: 1.2
-    attackDuration: 0.25
+    attackDuration: 0.12
   expelAttackLeftMost: {fileID: 8282075774887286925}
   expelAttackRightMost: {fileID: 8829846267043031207}
   expelAttackData:
     attackSize: {x: 4, y: 40}
     attackPosFromAxis: {x: 0, y: 0}
-    attackPrepareTime: 2
-    attackDuration: 3
-  expelAttackInterval: 2
+    attackPrepareTime: 3
+    attackDuration: 0.8
+  expelAttackInterval: 0.2
 --- !u!1 &8282075774887286925
 GameObject:
   m_ObjectHideFlags: 0
