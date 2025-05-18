@@ -34,8 +34,12 @@ public class LogicScript : MonoBehaviour
 
 	private float freezeTimer;
 
-	// Start is called before the first frame update
-	void Start()
+	//private List<AsyncOperation> sceneToLoad = new List<AsyncOperation>();
+	public List<SceneField> scenesCanLoad;
+	private SceneField lastSceneLoaded;
+
+    // Start is called before the first frame update
+    void Start()
     {
 		//gridColor();
 
@@ -153,4 +157,28 @@ public class LogicScript : MonoBehaviour
 		globalLight.intensity = intensity;
 	}
 
+
+	public void myLoadScene(SceneField scene)
+	{
+		//print(scene);
+
+		//foreach(var x in scenesCanLoad)
+		//{
+		//	print(x == scene);
+
+		//	if (x == scene)
+		//	{
+  //              SceneManager.LoadSceneAsync(scene, LoadSceneMode.Additive);
+		//		scenesCanLoad.Remove(x);
+		//		print("successful");
+
+		//		break;
+  //          }
+		//}
+        if (scene != lastSceneLoaded) SceneManager.LoadSceneAsync(scene, LoadSceneMode.Additive);
+        lastSceneLoaded = scene;
+
+        //sceneToLoad.Add(SceneManager.LoadSceneAsync(scene, LoadSceneMode.Additive));
+
+    }
 }

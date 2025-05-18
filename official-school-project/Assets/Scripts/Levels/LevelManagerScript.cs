@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Windows.WebCam;
 using UnityEditor;
+using UnityEngine.SceneManagement;
 
 
 
@@ -13,6 +14,9 @@ public class LevelManagerScript : MonoBehaviour
 	//reference
 	//private LevelManagerScript previousLevel;
 	public LevelManagerScript nextLevel;
+	public Vector2Int levelNumber; // x for chapter, y for level
+
+	[SerializeField] private SceneField sceneToLoad;// if this level is the first one of the chapter, load scene
 
 	private CinemachineBrain cinemachineBrain;
 	private CinemachineVirtualCamera currentCam;
@@ -86,6 +90,25 @@ public class LevelManagerScript : MonoBehaviour
 		//call logic to set up
 		LogicScript.instance.gridColor();
 
+
+		//scene
+		if(levelNumber.y == 1 && sceneToLoad != null) LogicScript.instance.myLoadScene(sceneToLoad);
+			//SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
+
+		//find next level
+		//if(nextLevel == null)
+		//{
+		//	GameObject[] levelManagerScripts = GameObject.FindGameObjectsWithTag("LevelManagers");
+		//	foreach (var levelManagerScript in levelManagerScripts) 
+		//	{
+		//		if(levelManagerScript.GetComponent<LevelManagerScript>().levelNumber.x == levelNumber.x + 1 &&
+  //                  levelManagerScript.GetComponent<LevelManagerScript>().levelNumber.y == 1)
+		//		{
+		//			nextLevel = levelManagerScript.GetComponent<LevelManagerScript>();
+
+  //              }
+		//	}
+		//}
 	}
 
 	public void disableLevel() // means leave this level

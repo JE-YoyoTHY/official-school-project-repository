@@ -1485,8 +1485,8 @@ MonoBehaviour:
     m_SceneAsset: {fileID: 102900000, guid: c108e694ec3293d43aca8796ec50af62, type: 3}
     m_SceneName: PersistentGameplay
   level:
-    m_SceneAsset: {fileID: 102900000, guid: 2cda990e2423bbf4892e6590ba056729, type: 3}
-    m_SceneName: SampleScene
+    m_SceneAsset: {fileID: 102900000, guid: 83385c1874ce8fe45bd7485339d27a51, type: 3}
+    m_SceneName: Chapter1
   loadAnimDuration: 0.1
   slabCam: {fileID: 1661580927}
   slabWaitTime: 5

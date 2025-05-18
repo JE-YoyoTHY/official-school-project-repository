@@ -1273,9 +1273,32 @@ public class PlayerControlScript : MonoBehaviour
 				{
 					currentLevel.disableLevel();
 				}
-				currentLevel = collision.gameObject.transform.parent.parent.parent.gameObject.GetComponent<LevelManagerScript>().nextLevel;
+
+				LevelManagerScript levelManager = collision.gameObject.transform.parent.parent.parent.gameObject.GetComponent<LevelManagerScript>();
+
+                if (levelManager.nextLevel == null)
+				{
+                    GameObject[] levelManagerScripts = GameObject.FindGameObjectsWithTag("LevelManager");
+                    foreach (var levelManagerScript in levelManagerScripts)
+                    {
+                        if (levelManagerScript.GetComponent<LevelManagerScript>().levelNumber.x == levelManager.levelNumber.x + 1 &&
+                            levelManagerScript.GetComponent<LevelManagerScript>().levelNumber.y == 1)
+                        {
+                            currentLevel = levelManagerScript.GetComponent<LevelManagerScript>();
+
+                        }
+                    }
+                }
+				else
+				{
+					currentLevel = levelManager.nextLevel;
+				}
+
+				//currentLevel = collision.gameObject.transform.parent.parent.parent.gameObject.GetComponent<LevelManagerScript>().nextLevel;
 				changeLevel();
-			}
+
+               
+            }
 		}
 
 		if (collision.gameObject.layer == respawnTriggerLayer)
