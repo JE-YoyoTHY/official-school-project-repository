@@ -41,6 +41,7 @@ public class DecorationManager : MonoBehaviour
     void Start()
     {
         initDecoration(MainMenuDecorationOptions.PlaySelection);
+        performDecorationToGrayInstantly();
     }
 
     // Update is called once per frame

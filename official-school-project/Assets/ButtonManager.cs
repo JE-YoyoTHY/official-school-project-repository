@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using DG.Tweening;
+using TMPro;
 
 public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -107,7 +108,7 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             selectionTriangle.gameObject.SetActive(true);
             selectionTriangle.showSelectionTriangle(UIIndicators.UIIndicatorReferencesEnum.playSelection);
             decorManager.performDecorationColorize();
-            pointerEnterEffect_SlideAndGrow(new Vector2(mainMenuButtonDisplacement, 0), mainMenuButtonScale);
+            pointerEnterEffect_SlideAndGrowText(new Vector2(mainMenuButtonDisplacement, 0), mainMenuButtonScale);
         }
         else if (whichButton == ButtonTypes.OpenSettingButton)
         {
@@ -115,14 +116,14 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             {
                 selectionTriangle.gameObject.SetActive(true);
                 selectionTriangle.showSelectionTriangle(UIIndicators.UIIndicatorReferencesEnum.settingSelection);
-                pointerEnterEffect_SlideAndGrow(new Vector2(mainMenuButtonDisplacement, 0), mainMenuButtonScale);
+                pointerEnterEffect_SlideAndGrowText(new Vector2(mainMenuButtonDisplacement, 0), mainMenuButtonScale);
             }
         }
         else if (whichButton == ButtonTypes.OpenCreditButton)
         {
             selectionTriangle.gameObject.SetActive(true);
             selectionTriangle.showSelectionTriangle(UIIndicators.UIIndicatorReferencesEnum.creditSelection);
-            pointerEnterEffect_SlideAndGrow(new Vector2(mainMenuButtonDisplacement, 0), mainMenuButtonScale);
+            pointerEnterEffect_SlideAndGrowText(new Vector2(mainMenuButtonDisplacement, 0), mainMenuButtonScale);
         }
     }
     public void OnPointerExit(PointerEventData eventData)
@@ -131,21 +132,21 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         {
             selectionTriangle.disappear();
             decorManager.performDecorationToGrayGradually();
-            pointerEnterEffect_SlideAndGrow(new Vector2(mainMenuButtonDisplacement, 0), mainMenuButtonScale, true);
+            pointerEnterEffect_SlideAndGrowText(new Vector2(mainMenuButtonDisplacement, 0), mainMenuButtonScale, true);
         }
         else if (whichButton == ButtonTypes.OpenSettingButton)
         {
             if (selectionTriangle != null)
             {
                 selectionTriangle.disappear();
-                pointerEnterEffect_SlideAndGrow(new Vector2(mainMenuButtonDisplacement, 0), mainMenuButtonScale, true);
+                pointerEnterEffect_SlideAndGrowText(new Vector2(mainMenuButtonDisplacement, 0), mainMenuButtonScale, true);
             }
             
         }
         else if (whichButton == ButtonTypes.OpenCreditButton)
         {
             selectionTriangle.disappear();
-            pointerEnterEffect_SlideAndGrow(new Vector2(mainMenuButtonDisplacement, 0), mainMenuButtonScale, true);
+            pointerEnterEffect_SlideAndGrowText(new Vector2(mainMenuButtonDisplacement, 0), mainMenuButtonScale, true);
         }
     }
 
@@ -154,20 +155,22 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         transform.position = originalPosition;
         transform.DOScale(1, 0);
     }
-    private void pointerEnterEffect_SlideAndGrow(Vector2 displacement, float growScale, bool isReverse = false, float duration = 0.2f, Ease easeType = Ease.Linear)
+    private void pointerEnterEffect_SlideAndGrowText(Vector2 displacement, float growScale, bool isReverse = false, float duration = 0.2f, Ease easeType = Ease.Linear)
     {
+        GameObject targetText = transform.GetChild(0).transform.gameObject;
+        RectTransform textTransform = targetText.GetComponent<RectTransform>();
         if (isReverse == false)
         {
             Vector2 destination = originalPosition + displacement;
-            transform.DOMove(destination, duration).SetEase(easeType);
-            transform.DOScale(growScale, duration).SetEase(easeType);
+            textTransform.DOMove(destination, duration).SetEase(easeType);
+            textTransform.DOScale(growScale, duration).SetEase(easeType);
         }
 
         if (isReverse == true)
         {
             Vector2 destination = originalPosition;
-            transform.DOMove(destination, duration).SetEase(easeType);
-            transform.DOScale(1, duration).SetEase(easeType);
+            textTransform.DOMove(destination, duration).SetEase(easeType);
+            textTransform.DOScale(1, duration).SetEase(easeType);
         }
     }
 

@@ -378,6 +378,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1429995037766065918, guid: d09a560f945ec6b488c14fbe93a52f7f, type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2261382010059755511, guid: d09a560f945ec6b488c14fbe93a52f7f, type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 3641405281175188330, guid: d09a560f945ec6b488c14fbe93a52f7f, type: 3}
       propertyPath: m_Name
       value: MainMenuCanvas
@@ -386,6 +394,14 @@ PrefabInstance:
       propertyPath: decorManager
       value: 
       objectReference: {fileID: 1622662103}
+    - target: {fileID: 4228394707517288365, guid: d09a560f945ec6b488c14fbe93a52f7f, type: 3}
+      propertyPath: mainMenuManager
+      value: 
+      objectReference: {fileID: 1424250355}
+    - target: {fileID: 6748411879903674264, guid: d09a560f945ec6b488c14fbe93a52f7f, type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 6987544701035564828, guid: d09a560f945ec6b488c14fbe93a52f7f, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -479,6 +495,16 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d09a560f945ec6b488c14fbe93a52f7f, type: 3}
+--- !u!1 &106328958 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4387147782101860990, guid: d09a560f945ec6b488c14fbe93a52f7f, type: 3}
+  m_PrefabInstance: {fileID: 98907197}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &154424702 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1172610520910515444, guid: d09a560f945ec6b488c14fbe93a52f7f, type: 3}
+  m_PrefabInstance: {fileID: 98907197}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &393126463
 GameObject:
   m_ObjectHideFlags: 3
@@ -523,6 +549,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &475596876 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7634801579511697588, guid: d09a560f945ec6b488c14fbe93a52f7f, type: 3}
+  m_PrefabInstance: {fileID: 98907197}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &586338037
 GameObject:
   m_ObjectHideFlags: 0
@@ -1014,9 +1045,10 @@ MonoBehaviour:
   loadingBar: {fileID: 74788820}
   loadingBarImage: {fileID: 1030347988}
   objectsToHide:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 1753447944}
+  - {fileID: 154424702}
+  - {fileID: 106328958}
+  - {fileID: 475596876}
   objectsToHideWhenSceneIsLoading:
   - {fileID: 45498344}
   - {fileID: 1206519979}
@@ -1338,6 +1370,11 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1753447944 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7955028346928761052, guid: d09a560f945ec6b488c14fbe93a52f7f, type: 3}
+  m_PrefabInstance: {fileID: 98907197}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2041401309
 GameObject:
   m_ObjectHideFlags: 0
