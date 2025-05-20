@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 /// <summary>
@@ -36,7 +35,7 @@ public class RebindingUI : MonoBehaviour
     [SerializeField] private InputActionAsset inputAsset;
     [SerializeField] private InputActionReference targetActionRef;
     [SerializeField] private Canvas rebindCanvas;
-    [SerializeField] private BindingChangedEventBroadcaster broadCaster;  // 只要有就會Invoke, 不論是一個還是全部
+    [SerializeField] private RebindingCanvasManager rebindingCanvasManager;  // 只要有就會Invoke, 不論是一個還是全部
     [SerializeField] private GameObject overlay;
 
     [Header("--- Read Only ---")]
@@ -59,6 +58,8 @@ public class RebindingUI : MonoBehaviour
         rebindCanceled, 
     };
 
+    private Dictionary<string, string> readableNameToShorterOrImagePair;
+
     // 綁定索引值
     private int bindingIndex = 0;
     private HashSet<InputBinding> playerControl_AllUsedBindings = new HashSet<InputBinding>();
@@ -74,22 +75,50 @@ public class RebindingUI : MonoBehaviour
             {promptStringsNames.rebindCanceled, "Rebind canceled." }
         };
 
+        readableNameToShorterOrImagePair = new Dictionary<string, string>()
+        {
+            {"Left Shift", "L Shift"},
+            {"Right Shift", "R Shift"},
+            {"Left Arrow", "IMAGE" },
+            {"Right Arrow", "IMAGE" },
+            {"Up Arrow", "IMAGE" },
+            {"Down Arrow", "IMAGE" },
+        };
+
         #region Set Ref
         gameInputControl = new GameInputControl();
 
         // 下面三個理論上要有，因為他們是在Inpector中拖入的
-        if (rebindCanvas == null) { Debug.LogError("rebindCanvas is null"); }
+        if (rebindCanvas == null)
+        {
+            rebindCanvas = transform.parent.gameObject.GetComponent<Canvas>();  // 嘗試從父級取得
+            if (rebindCanvas == null)
+            {
+                Debug.Log("Rebind Canvas is null");
+            }
+        }
+        if (rebindingCanvasManager == null)
+        {
+            rebindingCanvasManager = transform.parent.gameObject.GetComponent<RebindingCanvasManager>();
+            if (rebindingCanvasManager == null)
+            {
+                Debug.Log("Binding Canvas Manager is null");
+            }
+        }
+
         if (targetActionRef == null) { Debug.LogError("targetActionRef is null"); }
         if (inputAsset == null) { Debug.LogError("inputAsset is null"); }
 
         // rebind canvas's
         if (overlay == null)
         {
+                                                 ///// To do
             overlay = rebindCanvas.transform.GetChild(rebindCanvas.transform.childCount - 1).transform.gameObject;
         }
         promptLabel = overlay.transform.GetChild(0).transform.gameObject;
 
         // rebind UI prefab's
+                                                 //// to do
         rebindUIPrefab = gameObject;
         buttonOutline = rebindUIPrefab.transform.GetChild(0).transform.gameObject;
         actionLabel = rebindUIPrefab.transform.GetChild(1).transform.gameObject;
@@ -158,7 +187,7 @@ public class RebindingUI : MonoBehaviour
                 operation.Dispose();
                 targetActionRef.action.Enable();
                 updateKeyDisplay();
-                broadCaster.broadCast();
+                rebindingCanvasManager.bindingChangedBroadcast();
 
                 promptLabel.SetActive(false);
                 overlay.SetActive(false);
@@ -183,7 +212,7 @@ public class RebindingUI : MonoBehaviour
     public void resetRebind()
     {
         targetActionRef.action.RemoveAllBindingOverrides();
-        broadCaster.broadCast();
+        rebindingCanvasManager.bindingChangedBroadcast();
         updateKeyDisplay();
     }
 
@@ -213,7 +242,7 @@ public class RebindingUI : MonoBehaviour
     public void resetAllRebindButton_OnClick()
     {
         resetAllRebind(inputAsset.FindActionMap("Player"));
-        broadCaster.broadCast();
+        rebindingCanvasManager.bindingChangedBroadcast();
     }
 
     public void updateAllKeyDisplay()
@@ -245,6 +274,27 @@ public class RebindingUI : MonoBehaviour
 
         return readableName;
     }
+
+    public string convertReadableNameToShorterTerm(string readableName)
+    {
+        if (readableNameToShorterOrImagePair.ContainsKey(readableName))
+        {
+            if (readableNameToShorterOrImagePair[readableName] != "IMAGE")
+            {
+                return readableNameToShorterOrImagePair[readableName];
+            }
+            else
+            {
+                return null;
+            }
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    
 
     /// <summary>
     /// 取得傳入之InputActionMap中所有用過的按鍵(輸入)
