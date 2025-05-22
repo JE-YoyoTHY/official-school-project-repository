@@ -5,6 +5,18 @@ using UnityEngine;
 
 public class PlayerAnims : MonoBehaviour
 {
+    public static PlayerAnims instance { get; private set; }
+
+    private void Awake(){
+        if (instance != null && instance != this) {
+            Destroy(this);
+        }
+        else {
+            instance = this;
+        }
+    }
+
+
     private Animator animator;
     private SpriteRenderer spriteRenderer;
 
@@ -55,7 +67,8 @@ public class PlayerAnims : MonoBehaviour
     void Update()
     {
         //transform.position = GameObject.Find("Player").transform.position;
-        Vector3 playerPos = GameObject.Find("Player").transform.position;
+        //Vector3 playerPos = GameObject.Find("Player").transform.position;
+        Vector3 playerPos = PlayerControlScript.instance.transform.position;
         transform.position = new Vector3(playerPos.x, playerPos.y+0.5f, transform.position.z);
         facingDir = playerControlScript.moveKeyValue;
         flipPlayerSprite(facingDir);
@@ -124,9 +137,9 @@ public class PlayerAnims : MonoBehaviour
     public void flipPlayerSprite(sbyte facingDir)
     {
         bool shouldFlip = false;
-        if (facingDir == 0 && currentVelocity.x == 0) { return; }
-        if (facingDir == 1 || currentVelocity.x > 0.05f) { shouldFlip = false; }
-        else if (facingDir == -1 || currentVelocity.x < -0.05f) { shouldFlip = true; }
+        if (facingDir == 0) { return; }
+        if (facingDir == 1) { shouldFlip = false; }
+        else if (facingDir == -1) { shouldFlip = true; }
 
         spriteRenderer.flipX = shouldFlip;
 
