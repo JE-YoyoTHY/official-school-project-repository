@@ -90,7 +90,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 622a4559748970e44ab56bec0819b59a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isColliding: 0
+  anotherTrigger: {fileID: 209643069965685381}
+  collideObj: 0
+  collidingBreakablePlatform: {fileID: 0}
 --- !u!1 &2126744474065848890
 GameObject:
   m_ObjectHideFlags: 0
@@ -5429,4 +5431,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 622a4559748970e44ab56bec0819b59a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isColliding: 0
+  anotherTrigger: {fileID: 3887909984042735184}
+  collideObj: 0
+  collidingBreakablePlatform: {fileID: 0}

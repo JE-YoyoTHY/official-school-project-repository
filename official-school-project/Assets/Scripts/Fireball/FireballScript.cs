@@ -311,7 +311,7 @@ public class FireballScript : MonoBehaviour
 	{
 		if (!LogicScript.instance.isFreeze())
 		{
-			if (collision.gameObject.tag == "KillFireballWithoutExplode")
+			if (collision.gameObject.tag == "KillFireballWithoutExplode" && triggerState() == fireballTriggerCollidingObject.airwall)
 			{
 				Destroy(gameObject);
 				return;
@@ -340,7 +340,7 @@ public class FireballScript : MonoBehaviour
 			 * and my solution to make fb pass through is
 			 * when it touch one way platform and move upwards
 			 */
-            if (((collision.gameObject.layer == groundLayer && triggerOnLeft.isColliding && triggerOnRight.isColliding) || collision.gameObject.tag == "Fireball" /*|| (collision.gameObject.tag == "Player" && leftPlayer)*/) && !isExploding)
+            if (((collision.gameObject.layer == groundLayer && triggerState() == fireballTriggerCollidingObject.ground) || collision.gameObject.tag == "Fireball" /*|| (collision.gameObject.tag == "Player" && leftPlayer)*/) && !isExploding)
 			{
 				if (collision.gameObject.tag == "BreakablePlatform")
 				{
@@ -409,6 +409,15 @@ public class FireballScript : MonoBehaviour
 		{
 			Physics2D.IgnoreCollision(coll, obj.GetComponent<Collider2D>(), true);
 		}
+	}
+
+	private fireballTriggerCollidingObject triggerState()
+	{
+		//if (triggerOnLeft.collideObj == triggerOnRight.collideObj) return triggerOnRight.collideObj;
+		if (triggerOnLeft.collideWithSpring && triggerOnRight.collideWithSpring) return fireballTriggerCollidingObject.spring;
+        if (triggerOnLeft.collideWithAirwall && triggerOnRight.collideWithAirwall) return fireballTriggerCollidingObject.airwall;
+        if (triggerOnLeft.collideWithGround && triggerOnRight.collideWithGround) return fireballTriggerCollidingObject.ground;
+        else return fireballTriggerCollidingObject.none;
 	}
 
 }
