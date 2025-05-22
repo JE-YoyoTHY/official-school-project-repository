@@ -26,6 +26,7 @@ TagManager:
   - ZeusPhaseOne
   - ZeusPhaseTwo
   - LevelManager
+  - Spring
   layers:
   - Default
   - TransparentFX

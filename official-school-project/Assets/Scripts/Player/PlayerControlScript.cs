@@ -912,7 +912,8 @@ public class PlayerControlScript : MonoBehaviour
 			if(jumpExtraHangTimeCoroutine != null) StopCoroutine(jumpExtraHangTimeCoroutine);
 		}
 		if (fireballHangTimeCoroutine != null) StopCoroutine(fireballHangTimeCoroutine);
-		springEnd();
+        if (isFireballExplodeForceAdding) fireballExplodeEnd();
+        springEnd();
 		mySetGravity(0, myGravityMaxSpeed);
 		
 		//set player's velocity, currently, i want to set player vy to 0. vx to 0 if there's no horizontal force
