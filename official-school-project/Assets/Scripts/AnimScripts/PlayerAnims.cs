@@ -70,7 +70,8 @@ public class PlayerAnims : MonoBehaviour
         //Vector3 playerPos = GameObject.Find("Player").transform.position;
         Vector3 playerPos = PlayerControlScript.instance.transform.position;
         transform.position = new Vector3(playerPos.x, playerPos.y+0.5f, transform.position.z);
-        facingDir = playerControlScript.moveKeyValue;
+        //facingDir = playerControlScript.moveKeyValue;
+        facingDir = PlayerPerformanceSystemScript.instance.getPlayerFacingDir();
         flipPlayerSprite(facingDir);
 
         stateDetect();

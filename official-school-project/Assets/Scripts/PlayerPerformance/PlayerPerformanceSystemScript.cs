@@ -95,4 +95,23 @@ public class PlayerPerformanceSystemScript : MonoBehaviour
 		currentController = newTrigger;
 		newTrigger.enableTrigger();
 	}
+
+	public sbyte getPlayerFacingDir()
+	{
+		if(currentController != null)
+		{
+			if(currentController.performanceTriggerInspectorObject.action == PerformanceAction.move)
+			{
+				return currentController.moveDir;
+			}
+			else
+			{
+                return PlayerControlScript.instance.moveKeyValue;
+            }
+		}
+		else
+		{
+            return PlayerControlScript.instance.moveKeyValue;
+        }
+	}
 }
