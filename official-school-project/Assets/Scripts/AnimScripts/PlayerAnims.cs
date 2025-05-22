@@ -31,13 +31,15 @@ public class PlayerAnims : MonoBehaviour
     public string STATE_RUN { get; private set; } = "PlayerRun";
     public string STATE_JUMP { get; private set; } = "PlayerJump";
     public string STATE_FALL { get; private set; } = "PlayerFall";
+    public string STATE_FALL_RIGHT { get; private set; } = "PlayerFallRight";
+    public string STATE_FALL_LEFT { get; private set; } = "PlayerFallLeft";
     public string STATE_LAND { get; private set; } = "PlayerLand";
     public string STATE_HARD_LAND { get; private set; } = "PlayerHardLand";
     public string STATE_PARKOUR_ROLL { get; private set; } = "PlayerParkourRoll";
 
     private List<string> availableAnims = new List<string>()
     {
-        "PlayerRun", "PlayerIdle", "PlayerJump", "PlayerFall", "PlayerLand"
+        "PlayerRun", "PlayerIdle", "PlayerJump", "PlayerFall", "PlayerFallRight", "PlayerFallLeft", "PlayerLand"
     };
     #endregion
 
@@ -91,6 +93,7 @@ public class PlayerAnims : MonoBehaviour
         if (availableAnims.Contains(newState))
         {
             animator.Play(currentState);
+            //Debug.Log(currentState);
         }
     }
 
@@ -106,7 +109,21 @@ public class PlayerAnims : MonoBehaviour
         }
         if (stateCondition["fall"])
         {
-            changeState(STATE_FALL);
+            if (currentVelocity.y <= -15)
+            {
+                if (currentVelocity.x <= -0.5f)
+                {
+                    Debug.Log("fall left");
+                    changeState(STATE_FALL_LEFT);
+                }
+                if (currentVelocity.x >= 0.5f)
+                {
+                    Debug.Log("fall right");
+                    changeState(STATE_FALL_RIGHT);
+                }
+
+                else changeState(STATE_FALL);
+            }
         }
 
 
