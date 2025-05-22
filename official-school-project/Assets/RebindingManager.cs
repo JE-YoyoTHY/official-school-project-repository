@@ -6,18 +6,18 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class RebindingManager : MonoBehaviour
 {
     public UnityEvent BindingChangedEvent;
     public bool isRebinding;
+    public Dictionary<string, string> readableNameToShorterOrImagePair;
 
 
     // key value pair
     public List<string> keyImages_Keys;
     public List<Sprite> keyImages_Values;
-    
-
     
     public Dictionary<string, Sprite> keyImagesDict = new Dictionary<string, Sprite>();
 
@@ -45,6 +45,25 @@ public class RebindingManager : MonoBehaviour
                 keyImagesDict.Add(keyImages_Keys[keyImages_Values.IndexOf(_value)], _value);
             }
         }
+
+        readableNameToShorterOrImagePair = new Dictionary<string, string>()
+        {
+            // SHORTER TERM AREA
+            {"Left Shift", "L Shift"},
+            {"Right Shift", "R Shift"},
+            {"Left Control", "L Ctrl" },
+            {"Right Control", "R Ctrl" },
+            {"Left Alt", "L Alt" },
+            {"Right Alt", "R Alt" },
+            {"Left System", "L System" },
+            {"Right System", "R System" },
+
+            // IMAGE AREA
+            {"Left Arrow", "IMAGE" },
+            {"Right Arrow", "IMAGE" },
+            {"Up Arrow", "IMAGE" },
+            {"Down Arrow", "IMAGE" },
+        };
     }
 
     public void bindingChangedBroadcast()
@@ -73,8 +92,6 @@ public class RebindingManager : MonoBehaviour
                 RectTransform keyImageTransform = keyImage.GetComponent<RectTransform>();
                 float spriteWidth = keyImage.GetComponent<Image>().sprite.rect.width;
                 float spriteHeight = keyImage.GetComponent<Image>().sprite.rect.height;
-                print(spriteWidth);
-                print(spriteHeight);
                 float _scale = startRebindButton.GetComponent<RectTransform>().sizeDelta.y / spriteHeight;
                 spriteWidth *= _scale;
                 spriteHeight *= _scale;
@@ -93,6 +110,36 @@ public class RebindingManager : MonoBehaviour
         else
         {
             Debug.Log("Can't find child named [StartRebindButton]");
+        }
+    }
+
+
+    public string convertBindingNameToReadableName(InputBinding binding)
+    {
+        string readableName = InputControlPath.ToHumanReadableString(
+        binding.effectivePath,
+        InputControlPath.HumanReadableStringOptions.OmitDevice | InputControlPath.HumanReadableStringOptions.UseShortNames
+        );
+
+        return readableName;
+
+    }
+    public string convertReadableNameToShorterTerm(string readableName)
+    {
+        if (readableNameToShorterOrImagePair.ContainsKey(readableName))
+        {
+            if (readableNameToShorterOrImagePair[readableName] != "IMAGE")
+            {
+                return readableNameToShorterOrImagePair[readableName];
+            }
+            else
+            {
+                return "IMAGE";
+            }
+        }
+        else
+        {
+            return null;
         }
     }
 

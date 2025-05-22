@@ -10,11 +10,9 @@ using TMPro;
 
 public class InstructionUIManager : MonoBehaviour
 {
-    public Transform instructionCanvasTransform;
-    public List<GameObject> instructionsList = new List<GameObject>();  // 用於在Inspector拖曳進去
-    // string:該指示的名稱; GameObject:圖示的panel(instructionUIObj)
-    public Dictionary<string, GameObject> availableInstructionsUIObj = new Dictionary<string, GameObject>();
-    private Dictionary<string, Vector2> expandedMaskSizeDict = new Dictionary<string, Vector2>();
+    [SerializeField] private List<GameObject> instructionUIList = new List<GameObject>();  // 用於在Inspector拖曳進去
+    private Dictionary<string, GameObject> availableInstructionsUIObj = new Dictionary<string, GameObject>();
+    private Dictionary<string, Vector2> maskMaxSizeDict = new Dictionary<string, Vector2>();
     [SerializeField] public GameObject currentInstructionUIObj = null;
 
     #region Deprecated Ref
@@ -43,6 +41,9 @@ public class InstructionUIManager : MonoBehaviour
     private Tweener maskGrowTweener = null;
     private Tweener maskShrinkTweener = null;
 
+    [Header("Drag")]
+    [SerializeField] private RebindingManager rebindingManager;
+
 
 
 
@@ -52,14 +53,17 @@ public class InstructionUIManager : MonoBehaviour
         
     void Start()
     {
-        expandedMaskSizeDict.Add("MoveInstruction", new Vector2(370, 213));
-        expandedMaskSizeDict.Add("JumpInstruction", new Vector2(370, 213));
-        expandedMaskSizeDict.Add("ShootFireballInstruction_1", new Vector2(700, 300));
-        expandedMaskSizeDict.Add("ShootFireballInstruction_2", new Vector2(477.5f, 269.4f));
+        /*
+        maskMaxSizeDict.Add("MoveInstruction", new Vector2(370, 213));
+        maskMaxSizeDict.Add("JumpInstruction", new Vector2(370, 213));
+        maskMaxSizeDict.Add("ShootFireballInstruction_1", new Vector2(700, 300));
+        maskMaxSizeDict.Add("ShootFireballInstruction_2", new Vector2(477.5f, 269.4f));
+        */
 
-        foreach (GameObject instructionUIObj in instructionsList)
+        foreach (GameObject instructionUIObj in instructionUIList)
         {
             availableInstructionsUIObj[instructionUIObj.name] = instructionUIObj;
+            maskMaxSizeDict[instructionUIObj.name] = instructionUIObj.GetComponent<InstructionUI>().getMaskMaxSize();
         }
 
         
@@ -70,10 +74,7 @@ public class InstructionUIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.V))
-        {
-            disappearInstructionUI();
-        }
+        
     }
 
     #region DEPRECATED FUNCTION: showImagePanel()
@@ -180,7 +181,7 @@ public class InstructionUIManager : MonoBehaviour
                 maskGrowTweener.onComplete = maskGrowTweenFinished;
                 #endregion
 
-                    #region KeyCode Image Animation
+                #region KeyCode Image Animation
                 keyCodeVisualDisplayAnim(ui.transform.GetChild(0).transform.GetChild(1).gameObject);  // Mask -> BackGround -> KeyCodeImage
                 #endregion
             }
@@ -224,7 +225,7 @@ public class InstructionUIManager : MonoBehaviour
                 }
 
 
-                Vector2 expandedMaskSize = expandedMaskSizeDict[instructionName];  // mask最大狀態
+                Vector2 expandedMaskSize = maskMaxSizeDict[instructionName];  // mask最大狀態
                 UIPerforming.setUISize(ui, new Vector2(uiRect.sizeDelta.x, 0));  // 為了讓他可以從0到全展開，所以height先設為0
 
                 // 這時才讓他可以顯示在Canvas內

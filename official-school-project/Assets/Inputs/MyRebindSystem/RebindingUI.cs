@@ -34,6 +34,7 @@ public class RebindingUI : MonoBehaviour
 
 
     [Header("--- Drag-Needed ---")]
+    [SerializeField] private string actionName;
     [SerializeField] private InputActionAsset inputAsset;
     [SerializeField] private InputActionReference targetActionRef;
     [SerializeField] private RebindingManager rebindingManager;
@@ -82,6 +83,8 @@ public class RebindingUI : MonoBehaviour
         {
             {"Left Shift", "L Shift"},
             {"Right Shift", "R Shift"},
+            {"Left Control", "L Ctrl" },
+            {"Right Control", "R Ctrl" },
             {"Left Arrow", "IMAGE" },
             {"Right Arrow", "IMAGE" },
             {"Up Arrow", "IMAGE" },
@@ -124,6 +127,8 @@ public class RebindingUI : MonoBehaviour
 
         #endregion
 
+
+        actionLabel.GetComponent<TextMeshProUGUI>().text = actionName;
 
 
 
