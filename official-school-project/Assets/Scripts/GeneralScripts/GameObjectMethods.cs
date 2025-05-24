@@ -14,6 +14,12 @@ public static class GameObjectMethods
         return allChildren;
     }
 
+    public static GameObject GetLastChild(GameObject m_obj)
+    {
+        return m_obj.transform.GetChild(m_obj.transform.childCount - 1).gameObject;
+    }
+
+
     
 
 }

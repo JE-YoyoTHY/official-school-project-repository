@@ -11,6 +11,7 @@ public class InstructionUI : MonoBehaviour
     [SerializeField] private InputActionAsset inputAsset;
     public InstructionsTypeEnum currentInstruction;  // Inspector設定
     [SerializeField] private RebindingManager rebindingManager;  // 為了使用它的convertBindingNameToReadableName()
+    [SerializeField] RebindSystemDataBase rebindSystemDataBase;
 
     [Header("Data")]
     [SerializeField] private Vector2 maskMaxSize;
@@ -104,27 +105,27 @@ public class InstructionUI : MonoBehaviour
         else if (currentInstruction == InstructionsTypeEnum.MoveInstruction)
         {
             // left
-            getAllKeyCodeLabel()[0].GetComponent<TextMeshProUGUI>().text = rebindingManager.convertBindingNameToReadableName(inputActions[ActionsEnum.MoveLeft].bindings[0]);
+            getAllKeyCodeLabel()[0].GetComponent<TextMeshProUGUI>().text = rebindSystemDataBase.getReadableNameFromBindingName(inputActions[ActionsEnum.MoveLeft].bindings[0]);
 
             // right
-            getAllKeyCodeLabel()[1].GetComponent<TextMeshProUGUI>().text = rebindingManager.convertBindingNameToReadableName(inputActions[ActionsEnum.MoveRight].bindings[0]);
+            getAllKeyCodeLabel()[1].GetComponent<TextMeshProUGUI>().text = rebindSystemDataBase.getReadableNameFromBindingName(inputActions[ActionsEnum.MoveRight].bindings[0]);
 
             setInstructionSize();
         }
 
         else if (currentInstruction == InstructionsTypeEnum.JumpInstruction)
         {
-            getAllKeyCodeLabel()[0].GetComponent<TextMeshProUGUI>().text = rebindingManager.convertBindingNameToReadableName(inputActions[ActionsEnum.Jump].bindings[0]);
+            getAllKeyCodeLabel()[0].GetComponent<TextMeshProUGUI>().text = rebindSystemDataBase.getReadableNameFromBindingName(inputActions[ActionsEnum.Jump].bindings[0]);
             setInstructionSize();
         }
 
         else if (currentInstruction == InstructionsTypeEnum.ShootFireballInstruction_1)
         {
             // shoot left
-            getAllKeyCodeLabel()[0].GetComponent<TextMeshProUGUI>().text = rebindingManager.convertBindingNameToReadableName(inputActions[ActionsEnum.LeftShootFireball].bindings[0]);
+            getAllKeyCodeLabel()[0].GetComponent<TextMeshProUGUI>().text = rebindSystemDataBase.getReadableNameFromBindingName(inputActions[ActionsEnum.LeftShootFireball].bindings[0]);
 
             // shoot down
-            getAllKeyCodeLabel()[1].GetComponent<TextMeshProUGUI>().text = rebindingManager.convertBindingNameToReadableName(inputActions[ActionsEnum.DownShootFireball].bindings[0]);
+            getAllKeyCodeLabel()[1].GetComponent<TextMeshProUGUI>().text = rebindSystemDataBase.getReadableNameFromBindingName(inputActions[ActionsEnum.DownShootFireball].bindings[0]);
 
             setInstructionSize();
         }
@@ -132,7 +133,7 @@ public class InstructionUI : MonoBehaviour
         else if (currentInstruction == InstructionsTypeEnum.ShootFireballInstruction_2)
         {
             // shoot left
-            getAllKeyCodeLabel()[0].GetComponent<TextMeshProUGUI>().text = rebindingManager.convertBindingNameToReadableName(inputActions[ActionsEnum.LeftShootFireball].bindings[0]);
+            getAllKeyCodeLabel()[0].GetComponent<TextMeshProUGUI>().text = rebindSystemDataBase.getReadableNameFromBindingName(inputActions[ActionsEnum.LeftShootFireball].bindings[0]);
 
             setInstructionSize();
         }
