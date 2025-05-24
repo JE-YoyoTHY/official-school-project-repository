@@ -49,7 +49,6 @@ public class RebindingUI : MonoBehaviour
     private List<string> keyImages_Keys;
     private List<Sprite> keyImages_Values;
     private Dictionary<string, Sprite> keyImagesDict = new Dictionary<string, Sprite>();
-    private bool isRebinding;
 
     // ¸j©w¯Á¤Þ­È
     private int bindingIndex = 0;
@@ -125,6 +124,7 @@ public class RebindingUI : MonoBehaviour
         if (rebindOperation != null && Input.GetKeyDown(KeyCode.Escape))
         {
             rebindOperation.Cancel();
+            rebindSystemDataBase.isRebinding = false;
         }
 
     }
@@ -172,8 +172,6 @@ public class RebindingUI : MonoBehaviour
 
                 promptLabel.SetActive(false);
                 overlay.SetActive(false);
-
-                rebindSystemDataBase.isRebinding = false;
 
             });
         rebindOperation.Start();

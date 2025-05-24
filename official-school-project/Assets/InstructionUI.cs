@@ -1,17 +1,26 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using static InstructionKeyCodeSetting;
-using UnityEngine.InputSystem;
+using System.Runtime.CompilerServices;
 using TMPro;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class InstructionUI : MonoBehaviour
 {
+    public enum InstructionsTypeEnum
+    {
+        _None,
+        Move,
+        Jump,
+        ShootFireball_OneKey,
+        ShootFireball_TwoKey,
+    }
+
     [Header("Drag-Needed")]
     [SerializeField] private InputActionAsset inputAsset;
-    public InstructionsTypeEnum currentInstruction;  // Inspector設定
-    [SerializeField] private RebindingManager rebindingManager;  // 為了使用它的convertBindingNameToReadableName()
     [SerializeField] RebindSystemDataBase rebindSystemDataBase;
+    [SerializeField] private InstructionsTypeEnum currentInstruction;
+
 
     [Header("Data")]
     [SerializeField] private Vector2 maskMaxSize;
@@ -23,16 +32,7 @@ public class InstructionUI : MonoBehaviour
     [SerializeField] private GameObject background;
     [SerializeField] private GameObject keyHorizontalLayout;
 
-    [SerializeField] private Dictionary<string, GameObject> keyboardKeyImagesPair;
 
-    public enum InstructionsTypeEnum
-    {
-        _None,
-        MoveInstruction,
-        JumpInstruction,
-        ShootFireballInstruction_1,
-        ShootFireballInstruction_2,
-    }
     public enum ActionsEnum
     {
         MoveLeft, MoveRight,
@@ -43,25 +43,17 @@ public class InstructionUI : MonoBehaviour
 
     private void Awake()
     {
-        if (maskMaxSize == null)
+        if (maskMaxSize == Vector2.zero)
         {
             maskMaxSize = gameObject.GetComponent<RectTransform>().sizeDelta;
         }
 
         playerMap = inputAsset.FindActionMap("Player");
+
         background = transform.Find("Background").gameObject;
         keyHorizontalLayout = background.transform.Find("KeyHorizontalLayout").gameObject;
         List<GameObject> childrenOfHorizontalLayout = GameObjectMethods.GetAllChildren(keyHorizontalLayout);
-        foreach (GameObject child in childrenOfHorizontalLayout)
-        {
-            if (child.name.IndexOf("KeyboardKeyImage") != -1)
-            {
-                // 確認不是例如"+"號這類的東西
-                keyboardKeyImagesPair.Add(child.name, child);
-            }
 
-
-        }
 
         inputActions = new Dictionary<ActionsEnum, InputAction>()
         {
@@ -75,9 +67,10 @@ public class InstructionUI : MonoBehaviour
         };
 
 
-
-        gameObject.SetActive(false);
+        UIInit();
+        //gameObject.SetActive(false);
     }
+    
     void Start()
     {
         
@@ -94,52 +87,105 @@ public class InstructionUI : MonoBehaviour
         return maskMaxSize;
     }
 
-    public void changeKeyCodeLabelText()
+    public void manageChangingKeyDisplay()
     {
+
         if (currentInstruction == InstructionsTypeEnum._None)
         {
             Debug.LogError("currentInstruction is _None");
             return;
         }
 
-        else if (currentInstruction == InstructionsTypeEnum.MoveInstruction)
+        else if (currentInstruction == InstructionsTypeEnum.Move)
         {
-            // left
-            getAllKeyCodeLabel()[0].GetComponent<TextMeshProUGUI>().text = rebindSystemDataBase.getReadableNameFromBindingName(inputActions[ActionsEnum.MoveLeft].bindings[0]);
-
-            // right
-            getAllKeyCodeLabel()[1].GetComponent<TextMeshProUGUI>().text = rebindSystemDataBase.getReadableNameFromBindingName(inputActions[ActionsEnum.MoveRight].bindings[0]);
+            for (int i = 0; i < getAllKeyboardKeyImage().Count; i++)
+            {
+                changeKeyboardKeyImageDisplay(i);
+            }
 
             setInstructionSize();
         }
 
-        else if (currentInstruction == InstructionsTypeEnum.JumpInstruction)
+        else if (currentInstruction == InstructionsTypeEnum.Jump)
         {
-            getAllKeyCodeLabel()[0].GetComponent<TextMeshProUGUI>().text = rebindSystemDataBase.getReadableNameFromBindingName(inputActions[ActionsEnum.Jump].bindings[0]);
+            getAllKeyboardKeyImage()[0].GetComponent<TextMeshProUGUI>().text = rebindSystemDataBase.getReadableNameFromBindingName(inputActions[ActionsEnum.Jump].bindings[0]);
             setInstructionSize();
         }
 
-        else if (currentInstruction == InstructionsTypeEnum.ShootFireballInstruction_1)
+        else if (currentInstruction == InstructionsTypeEnum.ShootFireball_OneKey)
         {
             // shoot left
-            getAllKeyCodeLabel()[0].GetComponent<TextMeshProUGUI>().text = rebindSystemDataBase.getReadableNameFromBindingName(inputActions[ActionsEnum.LeftShootFireball].bindings[0]);
+            getAllKeyboardKeyImage()[0].GetComponent<TextMeshProUGUI>().text = rebindSystemDataBase.getReadableNameFromBindingName(inputActions[ActionsEnum.LeftShootFireball].bindings[0]);
 
             // shoot down
-            getAllKeyCodeLabel()[1].GetComponent<TextMeshProUGUI>().text = rebindSystemDataBase.getReadableNameFromBindingName(inputActions[ActionsEnum.DownShootFireball].bindings[0]);
+            getAllKeyboardKeyImage()[1].GetComponent<TextMeshProUGUI>().text = rebindSystemDataBase.getReadableNameFromBindingName(inputActions[ActionsEnum.DownShootFireball].bindings[0]);
 
             setInstructionSize();
         }
 
-        else if (currentInstruction == InstructionsTypeEnum.ShootFireballInstruction_2)
+        else if (currentInstruction == InstructionsTypeEnum.ShootFireball_TwoKey)
         {
             // shoot left
-            getAllKeyCodeLabel()[0].GetComponent<TextMeshProUGUI>().text = rebindSystemDataBase.getReadableNameFromBindingName(inputActions[ActionsEnum.LeftShootFireball].bindings[0]);
+            getAllKeyboardKeyImage()[0].GetComponent<TextMeshProUGUI>().text = rebindSystemDataBase.getReadableNameFromBindingName(inputActions[ActionsEnum.LeftShootFireball].bindings[0]);
 
             setInstructionSize();
         }
     }
 
-    public List<GameObject> getAllKeyCodeLabel()
+    public void changeKeyboardKeyImageDisplay(int m_index)
+    {
+        ActionsEnum m_action = (ActionsEnum)m_index;
+        string readableName = rebindSystemDataBase.getReadableNameFromBindingName(inputActions[m_action].bindings[0]);
+        string shorterTerm = rebindSystemDataBase.getShorterTermFromReadableName(readableName);
+        GameObject targetKeyboardKeyImage = getAllKeyboardKeyImage()[m_index];
+        GameObject keyCodeText = targetKeyboardKeyImage.transform.GetChild(0).gameObject;
+        GameObject keyImage = targetKeyboardKeyImage.transform.GetChild(1).gameObject;
+        if (shorterTerm == null)
+        {
+            keyImage.SetActive(false);
+            keyCodeText.SetActive(true);
+            keyCodeText.GetComponent<TextMeshProUGUI>().text = readableName;
+        }
+        else if (shorterTerm != "IMAGE")
+        {
+            keyImage.SetActive(false);
+            keyCodeText.SetActive(true);
+            keyCodeText.GetComponent<TextMeshProUGUI>().text = shorterTerm;
+        }
+        else if (shorterTerm == "IMAGE")
+        {
+            if (keyCodeText != null && keyImage != null)
+            {
+                keyCodeText.SetActive(false);
+
+                Sprite targetSprite = rebindSystemDataBase.keyImagesDict[readableName];  // 從這取得圖片
+                keyImage.GetComponent<Image>().sprite = targetSprite;
+                keyImage.GetComponent<Image>().color = Color.black;
+                RectTransform keyImageTransform = keyImage.GetComponent<RectTransform>();
+                float spriteWidth = keyImage.GetComponent<Image>().sprite.rect.width;
+                float spriteHeight = keyImage.GetComponent<Image>().sprite.rect.height;
+                print(spriteWidth);
+                print(spriteHeight);
+                float _scale = GetComponent<RectTransform>().sizeDelta.y / spriteHeight;
+                float _scale_fineTune = 1.0f / 2.75f;
+                _scale *= _scale_fineTune;
+                spriteWidth *= _scale;
+                spriteHeight *= _scale;
+                keyImageTransform.sizeDelta = new Vector2(spriteWidth, spriteHeight);
+                
+
+                // 將真正的Button隱藏掉, 圖片剩KeyImage
+                /* 暫時取消此功能
+                Color startRebindButtonColor = startRebindButton.GetComponent<Image>().color;
+                startRebindButtonColor.a = 0;
+                startRebindButton.GetComponent<Image>().color = startRebindButtonColor;
+                */
+
+                keyImage.SetActive(true);
+            }
+        }
+    }
+    public List<GameObject> getAllKeyboardKeyImage()
     {
         List<GameObject> result = new List<GameObject>();
 
@@ -149,14 +195,9 @@ public class InstructionUI : MonoBehaviour
         for (int i = 0; i < horizontalLayout.transform.childCount; i++)
         {
             GameObject keyboardKeyImage = horizontalLayout.transform.GetChild(i).transform.gameObject;
-
-            if (keyboardKeyImage.transform.childCount > 0)
+            if (keyboardKeyImage.name.IndexOf("KeyboardKeyImage") != -1)
             {
-                GameObject keyCodeLabel = keyboardKeyImage.transform.GetChild(0).transform.gameObject;
-                if (keyCodeLabel.GetComponent<TextMeshProUGUI>() != null)
-                {
-                    result.Add(keyCodeLabel);
-                }
+                result.Add(keyboardKeyImage);
             }
         }
 
@@ -169,7 +210,8 @@ public class InstructionUI : MonoBehaviour
     {
         print("set instru");
         const string imageFilterName = "KeyboardKeyImage";
-        const float padding = 60.0f;
+        const float widthPaddingForText = 60.0f;
+        const float widthPaddingForImage = 18.0f;
 
         GameObject background = transform.GetChild(0).transform.gameObject;
         GameObject horizontalLayout = background.transform.GetChild(1).transform.gameObject;  // child 0: ActionNameLabel | child 1: KeyboardKeyImage_HorizontalLayout
@@ -188,19 +230,32 @@ public class InstructionUI : MonoBehaviour
         float totalDiffWidth = 0;
         foreach (GameObject keyboardKeyImage in horizontalLayout_AllKeyboardKeyImage)
         {
-            GameObject keyCodeLabel = keyboardKeyImage.transform.GetChild(0).transform.gameObject;
-            print(keyCodeLabel.name);
-            if (keyCodeLabel.GetComponent<TextMeshProUGUI>() != null)
+            GameObject keyCodeText = keyboardKeyImage.transform.GetChild(0).gameObject;
+            GameObject keyImage = keyboardKeyImage.transform.GetChild(1).gameObject;
+            print(keyCodeText.name);
+            
+            if (keyCodeText.gameObject.activeSelf == true && keyImage.gameObject.activeSelf == false)
+            {
+                if (keyCodeText.GetComponent<TextMeshProUGUI>() != null)
+                {
+                    float oldWidth = keyboardKeyImage.GetComponent<RectTransform>().sizeDelta.x;
+                    float newWidth = keyCodeText.GetComponent<TextMeshProUGUI>().preferredWidth + widthPaddingForText;
+                    float diffWidth = newWidth - oldWidth;
+                    totalDiffWidth += diffWidth;
+
+                    keyboardKeyImage.GetComponent<RectTransform>().sizeDelta += new Vector2(diffWidth, 0);
+                }
+            }
+            else if (keyCodeText.gameObject.activeSelf == false && keyImage.gameObject.activeSelf == true)
             {
                 float oldWidth = keyboardKeyImage.GetComponent<RectTransform>().sizeDelta.x;
-                float newWidth = keyCodeLabel.GetComponent<TextMeshProUGUI>().preferredWidth + padding;
+                float newWidth = keyImage.GetComponent<RectTransform>().sizeDelta.x + widthPaddingForImage;
                 float diffWidth = newWidth - oldWidth;
                 totalDiffWidth += diffWidth;
 
                 keyboardKeyImage.GetComponent<RectTransform>().sizeDelta += new Vector2(diffWidth, 0);
-
-
             }
+
         }
 
         GetComponent<RectTransform>().sizeDelta += new Vector2(totalDiffWidth, 0);
@@ -210,7 +265,14 @@ public class InstructionUI : MonoBehaviour
     }
     #endregion
 
+    public void UIInit()
+    {
+        GameObject background = transform.GetChild(0).gameObject;
+        GameObject actionNameLabel = background.transform.GetChild(0).gameObject;
 
+        actionNameLabel.GetComponent<TextMeshProUGUI>().text = actionName;
+        manageChangingKeyDisplay();
+    }
 
 }
 
