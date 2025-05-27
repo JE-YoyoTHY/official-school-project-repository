@@ -17,7 +17,7 @@ public class InputManagerScript : MonoBehaviour
 
     [SerializeField] private InputActionAsset inputAsset;
     [SerializeField] private InputActionMap playerMap;
-    private PlayerInput playerInput;
+    public PlayerInput playerInput {  get; private set; }
 	//private InputAction moveAction;
 	private InputAction moveLeftAction;
 	private InputAction moveRightAction;

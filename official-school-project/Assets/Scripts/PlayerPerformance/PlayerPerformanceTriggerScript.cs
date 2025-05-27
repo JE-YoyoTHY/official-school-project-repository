@@ -226,6 +226,11 @@ public class PlayerPerformanceTriggerScript : MonoBehaviour
 		PlayerControlScript.instance.fireballPlayerGetAbility();
 	}
 
+	public void comicStart(string id)
+	{
+		LogicScript.instance.comicStart(id);
+	}
+
 	#endregion
 }
 

@@ -501,6 +501,34 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Pause",
+            "id": "51b03cda-71ed-45f7-acc4-2f88bf245da1",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Button",
+                    "id": "dcb97ea0-e929-4b95-ae49-498f0318e6c9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "97231d84-1731-4e59-93cb-0676b2647e86",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

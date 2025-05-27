@@ -1064,7 +1064,7 @@ MonoBehaviour:
     m_SceneName: Chapter1
   loadAnimDuration: 0.1
   slabCam: {fileID: 1661580927}
-  slabWaitTime: 5
+  slabWaitTime: 0
 --- !u!4 &1424250356
 Transform:
   m_ObjectHideFlags: 0

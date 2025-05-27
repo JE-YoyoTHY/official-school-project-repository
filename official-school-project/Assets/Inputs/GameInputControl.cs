@@ -523,6 +523,34 @@ public partial class @GameInputControl: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Pause"",
+            ""id"": ""51b03cda-71ed-45f7-acc4-2f88bf245da1"",
+            ""actions"": [
+                {
+                    ""name"": ""New action"",
+                    ""type"": ""Button"",
+                    ""id"": ""dcb97ea0-e929-4b95-ae49-498f0318e6c9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""97231d84-1731-4e59-93cb-0676b2647e86"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""New action"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -547,6 +575,9 @@ public partial class @GameInputControl: IInputActionCollection2, IDisposable
         m_UINavigation_previousSelection = m_UINavigation.FindAction("previousSelection", throwIfNotFound: true);
         m_UINavigation_confirm = m_UINavigation.FindAction("confirm", throwIfNotFound: true);
         m_UINavigation_exit = m_UINavigation.FindAction("exit", throwIfNotFound: true);
+        // Pause
+        m_Pause = asset.FindActionMap("Pause", throwIfNotFound: true);
+        m_Pause_Newaction = m_Pause.FindAction("New action", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -808,6 +839,52 @@ public partial class @GameInputControl: IInputActionCollection2, IDisposable
         }
     }
     public UINavigationActions @UINavigation => new UINavigationActions(this);
+
+    // Pause
+    private readonly InputActionMap m_Pause;
+    private List<IPauseActions> m_PauseActionsCallbackInterfaces = new List<IPauseActions>();
+    private readonly InputAction m_Pause_Newaction;
+    public struct PauseActions
+    {
+        private @GameInputControl m_Wrapper;
+        public PauseActions(@GameInputControl wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Newaction => m_Wrapper.m_Pause_Newaction;
+        public InputActionMap Get() { return m_Wrapper.m_Pause; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(PauseActions set) { return set.Get(); }
+        public void AddCallbacks(IPauseActions instance)
+        {
+            if (instance == null || m_Wrapper.m_PauseActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_PauseActionsCallbackInterfaces.Add(instance);
+            @Newaction.started += instance.OnNewaction;
+            @Newaction.performed += instance.OnNewaction;
+            @Newaction.canceled += instance.OnNewaction;
+        }
+
+        private void UnregisterCallbacks(IPauseActions instance)
+        {
+            @Newaction.started -= instance.OnNewaction;
+            @Newaction.performed -= instance.OnNewaction;
+            @Newaction.canceled -= instance.OnNewaction;
+        }
+
+        public void RemoveCallbacks(IPauseActions instance)
+        {
+            if (m_Wrapper.m_PauseActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IPauseActions instance)
+        {
+            foreach (var item in m_Wrapper.m_PauseActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_PauseActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public PauseActions @Pause => new PauseActions(this);
     public interface IPlayerActions
     {
         void OnMoveLeft(InputAction.CallbackContext context);
@@ -829,5 +906,9 @@ public partial class @GameInputControl: IInputActionCollection2, IDisposable
         void OnPreviousSelection(InputAction.CallbackContext context);
         void OnConfirm(InputAction.CallbackContext context);
         void OnExit(InputAction.CallbackContext context);
+    }
+    public interface IPauseActions
+    {
+        void OnNewaction(InputAction.CallbackContext context);
     }
 }

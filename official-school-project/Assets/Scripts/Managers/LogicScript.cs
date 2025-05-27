@@ -34,9 +34,15 @@ public class LogicScript : MonoBehaviour
 
 	private float freezeTimer;
 
+	[SerializeField] private ComicPageScript[] comicPages;
+
 	//private List<AsyncOperation> sceneToLoad = new List<AsyncOperation>();
 	public List<SceneField> scenesCanLoad;
 	private SceneField lastSceneLoaded;
+
+	//pause
+	public bool isPaused {  get; private set; }
+
 
     // Start is called before the first frame update
     void Start()
@@ -114,11 +120,31 @@ public class LogicScript : MonoBehaviour
 	}
 
 
-	#endregion
+    #endregion
 
-	#region grid
+    #region pause
 
-	public void gridColor()
+	public void pauseGame()
+	{	
+		isPaused = true;
+		Time.timeScale = 0f;
+
+		InputManagerScript.instance.playerInput.SwitchCurrentActionMap("Pause");
+	}
+
+	public void unpauseGame()
+	{	
+		isPaused = false;
+		Time.timeScale = 1f;
+
+        InputManagerScript.instance.playerInput.SwitchCurrentActionMap("Player");
+    }
+
+    #endregion
+
+    #region grid
+
+    public void gridColor()
 	{
 		GameObject[] killFbZones = GameObject.FindGameObjectsWithTag("KillFireballWithoutExplode");
 		foreach (GameObject killFbZone in killFbZones)
@@ -181,4 +207,26 @@ public class LogicScript : MonoBehaviour
         //sceneToLoad.Add(SceneManager.LoadSceneAsync(scene, LoadSceneMode.Additive));
 
     }
+	
+
+	public void comicStart(string id)
+	{
+		//print("Called");
+		//GameObject[] comicsPages = GameObject.FindGameObjectsWithTag("ComicPage");
+		foreach (var page in comicPages)
+		{
+			//print("called");
+			if (page.pageID == id)
+			{
+				//print("found");
+
+				page.showPage();
+				pauseGame();
+			}
+				
+
+        }
+	}
+
+
 }
