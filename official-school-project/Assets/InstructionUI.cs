@@ -16,10 +16,31 @@ public class InstructionUI : MonoBehaviour
         ShootFireball_TwoKey,
     }
 
+    [SerializeField] private enum InstructionTypeEnum_ShootFireball_OneKey
+    {
+        UpShootFireball, DownShootFireball, LeftShootFireball, RightShootFireball
+    }
+    
+    [SerializeField] private enum InstructionTypeEnum_ShootFireball_TwoKey_First
+    {
+        UpShootFireball, DownShootFireball, LeftShootFireball, RightShootFireball
+    }
+    
+    [SerializeField] private enum InstructionTypeEnum_ShootFireball_TwoKey_Second
+    {
+        UpShootFireball, DownShootFireball, LeftShootFireball, RightShootFireball
+    }
+
     [Header("Drag-Needed")]
     [SerializeField] private InputActionAsset inputAsset;
     [SerializeField] RebindSystemDataBase rebindSystemDataBase;
     [SerializeField] private InstructionsTypeEnum currentInstruction;
+    [Header("If InstructionTypeEnum is ShootFireball")]
+    [Header("One Key")]
+    [SerializeField] private InstructionTypeEnum_ShootFireball_OneKey currentShootFireballInstruction_OneKey;
+    [Header("Two Key")]
+    [SerializeField] private InstructionTypeEnum_ShootFireball_TwoKey_First currentShootFireballInstruction_TwoKey_First;
+    [SerializeField] private InstructionTypeEnum_ShootFireball_TwoKey_Second currentShootFireballInstruction_TwoKey_Second;
 
 
     [Header("Data")]
@@ -98,46 +119,41 @@ public class InstructionUI : MonoBehaviour
 
         else if (currentInstruction == InstructionsTypeEnum.Move)
         {
-            for (int i = 0; i < getAllKeyboardKeyImage().Count; i++)
-            {
-                changeKeyboardKeyImageDisplay(i);
-            }
-
+            changeKeyboardKeyImageDisplay(0, 0);
+            changeKeyboardKeyImageDisplay(1, 1);
             setInstructionSize();
         }
 
         else if (currentInstruction == InstructionsTypeEnum.Jump)
         {
-            getAllKeyboardKeyImage()[0].GetComponent<TextMeshProUGUI>().text = rebindSystemDataBase.getReadableNameFromBindingName(inputActions[ActionsEnum.Jump].bindings[0]);
+            changeKeyboardKeyImageDisplay(2, 0);
             setInstructionSize();
         }
 
         else if (currentInstruction == InstructionsTypeEnum.ShootFireball_OneKey)
         {
-            // shoot left
-            getAllKeyboardKeyImage()[0].GetComponent<TextMeshProUGUI>().text = rebindSystemDataBase.getReadableNameFromBindingName(inputActions[ActionsEnum.LeftShootFireball].bindings[0]);
 
-            // shoot down
-            getAllKeyboardKeyImage()[1].GetComponent<TextMeshProUGUI>().text = rebindSystemDataBase.getReadableNameFromBindingName(inputActions[ActionsEnum.DownShootFireball].bindings[0]);
-
+            changeKeyboardKeyImageDisplay((int)currentShootFireballInstruction_OneKey + 3, 0);  // +3 是因為ActionEnum開頭已經有MoveLeft, MoveRight, Jump三個動作了
             setInstructionSize();
         }
 
         else if (currentInstruction == InstructionsTypeEnum.ShootFireball_TwoKey)
         {
-            // shoot left
-            getAllKeyboardKeyImage()[0].GetComponent<TextMeshProUGUI>().text = rebindSystemDataBase.getReadableNameFromBindingName(inputActions[ActionsEnum.LeftShootFireball].bindings[0]);
-
+            print((int)currentShootFireballInstruction_TwoKey_First);
+            print((int)currentShootFireballInstruction_TwoKey_Second);
+            changeKeyboardKeyImageDisplay((int)currentShootFireballInstruction_TwoKey_First + 3, 0);  // +3 是因為ActionEnum開頭已經有MoveLeft, MoveRight, Jump三個動作了
+            changeKeyboardKeyImageDisplay((int)currentShootFireballInstruction_TwoKey_Second + 3, 1);  // +3 是因為ActionEnum開頭已經有MoveLeft, MoveRight, Jump三個動作了
             setInstructionSize();
         }
     }
 
-    public void changeKeyboardKeyImageDisplay(int m_index)
+    public void changeKeyboardKeyImageDisplay(int actionEnumIndex, int targetKeyboardKeyImageIndex)
     {
-        ActionsEnum m_action = (ActionsEnum)m_index;
+        print($"Received actionEnumIndex: {actionEnumIndex}");
+        ActionsEnum m_action = (ActionsEnum)actionEnumIndex;
         string readableName = rebindSystemDataBase.getReadableNameFromBindingName(inputActions[m_action].bindings[0]);
         string shorterTerm = rebindSystemDataBase.getShorterTermFromReadableName(readableName);
-        GameObject targetKeyboardKeyImage = getAllKeyboardKeyImage()[m_index];
+        GameObject targetKeyboardKeyImage = getAllKeyboardKeyImage()[targetKeyboardKeyImageIndex];
         GameObject keyCodeText = targetKeyboardKeyImage.transform.GetChild(0).gameObject;
         GameObject keyImage = targetKeyboardKeyImage.transform.GetChild(1).gameObject;
         if (shorterTerm == null)
@@ -184,6 +200,8 @@ public class InstructionUI : MonoBehaviour
                 keyImage.SetActive(true);
             }
         }
+
+        print("change display completed");
     }
     public List<GameObject> getAllKeyboardKeyImage()
     {
@@ -272,6 +290,14 @@ public class InstructionUI : MonoBehaviour
 
         actionNameLabel.GetComponent<TextMeshProUGUI>().text = actionName;
         manageChangingKeyDisplay();
+
+        if (currentInstruction == InstructionsTypeEnum.ShootFireball_OneKey)
+        {
+            if (getAllKeyboardKeyImage().Count > 1)
+            {
+                Debug.LogError("Selected ShootFireball_OneKey but detected two KeyboardKeyImages");
+            }
+        }
     }
 
 }
