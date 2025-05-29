@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using TMPro;
@@ -7,7 +8,7 @@ using UnityEngine.UI;
 
 public class InstructionUI : MonoBehaviour
 {
-    public enum InstructionsTypeEnum
+    public enum InstructionTypeEnum
     {
         _None,
         Move,
@@ -15,32 +16,28 @@ public class InstructionUI : MonoBehaviour
         ShootFireball_OneKey,
         ShootFireball_TwoKey,
     }
-
+    public enum ActionsEnum
+    {
+        MoveLeft, MoveRight,
+        Jump,
+        UpShootFireball, DownShootFireball, LeftShootFireball, RightShootFireball
+    }
     [SerializeField] private enum InstructionTypeEnum_ShootFireball_OneKey
     {
         UpShootFireball, DownShootFireball, LeftShootFireball, RightShootFireball
     }
     
-    [SerializeField] private enum InstructionTypeEnum_ShootFireball_TwoKey_First
-    {
-        UpShootFireball, DownShootFireball, LeftShootFireball, RightShootFireball
-    }
-    
-    [SerializeField] private enum InstructionTypeEnum_ShootFireball_TwoKey_Second
-    {
-        UpShootFireball, DownShootFireball, LeftShootFireball, RightShootFireball
-    }
 
     [Header("Drag-Needed")]
     [SerializeField] private InputActionAsset inputAsset;
     [SerializeField] RebindSystemDataBase rebindSystemDataBase;
-    [SerializeField] private InstructionsTypeEnum currentInstruction;
+    [SerializeField] private InstructionTypeEnum currentInstructionType;
     [Header("If InstructionTypeEnum is ShootFireball")]
     [Header("One Key")]
-    [SerializeField] private InstructionTypeEnum_ShootFireball_OneKey currentShootFireballInstruction_OneKey;
+    [SerializeField] private ActionsEnum currentShootFireballInstruction_OneKey;
     [Header("Two Key")]
-    [SerializeField] private InstructionTypeEnum_ShootFireball_TwoKey_First currentShootFireballInstruction_TwoKey_First;
-    [SerializeField] private InstructionTypeEnum_ShootFireball_TwoKey_Second currentShootFireballInstruction_TwoKey_Second;
+    [SerializeField] private ActionsEnum currentShootFireballInstruction_TwoKey_First;
+    [SerializeField] private ActionsEnum currentShootFireballInstruction_TwoKey_Second;
 
 
     [Header("Data")]
@@ -54,12 +51,7 @@ public class InstructionUI : MonoBehaviour
     [SerializeField] private GameObject keyHorizontalLayout;
 
 
-    public enum ActionsEnum
-    {
-        MoveLeft, MoveRight,
-        Jump,
-        UpShootFireball, DownShootFireball, LeftShootFireball, RightShootFireball
-    }
+
     private Dictionary<ActionsEnum, InputAction> inputActions;
 
     private void Awake()
@@ -108,36 +100,40 @@ public class InstructionUI : MonoBehaviour
         return maskMaxSize;
     }
 
+    public InstructionTypeEnum getCurrentInstructionType()
+    {
+        return currentInstructionType;
+    }
     public void manageChangingKeyDisplay()
     {
 
-        if (currentInstruction == InstructionsTypeEnum._None)
+        if (currentInstructionType == InstructionTypeEnum._None)
         {
-            Debug.LogError("currentInstruction is _None");
+            Debug.LogError("currentInstructionType is _None");
             return;
         }
 
-        else if (currentInstruction == InstructionsTypeEnum.Move)
+        else if (currentInstructionType == InstructionTypeEnum.Move)
         {
             changeKeyboardKeyImageDisplay(0, 0);
             changeKeyboardKeyImageDisplay(1, 1);
             setInstructionSize();
         }
 
-        else if (currentInstruction == InstructionsTypeEnum.Jump)
+        else if (currentInstructionType == InstructionTypeEnum.Jump)
         {
             changeKeyboardKeyImageDisplay(2, 0);
             setInstructionSize();
         }
 
-        else if (currentInstruction == InstructionsTypeEnum.ShootFireball_OneKey)
+        else if (currentInstructionType == InstructionTypeEnum.ShootFireball_OneKey)
         {
 
             changeKeyboardKeyImageDisplay((int)currentShootFireballInstruction_OneKey + 3, 0);  // +3 是因為ActionEnum開頭已經有MoveLeft, MoveRight, Jump三個動作了
             setInstructionSize();
         }
 
-        else if (currentInstruction == InstructionsTypeEnum.ShootFireball_TwoKey)
+        else if (currentInstructionType == InstructionTypeEnum.ShootFireball_TwoKey)
         {
             print((int)currentShootFireballInstruction_TwoKey_First);
             print((int)currentShootFireballInstruction_TwoKey_Second);
@@ -291,7 +287,7 @@ public class InstructionUI : MonoBehaviour
         actionNameLabel.GetComponent<TextMeshProUGUI>().text = actionName;
         manageChangingKeyDisplay();
 
-        if (currentInstruction == InstructionsTypeEnum.ShootFireball_OneKey)
+        if (currentInstructionType == InstructionTypeEnum.ShootFireball_OneKey)
         {
             if (getAllKeyboardKeyImage().Count > 1)
             {
@@ -299,6 +295,19 @@ public class InstructionUI : MonoBehaviour
             }
         }
     }
+
+    public void changeAction_ShootFireball_OneKey(ActionsEnum newAction)
+    {
+        currentShootFireballInstruction_OneKey = newAction;
+    }
+
+    public void changeAction_ShootFireball_TwoKey(ActionsEnum newFirstAction, ActionsEnum newSecondAction)
+    {
+        currentShootFireballInstruction_TwoKey_First = newFirstAction;
+        currentShootFireballInstruction_TwoKey_Second = newSecondAction;
+    }
+
+
 
 }
 

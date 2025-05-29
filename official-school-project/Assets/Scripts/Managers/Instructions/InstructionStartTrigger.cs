@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class InstructionStartTrigger : MonoBehaviour
 {
-    public InstructionUIManager instructionUIManager;  // inspector 拖入
-    public enum InstructionsEnum
-    {
-        _None, 
-        MoveInstruction, 
-        JumpInstruction, 
-        ShootFireballInstruction_1, 
-        ShootFireballInstruction_2,
-    }
-    [SerializeField] public InstructionsEnum currentInstruction; // 用inspector選擇
+    [Header("Drag")]
+    [SerializeField] private GameObject instructionUIPrefab;   
+
+    [Header("Read-Only")]
+    [SerializeField] InstructionUIManager instructionUIManager;
     [SerializeField] private bool hadStarted = false;
+
+    private void Awake()
+    {
+        instructionUIManager = transform.parent.transform.parent.GetComponent<InstructionUIManager>();
+    }
     void Start()
     {
 
@@ -30,39 +30,8 @@ public class InstructionStartTrigger : MonoBehaviour
     {
         if (collision.CompareTag("Player") && hadStarted == false)  // 從來沒有出現過
         {
-            if (currentInstruction == InstructionsEnum._None)
-            {
-                Debug.LogError("[InstructionTrigger.OnTriggerEnter2D]: InstructionEnum is _None");
-                return;
-            }
-            else
-            {
-                instructionUIManager.showInstructionUI(currentInstruction.ToString());
-                hadStarted = true;
-            }
+            hadStarted = true;
+            instructionUIManager.showInstructionUI(instructionUIPrefab.GetComponent<InstructionUI>().getCurrentInstructionType());
         }
-
-        /*
-        if (collision.CompareTag("Player"))
-        {
-            if (currentInstruction == InstructionsTypeEnum._None) 
-            {
-                Debug.LogError("[InstructionTrigger.OnTriggerEnter2D]: InstructionEnum is _None");
-                return; 
-            }
-
-            if (instructionUIManager.currentInstructionUIObj != null)
-            {
-                Debug.Log("[InstructionTrigger.OnTriggerEnter2D]: There is already an existing instruction UI.");
-                return;
-            }
-
-            instructionUIManager.showInstructionUI(currentInstruction.ToString());
-            existingInstructionObjName = currentInstruction.ToString();
-            hadExistedInstructionObjsName.Add(existingInstructionObjName);
-            
-        }
-        */
-
     }
 }

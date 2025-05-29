@@ -4,17 +4,20 @@ using UnityEngine;
 
 public class InstructionEndTrigger : MonoBehaviour
 {
-    private InstructionStartTrigger startTrigger;
-    private InstructionUIManager uiManager;
-    private InstructionStartTrigger.InstructionsEnum m_currentInstruction;
-    private bool hadEnded = false;
+    [Header("Drag")]
+    [SerializeField] private GameObject instructionUIPrefab;
 
-    // Start is called before the first frame update
+    [Header("Read-Only")]
+    [SerializeField] private InstructionUIManager instructionUIManager;
+    [SerializeField] private bool hadEnded = false;
+
+    private void Awake()
+    {
+        instructionUIManager = transform.parent.transform.parent.GetComponent<InstructionUIManager>();
+    }
     void Start()
     {
-        startTrigger = transform.parent.transform.GetChild(0).transform.gameObject.GetComponent<InstructionStartTrigger>();
-        uiManager = startTrigger.instructionUIManager;
-        m_currentInstruction = startTrigger.currentInstruction;
+
     }
 
     // Update is called once per frame
@@ -28,7 +31,7 @@ public class InstructionEndTrigger : MonoBehaviour
         if (collision.CompareTag("Player") && hadEnded == false)
         {
             hadEnded = true;
-            uiManager.disappearInstructionUI();
+            instructionUIManager.disappearInstructionUI();
         }
     }
 }
