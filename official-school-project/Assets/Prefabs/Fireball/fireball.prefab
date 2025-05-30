@@ -91,8 +91,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anotherTrigger: {fileID: 209643069965685381}
-  collideObj: 0
   collidingBreakablePlatform: {fileID: 0}
+  collideWithAirwall: 0
+  collideWithGround: 0
+  collideWithSpring: 0
 --- !u!1 &2126744474065848890
 GameObject:
   m_ObjectHideFlags: 0
@@ -5179,7 +5181,7 @@ MonoBehaviour:
   fireballFriction: 40
   explodeRadius: 4
   explodeDuration: 0.25
-  explodeSpriteDuration: 0.65
+  explodeSpriteDuration: 0.6
   impulseForce: 0.3
   leavePlayerTime: 0.1
 --- !u!114 &2583024885239792354
@@ -5320,6 +5322,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ParticleSystem: {fileID: 6197230993411093695, guid: bf4427dd5954bea4e9364f0cb4f67710, type: 3}
+  ParticleSystemWithIndex: []
 --- !u!95 &2876724612870577582
 Animator:
   serializedVersion: 5
@@ -5432,5 +5435,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anotherTrigger: {fileID: 3887909984042735184}
-  collideObj: 0
   collidingBreakablePlatform: {fileID: 0}
+  collideWithAirwall: 0
+  collideWithGround: 0
+  collideWithSpring: 0

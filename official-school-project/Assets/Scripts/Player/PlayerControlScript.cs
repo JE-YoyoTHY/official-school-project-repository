@@ -78,6 +78,9 @@ public class PlayerControlScript : MonoBehaviour
 	[SerializeField] private float coyoteTime;
 	private Coroutine coyoteTimeCoroutine;
 	private bool onGround;
+	private Coroutine fallDetectCoroutine;
+	[SerializeField] private float fallParticleThreshold;
+	private float currentMaxFallSpeedInAir;
 
 	//fireball
 	[Header("Fireball")]
@@ -661,6 +664,10 @@ public class PlayerControlScript : MonoBehaviour
 
 		
 		leaveGround(true);
+		currentMaxFallSpeedInAir = 0;
+
+		//particle
+		GetComponent<ParticleCommonScript>().emitParticle();
 	}
 
 	private void jumpEnd()
@@ -765,6 +772,19 @@ public class PlayerControlScript : MonoBehaviour
 				coyoteTimeCoroutine = StartCoroutine(leaveGroundDelay(coyoteTime));
 			}
 		}
+
+		//if (onGround)
+		//{
+		//	if(fallDetectCoroutine != null)
+		//		StopCoroutine(fallDetectCoroutine);
+		//	fallDetectCoroutine = null;
+		//}
+
+		if (!onGround && fallDetectCoroutine == null)
+		{
+			fallDetectCoroutine = StartCoroutine(fallDetect());
+		}
+
 	}
 
 	private void leaveGround(bool byJump)
@@ -777,7 +797,19 @@ public class PlayerControlScript : MonoBehaviour
 			StopCoroutine(coyoteTimeCoroutine);
 			coyoteTimeCoroutine = null;
 		}
-	}
+
+        if (fallDetectCoroutine != null)
+		{
+			StopCoroutine(fallDetectCoroutine);
+			fallDetectCoroutine = null;
+
+            if (currentMaxFallSpeedInAir < fallParticleThreshold)
+                GetComponent<ParticleCommonScript>().emitParticleWithIndex(0); // 0 for fall in particle common script
+        }
+            
+        fallDetectCoroutine = StartCoroutine(fallDetect());
+
+    }
 
 	IEnumerator leaveGroundDelay(float t) // t for time, this function implement the coyote time
 	{
@@ -788,6 +820,29 @@ public class PlayerControlScript : MonoBehaviour
 			yield return null;
 		}
 		leaveGround(false);
+	}
+
+	IEnumerator fallDetect()
+	{
+		//float vy1 = rb.velocity.y;
+		//float vy2 = 0;
+        //print(vy + "fall speed");
+		currentMaxFallSpeedInAir = 0;
+        while (!onGround)
+		{
+			//vy2 = vy1;
+			//vy1 = rb.velocity.y;
+
+			currentMaxFallSpeedInAir = Mathf.Min(currentMaxFallSpeedInAir, rb.velocity.y);
+            yield return null;
+		}
+
+		//print(currentMaxFallSpeedInAir + "fall speed");
+
+		if (currentMaxFallSpeedInAir < fallParticleThreshold)
+			GetComponent<ParticleCommonScript>().emitParticleWithIndex(0); // 0 for fall in particle common script
+
+		fallDetectCoroutine = null;
 	}
 
 	#endregion
@@ -939,7 +994,11 @@ public class PlayerControlScript : MonoBehaviour
 
 		impulseSource.m_DefaultVelocity = fireballDir;
 		impulseSource.GenerateImpulseWithForce(fireballPushScreenShakeForce);
-	}
+
+		//fall particle
+		currentMaxFallSpeedInAir = 0;
+
+    }
 
 	private void fireballPushForceEnd()
 	{
@@ -975,6 +1034,9 @@ public class PlayerControlScript : MonoBehaviour
 			fireballPushForceEnd();
 			if (fireballHangTimeCoroutine != null) StopCoroutine(fireballHangTimeCoroutine);
 			fireballHangTimeMoveBoostDir = 0;
+
+			//fall particle
+			currentMaxFallSpeedInAir = 0;
 
 			//if hit by fireball, reset vy if its below 0
 			if (fireballVelocity.magnitude > 0 && rb.velocity.y < 0)
@@ -1362,7 +1424,9 @@ public class PlayerControlScript : MonoBehaviour
 		if (moveLessCoroutine != null) StopCoroutine(moveLessCoroutine);
 		if (jumpLessCoroutine != null) StopCoroutine(jumpLessCoroutine);
 		if (fireballLessCoroutine != null) StopCoroutine(fireballLessCoroutine);
-		StopAllCoroutines();
+        fallDetectCoroutine = null;
+        StopAllCoroutines();
+
 
 		PlayerPerformanceSystemScript.instance.controlEnd();
 
@@ -1457,8 +1521,11 @@ public class PlayerControlScript : MonoBehaviour
 		if (fireballLessCoroutine != null) StopCoroutine(fireballLessCoroutine);
 		fireballLessCoroutine = StartCoroutine(fireballLess(springFireballLessTime));
 
-		//push
-		rb.velocity = localForce;
+        //fall particle
+        currentMaxFallSpeedInAir = 0;
+
+        //push
+        rb.velocity = localForce;
 		fireballChargeGain(3);
 		//transform.position = localPos;
 

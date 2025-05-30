@@ -89,49 +89,49 @@ MonoBehaviour:
       attackPrepareTime: 1.2
       attackDuration: 0.12
     attackPos: {x: -935.01, y: -552.1, z: 0}
-    waitTimeAfterAttack: 0.1
+    waitTimeAfterAttack: 0.15
   - lightningAttackData:
       attackSize: {x: 4, y: 30}
       attackPosFromAxis: {x: 0, y: 0}
       attackPrepareTime: 1.2
       attackDuration: 0.12
     attackPos: {x: -931.51, y: -552.1, z: 0}
-    waitTimeAfterAttack: 0.1
+    waitTimeAfterAttack: 0.15
   - lightningAttackData:
       attackSize: {x: 4, y: 30}
       attackPosFromAxis: {x: 0, y: 0}
       attackPrepareTime: 1.2
       attackDuration: 0.12
     attackPos: {x: -928.01, y: -552.1, z: 0}
-    waitTimeAfterAttack: 0.1
+    waitTimeAfterAttack: 0.15
   - lightningAttackData:
       attackSize: {x: 4, y: 30}
       attackPosFromAxis: {x: 0, y: 0}
       attackPrepareTime: 1.2
       attackDuration: 0.12
     attackPos: {x: -924.51, y: -552.1, z: 0}
-    waitTimeAfterAttack: 0.1
+    waitTimeAfterAttack: 0.15
   - lightningAttackData:
       attackSize: {x: 4, y: 30}
       attackPosFromAxis: {x: 0, y: 0}
       attackPrepareTime: 1.2
       attackDuration: 0.12
     attackPos: {x: -921.01, y: -552.1, z: 0}
-    waitTimeAfterAttack: 0.1
+    waitTimeAfterAttack: 0.15
   - lightningAttackData:
       attackSize: {x: 4, y: 30}
       attackPosFromAxis: {x: 0, y: 0}
       attackPrepareTime: 1.2
       attackDuration: 0.12
     attackPos: {x: -917.51, y: -552.1, z: 0}
-    waitTimeAfterAttack: 0.1
+    waitTimeAfterAttack: 0.15
   - lightningAttackData:
       attackSize: {x: 4, y: 30}
       attackPosFromAxis: {x: 0, y: 0}
       attackPrepareTime: 1.2
       attackDuration: 0.12
     attackPos: {x: -914.01, y: -552.1, z: 0}
-    waitTimeAfterAttack: 0.1
+    waitTimeAfterAttack: 0.15
   - lightningAttackData:
       attackSize: {x: 4, y: 30}
       attackPosFromAxis: {x: 0, y: 0}
@@ -376,6 +376,83 @@ MonoBehaviour:
       attackPrepareTime: 1.2
       attackDuration: 0.2
     attackPos: {x: -905.09, y: -552.6, z: 0}
+    waitTimeAfterAttack: 1.1
+  - lightningAttackData:
+      attackSize: {x: 4, y: 25}
+      attackPosFromAxis: {x: 0, y: 0}
+      attackPrepareTime: 1.2
+      attackDuration: 0.2
+    attackPos: {x: -931.84, y: -552.6, z: 0}
+    waitTimeAfterAttack: 0
+  - lightningAttackData:
+      attackSize: {x: 4, y: 25}
+      attackPosFromAxis: {x: 0, y: 0}
+      attackPrepareTime: 1.2
+      attackDuration: 0.2
+    attackPos: {x: -926.09, y: -552.6, z: 0}
+    waitTimeAfterAttack: 0
+  - lightningAttackData:
+      attackSize: {x: 4, y: 25}
+      attackPosFromAxis: {x: 0, y: 0}
+      attackPrepareTime: 1.2
+      attackDuration: 0.2
+    attackPos: {x: -920.09, y: -552.6, z: 0}
+    waitTimeAfterAttack: 0
+  - lightningAttackData:
+      attackSize: {x: 4, y: 25}
+      attackPosFromAxis: {x: 0, y: 0}
+      attackPrepareTime: 1.2
+      attackDuration: 0.2
+    attackPos: {x: -914.09, y: -552.6, z: 0}
+    waitTimeAfterAttack: 1
+  - lightningAttackData:
+      attackSize: {x: 4, y: 25}
+      attackPosFromAxis: {x: 0, y: 0}
+      attackPrepareTime: 1.2
+      attackDuration: 0.2
+    attackPos: {x: -908.09, y: -552.6, z: 0}
+    waitTimeAfterAttack: 0
+  - lightningAttackData:
+      attackSize: {x: 4, y: 25}
+      attackPosFromAxis: {x: 0, y: 0}
+      attackPrepareTime: 1.2
+      attackDuration: 0.2
+    attackPos: {x: -934.84, y: -552.6, z: 0}
+    waitTimeAfterAttack: 0
+  - lightningAttackData:
+      attackSize: {x: 4, y: 25}
+      attackPosFromAxis: {x: 0, y: 0}
+      attackPrepareTime: 1.2
+      attackDuration: 0.2
+    attackPos: {x: -928.84, y: -552.6, z: 0}
+    waitTimeAfterAttack: 0
+  - lightningAttackData:
+      attackSize: {x: 4, y: 25}
+      attackPosFromAxis: {x: 0, y: 0}
+      attackPrepareTime: 1.2
+      attackDuration: 0.2
+    attackPos: {x: -923.09, y: -552.6, z: 0}
+    waitTimeAfterAttack: 0
+  - lightningAttackData:
+      attackSize: {x: 4, y: 25}
+      attackPosFromAxis: {x: 0, y: 0}
+      attackPrepareTime: 1.2
+      attackDuration: 0.2
+    attackPos: {x: -917.09, y: -552.6, z: 0}
+    waitTimeAfterAttack: 0
+  - lightningAttackData:
+      attackSize: {x: 4, y: 25}
+      attackPosFromAxis: {x: 0, y: 0}
+      attackPrepareTime: 1.2
+      attackDuration: 0.2
+    attackPos: {x: -911.09, y: -552.6, z: 0}
+    waitTimeAfterAttack: 0
+  - lightningAttackData:
+      attackSize: {x: 4, y: 25}
+      attackPosFromAxis: {x: 0, y: 0}
+      attackPrepareTime: 1.2
+      attackDuration: 0.2
+    attackPos: {x: -905.09, y: -552.6, z: 0}
     waitTimeAfterAttack: 1
   - lightningAttackData:
       attackSize: {x: 4, y: 25}
@@ -453,7 +530,7 @@ MonoBehaviour:
       attackPrepareTime: 1.2
       attackDuration: 0.2
     attackPos: {x: -905.09, y: -552.6, z: 0}
-    waitTimeAfterAttack: 0.6
+    waitTimeAfterAttack: 0.8
   - lightningAttackData:
       attackSize: {x: 4, y: 25}
       attackPosFromAxis: {x: 0, y: 0}
@@ -488,7 +565,7 @@ MonoBehaviour:
       attackPrepareTime: 1.2
       attackDuration: 0.2
     attackPos: {x: -908.09, y: -552.6, z: 0}
-    waitTimeAfterAttack: 0.6
+    waitTimeAfterAttack: 0.8
   - lightningAttackData:
       attackSize: {x: 4, y: 25}
       attackPosFromAxis: {x: 0, y: 0}
@@ -530,39 +607,4 @@ MonoBehaviour:
       attackPrepareTime: 1.2
       attackDuration: 0.2
     attackPos: {x: -905.09, y: -552.6, z: 0}
-    waitTimeAfterAttack: 0.6
-  - lightningAttackData:
-      attackSize: {x: 4, y: 25}
-      attackPosFromAxis: {x: 0, y: 0}
-      attackPrepareTime: 1.2
-      attackDuration: 0.2
-    attackPos: {x: -931.84, y: -552.6, z: 0}
     waitTimeAfterAttack: 0
-  - lightningAttackData:
-      attackSize: {x: 4, y: 25}
-      attackPosFromAxis: {x: 0, y: 0}
-      attackPrepareTime: 1.2
-      attackDuration: 0.2
-    attackPos: {x: -926.09, y: -552.6, z: 0}
-    waitTimeAfterAttack: 0
-  - lightningAttackData:
-      attackSize: {x: 4, y: 25}
-      attackPosFromAxis: {x: 0, y: 0}
-      attackPrepareTime: 1.2
-      attackDuration: 0.2
-    attackPos: {x: -920.09, y: -552.6, z: 0}
-    waitTimeAfterAttack: 0
-  - lightningAttackData:
-      attackSize: {x: 4, y: 25}
-      attackPosFromAxis: {x: 0, y: 0}
-      attackPrepareTime: 1.2
-      attackDuration: 0.2
-    attackPos: {x: -914.09, y: -552.6, z: 0}
-    waitTimeAfterAttack: 0
-  - lightningAttackData:
-      attackSize: {x: 4, y: 25}
-      attackPosFromAxis: {x: 0, y: 0}
-      attackPrepareTime: 1.2
-      attackDuration: 0.2
-    attackPos: {x: -908.09, y: -552.6, z: 0}
-    waitTimeAfterAttack: 0.6

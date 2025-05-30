@@ -257,6 +257,7 @@ GameObject:
   - component: {fileID: 266389620}
   - component: {fileID: 266389619}
   - component: {fileID: 266389618}
+  - component: {fileID: 266389629}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -288,6 +289,7 @@ MonoBehaviour:
   jumpPreInputTime: 0.2
   jumpExtraHangTimeGravityScale: 0.5
   coyoteTime: 0.1
+  fallParticleThreshold: -5
   fireballPrefab: {fileID: 5748096341067494691, guid: ccbf7d65b2cd3b7428dc4e90730c24de, type: 3}
   fireballPreInputTime: 0.1
   fireballMaxCharges: 1
@@ -740,6 +742,21 @@ Transform:
   - {fileID: 1936436783}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &266389629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 266389616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70a7ff187abf65e4092204759db5485b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ParticleSystem: {fileID: 5379535512121264728, guid: 2293df89037cbd2489cb7d69a0d73b8e, type: 3}
+  ParticleSystemWithIndex:
+  - {fileID: 5379535512121264728, guid: 174ee35549d4458419f30e7d15627dd3, type: 3}
 --- !u!1 &303352848
 GameObject:
   m_ObjectHideFlags: 0

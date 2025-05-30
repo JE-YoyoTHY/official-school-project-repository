@@ -90,6 +90,11 @@ public class ZeusPhaseTwoScript : MonoBehaviour
         attackInstance.summon(attackProfiles[currentProfileIndex].fightDatas[currentDataIndex].lightningAttackData, attackProfiles[currentProfileIndex].fightDatas[currentDataIndex].attackPos);
     }
 
+    public void setActiveState(bool state)
+    {
+        gameObject.SetActive(state);
+    }
+
     //private void 
 
     #region public method
