@@ -28,6 +28,7 @@ TagManager:
   - LevelManager
   - Spring
   - ComicPage
+  - InstructionUIManager
   layers:
   - Default
   - TransparentFX

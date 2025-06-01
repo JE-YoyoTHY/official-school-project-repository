@@ -80,6 +80,11 @@ public class InstructionUIManager : MonoBehaviour
     #region FUNCTION: showInstructionUI()
     public void showInstructionUI(InstructionTypeEnum instructionType)  // move or jump
     {
+        if (currentInstructionUIObj != null)
+        {
+            // 已有UI顯示中
+            return;
+        }
         if (maskGrowTweener != null)
         {
             Debug.Log("Already growing mask");
@@ -117,7 +122,7 @@ public class InstructionUIManager : MonoBehaviour
                 UIPerforming.setUISize(instructionUIPrefab, new Vector2(prefabRect.sizeDelta.x, 0));  // 為了讓他可以從0到全展開，所以height先設為0
 
                 // 這時才讓他可以顯示在Canvas內
-                instructionUIPrefab.transform.SetParent(GameObject.FindGameObjectWithTag("InstructionCanvas").transform);
+                instructionUIPrefab.transform.SetParent(GameObject.FindGameObjectWithTag("InstructionUIManager").transform);
                 prefabRect.anchoredPosition = prefabPos;
 
                 maskGrowTweener = prefabRect.DOSizeDelta(expandedMaskSize, maskGrowDuration).SetEase(maskGrowEaseType);
@@ -149,11 +154,13 @@ public class InstructionUIManager : MonoBehaviour
     #region FUNCTION: disappearInstructionUI()
     public void disappearInstructionUI()
     {
+        /*
         if (isProcessingDisappearUI == true)
         {
             Debug.Log("Already disappearing");
             return;
         }
+        */
 
         // 如果mask正在擴大，停止擴大
         if (maskGrowTweener != null)
@@ -183,11 +190,13 @@ public class InstructionUIManager : MonoBehaviour
 
     public void disappearInstructionUI(string instructionName)
     {
+        /*
         if (isProcessingDisappearUI == true)
         {
             Debug.Log("Already disappearing");
             return;
         }
+        */
 
         // 如果mask正在擴大，停止擴大
         if (maskGrowTweener != null)

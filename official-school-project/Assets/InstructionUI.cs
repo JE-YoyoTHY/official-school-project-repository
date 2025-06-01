@@ -78,7 +78,7 @@ public class InstructionUI : MonoBehaviour
 
 
         UIInit();
-        //gameObject.SetActive(false);
+        gameObject.SetActive(false);
     }
     
     void Start()

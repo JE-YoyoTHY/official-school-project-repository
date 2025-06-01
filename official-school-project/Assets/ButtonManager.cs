@@ -18,9 +18,10 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         CloseSettingButton, 
         OpenCreditButton, 
         CloseCreditButton,
+        SingleHandler  // 只需要一個就好, 例如ESC
     }
     
-    private Vector2 originalPosition;
+    private Vector2 originalTMPPosition;
     private float mainMenuButtonDisplacement = 50.0f;
     private float mainMenuButtonScale = 1.1f;
 
@@ -33,7 +34,7 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     // targets
     [Header("Rebind Switch")]
-    [SerializeField] private GameObject rebindCanvas;
+
 
     [Header("Open / Close Setting Button")]
     [SerializeField] private GameObject settingTab;
@@ -47,7 +48,11 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     private void Awake()
     {
-        originalPosition = transform.position;
+        if (transform.childCount > 0 && transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>() != null)
+        {
+            originalTMPPosition = transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().transform.position;
+        }
+
     }
 
     void Start()
@@ -58,31 +63,65 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     // Update is called once per frame
     void Update()
     {
-        if (Keyboard.current.escapeKey.wasPressedThisFrame)
+        if (whichButton == ButtonTypes.SingleHandler)
         {
-            if (rebindSystemDataBase.isRebinding == false)
+            if (Keyboard.current.escapeKey.wasPressedThisFrame)
             {
-                settingTab.SetActive(!settingTab.activeSelf);
+                print("esc pressed");
+                if (rebindSystemDataBase.isRebinding == false)
+                {
+                    if (settingTab.activeSelf == false)
+                    {
+                        // want to open
+                        if (startGameButton != null)  // at main menu
+                        {
+                            startGameButton.SetActive(false);
+                            openSettingButton.SetActive(false);
+                            openCreditButton.SetActive(false);
+                            selectionTriangle.gameObject.SetActive(false);
+                        }
+                        openSettingButton.SetActive(false);
+                        print("set setting button false");
+                    }
+                    else
+                    {
+                        // want to close setting
+                        if (startGameButton != null)
+                        {
+                            startGameButton.SetActive(true);
+                            openSettingButton.SetActive(true);
+                            openCreditButton.SetActive(true);
+                            startGameButton.GetComponent<ButtonManager>().TMPBackToOriginalInstantly();
+                            openSettingButton.GetComponent<ButtonManager>().TMPBackToOriginalInstantly();
+                            openCreditButton.GetComponent<ButtonManager>().TMPBackToOriginalInstantly();
+                        }
+                        openSettingButton.SetActive(true);
+                        print("set setting button true");
+                    }
+                    settingTab.SetActive(!settingTab.activeSelf);
+                }
             }
         }
+
     }
 
     public void buttonOnClick()
     {
-        if (whichButton == ButtonTypes.RebindSwitch)
+
+        if (whichButton == ButtonTypes.CloseSettingButton)
         {
-            rebindCanvas.SetActive(!rebindCanvas.activeSelf);
-        }
-        else if (whichButton == ButtonTypes.CloseSettingButton)
-        {
-            if (startGameButton != null)
+            if (startGameButton != null) // at main menu
             {
                 startGameButton.SetActive(true);
+                startGameButton.GetComponent<ButtonManager>().TMPBackToOriginalInstantly();
                 openSettingButton.SetActive(true);
                 openCreditButton.SetActive(true);
+                openCreditButton.GetComponent<ButtonManager>().TMPBackToOriginalInstantly();
             }
             settingTab.SetActive(false);
             openSettingButton.SetActive(true);
+            openSettingButton.GetComponent<ButtonManager>().TMPBackToOriginalInstantly();
+            print("BACK TO ORIGINAL");
 
         }
         else if (whichButton == ButtonTypes.OpenSettingButton)
@@ -90,7 +129,7 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             
             if (startGameButton != null)
             {   
-                backToOriginalInstantly();
+                TMPBackToOriginalInstantly();
                 selectionTriangle.disappear();
                 startGameButton.SetActive(false);
                 openCreditButton.SetActive(false);
@@ -101,7 +140,7 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         else if (whichButton == ButtonTypes.StartGameButton)
         {
             selectionTriangle.disappear();
-            backToOriginalInstantly();
+            TMPBackToOriginalInstantly();
             mainMenuManager.startGame();
         }
     }
@@ -155,10 +194,11 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
     }
 
-    private void backToOriginalInstantly()
+    public void TMPBackToOriginalInstantly()
     {
-        transform.position = originalPosition;
-        transform.DOScale(1, 0);
+        // 文字
+        transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().transform.position = originalTMPPosition;
+        transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().transform.DOScale(1, 0);
     }
     private void pointerEnterEffect_SlideAndGrowText(Vector2 displacement, float growScale, bool isReverse = false, float duration = 0.2f, Ease easeType = Ease.Linear)
     {
@@ -166,14 +206,14 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         RectTransform textTransform = targetText.GetComponent<RectTransform>();
         if (isReverse == false)
         {
-            Vector2 destination = originalPosition + displacement;
+            Vector2 destination = originalTMPPosition + displacement;
             textTransform.DOMove(destination, duration).SetEase(easeType);
             textTransform.DOScale(growScale, duration).SetEase(easeType);
         }
 
         if (isReverse == true)
         {
-            Vector2 destination = originalPosition;
+            Vector2 destination = originalTMPPosition;
             textTransform.DOMove(destination, duration).SetEase(easeType);
             textTransform.DOScale(1, duration).SetEase(easeType);
         }

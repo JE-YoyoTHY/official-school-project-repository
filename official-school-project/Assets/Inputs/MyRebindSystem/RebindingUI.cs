@@ -77,12 +77,8 @@ public class RebindingUI : MonoBehaviour
         if (targetActionRef == null) { Debug.LogError("targetActionRef is null"); }
         if (inputAsset == null) { Debug.LogError("inputAsset is null"); }
 
-        // rebind canvas's
-        if (overlay == null)
-        {
-            overlay = GameObjectMethods.GetLastChild(rebindingParent);
-        }
-        promptLabel = overlay.transform.GetChild(0).transform.gameObject;
+
+        
 
         // rebind UI prefab's
         rebindUIPrefab = gameObject;
@@ -102,9 +98,13 @@ public class RebindingUI : MonoBehaviour
 
 
     }
-    void Start()
-    {
-        overlay.SetActive(false);
+    void Start() { 
+        if (overlay == null)
+        {
+            overlay = rebindSystemDataBase.overlay;
+        }
+        promptLabel = overlay.transform.GetChild(0).transform.gameObject;
+        overlay.gameObject.GetComponent<Image>().enabled = false;
         promptLabel.SetActive(false);
         updateStartBindingButtonDisplay();
         /*
@@ -140,7 +140,7 @@ public class RebindingUI : MonoBehaviour
         }
 
         // 提示玩家按下新按鍵
-        overlay.SetActive(true);
+        overlay.GetComponent<Image>().enabled = true;  
         promptLabel.SetActive(true);
         promptLabel.GetComponent<TextMeshProUGUI>().text = promptStrings[promptStringsNames.waitForInput];
 
@@ -160,7 +160,7 @@ public class RebindingUI : MonoBehaviour
                 rebindingParent.GetComponent<RebindingManager>().bindingChangedBroadcast();
 
                 promptLabel.SetActive(false);
-                overlay.SetActive(false);
+                overlay.GetComponent <Image>().enabled = false;
 
             })
             .OnCancel(operation =>
@@ -171,7 +171,7 @@ public class RebindingUI : MonoBehaviour
                 promptLabel.GetComponent<TextMeshProUGUI>().text = promptStrings[promptStringsNames.rebindCanceled];
 
                 promptLabel.SetActive(false);
-                overlay.SetActive(false);
+                overlay.GetComponent<Image>().enabled = false;
 
             });
         rebindOperation.Start();

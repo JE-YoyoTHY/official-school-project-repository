@@ -28,9 +28,11 @@ public class InstructionEndTrigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+
         if (collision.CompareTag("Player") && hadEnded == false)
         {
-            hadEnded = true;
+            print("instruction end trigger entered");
+
             instructionUIManager.disappearInstructionUI();
         }
     }

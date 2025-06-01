@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 [CreateAssetMenu(fileName = "RebindSystemDataBase", menuName = "CustomScriptableObject/RebindSystemDataBase")]
 public class RebindSystemDataBase : ScriptableObject
@@ -31,6 +32,7 @@ public class RebindSystemDataBase : ScriptableObject
     public List<Sprite> keyImages_Values;
     public Dictionary<string, Sprite> keyImagesDict = new Dictionary<string, Sprite>();
 
+    public GameObject overlay;
     public bool isRebinding;
     public string getReadableNameFromBindingName(InputBinding binding)
     {
@@ -86,6 +88,11 @@ public class RebindSystemDataBase : ScriptableObject
                 keyImagesDict.Add(keyImages_Keys[keyImages_Values.IndexOf(_value)], _value);
             }
         }
+    }
+
+    public void setOverlay(GameObject m_overlay)
+    {
+        overlay = m_overlay;
     }
 
     private void OnEnable()

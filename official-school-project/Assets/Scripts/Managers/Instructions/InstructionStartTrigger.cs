@@ -42,9 +42,11 @@ public class InstructionStartTrigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+
         if (collision.CompareTag("Player") && hadStarted == false)  // 從來沒有出現過
         {
-            hadStarted = true;
+            print("instruction start trigger entered");
+
             instructionUIPrefab.GetComponent<InstructionUI>().changeAction_ShootFireball_OneKey(shootFireball_OneKey);
             instructionUIPrefab.GetComponent<InstructionUI>().changeAction_ShootFireball_TwoKey(shootFireball_TwoKey_First, shootFireball_TwoKey_Second);
             instructionUIManager.showInstructionUI(instructionUIPrefab.GetComponent<InstructionUI>().getCurrentInstructionType());
