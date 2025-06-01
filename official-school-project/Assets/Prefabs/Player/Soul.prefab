@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7222957666323859581}
   - component: {fileID: 5985971977857947517}
   - component: {fileID: 8310937895761225484}
+  - component: {fileID: -3322914179699254851}
   m_Layer: 0
   m_Name: Soul
   m_TagString: Untagged
@@ -75,7 +76,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 10
   m_Sprite: {fileID: -1571046930, guid: ae68aacc2c4d9574ea2d496a28f5e7bb, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.8627451}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.7058824}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -165,3 +166,17 @@ MonoBehaviour:
   tailDown: {fileID: 886308134, guid: ae68aacc2c4d9574ea2d496a28f5e7bb, type: 3}
   tailLeft: {fileID: -799531659, guid: ae68aacc2c4d9574ea2d496a28f5e7bb, type: 3}
   tailRight: {fileID: -1571046930, guid: ae68aacc2c4d9574ea2d496a28f5e7bb, type: 3}
+--- !u!114 &-3322914179699254851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8139547032279310443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70a7ff187abf65e4092204759db5485b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ParticleSystem: {fileID: 6197230993411093695, guid: 98df4a54b6a6e6d429a4c28ae085dcbf, type: 3}
+  ParticleSystemWithIndex: []

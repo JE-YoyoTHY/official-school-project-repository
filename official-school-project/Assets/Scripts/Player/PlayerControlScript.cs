@@ -1173,8 +1173,12 @@ public class PlayerControlScript : MonoBehaviour
 			if (fireballCurrentCharges == fireballMaxCharges && fireballPlayerGotten) transform.GetChild(2).gameObject.SetActive(true);
 			else transform.GetChild(2).gameObject.SetActive(false);
 		}
-		
-	}
+
+		//indicator
+		if (fireballCurrentCharges == fireballMaxCharges && fireballPlayerGotten && !isDying) PlayerFireballCountIndicatorScript.instance.setIndicatorActiveState(true);
+		else PlayerFireballCountIndicatorScript.instance.setIndicatorActiveState(false);
+
+    }
 
 	public bool fireballChargeNeeded()
 	{

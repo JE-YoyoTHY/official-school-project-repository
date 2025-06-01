@@ -70,6 +70,7 @@ public class PlayDeathSoulScript : MonoBehaviour
         if (!isMoveUpward)
         {
             PlayerAnims.instance.GetComponent<SpriteRenderer>().enabled = true;
+            GetComponent<ParticleCommonScript>().emitParticle();
         }
 
         Destroy(gameObject);
