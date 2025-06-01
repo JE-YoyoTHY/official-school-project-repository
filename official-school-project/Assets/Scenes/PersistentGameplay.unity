@@ -1103,10 +1103,11 @@ MonoBehaviour:
   fireballExplodeShade: {fileID: 8836143847271298720, guid: 78840065ee18bf44b8b4dd4fe42f5ef9, type: 3}
   fireballExplodeShadeInterval: 0.02
   fireballExplodeShadeCount: 10
-  deathRespawnDelayTime: 0.05
+  deathSoul: {fileID: 8139547032279310443, guid: 9e37a9e5349a23047af358e762deec23, type: 3}
+  deathRespawnDelayTime: 0.8
   deathHoleScript: {fileID: 1704808575}
   levelTransitionHoleScript: {fileID: 1862859407}
-  playerControlRegainMinHoleRadius: 1500
+  playerControlRegainMinHoleRadius: 200
 --- !u!95 &266389618
 Animator:
   serializedVersion: 5
@@ -1516,7 +1517,7 @@ Transform:
   m_GameObject: {fileID: 266389616}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 34.6, y: -124.185036, z: 0}
+  m_LocalPosition: {x: 34.6, y: -123, z: 0}
   m_LocalScale: {x: 1, y: 1.5999999, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1540,6 +1541,7 @@ MonoBehaviour:
   ParticleSystem: {fileID: 5379535512121264728, guid: 2293df89037cbd2489cb7d69a0d73b8e, type: 3}
   ParticleSystemWithIndex:
   - {fileID: 5379535512121264728, guid: 174ee35549d4458419f30e7d15627dd3, type: 3}
+  - {fileID: 6197230993411093695, guid: ef89e0acce003f04ab8cc064d78d15e0, type: 3}
 --- !u!1 &273357107
 GameObject:
   m_ObjectHideFlags: 0
@@ -6202,7 +6204,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1611867108464218590, guid: e386ded94a5a38145993d65b89342b47, type: 3}
       propertyPath: openDuration
-      value: 1
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 1611867108464218590, guid: e386ded94a5a38145993d65b89342b47, type: 3}
       propertyPath: openEaseType
@@ -6210,7 +6212,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1611867108464218590, guid: e386ded94a5a38145993d65b89342b47, type: 3}
       propertyPath: closeDuration
-      value: 0.25
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 1611867108464218590, guid: e386ded94a5a38145993d65b89342b47, type: 3}
       propertyPath: closeEaseType

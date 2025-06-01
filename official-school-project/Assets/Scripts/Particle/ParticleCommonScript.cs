@@ -12,11 +12,11 @@ public class ParticleCommonScript : MonoBehaviour
 
     public void emitParticle(){
         //particle
-		ParticleInstance = Instantiate(ParticleSystem, transform.position, Quaternion.identity);
+		ParticleInstance = Instantiate(ParticleSystem, transform.position, ParticleSystem.transform.rotation);
     }
 
     public void emitParticleWithIndex(int i)
     {
-        ParticleInstance = Instantiate(ParticleSystemWithIndex[i], transform.position, Quaternion.identity);
+        ParticleInstance = Instantiate(ParticleSystemWithIndex[i], transform.position, ParticleSystem.transform.rotation);
     }
 }
