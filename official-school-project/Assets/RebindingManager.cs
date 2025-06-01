@@ -1,18 +1,28 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
-public class BindingChangedEventBroadcaster : MonoBehaviour
+public class RebindingManager : MonoBehaviour
 {
     public UnityEvent BindingChangedEvent;
 
-    public void broadCast()
+    private void Awake()
+    {
+
+    }
+
+    public void bindingChangedBroadcast()
     {
         BindingChangedEvent.Invoke();
     }
 
 
+
+    
 }

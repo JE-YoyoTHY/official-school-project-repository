@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using DG.Tweening;
 using TMPro;
+using UnityEngine.InputSystem;
 
 public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -28,6 +29,7 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     [SerializeField] private ButtonTypes whichButton;  // inspector
     [SerializeField] private DecorationManager decorManager;
     [SerializeField] UIIndicators selectionTriangle;
+    [SerializeField] private RebindSystemDataBase rebindSystemDataBase;
 
     // targets
     [Header("Rebind Switch")]
@@ -56,9 +58,12 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Keyboard.current.escapeKey.wasPressedThisFrame)
         {
-            settingTab.SetActive(!settingTab.activeSelf);
+            if (rebindSystemDataBase.isRebinding == false)
+            {
+                settingTab.SetActive(!settingTab.activeSelf);
+            }
         }
     }
 

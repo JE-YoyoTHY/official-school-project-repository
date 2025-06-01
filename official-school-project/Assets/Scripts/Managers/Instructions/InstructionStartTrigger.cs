@@ -1,20 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static InstructionUI;
 
 public class InstructionStartTrigger : MonoBehaviour
 {
-    public InstructionUIManager instructionUIManager;  // inspector 拖入
-    public enum InstructionsEnum
-    {
-        _None, 
-        MoveInstruction, 
-        JumpInstruction, 
-        ShootFireballInstruction_1, 
-        ShootFireballInstruction_2,
-    }
-    [SerializeField] public InstructionsEnum currentInstruction; // 用inspector選擇
+    [Header("Drag")]
+    [SerializeField] private GameObject instructionUIPrefab;
+    [SerializeField] private ActionsEnum shootFireball_OneKey;
+    [SerializeField] private ActionsEnum shootFireball_TwoKey_First;
+    [SerializeField] private ActionsEnum shootFireball_TwoKey_Second;
+
+
+    [Header("Read-Only")]
+    [SerializeField] InstructionUIManager instructionUIManager;
     [SerializeField] private bool hadStarted = false;
+    private List<ActionsEnum> shootFireballActions;
+    private void Awake()
+    {
+        instructionUIManager = transform.parent.transform.parent.GetComponent<InstructionUIManager>();
+        shootFireballActions = new List<ActionsEnum>()
+        {
+            ActionsEnum.UpShootFireball, ActionsEnum.LeftShootFireball, ActionsEnum.RightShootFireball, ActionsEnum.DownShootFireball
+        };
+
+        if (shootFireballActions.Contains(shootFireball_OneKey) && shootFireballActions.Contains(shootFireball_TwoKey_First) && shootFireballActions.Contains(shootFireball_TwoKey_Second) == false)
+        {
+            Debug.LogError("shootFireball actions not set correctly.");
+        }
+    }
     void Start()
     {
 
@@ -30,39 +44,10 @@ public class InstructionStartTrigger : MonoBehaviour
     {
         if (collision.CompareTag("Player") && hadStarted == false)  // 從來沒有出現過
         {
-            if (currentInstruction == InstructionsEnum._None)
-            {
-                Debug.LogError("[InstructionTrigger.OnTriggerEnter2D]: InstructionEnum is _None");
-                return;
-            }
-            else
-            {
-                instructionUIManager.showInstructionUI(currentInstruction.ToString());
-                hadStarted = true;
-            }
+            hadStarted = true;
+            instructionUIPrefab.GetComponent<InstructionUI>().changeAction_ShootFireball_OneKey(shootFireball_OneKey);
+            instructionUIPrefab.GetComponent<InstructionUI>().changeAction_ShootFireball_TwoKey(shootFireball_TwoKey_First, shootFireball_TwoKey_Second);
+            instructionUIManager.showInstructionUI(instructionUIPrefab.GetComponent<InstructionUI>().getCurrentInstructionType());
         }
-
-        /*
-        if (collision.CompareTag("Player"))
-        {
-            if (currentInstruction == InstructionsTypeEnum._None) 
-            {
-                Debug.LogError("[InstructionTrigger.OnTriggerEnter2D]: InstructionEnum is _None");
-                return; 
-            }
-
-            if (instructionUIManager.currentInstructionUIObj != null)
-            {
-                Debug.Log("[InstructionTrigger.OnTriggerEnter2D]: There is already an existing instruction UI.");
-                return;
-            }
-
-            instructionUIManager.showInstructionUI(currentInstruction.ToString());
-            existingInstructionObjName = currentInstruction.ToString();
-            hadExistedInstructionObjsName.Add(existingInstructionObjName);
-            
-        }
-        */
-
     }
 }

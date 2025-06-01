@@ -1,51 +1,36 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using Unity.UI;
+using UnityEngine.UI;
 
 /// <summary>
 /// How To Use: 將此腳本放入每一個 RebindUIPrefab, 拖入:
-/// inputAsset, targetActionRef, rebindCanvas 即可使用
+/// inputAsset, targetActionRef, rebindingManager 即可使用
 /// </summary>
 public class RebindingUI : MonoBehaviour
 {
     //// TO DO: 在同一map中偵測所有action
-    #region UI Reference
-    // 父子級架構:
-    // ------------------------------------ \\
-    // Canvas
-    //
-    //    只會有一個
-    //  > Overlay (Image)
-    //     > PromptLabel (TextMeshProUGUI)
-    //
-    //    可以有很多個
-    //  > RebindUIPrefab (Empty GameObject)
-    //     > ActionLabel (TextMeshProUGUI)
-    //     > StartRebindButton (Button)
-    //        > BindingLabel (TextMeshProUGUI)
-    //     > ResetButton (Button)
-    //        > ResetLabel (TextMeshProUGUI)
-    // -------------------------------------- \\
-    
+
+    #region Ref
     private GameInputControl gameInputControl;
 
-
     [Header("--- Drag-Needed ---")]
+    [SerializeField] private string actionName;
     [SerializeField] private InputActionAsset inputAsset;
     [SerializeField] private InputActionReference targetActionRef;
-    [SerializeField] private Canvas rebindCanvas;
-    [SerializeField] private BindingChangedEventBroadcaster broadCaster;  // 只要有就會Invoke, 不論是一個還是全部
-    [SerializeField] private GameObject overlay;
+    [SerializeField] private RebindSystemDataBase rebindSystemDataBase;
 
     [Header("--- Read Only ---")]
+    [SerializeField] private GameObject rebindingParent;
+    [SerializeField] private GameObject overlay;
     [SerializeField] private GameObject promptLabel;
     [SerializeField] private GameObject rebindUIPrefab;
-    [SerializeField] private GameObject buttonOutline;
     [SerializeField] private GameObject actionLabel;
     [SerializeField] private GameObject startRebindButton;
-    [SerializeField] private GameObject bindingLabel;
+    [SerializeField] private GameObject keyCodeText;
+    [SerializeField] private GameObject keyImage;
     [SerializeField] private GameObject resetButton;
     [SerializeField] private GameObject resetLabel;
 
@@ -59,47 +44,59 @@ public class RebindingUI : MonoBehaviour
         rebindCanceled, 
     };
 
+
+    private Dictionary<string, string> readableNameToShorterOrImagePair;
+    private List<string> keyImages_Keys;
+    private List<Sprite> keyImages_Values;
+    private Dictionary<string, Sprite> keyImagesDict = new Dictionary<string, Sprite>();
+
     // 綁定索引值
     private int bindingIndex = 0;
     private HashSet<InputBinding> playerControl_AllUsedBindings = new HashSet<InputBinding>();
 
     private InputActionRebindingExtensions.RebindingOperation rebindOperation;
 
-    
+
+
     private void Awake()
     {
+        rebindingParent = transform.parent.gameObject;
         promptStrings = new Dictionary<promptStringsNames, string>()
         {
             {promptStringsNames.waitForInput, "Press a new key... (Esc to cancel)" },
             {promptStringsNames.rebindCanceled, "Rebind canceled." }
         };
+        readableNameToShorterOrImagePair = rebindSystemDataBase.readableNameToShorterOrImagePair;
+        keyImages_Keys = rebindSystemDataBase.keyImages_Keys;
+        keyImages_Values = rebindSystemDataBase.keyImages_Values;
+        keyImagesDict = rebindSystemDataBase.keyImagesDict;
 
         #region Set Ref
         gameInputControl = new GameInputControl();
 
-        // 下面三個理論上要有，因為他們是在Inpector中拖入的
-        if (rebindCanvas == null) { Debug.LogError("rebindCanvas is null"); }
         if (targetActionRef == null) { Debug.LogError("targetActionRef is null"); }
         if (inputAsset == null) { Debug.LogError("inputAsset is null"); }
 
         // rebind canvas's
         if (overlay == null)
         {
-            overlay = rebindCanvas.transform.GetChild(rebindCanvas.transform.childCount - 1).transform.gameObject;
+            overlay = GameObjectMethods.GetLastChild(rebindingParent);
         }
         promptLabel = overlay.transform.GetChild(0).transform.gameObject;
 
         // rebind UI prefab's
         rebindUIPrefab = gameObject;
-        buttonOutline = rebindUIPrefab.transform.GetChild(0).transform.gameObject;
-        actionLabel = rebindUIPrefab.transform.GetChild(1).transform.gameObject;
-        startRebindButton = rebindUIPrefab.transform.GetChild(2).transform.gameObject;
-        bindingLabel = startRebindButton.transform.GetChild(0).transform.gameObject;
-        resetButton = rebindUIPrefab.transform.GetChild(3).transform.gameObject;
+        actionLabel = rebindUIPrefab.transform.Find("ActionLabel").transform.gameObject;
+        startRebindButton = rebindUIPrefab.transform.Find("StartRebindButton").transform.gameObject;
+        keyCodeText = startRebindButton.transform.Find("KeyCodeText").transform.gameObject;
+        keyImage = startRebindButton.transform.Find("KeyImage").transform.gameObject;
+        resetButton = rebindUIPrefab.transform.Find("ResetButton").transform.gameObject;
         resetLabel = resetButton.transform.GetChild(0).transform.gameObject;
 
         #endregion
 
+
+        actionLabel.GetComponent<TextMeshProUGUI>().text = actionName;
 
 
 
@@ -107,10 +104,9 @@ public class RebindingUI : MonoBehaviour
     }
     void Start()
     {
-        updateKeyDisplay();
         overlay.SetActive(false);
         promptLabel.SetActive(false);
-
+        updateStartBindingButtonDisplay();
         /*
         playerControl_AllUsedBindings = getAllUsedBindings(inputAsset.FindActionMap("Player"));
 
@@ -119,7 +115,7 @@ public class RebindingUI : MonoBehaviour
             print(binding);
         }
         */
-        
+
     }
 
     // Update is called once per frame
@@ -128,15 +124,18 @@ public class RebindingUI : MonoBehaviour
         if (rebindOperation != null && Input.GetKeyDown(KeyCode.Escape))
         {
             rebindOperation.Cancel();
+            rebindSystemDataBase.isRebinding = false;
         }
 
     }
 
     public void performRebind()
     {
+        rebindSystemDataBase.isRebinding = true;
         if (targetActionRef == null || targetActionRef.action == null)
         {
             Debug.LogError("InputActionReference 未設定");
+            rebindSystemDataBase.isRebinding = false;
             return;
         }
 
@@ -157,8 +156,8 @@ public class RebindingUI : MonoBehaviour
                 //Debug.Log("綁定完成");
                 operation.Dispose();
                 targetActionRef.action.Enable();
-                updateKeyDisplay();
-                broadCaster.broadCast();
+                updateStartBindingButtonDisplay();
+                rebindingParent.GetComponent<RebindingManager>().bindingChangedBroadcast();
 
                 promptLabel.SetActive(false);
                 overlay.SetActive(false);
@@ -174,7 +173,6 @@ public class RebindingUI : MonoBehaviour
                 promptLabel.SetActive(false);
                 overlay.SetActive(false);
 
-
             });
         rebindOperation.Start();
 
@@ -183,11 +181,11 @@ public class RebindingUI : MonoBehaviour
     public void resetRebind()
     {
         targetActionRef.action.RemoveAllBindingOverrides();
-        broadCaster.broadCast();
-        updateKeyDisplay();
+        rebindingParent.GetComponent<RebindingManager>().bindingChangedBroadcast();
+        updateStartBindingButtonDisplay();
     }
 
-    public void updateKeyDisplay()
+    public void updateStartBindingButtonDisplay()
     {
         if (targetActionRef == null || targetActionRef.action == null)
         {
@@ -196,8 +194,50 @@ public class RebindingUI : MonoBehaviour
         }
         InputBinding binding = targetActionRef.action.bindings[bindingIndex];
         string readableName = convertBindingNameToReadableName(binding);
+        string shorterTerm = rebindSystemDataBase.getShorterTermFromReadableName(readableName);
 
-        bindingLabel.GetComponent<TextMeshProUGUI>().text = readableName;
+        if (shorterTerm == null)
+        {
+            keyImage.SetActive(false);
+            keyCodeText.SetActive(true);
+            keyCodeText.GetComponent<TextMeshProUGUI>().text = readableName;
+        }
+        else if (shorterTerm != "IMAGE")
+        {
+            keyImage.SetActive(false);
+            keyCodeText.SetActive(true);
+            keyCodeText.GetComponent<TextMeshProUGUI>().text = shorterTerm;
+        }
+        else if (shorterTerm == "IMAGE")
+        {
+            if (keyCodeText != null && keyImage != null)
+            {
+                keyCodeText.SetActive(false);
+
+                Sprite targetSprite = keyImagesDict[readableName];  // 從這取得圖片
+                keyImage.GetComponent<Image>().sprite = targetSprite;
+                RectTransform keyImageTransform = keyImage.GetComponent<RectTransform>();
+                float spriteWidth = keyImage.GetComponent<Image>().sprite.rect.width;
+                float spriteHeight = keyImage.GetComponent<Image>().sprite.rect.height;
+                print(spriteWidth);
+                print(spriteHeight);
+                float _scale = startRebindButton.GetComponent<RectTransform>().sizeDelta.y / spriteHeight;
+                float _scale_fineTune = 1.0f / 2.5f;
+                _scale *= _scale_fineTune;
+                spriteWidth *= _scale;
+                spriteHeight *= _scale;
+                keyImageTransform.sizeDelta = new Vector2(spriteWidth, spriteHeight);
+
+                // 將真正的Button隱藏掉, 圖片剩KeyImage
+                /* 暫時取消此功能
+                Color startRebindButtonColor = startRebindButton.GetComponent<Image>().color;
+                startRebindButtonColor.a = 0;
+                startRebindButton.GetComponent<Image>().color = startRebindButtonColor;
+                */
+
+                keyImage.SetActive(true);
+            }
+        }
     }
 
     public void resetAllRebind(InputActionMap actionMap)
@@ -213,16 +253,16 @@ public class RebindingUI : MonoBehaviour
     public void resetAllRebindButton_OnClick()
     {
         resetAllRebind(inputAsset.FindActionMap("Player"));
-        broadCaster.broadCast();
+        rebindingParent.GetComponent<RebindingManager>().bindingChangedBroadcast();
     }
 
     public void updateAllKeyDisplay()
     {
-        foreach(GameObject rebindPrefab in GameObjectMethods.GetAllChildren(rebindCanvas.gameObject))
+        foreach(GameObject rebindPrefab in GameObjectMethods.GetAllChildren(rebindingParent))
         {
             if (rebindPrefab.GetComponent<RebindingUI>())
             {
-                rebindPrefab.GetComponent<RebindingUI>().updateKeyDisplay();
+                rebindPrefab.GetComponent<RebindingUI>().updateStartBindingButtonDisplay();
             }
             
         }
@@ -245,6 +285,11 @@ public class RebindingUI : MonoBehaviour
 
         return readableName;
     }
+
+
+    
+
+    
 
     /// <summary>
     /// 取得傳入之InputActionMap中所有用過的按鍵(輸入)
