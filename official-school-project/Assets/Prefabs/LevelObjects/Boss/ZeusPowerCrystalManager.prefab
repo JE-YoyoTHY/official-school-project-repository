@@ -45,9 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9328c9e552ac99c49bada9a5aa8de30d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allCrystalGoneEvent:
-    m_PersistentCalls:
-      m_Calls: []
+  zeusInstance: {fileID: 0}
+  bossLightningManager: {fileID: 0}
 --- !u!1 &7331076206604544006
 GameObject:
   m_ObjectHideFlags: 0
@@ -234,6 +233,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ParticleSystem: {fileID: 6197230993411093695, guid: 0aea37cce0c9a8b478c1b3af79b7574b, type: 3}
+  ParticleSystemWithIndex: []
 --- !u!61 &6937533560088255509
 BoxCollider2D:
   m_ObjectHideFlags: 0
