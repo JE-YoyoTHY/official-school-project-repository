@@ -8,12 +8,14 @@ public class ZeusPhaseOneScript : MonoBehaviour
     //public UnityEvent damagedEvent;
     [SerializeField] private BossLightningManagerScript bossLightningManager;
     [SerializeField] private BossLightningInstanceScript bossLightningInstance;
+    private Animator animator;
 
     // Start is called before the first frame update
     void Start()
     {
         myIgnoreCollision(true);
         gameObject.SetActive(false);
+        
     }
 
     // Update is called once per frame
@@ -25,6 +27,8 @@ public class ZeusPhaseOneScript : MonoBehaviour
     public void showUp()
     {
         gameObject.SetActive(true);
+        animator = GetComponent<Animator>();
+        animator.Play("ZeusIdle");
     }
 
     public void zeusDamaged()
