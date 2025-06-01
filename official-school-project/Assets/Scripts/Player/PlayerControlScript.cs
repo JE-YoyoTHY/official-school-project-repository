@@ -150,6 +150,7 @@ public class PlayerControlScript : MonoBehaviour
 
 	//levels
 	[Header("Levels")]
+	[SerializeField] private GameObject deathSoul;
 	[SerializeField] private float deathRespawnDelayTime;
 	[SerializeField] private TransitionBlackHole deathHoleScript;
     [SerializeField] private TransitionBlackHole levelTransitionHoleScript;
@@ -666,7 +667,7 @@ public class PlayerControlScript : MonoBehaviour
 		leaveGround(true);
 		currentMaxFallSpeedInAir = 0;
 
-		//particle
+		//particle - jump
 		GetComponent<ParticleCommonScript>().emitParticle();
 	}
 
@@ -1172,8 +1173,12 @@ public class PlayerControlScript : MonoBehaviour
 			if (fireballCurrentCharges == fireballMaxCharges && fireballPlayerGotten) transform.GetChild(2).gameObject.SetActive(true);
 			else transform.GetChild(2).gameObject.SetActive(false);
 		}
-		
-	}
+
+		//indicator
+		if (fireballCurrentCharges == fireballMaxCharges && fireballPlayerGotten && !isDying) PlayerFireballCountIndicatorScript.instance.setIndicatorActiveState(true);
+		else PlayerFireballCountIndicatorScript.instance.setIndicatorActiveState(false);
+
+    }
 
 	public bool fireballChargeNeeded()
 	{
@@ -1404,6 +1409,9 @@ public class PlayerControlScript : MonoBehaviour
 		fbs = GameObject.FindGameObjectsWithTag("Fireball");
 		foreach (GameObject fb in fbs) Destroy(fb);
 
+		GameObject[] explosionShades = GameObject.FindGameObjectsWithTag("ExplosionShade");
+		foreach(GameObject exp_shade in explosionShades) Destroy(exp_shade);
+
 		//friction
 		if (myFrictionLessCoroutine != null) StopCoroutine(myFrictionLessCoroutine);
 
@@ -1430,7 +1438,11 @@ public class PlayerControlScript : MonoBehaviour
 
 		PlayerPerformanceSystemScript.instance.controlEnd();
 
-	}
+
+        //death soul
+        GameObject soulInstance = Instantiate(deathSoul, transform.position, Quaternion.identity);
+        soulInstance.GetComponent<PlayDeathSoulScript>().summon(false);
+    }
 
 	//call when hole close finish, called at the same time as player death,
 	//but these two must be separate because enter new level dont call player death
@@ -1440,6 +1452,8 @@ public class PlayerControlScript : MonoBehaviour
 		deathRespawnDelayCoroutine = null;
         if (deathRespawnPlayerControlRegainCoroutine != null) StopCoroutine(deathRespawnPlayerControlRegainCoroutine);
 		deathRespawnPlayerControlRegainCoroutine = StartCoroutine(playerRespawnControlRegain());
+
+        //PlayerAnims.instance.GetComponent<SpriteRenderer>().enabled = true;
     }
 
 	//call when player touch killzone, the actual death start
@@ -1449,6 +1463,16 @@ public class PlayerControlScript : MonoBehaviour
 		deathRespawnDelayCoroutine = StartCoroutine(playerDeathDelayMain(deathRespawnDelayTime));
 
 		isDying = true;
+
+		//particle - player death
+		GetComponent<ParticleCommonScript>().emitParticleWithIndex(1); // 1 for player death
+
+		//death soul
+		GameObject soulInstance = Instantiate(deathSoul, transform.position, Quaternion.identity);
+		soulInstance.GetComponent<PlayDeathSoulScript>().summon(true);
+
+		//player sprite
+		PlayerAnims.instance.GetComponent<SpriteRenderer>().enabled = false;
 	}
 
 	//wait for a short time before the hole close, to play animation

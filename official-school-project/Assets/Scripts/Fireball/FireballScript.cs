@@ -411,7 +411,7 @@ public class FireballScript : MonoBehaviour
 		}
 	}
 
-	private fireballTriggerCollidingObject triggerState()
+	public fireballTriggerCollidingObject triggerState()
 	{
 		//if (triggerOnLeft.collideObj == triggerOnRight.collideObj) return triggerOnRight.collideObj;
 		if (triggerOnLeft.collideWithSpring && triggerOnRight.collideWithSpring) return fireballTriggerCollidingObject.spring;
