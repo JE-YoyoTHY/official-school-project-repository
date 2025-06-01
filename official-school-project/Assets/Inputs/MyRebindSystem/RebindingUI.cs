@@ -161,6 +161,7 @@ public class RebindingUI : MonoBehaviour
 
                 promptLabel.SetActive(false);
                 overlay.GetComponent <Image>().enabled = false;
+                rebindSystemDataBase.isRebinding = false;
 
             })
             .OnCancel(operation =>
@@ -172,6 +173,7 @@ public class RebindingUI : MonoBehaviour
 
                 promptLabel.SetActive(false);
                 overlay.GetComponent<Image>().enabled = false;
+                rebindSystemDataBase.isRebinding = false;
 
             });
         rebindOperation.Start();

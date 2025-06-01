@@ -126,16 +126,17 @@ public class InstructionUI : MonoBehaviour
         else if (currentInstructionType == InstructionTypeEnum.ShootFireball_OneKey)
         {
 
-            changeKeyboardKeyImageDisplay((int)currentShootFireballInstruction_OneKey + 3, 0);  // +3 是因為ActionEnum開頭已經有MoveLeft, MoveRight, Jump三個動作了
+            changeKeyboardKeyImageDisplay((int)currentShootFireballInstruction_OneKey, 0);
             setInstructionSize();
         }
 
         else if (currentInstructionType == InstructionTypeEnum.ShootFireball_TwoKey)
         {
+            print("Manage changing key display - two key");
             print((int)currentShootFireballInstruction_TwoKey_First);
             print((int)currentShootFireballInstruction_TwoKey_Second);
-            changeKeyboardKeyImageDisplay((int)currentShootFireballInstruction_TwoKey_First + 3, 0);  // +3 是因為ActionEnum開頭已經有MoveLeft, MoveRight, Jump三個動作了
-            changeKeyboardKeyImageDisplay((int)currentShootFireballInstruction_TwoKey_Second + 3, 1);  // +3 是因為ActionEnum開頭已經有MoveLeft, MoveRight, Jump三個動作了
+            changeKeyboardKeyImageDisplay((int)currentShootFireballInstruction_TwoKey_First, 0);  
+            changeKeyboardKeyImageDisplay((int)currentShootFireballInstruction_TwoKey_Second, 1);  
             setInstructionSize();
         }
     }
@@ -296,12 +297,14 @@ public class InstructionUI : MonoBehaviour
     public void changeAction_ShootFireball_OneKey(ActionsEnum newAction)
     {
         currentShootFireballInstruction_OneKey = newAction;
+        manageChangingKeyDisplay();
     }
 
     public void changeAction_ShootFireball_TwoKey(ActionsEnum newFirstAction, ActionsEnum newSecondAction)
     {
         currentShootFireballInstruction_TwoKey_First = newFirstAction;
         currentShootFireballInstruction_TwoKey_Second = newSecondAction;
+        manageChangingKeyDisplay();
     }
 
 

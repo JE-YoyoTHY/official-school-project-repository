@@ -17,7 +17,7 @@ public class InjectToRebindDataBase : MonoBehaviour
         switch(whoAreYou)
         {
             case InjectTarget.Overlay:
-                dataBase.overlay = this.gameObject;
+                dataBase.overlay = gameObject;
                 break;
         }
     }
@@ -31,4 +31,6 @@ public class InjectToRebindDataBase : MonoBehaviour
     {
         
     }
+
+
 }
