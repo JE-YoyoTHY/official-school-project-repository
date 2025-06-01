@@ -18,7 +18,11 @@ public class InstructionStartTrigger : MonoBehaviour
     private List<ActionsEnum> shootFireballActions;
     private void Awake()
     {
-        instructionUIManager = transform.parent.transform.parent.GetComponent<InstructionUIManager>();
+        if (instructionUIManager == null)
+        {
+            instructionUIManager = GameObject.Find("InstructionManager").GetComponent<InstructionUIManager>();
+        }
+
         shootFireballActions = new List<ActionsEnum>()
         {
             ActionsEnum.UpShootFireball, ActionsEnum.LeftShootFireball, ActionsEnum.RightShootFireball, ActionsEnum.DownShootFireball
@@ -28,6 +32,8 @@ public class InstructionStartTrigger : MonoBehaviour
         {
             Debug.LogError("shootFireball actions not set correctly.");
         }
+
+        instructionUIManager = transform.parent.parent.parent.gameObject.GetComponent<InstructionUIManager>();
     }
     void Start()
     {
@@ -42,7 +48,6 @@ public class InstructionStartTrigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-
         if (collision.CompareTag("Player") && hadStarted == false)  // 從來沒有出現過
         {
             print("instruction start trigger entered");

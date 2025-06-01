@@ -77,13 +77,12 @@ public class InstructionUI : MonoBehaviour
         };
 
 
-        UIInit();
         gameObject.SetActive(false);
     }
     
     void Start()
     {
-        
+        UIInit();
     }
 
     // Update is called once per frame
@@ -126,16 +125,17 @@ public class InstructionUI : MonoBehaviour
         else if (currentInstructionType == InstructionTypeEnum.ShootFireball_OneKey)
         {
 
-            changeKeyboardKeyImageDisplay((int)currentShootFireballInstruction_OneKey + 3, 0);  // +3 是因為ActionEnum開頭已經有MoveLeft, MoveRight, Jump三個動作了
+            changeKeyboardKeyImageDisplay((int)currentShootFireballInstruction_OneKey, 0);
             setInstructionSize();
         }
 
         else if (currentInstructionType == InstructionTypeEnum.ShootFireball_TwoKey)
         {
+            print("Manage changing key display - two key");
             print((int)currentShootFireballInstruction_TwoKey_First);
             print((int)currentShootFireballInstruction_TwoKey_Second);
-            changeKeyboardKeyImageDisplay((int)currentShootFireballInstruction_TwoKey_First + 3, 0);  // +3 是因為ActionEnum開頭已經有MoveLeft, MoveRight, Jump三個動作了
-            changeKeyboardKeyImageDisplay((int)currentShootFireballInstruction_TwoKey_Second + 3, 1);  // +3 是因為ActionEnum開頭已經有MoveLeft, MoveRight, Jump三個動作了
+            changeKeyboardKeyImageDisplay((int)currentShootFireballInstruction_TwoKey_First, 0);  
+            changeKeyboardKeyImageDisplay((int)currentShootFireballInstruction_TwoKey_Second, 1);  
             setInstructionSize();
         }
     }
@@ -173,9 +173,9 @@ public class InstructionUI : MonoBehaviour
                 RectTransform keyImageTransform = keyImage.GetComponent<RectTransform>();
                 float spriteWidth = keyImage.GetComponent<Image>().sprite.rect.width;
                 float spriteHeight = keyImage.GetComponent<Image>().sprite.rect.height;
-                print(spriteWidth);
-                print(spriteHeight);
-                float _scale = GetComponent<RectTransform>().sizeDelta.y / spriteHeight;
+                print($"Sprite Width: {spriteWidth}");
+                print($"Sprite Height: {spriteHeight}");
+                float _scale = getMaskMaxSize().y / spriteHeight;
                 float _scale_fineTune = 1.0f / 2.75f;
                 _scale *= _scale_fineTune;
                 spriteWidth *= _scale;
@@ -296,12 +296,14 @@ public class InstructionUI : MonoBehaviour
     public void changeAction_ShootFireball_OneKey(ActionsEnum newAction)
     {
         currentShootFireballInstruction_OneKey = newAction;
+        manageChangingKeyDisplay();
     }
 
     public void changeAction_ShootFireball_TwoKey(ActionsEnum newFirstAction, ActionsEnum newSecondAction)
     {
         currentShootFireballInstruction_TwoKey_First = newFirstAction;
         currentShootFireballInstruction_TwoKey_Second = newSecondAction;
+        manageChangingKeyDisplay();
     }
 
 

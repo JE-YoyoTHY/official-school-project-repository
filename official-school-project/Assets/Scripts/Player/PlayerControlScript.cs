@@ -1409,6 +1409,9 @@ public class PlayerControlScript : MonoBehaviour
 		fbs = GameObject.FindGameObjectsWithTag("Fireball");
 		foreach (GameObject fb in fbs) Destroy(fb);
 
+		GameObject[] explosionShades = GameObject.FindGameObjectsWithTag("ExplosionShade");
+		foreach(GameObject exp_shade in explosionShades) Destroy(exp_shade);
+
 		//friction
 		if (myFrictionLessCoroutine != null) StopCoroutine(myFrictionLessCoroutine);
 

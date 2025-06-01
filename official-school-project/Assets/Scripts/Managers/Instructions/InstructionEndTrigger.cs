@@ -13,7 +13,7 @@ public class InstructionEndTrigger : MonoBehaviour
 
     private void Awake()
     {
-        instructionUIManager = transform.parent.transform.parent.GetComponent<InstructionUIManager>();
+        instructionUIManager = transform.parent.parent.parent.gameObject.GetComponent<InstructionUIManager>(); ;
     }
     void Start()
     {

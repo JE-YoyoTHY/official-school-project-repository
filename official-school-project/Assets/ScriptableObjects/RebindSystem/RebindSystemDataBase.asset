@@ -23,4 +23,4 @@ MonoBehaviour:
   - {fileID: 21300000, guid: b6c38e04891210f4ab355fd0a1619009, type: 3}
   - {fileID: 21300000, guid: 15734b46657b900429ef9548dffb000b, type: 3}
   overlay: {fileID: 0}
-  isRebinding: 1
+  isRebinding: 0

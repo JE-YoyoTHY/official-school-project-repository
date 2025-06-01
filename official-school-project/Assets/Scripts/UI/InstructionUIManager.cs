@@ -102,6 +102,7 @@ public class InstructionUIManager : MonoBehaviour
         if (availableInstructionsUIObj.ContainsKey(instructionType))
         {
             GameObject instructionUIPrefab = availableInstructionsUIObj[instructionType];
+            instructionUIPrefab.GetComponent<InstructionUI>().manageChangingKeyDisplay();
             instructionUIPrefab.SetActive(true);  // 將UI變為可見
             currentInstructionUIObj = instructionUIPrefab;
             print("set current instructionUIObj horizontalLayoutChild obj");

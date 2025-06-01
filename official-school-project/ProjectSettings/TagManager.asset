@@ -29,6 +29,7 @@ TagManager:
   - Spring
   - ComicPage
   - InstructionUIManager
+  - ExplosionShade
   layers:
   - Default
   - TransparentFX

@@ -9,6 +9,7 @@ public class TutorialFireballScript : MonoBehaviour
 	private Rigidbody2D rb;
 	private CircleCollider2D coll;
 	private TutorialShadeScript tutorialShade;
+	private Animator animator;
 
 	private Vector2 moveDir;
 	private float moveSpeed;
@@ -73,6 +74,7 @@ public class TutorialFireballScript : MonoBehaviour
 		moveDir = localDir;
 		rb = GetComponent<Rigidbody2D>();
 		coll = GetComponent<CircleCollider2D>();
+		animator = GetComponent<Animator>();
 		tutorialShade = shade;
 
 		isExploding = false;
@@ -85,14 +87,19 @@ public class TutorialFireballScript : MonoBehaviour
 
 
 		moveSpeed = normalMoveSpeed;
-	}
+
+        transform.rotation = Quaternion.FromToRotation(Vector3.up, moveDir);
+        animator.Play("FireballFly");
+    }
 
 	private void explode()
 	{
 		isExploding = true;
-		transform.localScale = new Vector3(explodeRadius / coll.radius, explodeRadius / coll.radius, 1);
+        //transform.localScale = new Vector3(explodeRadius / coll.radius, explodeRadius / coll.radius, 1);
+        transform.localScale = Vector3.one * 10;
+        coll.radius = 0.4f;
 
-		rb.velocity = Vector2.zero;
+        rb.velocity = Vector2.zero;
 		hitPlayerSpeedModifier = Vector2.zero;
 		//StopAllCoroutines();
 		StartCoroutine(destroyCoroutine(explodeDuration));
@@ -102,7 +109,9 @@ public class TutorialFireballScript : MonoBehaviour
 		myIgnoreCollision(false);
 		coll.isTrigger = true;
 
-	}
+        animator.Play("Explode");
+
+    }
 
 	private void explodePushPlayer(GameObject shade)
 	{
