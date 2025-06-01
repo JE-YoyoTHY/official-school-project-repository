@@ -102,7 +102,9 @@ public class SpringScript : MonoBehaviour
 			//Vector2 localDir = transform.GetChild(0).localPosition;
 			//Vector3 deltaPos = transform.GetChild(0).position - transform.position;
 			//Vector2 localDir = new Vector2(deltaPos.x, deltaPos.y).normalized;
-			collision.gameObject.GetComponent<FireballScript>().springPush(pushDir.normalized, fireballSpeedScale, hitPlayerVelocity);
+			FireballScript fb = collision.gameObject.GetComponent<FireballScript>();
+			if (fb.triggerState() == fireballTriggerCollidingObject.spring)
+				collision.gameObject.GetComponent<FireballScript>().springPush(pushDir.normalized, fireballSpeedScale, hitPlayerVelocity);
 		}
 
 		if (collision.gameObject.tag == "TutorialShade")
