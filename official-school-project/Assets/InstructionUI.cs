@@ -22,10 +22,7 @@ public class InstructionUI : MonoBehaviour
         Jump,
         UpShootFireball, DownShootFireball, LeftShootFireball, RightShootFireball
     }
-    [SerializeField] private enum InstructionTypeEnum_ShootFireball_OneKey
-    {
-        UpShootFireball, DownShootFireball, LeftShootFireball, RightShootFireball
-    }
+
     
 
     [Header("Drag-Needed")]
