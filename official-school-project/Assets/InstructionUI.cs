@@ -77,13 +77,12 @@ public class InstructionUI : MonoBehaviour
         };
 
 
-        UIInit();
         gameObject.SetActive(false);
     }
     
     void Start()
     {
-        
+        UIInit();
     }
 
     // Update is called once per frame
@@ -174,9 +173,9 @@ public class InstructionUI : MonoBehaviour
                 RectTransform keyImageTransform = keyImage.GetComponent<RectTransform>();
                 float spriteWidth = keyImage.GetComponent<Image>().sprite.rect.width;
                 float spriteHeight = keyImage.GetComponent<Image>().sprite.rect.height;
-                print(spriteWidth);
-                print(spriteHeight);
-                float _scale = GetComponent<RectTransform>().sizeDelta.y / spriteHeight;
+                print($"Sprite Width: {spriteWidth}");
+                print($"Sprite Height: {spriteHeight}");
+                float _scale = getMaskMaxSize().y / spriteHeight;
                 float _scale_fineTune = 1.0f / 2.75f;
                 _scale *= _scale_fineTune;
                 spriteWidth *= _scale;
