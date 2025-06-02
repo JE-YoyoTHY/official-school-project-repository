@@ -14,7 +14,7 @@ public class RebindingManager : MonoBehaviour
 
     private void Awake()
     {
-
+        
     }
 
     public void bindingChangedBroadcast()
@@ -23,6 +23,6 @@ public class RebindingManager : MonoBehaviour
     }
 
 
-
+    
     
 }

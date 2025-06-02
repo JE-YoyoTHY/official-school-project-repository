@@ -138,7 +138,7 @@ public class SpringScript : MonoBehaviour
 		}
         m_VFXManager.performVFX();
         animator.Play("SheepBounce");
-		
+		SFXManager.playSFXOneShot(SFXManager.SFXType.SheepStepped);
 		//player push
 		PlayerControlScript.instance.springPush(pushDir.normalized * pushForce, removePlayerMoveAbility, springDuration, springGravityScale, springFriction, fireballLessTime);
 	}

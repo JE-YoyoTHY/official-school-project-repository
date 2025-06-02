@@ -21,14 +21,20 @@ public class PlayerGroundTriggerScript : MonoBehaviour
     {
         
     }
-
-	private void OnTriggerStay2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.layer == groundLayer && isGrounded == false)
+		{
+			print("land sfx");
+            SFXManager.playSFXOneShot(SFXManager.SFXType.Land);
+        }
+    }
+    private void OnTriggerStay2D(Collider2D collision)
 	{
 		if(collision.gameObject.layer == groundLayer)
 		{
 			isGrounded = true;
-
-			if(collision.gameObject.tag == "BreakablePlatform")
+            if (collision.gameObject.tag == "BreakablePlatform")
 			{
 				currentBreakablePlatform = collision.gameObject.GetComponent<BreakablePlatformScript>();
 				currentBreakablePlatform.traversalThroughAdjacentTiles(null);

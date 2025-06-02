@@ -138,6 +138,7 @@ public class PlayerAnims : MonoBehaviour
         {
             print("land");
             changeState(STATE_LAND);
+
         }
 
 

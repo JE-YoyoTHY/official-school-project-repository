@@ -647,6 +647,8 @@ public class PlayerControlScript : MonoBehaviour
 
 	private void jumpStart()
 	{
+		print("jump sfx");
+		SFXManager.playSFXOneShot(SFXManager.SFXType.Jump);
 		if (jumpExtraHangTimeCoroutine != null) StopCoroutine(jumpExtraHangTimeCoroutine);
 
 		isJumping = true;
@@ -863,6 +865,8 @@ public class PlayerControlScript : MonoBehaviour
 	 */
 	public void fireballStart(bool isCastByKeyboard) 
 	{
+		print("shoot fireball sfx");
+		SFXManager.playSFXOneShot(SFXManager.SFXType.ShootFireball);
 		fireballCastByKeyboard = isCastByKeyboard;
 
 		isFireballPushForceAdding = true;
@@ -1012,6 +1016,8 @@ public class PlayerControlScript : MonoBehaviour
 
 	public void fireballExplodeStart(Vector2 localVelocity, Vector2 fireballVelocity)
 	{
+		print("fireball explode sfx");
+		SFXManager.playSFXOneShot(SFXManager.SFXType.FireballExplode);
 		//freezeStart(fireballExplodeFreezeTime);
 		LogicScript.instance.setFreezeTime(fireballExplodeFreezeTime);
 
