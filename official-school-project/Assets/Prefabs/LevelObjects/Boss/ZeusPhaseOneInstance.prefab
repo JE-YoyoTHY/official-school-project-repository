@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7274697055679076082}
   - component: {fileID: 4640006072807448198}
   - component: {fileID: 4518223970682164897}
+  - component: {fileID: 6902728599997855102}
   m_Layer: 0
   m_Name: ZeusPhaseOneInstance
   m_TagString: ZeusPhaseOne
@@ -171,6 +172,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0bbcdd00452d1a40a256a4ae2041ba8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damagedEvent:
-    m_PersistentCalls:
-      m_Calls: []
+  bossLightningManager: {fileID: 0}
+  bossLightningInstance: {fileID: 0}
+--- !u!95 &6902728599997855102
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1803982881137572784}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a445e0ef6162b63448991303dd3335ce, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
