@@ -206,6 +206,8 @@ public class BreakablePlatformScript : MonoBehaviour
 
 		//continuous particle
 		transform.GetChild(2).gameObject.SetActive(false); // child 2 -> particle
+
+		GetComponent<ParticleCommonScript>().emitParticleWithIndex(0);
 	}
 
 	public void playerJumpOnThisTraversal(BreakablePlatformScript lastTile)

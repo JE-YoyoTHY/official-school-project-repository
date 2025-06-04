@@ -114,7 +114,7 @@ public class PlayerAnims : MonoBehaviour
                 if (currentVelocity.x <= -0.5f)
                 {
                     Debug.Log("fall left");
-                    changeState(STATE_FALL_LEFT);
+                    changeState(STATE_FALL_RIGHT);
                 }
                 if (currentVelocity.x >= 0.5f)
                 {

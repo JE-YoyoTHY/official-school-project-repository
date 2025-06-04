@@ -38,6 +38,8 @@ public class ZeusPhaseTwoScript : MonoBehaviour
 
     private bool isAttackActive = false;
 
+    private Animator animator;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -81,6 +83,8 @@ public class ZeusPhaseTwoScript : MonoBehaviour
         summonAttack();
         attackWaitTimeCounter = attackProfiles[currentProfileIndex].fightDatas[currentDataIndex].waitTimeAfterAttack;
         currentDataIndex++;
+
+        animator.Play("ZeusAttack");
 
     }
 

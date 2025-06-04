@@ -5382,3 +5382,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ParticleSystem: {fileID: 8307610204318769644, guid: 27d2954ccb18ce046bacb15c6c96d468, type: 3}
+  ParticleSystemWithIndex:
+  - {fileID: 8307610204318769644, guid: 3f4d1c147fdb3e844a98d62d0b575579, type: 3}

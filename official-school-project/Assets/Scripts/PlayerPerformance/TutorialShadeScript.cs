@@ -25,15 +25,15 @@ public class TutorialShadeScript : MonoBehaviour
 	//move
 	//private float PlayerControlScript.instance.m_moveMaxSpeed;
 	//private float PlayerControlScript.instance.m_moveAcceleration;
-	private bool isMoving;
-	private sbyte moveDir;
+	public bool isMoving {  get; private set; }
+	public sbyte moveDir {  get; private set; }
 	private bool isMoveActive;
 
 	//jump
 	//private float PlayerControlScript.instance.m_jumpStrength;
 	//private float PlayerControlScript.instance.m_jumpStrength;
 	//private float PlayerControlScript.instance.m_jumpMinSpeed;
-	private bool isJumping;
+	public bool isJumping {  get; private set; }
 	private Coroutine jumpExtraHangTimeCoroutine;
 	//private float PlayerControlScript.instance.m_jumpExtraHangTimeGravityScale;
 	//private bool isJumpActive;

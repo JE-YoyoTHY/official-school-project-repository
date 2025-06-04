@@ -1595,6 +1595,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1483857777347752700, guid: 30d131496f330db438133d839d8be7d4, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].time
+      value: 0.0023384094
+      objectReference: {fileID: 0}
+    - target: {fileID: 1483857777347752700, guid: 30d131496f330db438133d839d8be7d4, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
+      value: 0.28476524
+      objectReference: {fileID: 0}
     - target: {fileID: 1598250844421760653, guid: 30d131496f330db438133d839d8be7d4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 97.44726
@@ -1634,6 +1642,14 @@ PrefabInstance:
     - target: {fileID: 1598250844421760653, guid: 30d131496f330db438133d839d8be7d4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5448361143008538151, guid: 30d131496f330db438133d839d8be7d4, type: 3}
+      propertyPath: rotateSpeed
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 5448361143008538151, guid: 30d131496f330db438133d839d8be7d4, type: 3}
+      propertyPath: rotatePatterns.Array.size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7012118233452296721, guid: 30d131496f330db438133d839d8be7d4, type: 3}
       propertyPath: m_Name
