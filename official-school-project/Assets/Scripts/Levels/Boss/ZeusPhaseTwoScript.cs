@@ -44,6 +44,8 @@ public class ZeusPhaseTwoScript : MonoBehaviour
     void Start()
     {
         myIgnoreCollision(true);
+
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -118,6 +120,7 @@ public class ZeusPhaseTwoScript : MonoBehaviour
         }
 
         resetEvents[currentProfileIndex].Invoke();
+        animator.Play("ZeusIdle");
     }
 
     [ContextMenu("Fight start")]
