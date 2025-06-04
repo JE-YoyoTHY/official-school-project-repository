@@ -134,8 +134,8 @@ public class BossLightningManagerScript : MonoBehaviour
         GameObject[] lightningAttacks = GameObject.FindGameObjectsWithTag("LightningAttackInstance");
         foreach(GameObject lightningAttack in lightningAttacks)
         {
-            if(!lightningAttack.GetComponent<BossLightningInstanceScript>().isStaticWall)
-                Destroy(lightningAttack.gameObject);
+            if (!lightningAttack.GetComponent<BossLightningInstanceScript>().isStaticWall)
+                lightningAttack.GetComponent<BossLightningInstanceScript>().destroyAttackInstance(); //Destroy(lightningAttack.gameObject);
         }
     }
     #endregion

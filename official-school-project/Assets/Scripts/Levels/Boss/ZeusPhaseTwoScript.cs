@@ -36,9 +36,19 @@ public class ZeusPhaseTwoScript : MonoBehaviour
     [SerializeField] private CinemachineVirtualCamera[] vcams;
     [SerializeField] private GameObject[] bossPositions;
 
+
     private bool isAttackActive = false;
 
     private Animator animator;
+    
+    
+    [Header("ScreenShake")]
+    [SerializeField] private ScreenShakeProfile shieldDamagedShake;
+    [SerializeField] private ScreenShakeProfile shieldBreakShake;
+    [SerializeField] private ScreenShakeProfile damagedShake;
+    [SerializeField] private ScreenShakeProfile reenterShake;
+
+    private CinemachineImpulseSource cinemachineImpulseSource;
 
     // Start is called before the first frame update
     void Start()
@@ -46,6 +56,7 @@ public class ZeusPhaseTwoScript : MonoBehaviour
         myIgnoreCollision(true);
 
         animator = GetComponent<Animator>();
+        cinemachineImpulseSource = GetComponent<CinemachineImpulseSource>();
     }
 
     // Update is called once per frame
@@ -75,6 +86,11 @@ public class ZeusPhaseTwoScript : MonoBehaviour
         }
         else
         {
+            if (isAttackActive)
+            {
+                roomCleared();
+            }
+
             isAttackActive = false;
         }
         
@@ -96,9 +112,16 @@ public class ZeusPhaseTwoScript : MonoBehaviour
         attackInstance.summon(attackProfiles[currentProfileIndex].fightDatas[currentDataIndex].lightningAttackData, attackProfiles[currentProfileIndex].fightDatas[currentDataIndex].attackPos);
     }
 
-    public void setActiveState(bool state)
+    //public void setActiveState(bool state)
+    //{
+    //    gameObject.SetActive(state);
+    //}
+
+    private void roomCleared()
     {
-        gameObject.SetActive(state);
+        transform.GetChild(0).gameObject.SetActive(false); // child 0 for shield
+        GetComponent<ParticleCommonScript>().emitParticle(); //emit for shield break;
+        CameraShakeManagerScript.instance.cameraShakeWithProfileWithRandomDirection(shieldBreakShake, cinemachineImpulseSource);
     }
 
     //private void 
@@ -121,6 +144,8 @@ public class ZeusPhaseTwoScript : MonoBehaviour
 
         resetEvents[currentProfileIndex].Invoke();
         animator.Play("ZeusIdle");
+
+        transform.GetChild(0).gameObject.SetActive(true); // child 0 for shield
     }
 
     [ContextMenu("Fight start")]
@@ -140,6 +165,16 @@ public class ZeusPhaseTwoScript : MonoBehaviour
             damagedEvents[currentProfileIndex].Invoke();
             //currentProfileIndex++;
             //currentDataIndex = 0;
+            transform.GetChild(0).gameObject.SetActive(false); // child 0 for shield
+            GetComponent<SpriteRenderer>().enabled = false;
+
+            GetComponent<ParticleCommonScript>().emitParticleWithIndex(1); // 1 for damaged particle
+
+            CameraShakeManagerScript.instance.cameraShakeWithProfileWithRandomDirection(damagedShake, cinemachineImpulseSource);
+        }
+        else
+        {
+            CameraShakeManagerScript.instance.cameraShakeWithProfileWithRandomDirection(shieldDamagedShake, cinemachineImpulseSource);
         }
     }
 
@@ -150,9 +185,16 @@ public class ZeusPhaseTwoScript : MonoBehaviour
         isAttackActive = true;
 
         transform.parent.parent.GetComponent<LevelManagerScript>().swapRespawnPoint(respawnPoints[currentProfileIndex]);
-        transform.parent.parent.GetComponent<LevelManagerScript>().swapCamera(vcams[currentProfileIndex], 1f);
+        transform.parent.parent.GetComponent<LevelManagerScript>().swapCamera(vcams[currentProfileIndex], 0.5f);
 
         transform.position = bossPositions[currentProfileIndex].transform.position;
+
+        transform.GetChild(0).gameObject.SetActive(true); // child 0 for shield
+        GetComponent<SpriteRenderer>().enabled = true;
+
+        GetComponent<ParticleCommonScript>().emitParticleWithIndex(0); //0 for shield restore
+
+        CameraShakeManagerScript.instance.cameraShakeWithProfileWithRandomDirection(reenterShake, cinemachineImpulseSource);
     }
 
     #endregion

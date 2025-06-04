@@ -7,6 +7,7 @@ using UnityEngine.Events;
 public class BossLightningInstanceScript : MonoBehaviour
 {
     private SpriteRenderer spriteRenderer;
+    private Animator animator;
 
     [SerializeField] private AnimationCurve flickerCurve;
     public bool isStaticWall;
@@ -15,6 +16,11 @@ public class BossLightningInstanceScript : MonoBehaviour
     /*[SerializeField]*/ private float myAttackDuration;
 
     private const int killZoneLayer = 7;
+
+    [Header("Animation")]
+    [SerializeField] private GameObject thunderSprite;
+    private GameObject thunderInstance;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -31,6 +37,8 @@ public class BossLightningInstanceScript : MonoBehaviour
     public void summon(BossLightningAttackData attackData, Vector3 startPos)
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
+        animator.enabled = false;
 
         transform.localScale = attackData.attackSize;
         transform.position = startPos + (Vector3)attackData.attackPosFromAxis;
@@ -57,9 +65,28 @@ public class BossLightningInstanceScript : MonoBehaviour
         }
 
         t = myAttackDuration;
-        spriteRenderer.color = Color.yellow;
+        spriteRenderer.color = Color.clear;
+        spriteRenderer.enabled = false;
         gameObject.layer = killZoneLayer;
         GetComponent<Collider2D>().enabled = true;
+
+        thunderInstance = Instantiate(thunderSprite, transform.position, Quaternion.identity);
+        SpriteRenderer thunderSpriteRenderer = thunderInstance.GetComponent<SpriteRenderer>();
+        thunderSpriteRenderer.size = transform.localScale;
+
+        //animation
+        //animator.enabled = true;
+        //if (transform.localScale.y / transform.localScale.x > 3)
+        //{
+        //    animator.Play("ThunderVertical");
+        //}
+        //else
+        //{
+        //    animator.Play("ThunderNet");
+        //}
+
+
+
         while (t > 0)
         {
             if (!LogicScript.instance.isFreeze())
@@ -68,13 +95,21 @@ public class BossLightningInstanceScript : MonoBehaviour
             yield return null;
         }
 
-        Destroy(gameObject);
+        //Destroy(thunderInstance);
+        //Destroy(gameObject);
+        destroyAttackInstance();
     }
 
     public void setStaticWallState(bool active)
     {
         //Destroy(gameObject);
         gameObject.SetActive(active);
+    }
+
+    public void destroyAttackInstance()
+    {
+        Destroy(thunderInstance);
+        Destroy(gameObject);
     }
 }
 
