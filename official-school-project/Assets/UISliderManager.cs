@@ -20,6 +20,7 @@ public class UISliderManager : MonoBehaviour, IBeginDragHandler, IEndDragHandler
     // - - Handle
     #endregion
 
+    public static GameObject currentDragingSlider;
     public enum UISliderType
     {
         Music,
@@ -143,6 +144,11 @@ public class UISliderManager : MonoBehaviour, IBeginDragHandler, IEndDragHandler
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (currentDragingSlider != null && currentDragingSlider != gameObject)
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+            currentDragingSlider = gameObject;
+        }
         isHandleBeingPressed = true;
     }
 

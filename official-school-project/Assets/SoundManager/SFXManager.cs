@@ -53,8 +53,6 @@ public class SFXManager : MonoBehaviour
 
     public static void playSFXOneShot(SFXType sfxType, float _volume = 1.0f)
     {
-        if (_volume > 1.0f) _volume = 1.0f;
-        else if (_volume < 0.0f) _volume = 0.0f;
         instance.audioSource.PlayOneShot(instance.SFXClipDict[sfxType], _volume);
     }
 

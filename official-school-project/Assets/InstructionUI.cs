@@ -105,7 +105,7 @@ public class InstructionUI : MonoBehaviour
 
         if (currentInstructionType == InstructionTypeEnum._None)
         {
-            Debug.LogError("currentInstructionType is _None");
+            Debug.LogError("currentInstructionType is _NULL");
             return;
         }
 
@@ -144,6 +144,18 @@ public class InstructionUI : MonoBehaviour
     {
         print($"Received actionEnumIndex: {actionEnumIndex}");
         ActionsEnum m_action = (ActionsEnum)actionEnumIndex;
+        if (rebindSystemDataBase == null)
+            Debug.LogError("rebindSystemDataBase 是 null");
+
+        if (inputActions == null)
+            Debug.LogError("inputActions 是 null");
+
+        if (!inputActions.ContainsKey(m_action))
+            Debug.LogError($"inputActions 不包含 key: {m_action}");
+
+        else if (inputActions[m_action].bindings.Count == 0)
+            Debug.LogError($"inputActions[{m_action}].bindings 是空的");
+
         string readableName = rebindSystemDataBase.getReadableNameFromBindingName(inputActions[m_action].bindings[0]);
         string shorterTerm = rebindSystemDataBase.getShorterTermFromReadableName(readableName);
         GameObject targetKeyboardKeyImage = getAllKeyboardKeyImage()[targetKeyboardKeyImageIndex];
