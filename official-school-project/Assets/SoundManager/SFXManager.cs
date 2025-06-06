@@ -12,7 +12,8 @@ public class SFXManager : MonoBehaviour
         Jump, 
         Land, 
         ShootFireball, FireballExplode, TriggeredRocketJump, 
-        SheepStepped
+        SheepStepped, 
+        CloseSetting
     }
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private List<SFXType> SFXTypeList;
