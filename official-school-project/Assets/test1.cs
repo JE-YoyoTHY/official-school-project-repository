@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class test1 : MonoBehaviour
 {
-    [SerializeField] private Material mat;
     void Start()
     {
-        SpriteMaterialHandler.changeSpriteMaterial(gameObject, mat);
+
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            SFXManager.playSFXOneShot(SoundDataBase.SFXType.CloseSetting);
+        }
     }
 }

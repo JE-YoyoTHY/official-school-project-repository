@@ -7,37 +7,15 @@ using UnityEngine;
 public class MusicManager : MonoBehaviour
 {
     private static MusicManager instance;
-    public enum MusicType
-    {
-        _NULL, 
-        MainMenu, 
-        Chapter1, Chapter2
-    }
+    [SerializeField] private SoundDataBase soundData;
     [SerializeField] private AudioSource audioSource;
-    [SerializeField] private List<MusicType> musicTypeList;
-    [SerializeField] private List<AudioClip> musicClipList;
-    public Dictionary<MusicType, AudioClip> musicClipDict = new Dictionary<MusicType, AudioClip>();
+
 
     private void Awake()
     {
         instance = this;
         audioSource = GetComponent<AudioSource>();
 
-        if (musicTypeList.Count != musicClipList.Count) { Debug.LogError("音樂片段數量與音樂type數量不同"); }
-        if (musicTypeList.Count <= musicClipList.Count)
-        {
-            for (int i = 0; i < musicTypeList.Count; i++)
-            {
-                musicClipDict.Add(musicTypeList[i], musicClipList[i]);
-            }
-        }
-        else
-        {
-            for (int i = 0; i < musicClipList.Count; i++)
-            {
-                musicClipDict.Add(musicTypeList[i], musicClipList[i]);
-            }
-        }
     }
     void Start()
     {
@@ -50,14 +28,14 @@ public class MusicManager : MonoBehaviour
 
     }
 
-    public static void playMusic(MusicType musicType, float _volume = 1f)
+    public static void playMusic(SoundDataBase.MusicType musicType, float _volume = 1f)
     {
         instance.audioSource.Play();
     }
 
-    public static void changeCurrentClip(MusicType musicType)
+    public static void changeCurrentClip(SoundDataBase.MusicType musicType)
     {
-        AudioClip newClip = instance.musicClipDict[musicType];
+        AudioClip newClip = instance.soundData.musicClipDict[musicType];
         instance.audioSource.clip = newClip;
     }
 
@@ -66,16 +44,16 @@ public class MusicManager : MonoBehaviour
         return instance.audioSource.clip;
     }
 
-    public static MusicType getCurrentMusicType()
+    public static SoundDataBase.MusicType getCurrentMusicType()
     {
-        AudioClip m_clip = instance.audioSource.clip;
-        foreach(MusicType musicType in instance.musicClipDict.Keys)
+        AudioClip currentClip = instance.audioSource.clip;
+        foreach(SoundDataBase.MusicType musicType in instance.soundData.musicClipDict.Keys)
         {
-            if (instance.musicClipDict[musicType] == m_clip)
+            if (instance.soundData.musicClipDict[musicType] == currentClip)
             {
                 return musicType;
             }
         }
-        return MusicType._NULL;
+        return SoundDataBase.MusicType._NULL;
     }
 }

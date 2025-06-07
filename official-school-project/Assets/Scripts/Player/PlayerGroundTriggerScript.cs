@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.Tilemaps;
 
 public class PlayerGroundTriggerScript : MonoBehaviour
 {
@@ -9,6 +11,9 @@ public class PlayerGroundTriggerScript : MonoBehaviour
 	private const int groundLayer = 6;
 
 	private BreakablePlatformScript currentBreakablePlatform;
+	public UnityEvent PlayerLandEvent;
+	[SerializeField] private Tilemap groundTileMap;
+	
 
     // Start is called before the first frame update
     void Start()
@@ -19,14 +24,21 @@ public class PlayerGroundTriggerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (groundTileMap)
+        {
+            print(groundTileMap.WorldToCell(transform.position));
+            print(groundTileMap.GetTile(groundTileMap.WorldToCell(transform.position)));
+        }
+
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.layer == groundLayer && isGrounded == false)
 		{
 			print("land sfx");
-            SFXManager.playSFXOneShot(SFXManager.SFXType.Land);
+            SFXManager.playSFXOneShot(SoundDataBase.SFXType.Land);
+			PlayerLandEvent.Invoke();
+			print(collision.gameObject.name);
         }
     }
     private void OnTriggerStay2D(Collider2D collision)
@@ -67,4 +79,9 @@ public class PlayerGroundTriggerScript : MonoBehaviour
 	{
 		return isGrounded;
 	}
+
+	//public Tile getTileUnderFeet()
+	//{
+
+	//}
 }

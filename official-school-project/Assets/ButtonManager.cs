@@ -99,7 +99,7 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                         print("set setting button true");
                     }
                     settingTab.SetActive(!settingTab.activeSelf);
-                    SFXManager.playSFXOneShot(SFXManager.SFXType.CloseSetting);
+                    SFXManager.playSFXOneShot(SoundDataBase.SFXType.CloseSetting);
                 }
             }
         }
@@ -111,7 +111,8 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
         if (whichButton == ButtonTypes.CloseSettingButton)
         {
-            SFXManager.playSFXOneShot(SFXManager.SFXType.CloseSetting);
+            SFXManager.playSFXOneShot(SoundDataBase.SFXType.CloseSetting);
+            print("setting sfx");
             if (startGameButton != null) // at main menu
             {
                 startGameButton.SetActive(true);

@@ -1,4 +1,5 @@
 using Cinemachine;
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -173,6 +174,12 @@ public class PlayerControlScript : MonoBehaviour
 	//performance
 	private bool performanceWithNoGravity;
 	private bool performanceWithNoFriction;
+
+	// sound effect
+	[Header("Sound Effect")]
+	[SerializeField] private float stepSFXInterval = 0.1f;  // sec
+	private float currentTimePassed;
+	private sbyte lastStep = 0;
 	#endregion
 
 	#region public data
@@ -255,6 +262,7 @@ public class PlayerControlScript : MonoBehaviour
 			fireballMain();
 
 			//myFrictionMain();
+			checkAndPlayStepSFX();
 		}
 		else
 		{
@@ -648,7 +656,7 @@ public class PlayerControlScript : MonoBehaviour
 	private void jumpStart()
 	{
 		print("jump sfx");
-		SFXManager.playSFXOneShot(SFXManager.SFXType.Jump);
+		SFXManager.playSFXOneShot(SoundDataBase.SFXType.Jump);
 		if (jumpExtraHangTimeCoroutine != null) StopCoroutine(jumpExtraHangTimeCoroutine);
 
 		isJumping = true;
@@ -866,7 +874,7 @@ public class PlayerControlScript : MonoBehaviour
 	public void fireballStart(bool isCastByKeyboard) 
 	{
 		print("shoot fireball sfx");
-		SFXManager.playSFXOneShot(SFXManager.SFXType.ShootFireball);
+		SFXManager.playSFXOneShot(SoundDataBase.SFXType.ShootFireball);
 		fireballCastByKeyboard = isCastByKeyboard;
 
 		isFireballPushForceAdding = true;
@@ -1017,7 +1025,7 @@ public class PlayerControlScript : MonoBehaviour
 	public void fireballExplodeStart(Vector2 localVelocity, Vector2 fireballVelocity)
 	{
 		print("fireball explode sfx");
-		SFXManager.playSFXOneShot(SFXManager.SFXType.FireballExplode);
+		SFXManager.playSFXOneShot(SoundDataBase.SFXType.FireballExplode);
 		//freezeStart(fireballExplodeFreezeTime);
 		LogicScript.instance.setFreezeTime(fireballExplodeFreezeTime);
 
@@ -1842,7 +1850,46 @@ public class PlayerControlScript : MonoBehaviour
 		changeLevel();
 	}
 
-	#endregion
-}
+    #endregion
 
+    #region sound effect
+    public void checkAndPlayStepSFX()
+	{
+
+		SoundDataBase.SFXType whichSFXType;
+
+		if (isMoving && onGround)
+		{
+            if (currentTimePassed <= 0)
+            {
+				if (lastStep == 0)
+				{
+					lastStep = 1;
+					whichSFXType = SoundDataBase.SFXType.RockStep2;
+				}
+				else
+				{
+					lastStep = 0;
+					whichSFXType = SoundDataBase.SFXType.RockStep1;
+				}
+                SFXManager.playSFXOneShot(whichSFXType, 0.5f);
+                currentTimePassed = stepSFXInterval;
+            }
+            else
+            {
+                currentTimePassed -= Time.deltaTime;
+            }
+        }
+
+
+	}
+
+	public void resetStepSFXCurrentTimePassedWhenLanded()
+	{
+		currentTimePassed = 0;
+	}
+	
+	#endregion
+
+}
 
