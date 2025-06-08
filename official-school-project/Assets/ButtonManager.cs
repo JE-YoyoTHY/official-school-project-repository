@@ -20,6 +20,7 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         CloseCreditButton,
         SingleHandler  // 只需要一個就好, 例如ESC
     }
+    [SerializeField] private ButtonDataBase buttonData;
     
     private Vector2 originalTMPPosition;
     private float mainMenuButtonDisplacement = 50.0f;
@@ -72,36 +73,12 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 {
                     if (settingTab.activeSelf == false)
                     {
-                        // want to open
-                        if (startGameButton != null)  // at main menu
-                        {
-                            startGameButton.SetActive(false);
-                            openSettingButton.SetActive(false);
-                            openCreditButton.SetActive(false);
-                            selectionTriangle.gameObject.SetActive(false);
-                        }
-                        openSettingButton.SetActive(false);
-                        GameObjectMethods.DeactivateAllGameObjectByName("PercentageDisplay");
-                        print("set setting button false");
+                        openSetting();
                     }
                     else
                     {
-                        // want to close setting
-                        if (startGameButton != null)
-                        {
-                            startGameButton.SetActive(true);
-                            openSettingButton.SetActive(true);
-                            openCreditButton.SetActive(true);
-                            startGameButton.GetComponent<ButtonManager>().TMPBackToOriginalInstantly();
-                            openSettingButton.GetComponent<ButtonManager>().TMPBackToOriginalInstantly();
-                            openCreditButton.GetComponent<ButtonManager>().TMPBackToOriginalInstantly();
-                        }
-                        openSettingButton.SetActive(true);
-                        GameObjectMethods.DeactivateAllGameObjectByName("PercentageDisplay");
-                        SFXManager.playSFXOneShot(SoundDataBase.SFXType.CloseSetting);
-                        print("set setting button true");
+                        closeSetting();
                     }
-                    settingTab.SetActive(!settingTab.activeSelf);
                     
                 }
             }
@@ -114,36 +91,11 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
         if (whichButton == ButtonTypes.CloseSettingButton)
         {
-            SFXManager.playSFXOneShot(SoundDataBase.SFXType.CloseSetting);
-            print("setting sfx");
-            if (startGameButton != null) // at main menu
-            {
-                startGameButton.SetActive(true);
-                startGameButton.GetComponent<ButtonManager>().TMPBackToOriginalInstantly();
-                openSettingButton.SetActive(true);
-                openCreditButton.SetActive(true);
-                openCreditButton.GetComponent<ButtonManager>().TMPBackToOriginalInstantly();
-            }
-            settingTab.SetActive(false);
-            openSettingButton.SetActive(true);
-            openSettingButton.GetComponent<ButtonManager>().TMPBackToOriginalInstantly();
-            GameObjectMethods.DeactivateAllGameObjectByName("PercentageDisplay");
-            print("BACK TO ORIGINAL");
-
+            closeSetting();
         }
         else if (whichButton == ButtonTypes.OpenSettingButton)
         {
-            
-            if (startGameButton != null)
-            {   
-                TMPBackToOriginalInstantly();
-                selectionTriangle.disappear();
-                startGameButton.SetActive(false);
-                openCreditButton.SetActive(false);
-            }
-            openSettingButton.SetActive(false);
-            settingTab.SetActive(true);
-            GameObjectMethods.DeactivateAllGameObjectByName("PercentageDisplay");
+            openSetting();
         }
         else if (whichButton == ButtonTypes.StartGameButton)
         {
@@ -225,6 +177,52 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             textTransform.DOMove(destination, duration).SetEase(easeType);
             textTransform.DOScale(1, duration).SetEase(easeType);
         }
+    }
+
+    public void openSetting()
+    {
+        if (buttonData.canOpenSetting == false) { return; }
+        // want to open
+        if (startGameButton != null)  // at main menu
+        {
+            startGameButton.SetActive(false);
+            openSettingButton.SetActive(false);
+            openCreditButton.SetActive(false);
+            selectionTriangle.gameObject.SetActive(false);
+        }
+        if (LogicScript.instance != null)
+        {
+            LogicScript.instance.pauseGame();
+        }
+        openSettingButton.SetActive(false);
+        settingTab.SetActive(true);
+        GameObjectMethods.DeactivateAllGameObjectByName("PercentageDisplay");
+
+        print("set setting button false");
+    }
+
+    public void closeSetting()
+    {
+        if (buttonData.canCloseSetting == false) { return; }
+        // want to close setting
+        if (startGameButton != null)
+        {
+            startGameButton.SetActive(true);
+            openSettingButton.SetActive(true);
+            openCreditButton.SetActive(true);
+            startGameButton.GetComponent<ButtonManager>().TMPBackToOriginalInstantly();
+            openSettingButton.GetComponent<ButtonManager>().TMPBackToOriginalInstantly();
+            openCreditButton.GetComponent<ButtonManager>().TMPBackToOriginalInstantly();
+        }
+        openSettingButton.SetActive(true);
+        settingTab.SetActive(false);
+        GameObjectMethods.DeactivateAllGameObjectByName("PercentageDisplay");
+        if (LogicScript.instance != null)
+        {
+            LogicScript.instance.unpauseGame();
+        }
+        SFXManager.playSFXOneShot(SoundDataBase.SFXType.CloseSetting);
+        print("set setting button true");
     }
 
 

@@ -2009,6 +2009,10 @@ PrefabInstance:
       value: 7.0624
       objectReference: {fileID: 0}
     - target: {fileID: 3317895928739156411, guid: a0aa5dd7d0c924a4586277fd98605f28, type: 3}
+      propertyPath: buttonData
+      value: 
+      objectReference: {fileID: 11400000, guid: 444d3946e252aae43ba8ab3a106a1f55, type: 2}
+    - target: {fileID: 3317895928739156411, guid: a0aa5dd7d0c924a4586277fd98605f28, type: 3}
       propertyPath: startGameButton
       value: 
       objectReference: {fileID: 7955028346868284641}
@@ -2068,6 +2072,18 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5561484457452024704, guid: a0aa5dd7d0c924a4586277fd98605f28, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 381.68
+      objectReference: {fileID: 0}
+    - target: {fileID: 5561484457452024704, guid: a0aa5dd7d0c924a4586277fd98605f28, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -82.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5561484457452024704, guid: a0aa5dd7d0c924a4586277fd98605f28, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -552.2
+      objectReference: {fileID: 0}
     - target: {fileID: 5838163785823193728, guid: a0aa5dd7d0c924a4586277fd98605f28, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2123,6 +2139,12 @@ PrefabInstance:
     - target: {fileID: 6848310638392165212, guid: a0aa5dd7d0c924a4586277fd98605f28, type: 3}
       propertyPath: BindingChangedEvent.m_PersistentCalls.m_Calls.Array.data[3].m_CallState
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7293035152489804074, guid: a0aa5dd7d0c924a4586277fd98605f28, type: 3}
+      propertyPath: m_text
+      value: 'Reset All
+
+'
       objectReference: {fileID: 0}
     - target: {fileID: 7601836870424605156, guid: a0aa5dd7d0c924a4586277fd98605f28, type: 3}
       propertyPath: m_Type
@@ -3952,6 +3974,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4946426272366680359, guid: 4ebe8beb22f82d9479259e2ee12a13a1, type: 3}
+      propertyPath: buttonData
+      value: 
+      objectReference: {fileID: 11400000, guid: 444d3946e252aae43ba8ab3a106a1f55, type: 2}
+    - target: {fileID: 4946426272366680359, guid: 4ebe8beb22f82d9479259e2ee12a13a1, type: 3}
       propertyPath: settingTab
       value: 
       objectReference: {fileID: 5198831594385214786}
@@ -4081,9 +4107,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3230945532196755020, guid: 17751a52c68f56d4b9a98ca57ddd5cbe, type: 3}
+      propertyPath: buttonData
+      value: 
+      objectReference: {fileID: 11400000, guid: 444d3946e252aae43ba8ab3a106a1f55, type: 2}
+    - target: {fileID: 3230945532196755020, guid: 17751a52c68f56d4b9a98ca57ddd5cbe, type: 3}
       propertyPath: decorManager
       value: 
       objectReference: {fileID: 1622662103}
+    - target: {fileID: 4375195966326806420, guid: 17751a52c68f56d4b9a98ca57ddd5cbe, type: 3}
+      propertyPath: buttonData
+      value: 
+      objectReference: {fileID: 11400000, guid: 444d3946e252aae43ba8ab3a106a1f55, type: 2}
     - target: {fileID: 4375195966326806420, guid: 17751a52c68f56d4b9a98ca57ddd5cbe, type: 3}
       propertyPath: decorManager
       value: 
@@ -4092,6 +4126,10 @@ PrefabInstance:
       propertyPath: mainMenuManager
       value: 
       objectReference: {fileID: 1424250355}
+    - target: {fileID: 6490729941899862852, guid: 17751a52c68f56d4b9a98ca57ddd5cbe, type: 3}
+      propertyPath: buttonData
+      value: 
+      objectReference: {fileID: 11400000, guid: 444d3946e252aae43ba8ab3a106a1f55, type: 2}
     - target: {fileID: 6490729941899862852, guid: 17751a52c68f56d4b9a98ca57ddd5cbe, type: 3}
       propertyPath: settingTab
       value: 
