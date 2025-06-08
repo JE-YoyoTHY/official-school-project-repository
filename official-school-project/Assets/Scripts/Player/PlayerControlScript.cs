@@ -1865,14 +1865,14 @@ public class PlayerControlScript : MonoBehaviour
 				if (lastStep == 0)
 				{
 					lastStep = 1;
-					whichSFXType = SoundDataBase.SFXType.RockStep2;
+					whichSFXType = SoundDataBase.SFXType.RockGrassStep2;
 				}
 				else
 				{
 					lastStep = 0;
-					whichSFXType = SoundDataBase.SFXType.RockStep1;
+					whichSFXType = SoundDataBase.SFXType.RockGrassStep1;
 				}
-                SFXManager.playSFXOneShot(whichSFXType, 0.5f);
+                SFXManager.playSFXOneShot(whichSFXType, 0.35f);
                 currentTimePassed = stepSFXInterval;
             }
             else

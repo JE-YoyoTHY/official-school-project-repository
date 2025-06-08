@@ -66,22 +66,48 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         if (whichButton == ButtonTypes.SingleHandler)
         {
-            if (Keyboard.current.escapeKey.wasPressedThisFrame && LogicScript.instance.pauseSource != PauseSource.comic)
+            // LogicScript available
+            if (LogicScript.instance != null)
             {
-                print("esc pressed");
-                if (rebindSystemDataBase.isRebinding == false)
+                if (Keyboard.current.escapeKey.wasPressedThisFrame && LogicScript.instance.pauseSource != PauseSource.comic)
                 {
-                    if (settingTab.activeSelf == false)
+                    print("esc pressed");
+                    if (rebindSystemDataBase.isRebinding == false)
                     {
-                        openSetting();
+                        if (settingTab.activeSelf == false)
+                        {
+                            openSetting();
+                        }
+                        else
+                        {
+                            closeSetting();
+                        }
+
                     }
-                    else
-                    {
-                        closeSetting();
-                    }
-                    
                 }
             }
+
+            // LogicScript not available
+            else
+            {
+                if (Keyboard.current.escapeKey.wasPressedThisFrame)
+                {
+                    print("esc pressed");
+                    if (rebindSystemDataBase.isRebinding == false)
+                    {
+                        if (settingTab.activeSelf == false)
+                        {
+                            openSetting();
+                        }
+                        else
+                        {
+                            closeSetting();
+                        }
+
+                    }
+                }
+            }
+
         }
 
     }
@@ -112,6 +138,7 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             selectionTriangle.gameObject.SetActive(true);
             selectionTriangle.showSelectionTriangle(UIIndicators.UIIndicatorReferencesEnum.playSelection);
             decorManager.performDecorationColorize();
+            SFXManager.playSFXOneShot(SoundDataBase.SFXType.OptionHover);
             pointerEnterEffect_SlideAndGrowText(new Vector2(mainMenuButtonDisplacement, 0), mainMenuButtonScale);
         }
         else if (whichButton == ButtonTypes.OpenSettingButton)
@@ -122,12 +149,14 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 selectionTriangle.showSelectionTriangle(UIIndicators.UIIndicatorReferencesEnum.settingSelection);
                 pointerEnterEffect_SlideAndGrowText(new Vector2(mainMenuButtonDisplacement, 0), mainMenuButtonScale);
             }
+            SFXManager.playSFXOneShot(SoundDataBase.SFXType.OptionHover);
         }
         else if (whichButton == ButtonTypes.OpenCreditButton)
         {
             selectionTriangle.gameObject.SetActive(true);
             selectionTriangle.showSelectionTriangle(UIIndicators.UIIndicatorReferencesEnum.creditSelection);
             pointerEnterEffect_SlideAndGrowText(new Vector2(mainMenuButtonDisplacement, 0), mainMenuButtonScale);
+            SFXManager.playSFXOneShot(SoundDataBase.SFXType.OptionHover);
         }
     }
     public void OnPointerExit(PointerEventData eventData)
@@ -221,7 +250,7 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         {
             LogicScript.instance.unpauseGame();
         }
-        SFXManager.playSFXOneShot(SoundDataBase.SFXType.CloseSetting);
+        SFXManager.playSFXOneShot(SoundDataBase.SFXType.CloseSetting, 0.3f);
         print("set setting button true");
     }
 

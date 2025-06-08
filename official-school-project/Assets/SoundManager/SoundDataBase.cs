@@ -12,7 +12,10 @@ public class SoundDataBase : ScriptableObject
         Land,
         ShootFireball, FireballExplode, TriggeredRocketJump,
         SheepStepped,
-        CloseSetting
+        CloseSetting, 
+        RockGrassStep1, RockGrassStep2, 
+        OptionHover, 
+        Sparrow, Frog, Breeze, Cicada
     }
     [SerializeField] private List<SFXType> SFXTypeList;
     [SerializeField] private List<AudioClip> SFXClipList;

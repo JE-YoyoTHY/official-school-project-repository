@@ -222,6 +222,7 @@ MonoBehaviour:
     m_SceneName: Chapter2
   - m_SceneAsset: {fileID: 102900000, guid: e1e9116e4aa60a1459f69aa4b764c150, type: 3}
     m_SceneName: Chapter3
+  pauseSource: 0
 --- !u!4 &53518504
 Transform:
   m_ObjectHideFlags: 0
@@ -330,7 +331,7 @@ MonoBehaviour:
   deathHoleScript: {fileID: 1704808575}
   levelTransitionHoleScript: {fileID: 1862859407}
   playerControlRegainMinHoleRadius: 2900
-  stepSFXInterval: 0.1
+  stepSFXInterval: 0.22
 --- !u!95 &266389618
 Animator:
   serializedVersion: 5

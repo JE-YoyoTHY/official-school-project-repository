@@ -38,9 +38,13 @@ public class MainMenuManager : MonoBehaviour
 	{
 		loadingBar.SetActive(false);
 	}
+    private void Start()
+    {
+        playEnvironmentalSFX();
+    }
 
 
-	public void startGame()
+    public void startGame()
 	{
 		//if (decorManager != null)
 		//{
@@ -136,5 +140,13 @@ public class MainMenuManager : MonoBehaviour
 				yield return null;
 			}
 		}
+	}
+
+	public void playEnvironmentalSFX()
+	{
+		SFXManager.playSFXOneShot(SoundDataBase.SFXType.Sparrow);
+		SFXManager.playSFXOneShot(SoundDataBase.SFXType.Frog);
+		SFXManager.playSFXOneShot(SoundDataBase.SFXType.Breeze);
+		SFXManager.playSFXOneShot(SoundDataBase.SFXType.Cicada);
 	}
 }

@@ -36,7 +36,7 @@ public class PlayerGroundTriggerScript : MonoBehaviour
         if (collision.gameObject.layer == groundLayer && isGrounded == false)
 		{
 			print("land sfx");
-            SFXManager.playSFXOneShot(SoundDataBase.SFXType.Land);
+            SFXManager.playSFXOneShot(SoundDataBase.SFXType.Land, 0.35f);
 			PlayerLandEvent.Invoke();
 			print(collision.gameObject.name);
         }
