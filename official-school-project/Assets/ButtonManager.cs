@@ -81,6 +81,7 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                             selectionTriangle.gameObject.SetActive(false);
                         }
                         openSettingButton.SetActive(false);
+                        GameObjectMethods.DeactivateAllGameObjectByName("PercentageDisplay");
                         print("set setting button false");
                     }
                     else
@@ -96,10 +97,12 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                             openCreditButton.GetComponent<ButtonManager>().TMPBackToOriginalInstantly();
                         }
                         openSettingButton.SetActive(true);
+                        GameObjectMethods.DeactivateAllGameObjectByName("PercentageDisplay");
+                        SFXManager.playSFXOneShot(SoundDataBase.SFXType.CloseSetting);
                         print("set setting button true");
                     }
                     settingTab.SetActive(!settingTab.activeSelf);
-                    SFXManager.playSFXOneShot(SoundDataBase.SFXType.CloseSetting);
+                    
                 }
             }
         }
@@ -124,6 +127,7 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             settingTab.SetActive(false);
             openSettingButton.SetActive(true);
             openSettingButton.GetComponent<ButtonManager>().TMPBackToOriginalInstantly();
+            GameObjectMethods.DeactivateAllGameObjectByName("PercentageDisplay");
             print("BACK TO ORIGINAL");
 
         }
@@ -139,6 +143,7 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             }
             openSettingButton.SetActive(false);
             settingTab.SetActive(true);
+            GameObjectMethods.DeactivateAllGameObjectByName("PercentageDisplay");
         }
         else if (whichButton == ButtonTypes.StartGameButton)
         {
@@ -221,5 +226,7 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             textTransform.DOScale(1, duration).SetEase(easeType);
         }
     }
+
+
 
 }
