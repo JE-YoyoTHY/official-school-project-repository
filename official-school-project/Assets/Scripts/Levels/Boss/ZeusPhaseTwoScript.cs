@@ -86,12 +86,19 @@ public class ZeusPhaseTwoScript : MonoBehaviour
         }
         else
         {
-            if (isAttackActive)
+            if (attackWaitTimeCounter < 0)
             {
-                roomCleared();
-            }
+                if (isAttackActive)
+                {
+                    roomCleared();
+                }
 
-            isAttackActive = false;
+                isAttackActive = false;
+            }
+            else
+            {
+                attackWaitTimeCounter -= Time.fixedDeltaTime;
+            }
         }
         
     }
