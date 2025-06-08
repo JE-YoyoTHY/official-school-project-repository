@@ -221,9 +221,9 @@ public class PlayerPerformanceTriggerScript : MonoBehaviour
 		LogicScript.instance.performanceTileDestroy(name);
 	}
 
-	public void enablePlayerFireball()
+	public void enablePlayerFireball(bool isSettingActive)
 	{
-		PlayerControlScript.instance.fireballPlayerGetAbility();
+		PlayerControlScript.instance.fireballPlayerGetAbility(isSettingActive);
 	}
 
 	public void comicStart(string id)

@@ -1283,9 +1283,9 @@ public class PlayerControlScript : MonoBehaviour
 	}*/
 
 	[ContextMenu("Get Fireball Ability")]
-	public void fireballPlayerGetAbility()
+	public void fireballPlayerGetAbility(bool isSettingActive)
 	{
-		fireballPlayerGotten = true;
+		fireballPlayerGotten = isSettingActive;
 	}
 
 	#endregion

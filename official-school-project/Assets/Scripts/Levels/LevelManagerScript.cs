@@ -196,7 +196,7 @@ public class LevelManagerScript : MonoBehaviour
 	[ContextMenu("Test This Level")]
 	public void testThisLevel()
 	{
-		PlayerControlScript.instance.fireballPlayerGetAbility();
+		PlayerControlScript.instance.fireballPlayerGetAbility(true);
 
 		PlayerControlScript.instance.currentLevel.disableLevel();
 
