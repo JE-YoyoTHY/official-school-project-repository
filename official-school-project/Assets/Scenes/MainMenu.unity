@@ -3229,6 +3229,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1408359452}
     - target: {fileID: 2811779912629093660, guid: 44a10314dba42474d8cd3611f9b4c284, type: 3}
+      propertyPath: fadeInTime
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2811779912629093660, guid: 44a10314dba42474d8cd3611f9b4c284, type: 3}
       propertyPath: fullOpacity
       value: 1
       objectReference: {fileID: 0}

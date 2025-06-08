@@ -87,7 +87,7 @@ public class MainMenuManager : MonoBehaviour
 		startComic.showPage();
 
 		//yield return new WaitForSeconds(1f);
-		t = 1f;
+		t = 0.4f;
 		while (t > 0)
 		{
 			t -= Time.unscaledDeltaTime;
