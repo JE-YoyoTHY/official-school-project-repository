@@ -20,6 +20,7 @@ public class BossLightningInstanceScript : MonoBehaviour
     [Header("Animation")]
     [SerializeField] private GameObject thunderSprite;
     private GameObject thunderInstance;
+    [SerializeField] private Sprite[] thunderImages;
     
 
     // Start is called before the first frame update
@@ -86,11 +87,17 @@ public class BossLightningInstanceScript : MonoBehaviour
         //}
 
 
-
+        float i = new float();
         while (t > 0)
         {
             if (!LogicScript.instance.isFreeze())
                 t -= Time.deltaTime;
+
+            i = (1 - (t / myAttackDuration)) * (thunderImages.Length - 1);
+            if (i >= thunderImages.Length - 1)
+                thunderInstance.GetComponent<SpriteRenderer>().sprite = thunderImages[thunderImages.Length - 1];
+            else
+                thunderInstance.GetComponent<SpriteRenderer>().sprite = thunderImages[(int)Mathf.Floor(i) + 1];
 
             yield return null;
         }

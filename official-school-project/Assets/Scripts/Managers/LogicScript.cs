@@ -42,6 +42,7 @@ public class LogicScript : MonoBehaviour
 
 	//pause
 	public bool isPaused {  get; private set; }
+	public PauseSource pauseSource;
 
 
     // Start is called before the first frame update
@@ -124,10 +125,11 @@ public class LogicScript : MonoBehaviour
 
     #region pause
 
-	public void pauseGame()
+	public void pauseGame(PauseSource source)
 	{	
 		isPaused = true;
 		Time.timeScale = 0f;
+		pauseSource = source;
 
 		InputManagerScript.instance.playerInput.SwitchCurrentActionMap("Pause");
 	}
@@ -136,6 +138,7 @@ public class LogicScript : MonoBehaviour
 	{	
 		isPaused = false;
 		Time.timeScale = 1f;
+		pauseSource = PauseSource.none;
 
         InputManagerScript.instance.playerInput.SwitchCurrentActionMap("Player");
     }
@@ -221,7 +224,7 @@ public class LogicScript : MonoBehaviour
 				//print("found");
 
 				page.showPage();
-				pauseGame();
+				pauseGame(PauseSource.comic);
 			}
 				
 
@@ -229,4 +232,11 @@ public class LogicScript : MonoBehaviour
 	}
 
 
+}
+
+public enum PauseSource
+{
+	setting,
+	comic,
+	none
 }

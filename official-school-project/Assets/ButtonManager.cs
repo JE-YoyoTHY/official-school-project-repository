@@ -66,7 +66,7 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         if (whichButton == ButtonTypes.SingleHandler)
         {
-            if (Keyboard.current.escapeKey.wasPressedThisFrame)
+            if (Keyboard.current.escapeKey.wasPressedThisFrame && LogicScript.instance.pauseSource != PauseSource.comic)
             {
                 print("esc pressed");
                 if (rebindSystemDataBase.isRebinding == false)
@@ -192,11 +192,11 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
         if (LogicScript.instance != null)
         {
-            LogicScript.instance.pauseGame();
+            LogicScript.instance.pauseGame(PauseSource.setting);
         }
         openSettingButton.SetActive(false);
         settingTab.SetActive(true);
-        GameObjectMethods.DeactivateAllGameObjectByName("PercentageDisplay");
+        //GameObjectMethods.DeactivateAllGameObjectByName("PercentageDisplay");
 
         print("set setting button false");
     }
@@ -216,7 +216,7 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
         openSettingButton.SetActive(true);
         settingTab.SetActive(false);
-        GameObjectMethods.DeactivateAllGameObjectByName("PercentageDisplay");
+        //GameObjectMethods.DeactivateAllGameObjectByName("PercentageDisplay");
         if (LogicScript.instance != null)
         {
             LogicScript.instance.unpauseGame();

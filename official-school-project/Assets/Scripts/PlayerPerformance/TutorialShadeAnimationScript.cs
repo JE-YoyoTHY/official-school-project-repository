@@ -123,10 +123,10 @@ public class TutorialShadeAnimationScript : MonoBehaviour
         }
 
 
-        if (stateCondition["parkour_roll"])
-        {
-            print("parkour_roll");
-        }
+        //if (stateCondition["parkour_roll"])
+        //{
+        //    print("parkour_roll");
+        //}
         if (stateCondition["idle"])
         {
             changeState(STATE_IDLE);
