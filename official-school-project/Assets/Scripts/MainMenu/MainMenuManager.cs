@@ -31,6 +31,7 @@ public class MainMenuManager : MonoBehaviour
 	//private Coroutine startPerformanceCoroutine;
 	[SerializeField] private CinemachineVirtualCamera slabCam;
 	[SerializeField] private float slabWaitTime;
+	[SerializeField] private ComicPageScript startComic;
 
 	
 
@@ -41,6 +42,8 @@ public class MainMenuManager : MonoBehaviour
     private void Start()
     {
 		AmbientSoundManager.playAmbientSound(SoundDataBase.AmbientSoundType.Sparrow);
+
+		Object.DontDestroyOnLoad(startComic.transform.parent.gameObject);
     }
 
 
@@ -80,6 +83,10 @@ public class MainMenuManager : MonoBehaviour
 
 		float t = slabWaitTime;
 		yield return new WaitForSeconds(t);
+
+		startComic.showPage();
+
+		yield return new WaitForSeconds(1f);
 
 
 		#region change scene in coroutine

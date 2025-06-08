@@ -51,6 +51,11 @@ public class ComicPageScript : MonoBehaviour
     [ContextMenu("Show Image")]
     public void showPage()
     {
+        if(LogicScript.instance == null)
+        {
+            Time.timeScale = 0f;
+        }
+
         gameObject.SetActive(true);
         currentImage = 0;
 
@@ -76,7 +81,15 @@ public class ComicPageScript : MonoBehaviour
         }
         else
         {
-            LogicScript.instance.unpauseGame();
+            if(LogicScript.instance != null)
+            {
+                LogicScript.instance.unpauseGame();
+            }
+            else
+            {
+                Time.timeScale = 1f;
+            }
+            
         }
 
         gameObject.SetActive(false);
