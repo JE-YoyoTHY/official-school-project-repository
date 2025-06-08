@@ -72,7 +72,7 @@ public class BossLightningInstanceScript : MonoBehaviour
 
         thunderInstance = Instantiate(thunderSprite, transform.position, Quaternion.identity);
         SpriteRenderer thunderSpriteRenderer = thunderInstance.GetComponent<SpriteRenderer>();
-        thunderSpriteRenderer.size = transform.localScale;
+        thunderSpriteRenderer.size = transform.localScale / thunderSprite.transform.localScale.x;
 
         //animation
         //animator.enabled = true;

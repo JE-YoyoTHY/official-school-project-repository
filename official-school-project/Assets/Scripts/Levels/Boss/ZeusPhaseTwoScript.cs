@@ -182,12 +182,27 @@ public class ZeusPhaseTwoScript : MonoBehaviour
     {
         currentProfileIndex++;
         currentDataIndex = 0;
-        isAttackActive = true;
+        //isAttackActive = true;
 
         transform.parent.parent.GetComponent<LevelManagerScript>().swapRespawnPoint(respawnPoints[currentProfileIndex]);
         transform.parent.parent.GetComponent<LevelManagerScript>().swapCamera(vcams[currentProfileIndex], 0.5f);
 
         transform.position = bossPositions[currentProfileIndex].transform.position;
+
+        StartCoroutine(enterNewRoomEffect());
+        //transform.GetChild(0).gameObject.SetActive(true); // child 0 for shield
+        //GetComponent<SpriteRenderer>().enabled = true;
+
+        //GetComponent<ParticleCommonScript>().emitParticleWithIndex(0); //0 for shield restore
+
+        //CameraShakeManagerScript.instance.cameraShakeWithProfileWithRandomDirection(reenterShake, cinemachineImpulseSource);
+    }
+
+    private IEnumerator enterNewRoomEffect()
+    {
+        yield return new WaitForSeconds(1.25f);
+
+        isAttackActive = true;
 
         transform.GetChild(0).gameObject.SetActive(true); // child 0 for shield
         GetComponent<SpriteRenderer>().enabled = true;

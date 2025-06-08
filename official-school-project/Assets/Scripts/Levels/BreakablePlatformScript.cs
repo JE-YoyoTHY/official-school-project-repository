@@ -17,6 +17,7 @@ public class BreakablePlatformScript : MonoBehaviour
 	private bool isBreaking;
 	private bool isRestoreing;
 	private bool playerJumpThisFrame;
+	private bool isPlayerInside;
 
 	//private bool isLeftMost;
 
@@ -76,16 +77,30 @@ public class BreakablePlatformScript : MonoBehaviour
 
 	private void OnTriggerStay2D(Collider2D collision)
 	{
-		if (collision.CompareTag("BreakablePlatform"))
-		{
-			//print("s;fja;sldfja");
+		//if (collision.CompareTag("BreakablePlatform"))
+		//{
+		//	//print("s;fja;sldfja");
 
-			tileOnRight = collision.GetComponent<BreakablePlatformScript>();
-			tileOnRight.tileOnLeft = this;
+		//	tileOnRight = collision.GetComponent<BreakablePlatformScript>();
+		//	tileOnRight.tileOnLeft = this;
+		//}
+
+		if(collision.gameObject == PlayerControlScript.instance.gameObject)
+		{
+			isPlayerInside = true;
 		}
+			
 	}
 
-	public void touchPlayer() // invoked by player ground trigger script to see if player touch it
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject == PlayerControlScript.instance.gameObject)
+        {
+            isPlayerInside = false;
+        }
+    }
+
+    public void touchPlayer() // invoked by player ground trigger script to see if player touch it
 	{
 		if (!isBreaking && !isRestoreing)
 		{
@@ -98,8 +113,8 @@ public class BreakablePlatformScript : MonoBehaviour
 	{
 		if (!isBreaking && !isRestoreing)
 		{
-			if (tileOnLeft != lastTile && tileOnLeft != null) tileOnLeft.traversalThroughAdjacentTiles(this);
-			if (tileOnRight != lastTile && tileOnRight != null) tileOnRight.traversalThroughAdjacentTiles(this);
+			//if (tileOnLeft != lastTile && tileOnLeft != null) tileOnLeft.traversalThroughAdjacentTiles(this);
+			//if (tileOnRight != lastTile && tileOnRight != null) tileOnRight.traversalThroughAdjacentTiles(this);
 
 			breakPrepare();
 			
@@ -146,8 +161,13 @@ public class BreakablePlatformScript : MonoBehaviour
 			}
 			else
 			{
-				//restoreTimeCounter = 0;
-				restoreAfterBreak();
+				if(!isPlayerInside)
+				{
+					//restoreTimeCounter = 0;
+					restoreAfterBreak();
+                    GetComponent<ParticleCommonScript>().emitParticleWithIndex(0);
+                }
+				
 			}
 		}
 	}
@@ -175,17 +195,19 @@ public class BreakablePlatformScript : MonoBehaviour
         transform.GetChild(2).gameObject.SetActive(false); // child 2 -> particle
 
         //GetComponent<CompositeCollider2D>().enabled = false;
-        Collider2D[] colls2D = GetComponents<BoxCollider2D>();
-		foreach (var coll2D in colls2D){
-			coll2D.enabled = false;
-		}
+        //      Collider2D[] colls2D = GetComponents<BoxCollider2D>();
+        //foreach (var coll2D in colls2D){
+        //	coll2D.enabled = false;
+        //}
+        //GetComponent<CompositeCollider2D>().isTrigger = true;
 
-		if (byFireball)
-		{
-			if (tileOnLeft != lastTile && tileOnLeft != null) tileOnLeft.breakStart(byFireball, this);
-			if (tileOnRight != lastTile && tileOnRight != null) tileOnRight.breakStart(byFireball, this);
-		}
-	}
+        GetComponent<Collider2D>().isTrigger = true;
+        //if (byFireball)
+        //{
+        //	if (tileOnLeft != lastTile && tileOnLeft != null) tileOnLeft.breakStart(byFireball, this);
+        //	if (tileOnRight != lastTile && tileOnRight != null) tileOnRight.breakStart(byFireball, this);
+        //}
+    }
 
 	public void restoreAfterBreak()
 	{
@@ -194,12 +216,15 @@ public class BreakablePlatformScript : MonoBehaviour
 		isBreaking = false;
 		isRestoreing = false;
 
+		GetComponent<Collider2D>().isTrigger = false;
 		//if(isLeftMost)
 		//	GetComponent<CompositeCollider2D>().enabled = true;
-		Collider2D[] colls2D = GetComponents<BoxCollider2D>();
-		foreach (var coll2D in colls2D){
-			coll2D.enabled = true;
-		}
+		//Collider2D[] colls2D = GetComponents<BoxCollider2D>();
+		//foreach (var coll2D in colls2D){
+		//	coll2D.enabled = true;
+		//}
+		//GetComponent<CompositeCollider2D>().isTrigger = false;
+
 		//transform.GetChild(0).localScale = new Vector3(1, 1, 1);
 		spriteRenderer.sprite = sprites[0];
 		spriteRenderer.enabled = true;
@@ -207,7 +232,7 @@ public class BreakablePlatformScript : MonoBehaviour
 		//continuous particle
 		transform.GetChild(2).gameObject.SetActive(false); // child 2 -> particle
 
-		GetComponent<ParticleCommonScript>().emitParticleWithIndex(0);
+		//GetComponent<ParticleCommonScript>().emitParticleWithIndex(0);
 	}
 
 	public void playerJumpOnThisTraversal(BreakablePlatformScript lastTile)
@@ -217,8 +242,8 @@ public class BreakablePlatformScript : MonoBehaviour
 			breakTimeCounter -= playerJumpBreakTime;
 			playerJumpThisFrame = true;
 
-			if (tileOnLeft != lastTile && tileOnLeft != null) tileOnLeft.playerJumpOnThisTraversal(this);
-			if (tileOnRight != lastTile && tileOnRight != null) tileOnRight.playerJumpOnThisTraversal(this);
+			//if (tileOnLeft != lastTile && tileOnLeft != null) tileOnLeft.playerJumpOnThisTraversal(this);
+			//if (tileOnRight != lastTile && tileOnRight != null) tileOnRight.playerJumpOnThisTraversal(this);
 		}
 	}
 
@@ -233,27 +258,32 @@ public class BreakablePlatformScript : MonoBehaviour
 		int d = depth(1);
 
 		GetComponent<BoxCollider2D>().enabled = true;
-		GetComponent<BoxCollider2D>().usedByComposite = true;
+		//GetComponent<BoxCollider2D>().usedByComposite = true;
 
 		//print(d);
 
-		for(int i = 1; i < d; i++)
-		{
-			//Collider2D newColl = gameObject.AddComponent(typeof(Collider2D)) as Collider2D;
-			BoxCollider2D newColl = gameObject.AddComponent<BoxCollider2D>() as BoxCollider2D;
-			newColl.enabled = true;
-			newColl.usedByComposite = true;
-			newColl.offset = Vector2.right * i;
-		}
+		//for(int i = 1; i < d; i++)
+		//{
+		//	//Collider2D newColl = gameObject.AddComponent(typeof(Collider2D)) as Collider2D;
+		//	BoxCollider2D newColl = gameObject.AddComponent<BoxCollider2D>() as BoxCollider2D;
+		//	newColl.enabled = true;
+		//	newColl.usedByComposite = true;
+		//	newColl.offset = Vector2.right * i;
+		//}
 
+		//GetComponent<CompositeCollider2D>().isTrigger = false;
 
-	}
+		transform.position += Vector3.right * ((d - 1) / 2);
+
+		spriteRenderer.size = new Vector2(d, 1);
+    }
 
 	public int depth(int d) // d for current depth
 	{
-		GetComponent<BoxCollider2D>().enabled = false;
+		//GetComponent<BoxCollider2D>().enabled = false;
 
-		if (tileOnRight != null) return tileOnRight.depth(d + 1);
+		if (tileOnLeft != null) gameObject.SetActive(false);
+        if (tileOnRight != null) return tileOnRight.depth(d + 1);
 		else return d;
 	}
 }
