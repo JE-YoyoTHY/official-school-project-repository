@@ -18,7 +18,9 @@ public class ComicPageScript : MonoBehaviour
     [Header("Fade In")]
     [SerializeField] private float fadeInTime;
     [SerializeField] private float fullOpacity; // 0 - 1
+    [SerializeField] private float fadeOutTime;
     private Coroutine fadeInCoroutine;
+    private Coroutine fadeOutCoroutine;
 
     private void Awake()
     {
@@ -92,7 +94,8 @@ public class ComicPageScript : MonoBehaviour
             
         }
 
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
+        fadeOutCoroutine = StartCoroutine(fadeOut());
     }
 
     [ContextMenu("Show Next Image")]
@@ -131,6 +134,26 @@ public class ComicPageScript : MonoBehaviour
         }
         color.a = fullOpacity;
         image.color = color;
+    }
+
+    private IEnumerator fadeOut()
+    {
+        float t = fadeOutTime;
+        Color color = image.color;
+
+        while (t > 0)
+        {
+            color.a = Mathf.Lerp(fullOpacity, 0, (1 - t) / fadeInTime);
+            image.color = color;
+
+
+            t -= Time.unscaledDeltaTime;
+
+            yield return null;
+        }
+        color.a = 0;
+        image.color = color;
+        gameObject.SetActive(false);
     }
 
     #region debug
