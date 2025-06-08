@@ -1204,7 +1204,9 @@ public class PlayerControlScript : MonoBehaviour
 	{
 		fireballCurrentCharges += localCharges;
 		fireballCurrentCharges = (fireballCurrentCharges > fireballMaxCharges) ? fireballMaxCharges : fireballCurrentCharges;
-	}
+        SFXManager.playSFXOneShot(SoundDataBase.SFXType.StrikeMatch);
+        print("Regain");
+    }
 
 	private void fireballMouseDir()
 	{

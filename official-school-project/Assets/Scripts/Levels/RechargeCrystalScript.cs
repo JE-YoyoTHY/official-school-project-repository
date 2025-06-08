@@ -86,9 +86,11 @@ public class RechargeCrystalScript : MonoBehaviour
 	{
 		cooldownCounter = 0;
 		isPowerActive = true;
-		//sprite.color = activeColor;
-		animator.Play("ChargedFlameFlicker");
+        //sprite.color = activeColor;
+
+        animator.Play("ChargedFlameFlicker");
 		light.enabled = true;
+
 	}
 
 	//[Button]
