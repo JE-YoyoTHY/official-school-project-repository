@@ -86,7 +86,13 @@ public class MainMenuManager : MonoBehaviour
 
 		startComic.showPage();
 
-		yield return new WaitForSeconds(1f);
+		//yield return new WaitForSeconds(1f);
+		t = 1f;
+		while (t > 0)
+		{
+			t -= Time.unscaledDeltaTime;
+			yield return null;
+		}
 
 
 		#region change scene in coroutine

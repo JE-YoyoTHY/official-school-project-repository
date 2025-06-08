@@ -35,7 +35,8 @@ public class LevelManagerScript : MonoBehaviour
 	void Start()
 	{
 		//player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControlScript>();
-		cinemachineBrain = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CinemachineBrain>();
+		//cinemachineBrain = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CinemachineBrain>();
+		cinemachineBrain = Camera.main.GetComponent<CinemachineBrain>();
 
 		currentRespawnPoint = transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).gameObject;
 
@@ -92,7 +93,7 @@ public class LevelManagerScript : MonoBehaviour
 
 
 		//scene
-		if(levelNumber.y == 1 && sceneToLoad != null) LogicScript.instance.myLoadScene(sceneToLoad);
+		//if(levelNumber.y == 1 && sceneToLoad != null) LogicScript.instance.myLoadScene(sceneToLoad);
 			//SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
 
 		//find next level
@@ -181,6 +182,11 @@ public class LevelManagerScript : MonoBehaviour
 		CameraShakeManagerScript.instance.changeImpulseListener(currentCam.GetComponent<CinemachineImpulseListener>());
 	}
 
+	public void loadNextScene()
+	{
+        //if (levelNumber.y == 1 && sceneToLoad != null) 
+			LogicScript.instance.myLoadScene(sceneToLoad);
+    }
 
 
 	#endregion
