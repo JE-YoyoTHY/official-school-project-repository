@@ -148,8 +148,9 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 selectionTriangle.gameObject.SetActive(true);
                 selectionTriangle.showSelectionTriangle(UIIndicators.UIIndicatorReferencesEnum.settingSelection);
                 pointerEnterEffect_SlideAndGrowText(new Vector2(mainMenuButtonDisplacement, 0), mainMenuButtonScale);
+                SFXManager.playSFXOneShot(SoundDataBase.SFXType.OptionHover);
             }
-            SFXManager.playSFXOneShot(SoundDataBase.SFXType.OptionHover);
+            
         }
         else if (whichButton == ButtonTypes.OpenCreditButton)
         {
