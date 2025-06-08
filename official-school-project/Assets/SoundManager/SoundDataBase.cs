@@ -15,6 +15,8 @@ public class SoundDataBase : ScriptableObject
         CloseSetting, 
         RockGrassStep1, RockGrassStep2, 
         OptionHover, 
+        FireballHitSheep, 
+        StrikeMatch
     }
     [SerializeField] private List<SFXType> SFXTypeList;
     [SerializeField] private List<AudioClip> SFXClipList;
