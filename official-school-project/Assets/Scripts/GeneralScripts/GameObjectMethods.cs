@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
 public static class GameObjectMethods
@@ -19,7 +20,20 @@ public static class GameObjectMethods
         return m_obj.transform.GetChild(m_obj.transform.childCount - 1).gameObject;
     }
 
+    public static void DeactivateAllGameObjectByName(string targetName)
+    {
+        GameObject[] allObjects = GameObject.FindObjectsOfType<GameObject>(true); // ¥]§t inactive ªº
+        foreach (GameObject obj in allObjects)
+        {
+            Debug.Log(obj.name);
+            if (obj.name == targetName)
+            {
+                obj.SetActive(false);
+            }
+        }
+    }
 
-    
+
+
 
 }
