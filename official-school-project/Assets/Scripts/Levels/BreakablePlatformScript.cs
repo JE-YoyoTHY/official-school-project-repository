@@ -273,7 +273,7 @@ public class BreakablePlatformScript : MonoBehaviour
 
 		//GetComponent<CompositeCollider2D>().isTrigger = false;
 
-		transform.position += Vector3.right * ((d - 1) / 2);
+		transform.position += Vector3.right * ((d - 1.0f) / 2.0f);
 
 		spriteRenderer.size = new Vector2(d, 1);
     }

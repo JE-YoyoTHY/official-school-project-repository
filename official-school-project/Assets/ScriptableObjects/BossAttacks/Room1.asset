@@ -110,4 +110,4 @@ MonoBehaviour:
       attackPrepareTime: 1.2
       attackDuration: 0.12
     attackPos: {x: -945.44, y: -551.1, z: 0}
-    waitTimeAfterAttack: 0.05
+    waitTimeAfterAttack: 1.3
