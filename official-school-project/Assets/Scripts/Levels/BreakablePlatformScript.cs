@@ -138,10 +138,18 @@ public class BreakablePlatformScript : MonoBehaviour
 
 				float i = (1 - (breakTimeCounter / breakTime)) * (sprites.Length-1);
 				//spriteRenderer.sprite = sprites[(int)Mathf.Floor(i) + 1];
-				if(i >= sprites.Length-1) spriteRenderer.sprite = sprites[sprites.Length-1];
-				else spriteRenderer.sprite = sprites[(int)Mathf.Floor(i) + 1];
+				if (i >= sprites.Length - 1)
+				{
+					spriteRenderer.sprite = sprites[sprites.Length - 1];
+					SFXManager.playSFXOneShot(SoundDataBase.SFXType.BreakablePlatformBroke);
+				}
+				else
+				{
+					spriteRenderer.sprite = sprites[(int)Mathf.Floor(i) + 1];
+                }
 
-			}
+
+            }
 			else
 			{
 				if(!isRestoreing)
