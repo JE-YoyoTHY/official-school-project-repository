@@ -15,7 +15,6 @@ public class SoundDataBase : ScriptableObject
         CloseSetting, 
         RockGrassStep1, RockGrassStep2, 
         OptionHover, 
-        Sparrow, Frog, Breeze, Cicada
     }
     [SerializeField] private List<SFXType> SFXTypeList;
     [SerializeField] private List<AudioClip> SFXClipList;
@@ -30,6 +29,16 @@ public class SoundDataBase : ScriptableObject
     [SerializeField] private List<MusicType> musicTypeList;
     [SerializeField] private List<AudioClip> musicClipList;
     public Dictionary<MusicType, AudioClip> musicClipDict = new Dictionary<MusicType, AudioClip>();
+
+    public enum AmbientSoundType
+    {
+        _NULL, 
+        Sparrow, Frog, Breeze, Cicada, Earthquake
+
+    }
+    [SerializeField] private List<AmbientSoundType> ambientSoundTypeList;
+    [SerializeField] private List<AudioClip> ambientSoundClipList;
+    public Dictionary<AmbientSoundType, AudioClip> ambientSoundClipDict = new Dictionary<AmbientSoundType, AudioClip>();
 
 
 
@@ -66,6 +75,23 @@ public class SoundDataBase : ScriptableObject
             for (int i = 0; i < musicClipList.Count; i++)
             {
                 musicClipDict.Add(musicTypeList[i], musicClipList[i]);
+            }
+        }
+
+        // Ambient Sound
+        if (ambientSoundTypeList.Count != ambientSoundClipList.Count) { Debug.LogError("音樂片段數量與音樂type數量不同"); }
+        if (ambientSoundTypeList.Count <= ambientSoundClipList.Count)
+        {
+            for (int i = 0; i < ambientSoundTypeList.Count; i++)
+            {
+                ambientSoundClipDict.Add(ambientSoundTypeList[i], ambientSoundClipList[i]);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < ambientSoundClipList.Count; i++)
+            {
+                ambientSoundClipDict.Add(ambientSoundTypeList[i], ambientSoundClipList[i]);
             }
         }
     }

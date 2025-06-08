@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e6a4c1c6ef5d7a48b27e3c9ddf03651, type: 3}
   m_Name: SoundDataBase
   m_EditorClassIdentifier: 
-  SFXTypeList: 040000000500000006000000070000000a000000090000000100000002000000030000000b0000000c000000
+  SFXTypeList: 040000000500000006000000070000000a000000090000000100000002000000030000000b0000000c0000000d000000
   SFXClipList:
   - {fileID: 8300000, guid: 977ca2c21936ee043b56d814b7d004be, type: 3}
   - {fileID: 8300000, guid: 88b666c6f7cc438469636ae63ee9adf3, type: 3}
@@ -25,5 +25,13 @@ MonoBehaviour:
   - {fileID: 8300000, guid: fac5bf8edce930748832ed8b8d48981a, type: 3}
   - {fileID: 8300000, guid: 879969b03afc6ee44a3d887be2f75102, type: 3}
   - {fileID: 8300000, guid: c67c6114cb3ce7947a3a651e6b69c8d4, type: 3}
+  - {fileID: 8300000, guid: c1024a1cfa463b24e91fc7dd23e1d002, type: 3}
   musicTypeList: 
   musicClipList: []
+  ambientSoundTypeList: 0100000002000000030000000400000005000000
+  ambientSoundClipList:
+  - {fileID: 8300000, guid: 20a3255dab1fda640810d2d0f53f764a, type: 3}
+  - {fileID: 8300000, guid: e442c4555e5b78d4ab82af0a7734561e, type: 3}
+  - {fileID: 8300000, guid: 668fbab11b3d08b4ab7d9c076374f755, type: 3}
+  - {fileID: 8300000, guid: d8cd0638f02993f4f8e634dcbac39582, type: 3}
+  - {fileID: 8300000, guid: b763d2b8164f69649ac70bfd6af91b32, type: 3}

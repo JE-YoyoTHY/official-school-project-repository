@@ -40,7 +40,7 @@ public class MainMenuManager : MonoBehaviour
 	}
     private void Start()
     {
-        playEnvironmentalSFX();
+		AmbientSoundManager.playAmbientSound(SoundDataBase.AmbientSoundType.Sparrow);
     }
 
 
@@ -142,11 +142,5 @@ public class MainMenuManager : MonoBehaviour
 		}
 	}
 
-	public void playEnvironmentalSFX()
-	{
-		SFXManager.playSFXOneShot(SoundDataBase.SFXType.Sparrow);
-		SFXManager.playSFXOneShot(SoundDataBase.SFXType.Frog);
-		SFXManager.playSFXOneShot(SoundDataBase.SFXType.Breeze);
-		SFXManager.playSFXOneShot(SoundDataBase.SFXType.Cicada);
-	}
+
 }
