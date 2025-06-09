@@ -280,6 +280,7 @@ MonoBehaviour:
   - {fileID: 1585206553, guid: f22dd41d9808bb249b1eb846b31df2ff, type: 3}
   - {fileID: 1283145425, guid: f22dd41d9808bb249b1eb846b31df2ff, type: 3}
   - {fileID: 1283145425, guid: f22dd41d9808bb249b1eb846b31df2ff, type: 3}
+  thunderPreview: {fileID: 3809069760807087061, guid: 8939fa5b0e805f74aa9338a8f877ed6c, type: 3}
 --- !u!95 &8920832708406183563
 Animator:
   serializedVersion: 5

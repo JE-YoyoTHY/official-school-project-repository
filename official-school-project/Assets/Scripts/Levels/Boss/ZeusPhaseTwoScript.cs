@@ -38,6 +38,7 @@ public class ZeusPhaseTwoScript : MonoBehaviour
 
 
     private bool isAttackActive = false;
+    private bool isFighting = false;
 
     private Animator animator;
     
@@ -57,6 +58,8 @@ public class ZeusPhaseTwoScript : MonoBehaviour
 
         animator = GetComponent<Animator>();
         cinemachineImpulseSource = GetComponent<CinemachineImpulseSource>();
+        GetComponent<SpriteRenderer>().enabled = false;
+        transform.GetChild(0).gameObject.SetActive(false); // child 0 for shield
     }
 
     // Update is called once per frame
@@ -73,33 +76,38 @@ public class ZeusPhaseTwoScript : MonoBehaviour
 
     private void attackMain()
     {
-        if (currentDataIndex < attackProfiles[currentProfileIndex].fightDatas.Length)
+        if (isFighting)
         {
-            if(attackWaitTimeCounter < 0)
+            if (currentDataIndex < attackProfiles[currentProfileIndex].fightDatas.Length)
             {
-                attackStart();
-            }
-            else
-            {
-                attackWaitTimeCounter -= Time.fixedDeltaTime;
-            }
-        }
-        else
-        {
-            if (attackWaitTimeCounter < 0)
-            {
-                if (isAttackActive)
+                if(attackWaitTimeCounter < 0)
                 {
-                    roomCleared();
+                    attackStart();
                 }
-
-                isAttackActive = false;
+                else
+                {
+                    attackWaitTimeCounter -= Time.fixedDeltaTime;
+                }
             }
             else
             {
-                attackWaitTimeCounter -= Time.fixedDeltaTime;
+                if (attackWaitTimeCounter < 0)
+                {
+                    if (isAttackActive)
+                    {
+                        roomCleared();
+                    }
+
+                    isAttackActive = false;
+                }
+                else
+                {
+                    attackWaitTimeCounter -= Time.fixedDeltaTime;
+                }
             }
         }
+
+        
         
     }
 
@@ -137,30 +145,38 @@ public class ZeusPhaseTwoScript : MonoBehaviour
 
     public void resetBoss()
     {
-        isAttackActive = true; // maybe it should be changed
-        //currentProfileIndex = 0;
-        currentDataIndex = 0;
-
-        //kill lightning
-        GameObject[] lightningAttacks = GameObject.FindGameObjectsWithTag("LightningAttackInstance");
-        foreach (GameObject lightningAttack in lightningAttacks)
+        if (isFighting)
         {
-            if (!lightningAttack.GetComponent<BossLightningInstanceScript>().isStaticWall)
-                Destroy(lightningAttack.gameObject);
+            isAttackActive = true; // maybe it should be changed
+            //currentProfileIndex = 0;
+            currentDataIndex = 0;
+
+            //kill lightning
+            GameObject[] lightningAttacks = GameObject.FindGameObjectsWithTag("LightningAttackInstance");
+            foreach (GameObject lightningAttack in lightningAttacks)
+            {
+                if (!lightningAttack.GetComponent<BossLightningInstanceScript>().isStaticWall)
+                    Destroy(lightningAttack.gameObject);
+            }
+
+            resetEvents[currentProfileIndex].Invoke();
+            animator.Play("ZeusIdle");
+
+            transform.GetChild(0).gameObject.SetActive(true); // child 0 for shield
+            GetComponent<SpriteRenderer>().enabled = true;
         }
-
-        resetEvents[currentProfileIndex].Invoke();
-        animator.Play("ZeusIdle");
-
-        transform.GetChild(0).gameObject.SetActive(true); // child 0 for shield
+        
     }
 
     [ContextMenu("Fight start")]
     public void startBossFight()
     {
-        isAttackActive = true;
+        //isAttackActive = true;
         currentProfileIndex = 0;
         currentDataIndex = 0;
+        isFighting = true;
+
+        StartCoroutine(enterNewRoomEffect());
     }
 
 
@@ -218,6 +234,12 @@ public class ZeusPhaseTwoScript : MonoBehaviour
 
         CameraShakeManagerScript.instance.cameraShakeWithProfileWithRandomDirection(reenterShake, cinemachineImpulseSource);
     }
+
+    public void setFightingState(bool fight)
+    {
+        isFighting = fight;
+    }
+
 
     #endregion
 

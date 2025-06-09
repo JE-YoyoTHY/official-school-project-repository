@@ -21,6 +21,8 @@ public class BossLightningInstanceScript : MonoBehaviour
     [SerializeField] private GameObject thunderSprite;
     private GameObject thunderInstance;
     [SerializeField] private Sprite[] thunderImages;
+    [SerializeField] private GameObject thunderPreview;
+    private GameObject thunderPreviewInstance;
     
 
     // Start is called before the first frame update
@@ -38,6 +40,7 @@ public class BossLightningInstanceScript : MonoBehaviour
     public void summon(BossLightningAttackData attackData, Vector3 startPos)
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.enabled = false;
         animator = GetComponent<Animator>();
         animator.enabled = false;
 
@@ -52,21 +55,29 @@ public class BossLightningInstanceScript : MonoBehaviour
 
     IEnumerator attackMain()
     {
+        //spriteRenderer.enabled = false;
+
         float t = myAttackPrepareTime;
-        Color color = spriteRenderer.color;
+        thunderPreviewInstance = Instantiate(thunderPreview, transform.position, Quaternion.identity);
+        SpriteRenderer thunderPreviewSpriteRender = thunderPreviewInstance.GetComponent<SpriteRenderer>();
+        thunderPreviewSpriteRender.enabled = true;
+        thunderPreviewSpriteRender.size = transform.localScale / thunderPreview.transform.localScale.x;
+
+        //Color color = spriteRenderer.color;
         while (t > 0)
         {
             if (!LogicScript.instance.isFreeze())
                 t -= Time.deltaTime;
 
-            color.a = flickerCurve.Evaluate(1 - (t / myAttackPrepareTime));
-            spriteRenderer.color = color;
+            //color.a = flickerCurve.Evaluate(1 - (t / myAttackPrepareTime));
+            //spriteRenderer.color = color;
 
             yield return null;
         }
 
         t = myAttackDuration;
-        spriteRenderer.color = Color.clear;
+        //spriteRenderer.color = Color.clear;
+        thunderPreviewSpriteRender.enabled = false;
         spriteRenderer.enabled = false;
         gameObject.layer = killZoneLayer;
         GetComponent<Collider2D>().enabled = true;
@@ -117,6 +128,7 @@ public class BossLightningInstanceScript : MonoBehaviour
     {
         Destroy(thunderInstance);
         Destroy(gameObject);
+        Destroy(thunderPreviewInstance);
     }
 }
 
