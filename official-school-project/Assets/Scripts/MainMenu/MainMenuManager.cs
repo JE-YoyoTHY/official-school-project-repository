@@ -41,7 +41,7 @@ public class MainMenuManager : MonoBehaviour
 	}
     private void Start()
     {
-		AmbientSoundManager.playAmbientSound(SoundDataBase.AmbientSoundType.Sparrow);
+		AmbientSoundManager.playAmbientSoundLoop(SoundDataBase.AmbientSoundType.Sparrow);
 
 		Object.DontDestroyOnLoad(startComic.transform.parent.gameObject);
     }

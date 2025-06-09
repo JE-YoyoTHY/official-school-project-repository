@@ -33,7 +33,7 @@ public class AmbientSoundManager: MonoBehaviour
         instance.audioSource.PlayOneShot(instance.soundData.ambientSoundClipDict[ambientType], _volume);
     }
 
-    public static void playAmbientSound(SoundDataBase.AmbientSoundType ambientType, float _volume = 1, int _priority = 128)
+    public static void playAmbientSoundLoop(SoundDataBase.AmbientSoundType ambientType, float _volume = 1, int _priority = 128)
     {
         GameObject tempGameObj = new GameObject("temp_ambientSound_" + ambientType.ToString());
         instance.tempGameObjs.Add(tempGameObj);
@@ -42,6 +42,7 @@ public class AmbientSoundManager: MonoBehaviour
         _source.clip = _clip;
         _source.volume = _volume;
         _source.priority = _priority;
+        _source.loop = true;
         _source.Play();
     }
 
@@ -69,6 +70,7 @@ public class AmbientSoundManager: MonoBehaviour
             obj.GetComponent<AudioSource>().UnPause();
         }
     }
+
 
 
 
