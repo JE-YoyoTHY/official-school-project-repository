@@ -30,7 +30,21 @@ public class MusicManager : MonoBehaviour
 
     public static void playMusic(SoundDataBase.MusicType musicType, float _volume = 1f)
     {
+        changeCurrentClip(musicType);
         instance.audioSource.Play();
+    }
+    public static void pauseMusic()
+    {
+        instance.audioSource.Pause();
+    }
+    public static void unpauseMusic()
+    {
+        instance.audioSource.UnPause();
+    }
+
+    public static void endMusic()
+    {
+        instance.audioSource.Stop();
     }
 
     public static void changeCurrentClip(SoundDataBase.MusicType musicType)

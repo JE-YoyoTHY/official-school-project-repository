@@ -105,6 +105,7 @@ public class SpringScript : MonoBehaviour
 			FireballScript fb = collision.gameObject.GetComponent<FireballScript>();
 			if (fb.triggerState() == fireballTriggerCollidingObject.spring)
 				collision.gameObject.GetComponent<FireballScript>().springPush(pushDir.normalized, fireballSpeedScale, hitPlayerVelocity);
+			SFXManager.playSFXOneShot(SoundDataBase.SFXType.FireballHitSheep);
 		}
 
 		if (collision.gameObject.tag == "TutorialShade")
