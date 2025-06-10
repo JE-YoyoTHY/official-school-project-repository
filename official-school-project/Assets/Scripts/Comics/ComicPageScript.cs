@@ -164,6 +164,7 @@ public class ComicPageScript : MonoBehaviour
         for(int i = 0;  i < transform.childCount; i++)
         {
             comicImages[i] = transform.GetChild(i).GetComponent<ComicImageScript>();
+            transform.GetChild(i).GetComponent<ComicImageScript>().page = this;
         }
     }
 

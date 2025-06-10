@@ -72,6 +72,12 @@ public class LevelManagerScript : MonoBehaviour
 		//blockage -> when player exit this level, enable this to prevent player from returning
 		transform.GetChild(0).GetChild(2).GetComponent<SpriteRenderer>().color = Color.clear; // 0 -> basic, 2 -> blockage
 		transform.GetChild(0).GetChild(2).gameObject.SetActive(false); // 0 -> basic, 2 -> blockage
+
+		if(levelNumber.x == 1 && levelNumber.y == 1)
+		{
+			testThisLevel(false);
+            //PlayerControlScript.instance.fireballPlayerGetAbility(false);
+        }
 	}
 
 	// Update is called once per frame
@@ -194,9 +200,9 @@ public class LevelManagerScript : MonoBehaviour
 	#region debug function
 
 	[ContextMenu("Test This Level")]
-	public void testThisLevel()
+	public void testThisLevel(bool playerFB)
 	{
-		PlayerControlScript.instance.fireballPlayerGetAbility(true);
+		PlayerControlScript.instance.fireballPlayerGetAbility(playerFB);
 
 		PlayerControlScript.instance.currentLevel.disableLevel();
 
@@ -224,7 +230,7 @@ public class LevelManagerCustomInspector : Editor
 		
 		if(GUILayout.Button("Test This Level", GUILayout.Width(180f)))
 		{
-			Level.testThisLevel();
+			Level.testThisLevel(true);
 		}
 
 		

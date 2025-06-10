@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class ComicImageScript : MonoBehaviour
 {
-    [SerializeField] private ComicPageScript page;
+    public ComicPageScript page;
 
     private Image image;
 

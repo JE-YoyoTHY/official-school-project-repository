@@ -237,6 +237,11 @@ public class PlayerPerformanceTriggerScript : MonoBehaviour
 		tmpLevel.swapCamera(performanceTriggerInspectorObject.virtualCamera, performanceTriggerInspectorObject.camBlendTime);
 	}
 
+	public void gridColor()
+	{
+		LogicScript.instance.gridColor();
+	}
+
 	#endregion
 }
 
