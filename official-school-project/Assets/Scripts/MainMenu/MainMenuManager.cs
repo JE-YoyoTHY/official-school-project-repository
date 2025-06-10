@@ -41,10 +41,8 @@ public class MainMenuManager : MonoBehaviour
 	}
     private void Start()
     {
-		AmbientSoundManager.playAmbientSoundLoop(SoundDataBase.AmbientSoundType.Sparrow);
         AmbientSoundManager.playAmbientSoundLoop(SoundDataBase.AmbientSoundType.Frog);
         AmbientSoundManager.playAmbientSoundLoop(SoundDataBase.AmbientSoundType.Cicada);
-        AmbientSoundManager.playAmbientSoundLoop(SoundDataBase.AmbientSoundType.Breeze);
         Object.DontDestroyOnLoad(startComic.transform.parent.gameObject);
     }
     private void Update()

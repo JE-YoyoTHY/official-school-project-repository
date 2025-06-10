@@ -24,7 +24,6 @@ public class BossLightningInstanceScript : MonoBehaviour
     [SerializeField] private GameObject thunderPreview;
     private GameObject thunderPreviewInstance;
     
-
     // Start is called before the first frame update
     void Start()
     {
@@ -83,6 +82,7 @@ public class BossLightningInstanceScript : MonoBehaviour
         GetComponent<Collider2D>().enabled = true;
 
         thunderInstance = Instantiate(thunderSprite, transform.position, Quaternion.identity);
+        thunderInstance = Instantiate(thunderSprite, transform.position, Quaternion.identity);
         SpriteRenderer thunderSpriteRenderer = thunderInstance.GetComponent<SpriteRenderer>();
         thunderSpriteRenderer.size = transform.localScale / thunderSprite.transform.localScale.x;
 
@@ -137,7 +137,7 @@ public class BossLightningInstanceScript : MonoBehaviour
 public class BossLightningAttackData
 {
     public Vector2 attackSize;
-    public Vector2 attackPosFromAxis; //Â÷ª±®aªº¦ì¸m
+    public Vector2 attackPosFromAxis; //ï¿½ï¿½ï¿½ï¿½ï¿½aï¿½ï¿½ï¿½ï¿½m
 
     public float attackPrepareTime;
     public float attackDuration;

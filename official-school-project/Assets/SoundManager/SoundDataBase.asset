@@ -29,8 +29,11 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 28bec1b0a2792fb4582ab1e7c8f5ae35, type: 3}
   - {fileID: 8300000, guid: 21e703c74f75b0b47a3aea783cc639b4, type: 3}
   - {fileID: 8300000, guid: 5186b25a91e449541bac197f5be42b01, type: 3}
-  musicTypeList: 
-  musicClipList: []
+  musicTypeList: 020000000300000004000000
+  musicClipList:
+  - {fileID: 8300000, guid: 5eab980edc255ef4c8e5c98c9251fcfd, type: 3}
+  - {fileID: 8300000, guid: 4c112fd1f3ececf45809de69c48bada5, type: 3}
+  - {fileID: 8300000, guid: fc1cf73970c5a4847a85a1532a0c569d, type: 3}
   ambientSoundTypeList: 0100000002000000030000000400000005000000
   ambientSoundClipList:
   - {fileID: 8300000, guid: 20a3255dab1fda640810d2d0f53f764a, type: 3}

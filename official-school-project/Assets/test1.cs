@@ -14,7 +14,17 @@ public class test1 : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.G))
         {
-            SFXManager.playSFXOneShot(SoundDataBase.SFXType.CloseSetting);
+            MusicManager.playMusic(SoundDataBase.MusicType.Chapter1);
         }
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            MusicManager.playMusic(SoundDataBase.MusicType.Chapter2);
+        }
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            MusicManager.playMusic(SoundDataBase.MusicType.Chapter3);
+
+        }
+
     }
 }

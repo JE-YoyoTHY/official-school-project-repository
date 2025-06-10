@@ -39,6 +39,7 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     [Header("Open / Close Setting Button")]
     [SerializeField] private GameObject settingTab;
+    [SerializeField] private GameObject creditTab;
     [SerializeField] private GameObject startGameButton;
     [SerializeField] private GameObject openSettingButton;
     [SerializeField] private GameObject openCreditButton;
@@ -128,6 +129,10 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             selectionTriangle.disappear();
             TMPBackToOriginalInstantly();
             mainMenuManager.startGame();
+        }
+        else if (whichButton == ButtonTypes.CloseCreditButton)
+        {
+            closeCredit();
         }
     }
 
@@ -253,6 +258,52 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
         SFXManager.playSFXOneShot(SoundDataBase.SFXType.CloseSetting, 0.3f);
         print("set setting button true");
+    }
+
+    public void openCredit()
+    {
+        buttonData.canOpenSetting = false;
+        // want to open
+        if (startGameButton != null)  // at main menu
+        {
+            startGameButton.SetActive(false);
+            openSettingButton.SetActive(false);
+            openCreditButton.SetActive(false);
+            selectionTriangle.gameObject.SetActive(false);
+        }
+        if (LogicScript.instance != null)
+        {
+            LogicScript.instance.pauseGame(PauseSource.setting);
+        }
+        openCreditButton.SetActive(false);
+        creditTab.SetActive(true);
+        //GameObjectMethods.DeactivateAllGameObjectByName("PercentageDisplay");
+
+        print("set credit button false");
+    }
+
+    public void closeCredit()
+    {
+        // want to close setting
+        if (startGameButton != null)
+        {
+            startGameButton.SetActive(true);
+            openSettingButton.SetActive(true);
+            openCreditButton.SetActive(true);
+            startGameButton.GetComponent<ButtonManager>().TMPBackToOriginalInstantly();
+            openSettingButton.GetComponent<ButtonManager>().TMPBackToOriginalInstantly();
+            openCreditButton.GetComponent<ButtonManager>().TMPBackToOriginalInstantly();
+        }
+        openSettingButton.SetActive(true);
+        creditTab.SetActive(false);
+        //GameObjectMethods.DeactivateAllGameObjectByName("PercentageDisplay");
+        if (LogicScript.instance != null)
+        {
+            LogicScript.instance.unpauseGame();
+        }
+        buttonData.canOpenSetting = true;
+        SFXManager.playSFXOneShot(SoundDataBase.SFXType.CloseSetting, 0.3f);
+        print("set credit button true");
     }
 
 
