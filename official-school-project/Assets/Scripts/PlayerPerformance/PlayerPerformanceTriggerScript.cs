@@ -231,6 +231,12 @@ public class PlayerPerformanceTriggerScript : MonoBehaviour
 		LogicScript.instance.comicStart(id);
 	}
 
+	public void swapCamera()
+	{
+		LevelManagerScript tmpLevel = transform.parent.parent.parent.parent.GetComponent<LevelManagerScript>();
+		tmpLevel.swapCamera(performanceTriggerInspectorObject.virtualCamera, performanceTriggerInspectorObject.camBlendTime);
+	}
+
 	#endregion
 }
 
@@ -254,6 +260,8 @@ public class PerformanceTriggerInspectorObject
 	public ScreenShakeProfile screenShakeProfile;
 	public bool performWithNoGravity;
 	public bool performWithNoFriction;
+	public CinemachineVirtualCamera virtualCamera;
+	public float camBlendTime;
 
 
 	//move

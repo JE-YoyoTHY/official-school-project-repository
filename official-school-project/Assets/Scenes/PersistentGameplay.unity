@@ -293,6 +293,8 @@ MonoBehaviour:
   comicPages:
   - {fileID: 8825797344419583559}
   - {fileID: 1139821128}
+  - {fileID: 172056601}
+  - {fileID: 1963234767}
   scenesCanLoad:
   - m_SceneAsset: {fileID: 102900000, guid: c563e7eaf94aea34bb6ccd44602bebed, type: 3}
     m_SceneName: Chapter2
@@ -449,12 +451,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2811779912629093660, guid: 44a10314dba42474d8cd3611f9b4c284, type: 3}
       propertyPath: pageID
-      value: chapter3
+      value: chapter3-1
       objectReference: {fileID: 0}
     - target: {fileID: 2811779912629093660, guid: 44a10314dba42474d8cd3611f9b4c284, type: 3}
       propertyPath: nextPage
       value: 
-      objectReference: {fileID: 1963234767}
+      objectReference: {fileID: 0}
     - target: {fileID: 2811779912629093660, guid: 44a10314dba42474d8cd3611f9b4c284, type: 3}
       propertyPath: comicImages.Array.size
       value: 9
@@ -582,6 +584,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 96e32c8b4bd5789469dbc62111e6d190, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &172056601 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2811779912629093660, guid: 44a10314dba42474d8cd3611f9b4c284, type: 3}
+  m_PrefabInstance: {fileID: 172056598}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bc00bfbd4f531e42aa41cb1b7690631, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &266389616
@@ -7192,7 +7205,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2811779912629093660, guid: 44a10314dba42474d8cd3611f9b4c284, type: 3}
       propertyPath: pageID
-      value: chapter3
+      value: chapter3-2
       objectReference: {fileID: 0}
     - target: {fileID: 2811779912629093660, guid: 44a10314dba42474d8cd3611f9b4c284, type: 3}
       propertyPath: nextPage
