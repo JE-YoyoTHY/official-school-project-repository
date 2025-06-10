@@ -27,7 +27,7 @@ public class SoundDataBase : ScriptableObject
     {
         _NULL,
         MainMenu,
-        Chapter1, Chapter2
+        Chapter1, Chapter2, Chapter3
     }
     [SerializeField] private List<MusicType> musicTypeList;
     [SerializeField] private List<AudioClip> musicClipList;
