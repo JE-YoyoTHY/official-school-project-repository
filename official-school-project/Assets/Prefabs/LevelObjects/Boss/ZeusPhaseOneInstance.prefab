@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4640006072807448198}
   - component: {fileID: 4518223970682164897}
   - component: {fileID: 6902728599997855102}
+  - component: {fileID: -9004808741802527920}
   m_Layer: 0
   m_Name: ZeusPhaseOneInstance
   m_TagString: ZeusPhaseOne
@@ -195,3 +196,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &-9004808741802527920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1803982881137572784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70a7ff187abf65e4092204759db5485b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ParticleSystem: {fileID: 6197230993411093695, guid: 87412fa9fb5dab7409cb4205c1d7271b, type: 3}
+  ParticleSystemWithIndex:
+  - {fileID: 6197230993411093695, guid: d42c355f2ada8314e911d3532b7107aa, type: 3}

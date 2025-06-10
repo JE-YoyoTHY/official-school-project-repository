@@ -31,6 +31,8 @@ public class ZeusPhaseOneScript : MonoBehaviour
         animator.Play("ZeusIdle");
 
         myIgnoreCollision(true);
+
+        GetComponent<ParticleCommonScript>().emitParticleWithIndex(0);
     }
 
     public void zeusDamaged()
@@ -39,6 +41,8 @@ public class ZeusPhaseOneScript : MonoBehaviour
         bossLightningManager.setAttackState("Expel");
         bossLightningInstance.setStaticWallState(false);
         gameObject.SetActive(false);
+
+        GetComponent<ParticleCommonScript>().emitParticle();
     }
 
     private void myIgnoreCollision(bool ignore)
