@@ -25,13 +25,15 @@ public class UISliderManager : MonoBehaviour, IBeginDragHandler, IEndDragHandler
     {
         Music,
         SoundEffect,
-        CameraShake
+        CameraShake, 
+        AmbientSound
     }
 
     [Header("Fill In")]
     [SerializeField] private UISliderType currentSliderType;
     [SerializeField] private AudioSource musicAudioSource;
     [SerializeField] private AudioSource sfxAudioSource;
+    [SerializeField] private AudioSource ambientSoundAudioSource;
 
     [SerializeField] private GameObject percentageDisplay;
     
@@ -106,6 +108,10 @@ public class UISliderManager : MonoBehaviour, IBeginDragHandler, IEndDragHandler
         else if (currentSliderType == UISliderType.SoundEffect)
         {
             sfxAudioSource.volume = getCurrentSliderValue();
+        }
+        else if (currentSliderType == UISliderType.AmbientSound)
+        {
+            ambientSoundAudioSource.volume = getCurrentSliderValue();
         }
     }
 

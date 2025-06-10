@@ -41,7 +41,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Mode: 1
+    - _Mode: 0
     - _Radius: 0
     m_Colors:
     - _BorderUV: {r: 0, g: 0, b: 0, a: 0}

@@ -7,6 +7,7 @@ using UnityEngine;
 public class AmbientSoundManager: MonoBehaviour
 {
     private static AmbientSoundManager instance;
+    private static float previousVolume;
     [SerializeField] private SoundDataBase soundData;
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private List<GameObject> tempGameObjs;
@@ -16,6 +17,7 @@ public class AmbientSoundManager: MonoBehaviour
     {        
         instance = this;
         audioSource = GetComponent<AudioSource>();
+        previousVolume = audioSource.volume;
     }
     void Start()
     {
@@ -30,37 +32,44 @@ public class AmbientSoundManager: MonoBehaviour
 
     public static void playAmbientSoundOneShot(SoundDataBase.AmbientSoundType ambientType, float _volume = 1.0f)
     {
+        float finalVolume = _volume * instance.audioSource.volume;
         instance.audioSource.PlayOneShot(instance.soundData.ambientSoundClipDict[ambientType], _volume);
     }
 
     public static void playAmbientSoundLoop(SoundDataBase.AmbientSoundType ambientType, float _volume = 1, int _priority = 128)
     {
+        // _volume must be 1 to avoid some issues (not bug)
         GameObject tempGameObj = new GameObject("temp_ambientSound_" + ambientType.ToString());
         tempGameObj.transform.parent = instance.transform;
         instance.tempGameObjs.Add(tempGameObj);
         AudioSource _source = tempGameObj.AddComponent<AudioSource>();
         AudioClip _clip = instance.soundData.ambientSoundClipDict[ambientType];
         _source.clip = _clip;
-        _source.volume = _volume;
+        _source.volume = _volume * instance.audioSource.volume;
         _source.priority = _priority;
         _source.loop = true;
         _source.Play();
     }
 
+    /* DO NOT USE OTHERWISE BUDS WILL OCCUR !
     public static void stopSpecificAmbientSound(SoundDataBase.AmbientSoundType targetAmbientType)
     {
+        List<GameObject> shouldBeRemovedGameObjs = new List<GameObject>();
         foreach (GameObject obj in instance.tempGameObjs)
         {
             foreach (SoundDataBase.AmbientSoundType _ambientType in instance.soundData.ambientSoundClipDict.Keys)
             {
                 if (instance.soundData.ambientSoundClipDict[targetAmbientType] == obj.GetComponent<AudioSource>().clip && targetAmbientType == _ambientType)
                 {
-                    instance.tempGameObjs.Remove(obj);
+                    shouldBeRemovedGameObjs.Add(obj);
                     Destroy(obj);
                 }
             }
         }
+
     }
+    */
+
     public static void stopAllAmbientSound()
     {
         foreach (GameObject obj in instance.tempGameObjs)
@@ -84,6 +93,23 @@ public class AmbientSoundManager: MonoBehaviour
         {
             obj.GetComponent<AudioSource>().UnPause();
         }
+    }
+
+    public static void sliderVolumeChanged()
+    {
+        print("value changed");
+        float newValue = instance.audioSource.volume;
+        print(newValue);
+
+        foreach (GameObject obj in instance.tempGameObjs)
+        {
+            print(newValue / previousVolume);
+            float finalVolume = instance.audioSource.volume;
+            obj.GetComponent<AudioSource>().volume = finalVolume;
+        }
+
+        previousVolume = newValue;
+
     }
 
 

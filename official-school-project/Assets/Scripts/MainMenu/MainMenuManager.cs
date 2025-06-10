@@ -47,7 +47,10 @@ public class MainMenuManager : MonoBehaviour
         AmbientSoundManager.playAmbientSoundLoop(SoundDataBase.AmbientSoundType.Breeze);
         Object.DontDestroyOnLoad(startComic.transform.parent.gameObject);
     }
+    private void Update()
+    {
 
+    }
 
     public void startGame()
 	{
