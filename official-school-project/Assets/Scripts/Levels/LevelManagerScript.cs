@@ -204,7 +204,8 @@ public class LevelManagerScript : MonoBehaviour
 	{
 		PlayerControlScript.instance.fireballPlayerGetAbility(playerFB);
 
-		PlayerControlScript.instance.currentLevel.disableLevel();
+		if(PlayerControlScript.instance.currentLevel != null)
+			PlayerControlScript.instance.currentLevel.disableLevel();
 
 		PlayerControlScript.instance.testLevel(this);
 

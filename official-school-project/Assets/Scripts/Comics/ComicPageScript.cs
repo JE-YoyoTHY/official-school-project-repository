@@ -20,7 +20,8 @@ public class ComicPageScript : MonoBehaviour
     [SerializeField] private float fullOpacity; // 0 - 1
     [SerializeField] private float fadeOutTime;
     private Coroutine fadeInCoroutine;
-    private Coroutine fadeOutCoroutine;
+    private Coroutine fadeOutCoroutine = null;
+    private bool isComicPlaying = true;
 
     private void Awake()
     {
@@ -36,7 +37,7 @@ public class ComicPageScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.anyKeyDown)
+        if (Input.anyKeyDown && isComicPlaying)
         {
             if (isImageFadingIn)
             {
@@ -95,6 +96,7 @@ public class ComicPageScript : MonoBehaviour
         }
 
         //gameObject.SetActive(false);
+        isComicPlaying = false;
         fadeOutCoroutine = StartCoroutine(fadeOut());
     }
 
