@@ -30,6 +30,7 @@ TagManager:
   - ComicPage
   - InstructionUIManager
   - ExplosionShade
+  - ThunderAttackImage
   layers:
   - Default
   - TransparentFX

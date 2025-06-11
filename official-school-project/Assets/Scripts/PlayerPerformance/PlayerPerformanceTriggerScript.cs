@@ -297,6 +297,14 @@ public class PlayerPerformanceTriggerScript : MonoBehaviour
 		LogicScript.instance.backToMainMenu();
 	}
 
+	public void playMusic(string chapter)
+	{
+		if (chapter == "ch1") MusicManager.playMusic(SoundDataBase.MusicType.Chapter1);
+        if (chapter == "ch2") MusicManager.playMusic(SoundDataBase.MusicType.Chapter2);
+        if (chapter == "ch3") MusicManager.playMusic(SoundDataBase.MusicType.Chapter3);
+
+    }
+
 	#endregion
 }
 
