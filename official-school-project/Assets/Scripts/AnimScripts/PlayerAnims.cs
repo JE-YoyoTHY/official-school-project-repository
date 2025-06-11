@@ -53,6 +53,7 @@ public class PlayerAnims : MonoBehaviour
     [SerializeField] private bool currentIsGrounded;
     private sbyte facingDir;
     private Dictionary<string, bool> stateCondition = new Dictionary<string, bool>();
+    [SerializeField] private bool isShootingFireball;
     void Start()
     {
         
@@ -125,6 +126,7 @@ public class PlayerAnims : MonoBehaviour
                 else changeState(STATE_FALL);
             }
         }
+
 
 
         //print($"getLandVelocity(): {getLandVelocity()}");
@@ -205,5 +207,10 @@ public class PlayerAnims : MonoBehaviour
             {"parkour_roll", getLandVelocity() != Vector2.zero && Mathf.Abs(getLandVelocity().y) > hardLandMinVy && Mathf.Abs(currentVelocity.x) > parkourRollMinVx},
             {"idle", Mathf.Abs(currentVelocity.x) <= 0.05f && playerGroundTriggerScript.isGrounded == true && playerControlScript.isMoving == false && playerControlScript.isJumping == false}
         };
+    }
+
+    public void setIsShootingFireball(bool isShooting)
+    {
+        isShootingFireball = isShooting;
     }
 }
