@@ -186,7 +186,7 @@ public class ZeusPhaseTwoScript : MonoBehaviour
 
     public void zeusDamaged()
     {
-        if(!isAttackActive)
+        if(!isAttackActive && isFighting)
         {
             //print("Zeus was hit");
             damagedEvents[currentProfileIndex].Invoke();
@@ -198,6 +198,12 @@ public class ZeusPhaseTwoScript : MonoBehaviour
             GetComponent<ParticleCommonScript>().emitParticleWithIndex(1); // 1 for damaged particle
 
             CameraShakeManagerScript.instance.cameraShakeWithProfileWithRandomDirection(damagedShake, cinemachineImpulseSource);
+        }
+        else if (!isFighting)
+        {
+            damagedEvents[currentProfileIndex].Invoke();
+            CameraShakeManagerScript.instance.cameraShakeWithProfileWithRandomDirection(damagedShake, cinemachineImpulseSource);
+            transform.GetChild(0).gameObject.SetActive(false); // child 0 for shield
         }
         else
         {
