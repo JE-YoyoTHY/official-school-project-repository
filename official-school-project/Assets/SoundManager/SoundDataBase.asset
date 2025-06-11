@@ -41,3 +41,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 668fbab11b3d08b4ab7d9c076374f755, type: 3}
   - {fileID: 8300000, guid: d8cd0638f02993f4f8e634dcbac39582, type: 3}
   - {fileID: 8300000, guid: b763d2b8164f69649ac70bfd6af91b32, type: 3}
+  musicVolume: 0.29186997
+  sfxVolume: 1
+  ambientSoundVolume: 0.51490474
+  cameraShakeDegree: 0.047254793

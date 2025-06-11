@@ -3417,11 +3417,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1549583612069711395, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1549583612069711395, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1886111046103616762, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_Name
@@ -3429,15 +3429,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2128577423494707373, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2128577423494707373, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2128577423494707373, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3528865267409666377, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: sfxAudioSource
@@ -4270,11 +4270,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1549583612069711395, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1549583612069711395, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1886111046103616762, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_Name
@@ -4282,15 +4282,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2128577423494707373, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2128577423494707373, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2128577423494707373, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3528865267409666377, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: sfxAudioSource
@@ -5247,6 +5247,7 @@ MonoBehaviour:
   - {fileID: 45498344}
   - {fileID: 1206519979}
   mainMenuCam: {fileID: 2126631269}
+  settingTab: {fileID: 5198831594385214786}
   mainMenu:
     m_SceneAsset: {fileID: 102900000, guid: 9ace83e038168a84f941947ca7f84bd1, type: 3}
     m_SceneName: MainMenu
@@ -5881,7 +5882,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5198831592842279421, guid: a0aa5dd7d0c924a4586277fd98605f28, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5342332749957733607, guid: a0aa5dd7d0c924a4586277fd98605f28, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -6084,11 +6085,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1549583612069711395, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1549583612069711395, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1886111046103616762, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_Name
@@ -6096,15 +6097,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2128577423494707373, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2128577423494707373, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2128577423494707373, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3528865267409666377, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: currentSliderType
@@ -7615,11 +7616,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1549583612069711395, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1549583612069711395, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1886111046103616762, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_Name
@@ -7627,15 +7628,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2128577423494707373, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2128577423494707373, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2128577423494707373, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3528865267409666377, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: musicAudioSource

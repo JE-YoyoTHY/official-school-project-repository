@@ -15,6 +15,7 @@ public class MainMenuManager : MonoBehaviour
 	[SerializeField] private GameObject[] objectsToHide;
 	[SerializeField] private GameObject[] objectsToHideWhenSceneIsLoading;
 	[SerializeField] private CinemachineVirtualCamera mainMenuCam;
+	[SerializeField] private GameObject settingTab;
 	//[SerializeField] private GameObject m_mainCamera;
 	
 
@@ -41,6 +42,7 @@ public class MainMenuManager : MonoBehaviour
 	}
     private void Start()
     {
+		settingTab.SetActive(false);
         AmbientSoundManager.playAmbientSoundLoop(SoundDataBase.AmbientSoundType.Frog);
         AmbientSoundManager.playAmbientSoundLoop(SoundDataBase.AmbientSoundType.Cicada);
         Object.DontDestroyOnLoad(startComic.transform.parent.gameObject);

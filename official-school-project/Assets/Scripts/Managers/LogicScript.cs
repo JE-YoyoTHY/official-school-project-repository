@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Rendering.Universal;
@@ -40,9 +41,14 @@ public class LogicScript : MonoBehaviour
 	public List<SceneField> scenesCanLoad;
 	private SceneField lastSceneLoaded;
 
+	[SerializeField] private GameObject settingTab;
+
 	//pause
 	public bool isPaused {  get; private set; }
 	public PauseSource pauseSource;
+
+	[SerializeField] private SoundDataBase soundData;
+
 
 
     // Start is called before the first frame update
@@ -57,6 +63,8 @@ public class LogicScript : MonoBehaviour
 		//}
 
 		SceneManager.UnloadSceneAsync(mainMenu);
+		setSettingSliderValue();
+		settingTab.SetActive(false);
     }
 
     // Update is called once per frame
@@ -229,6 +237,14 @@ public class LogicScript : MonoBehaviour
 				
 
         }
+	}
+
+	public void setSettingSliderValue()
+	{
+		MusicManager.setSliderValue(soundData.musicVolume);
+		SFXManager.setSliderValue(soundData.sfxVolume);
+		AmbientSoundManager.setSliderValue(soundData.ambientSoundVolume);
+		CameraShakeSliderValueManager.setSliderValue(soundData.cameraShakeDegree);
 	}
 
 
