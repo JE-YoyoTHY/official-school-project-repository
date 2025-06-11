@@ -1429,6 +1429,10 @@ public class PlayerControlScript : MonoBehaviour
 		GameObject[] explosionShades = GameObject.FindGameObjectsWithTag("ExplosionShade");
 		foreach(GameObject exp_shade in explosionShades) Destroy(exp_shade);
 
+		//boss attack
+		GameObject[] lightningAttackObjs = GameObject.FindGameObjectsWithTag("ThunderAttackImage");
+		foreach(var lightningAttackObj in lightningAttackObjs) Destroy(lightningAttackObj);
+
 		//friction
 		if (myFrictionLessCoroutine != null) StopCoroutine(myFrictionLessCoroutine);
 

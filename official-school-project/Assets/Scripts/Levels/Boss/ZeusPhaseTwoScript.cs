@@ -141,6 +141,8 @@ public class ZeusPhaseTwoScript : MonoBehaviour
         transform.GetChild(0).gameObject.SetActive(false); // child 0 for shield
         GetComponent<ParticleCommonScript>().emitParticle(); //emit for shield break;
         CameraShakeManagerScript.instance.cameraShakeWithProfileWithRandomDirection(shieldBreakShake, cinemachineImpulseSource);
+
+        animator.Play("ZeusStun");
     }
 
     //private void 
@@ -243,6 +245,8 @@ public class ZeusPhaseTwoScript : MonoBehaviour
         GetComponent<ParticleCommonScript>().emitParticleWithIndex(0); //0 for shield restore
 
         CameraShakeManagerScript.instance.cameraShakeWithProfileWithRandomDirection(reenterShake, cinemachineImpulseSource);
+
+        animator.Play("ZeusIdle");
     }
 
     public void setFightingState(bool fight)

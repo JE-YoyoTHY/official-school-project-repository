@@ -28,7 +28,7 @@ public class ZeusPhaseOneScript : MonoBehaviour
     {
         gameObject.SetActive(true);
         animator = GetComponent<Animator>();
-        animator.Play("ZeusIdle");
+        animator.Play("ZeusStun");
 
         myIgnoreCollision(true);
 
