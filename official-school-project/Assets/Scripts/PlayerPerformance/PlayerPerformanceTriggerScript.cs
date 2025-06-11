@@ -6,6 +6,7 @@ using UnityEngine.Events;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 using Unity.VisualScripting;
 using Cinemachine;
+using JetBrains.Annotations;
 
 //[ExecuteInEditMode]
 public class PlayerPerformanceTriggerScript : MonoBehaviour
@@ -111,11 +112,24 @@ public class PlayerPerformanceTriggerScript : MonoBehaviour
 		}
 	}
 
-	#endregion
+    #region Instruction UI
+    public void showInstructionUIFromPerformanceTrigger(int instructionTypeInt)
+    {
+		InstructionUI.InstructionTypeEnum instructionType = (InstructionUI.InstructionTypeEnum)instructionTypeInt;
+        InstructionUIManager.instance.showInstructionUI(instructionType);
+    }
 
-	#region move
+    public void disappearInstructionUIFromPerformanceTrigger()
+    {
+        InstructionUIManager.instance.disappearInstructionUI();
+    }
+    #endregion
 
-	private void moveMain()
+    #endregion
+
+    #region move
+
+    private void moveMain()
 	{
 		Rigidbody2D playerRB = PlayerControlScript.instance.GetComponent<Rigidbody2D>();
 		//Vector3 deltaPos = performanceTriggerInspectorObject.nextTrigger.transform.GetChild(0).position - transform.GetChild(0).position;
@@ -286,6 +300,9 @@ public class PerformanceTriggerInspectorObject
 	[HideInInspector] public float waitTime;
 	//[HideInInspector] public bool waitWithNoGravity;
 	[HideInInspector] public bool waitWithScreenShake;
+
+
+
 }
 
 public enum PerformanceAction
@@ -301,6 +318,7 @@ public enum PerformanceWaitInputAction
 	jump,
 	fireball
 }
+
 
 #if UNITY_EDITOR
 
@@ -354,7 +372,7 @@ public class PerformanceScriptEditor : Editor
 					EditorGUILayout.Toggle("Wait With Screen Shake", playerPerformanceTrigger.performanceTriggerInspectorObject.waitWithScreenShake);
 			}
 		}
-
+		
 		if (GUI.changed)
 		{
 			EditorUtility.SetDirty(playerPerformanceTrigger);

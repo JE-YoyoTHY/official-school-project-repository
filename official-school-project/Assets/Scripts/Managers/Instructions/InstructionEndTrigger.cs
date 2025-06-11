@@ -36,4 +36,8 @@ public class InstructionEndTrigger : MonoBehaviour
             instructionUIManager.disappearInstructionUI();
         }
     }
+    public void deactiveSelf()
+    {
+        gameObject.SetActive(false);
+    }
 }

@@ -57,4 +57,9 @@ public class InstructionStartTrigger : MonoBehaviour
             instructionUIManager.showInstructionUI(instructionUIPrefab.GetComponent<InstructionUI>().getCurrentInstructionType());
         }
     }
+
+    public void deactiveSelf()
+    {
+        gameObject.SetActive(false);
+    }
 }
