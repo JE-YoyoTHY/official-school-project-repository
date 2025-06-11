@@ -16,6 +16,7 @@ public class ComicImageScript : MonoBehaviour
     [SerializeField] private float fadeInTime;
     [SerializeField] private float fullOpacity; // 0 - 1
     private Coroutine fadeInCoroutine;
+    [SerializeField] private bool isAuto = false;
 
     private void Awake()
     {
@@ -76,10 +77,15 @@ public class ComicImageScript : MonoBehaviour
         color.a = fullOpacity;
         image.color = color;
 
-        if(fadeInCoroutine != null) StopCoroutine(fadeInCoroutine);
+        if (fadeInCoroutine != null) StopCoroutine(fadeInCoroutine);
 
-        
+
         page.isImageFadingIn = false;
+
+        if (isAuto)
+        {
+            page.showNextImage();
+        }
         
     }
 }

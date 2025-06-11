@@ -2061,6 +2061,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &316990065
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2810,6 +2811,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &385936930
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3257,6 +3259,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &588062953
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3598,6 +3601,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &625697059
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3692,6 +3696,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &638142845
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3928,6 +3933,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &659147904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4021,6 +4027,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &663968258
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4116,6 +4123,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &719130474
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4531,6 +4539,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &839461956
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4871,6 +4880,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &848827038
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5453,6 +5463,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &938435654
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5830,6 +5841,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &959884209
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5922,6 +5934,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &981949363
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6204,6 +6217,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &1080972007
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6374,6 +6388,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &1089168239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6447,6 +6462,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &1093843424
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6778,6 +6794,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &1132705880
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6908,6 +6925,10 @@ PrefabInstance:
       propertyPath: page
       value: 
       objectReference: {fileID: 1139821128}
+    - target: {fileID: 2293306178643076529, guid: 44a10314dba42474d8cd3611f9b4c284, type: 3}
+      propertyPath: isAuto
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2293306178643076529, guid: 44a10314dba42474d8cd3611f9b4c284, type: 3}
       propertyPath: fadeInTime
       value: 0.1
@@ -7377,6 +7398,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &1239718323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7556,6 +7578,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &1251492685
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7801,6 +7824,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &1319658887
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8027,6 +8051,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &1368165205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8602,6 +8627,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &1478241035
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8837,6 +8863,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &1485404416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8929,6 +8956,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &1486771840
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10465,6 +10493,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &1770415123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10724,6 +10753,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &1797753341
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11094,6 +11124,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &1818129717
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11662,6 +11693,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &1877951436
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12335,6 +12367,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &1959881231
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13134,6 +13167,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &2060037855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13226,6 +13260,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &2073140321
 MonoBehaviour:
   m_ObjectHideFlags: 0

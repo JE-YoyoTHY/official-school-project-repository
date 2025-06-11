@@ -113,12 +113,12 @@ public class PlayerAnims : MonoBehaviour
             {
                 if (currentVelocity.x <= -0.5f)
                 {
-                    Debug.Log("fall left");
+                    //Debug.Log("fall left");
                     changeState(STATE_FALL_RIGHT);
                 }
-                if (currentVelocity.x >= 0.5f)
+                else if (currentVelocity.x >= 0.5f)
                 {
-                    Debug.Log("fall right");
+                    //Debug.Log("fall right");
                     changeState(STATE_FALL_RIGHT);
                 }
 
@@ -169,14 +169,14 @@ public class PlayerAnims : MonoBehaviour
         previousIsGrounded = currentIsGrounded;
         currentIsGrounded = playerGroundTriggerScript.isGrounded;
 
-        if (previousIsGrounded == false && currentIsGrounded == true)  // �N���踨�a
+        if (previousIsGrounded == false && currentIsGrounded == true)
         {
             //print($"previousVelocity{previousVelocity}");
             return previousVelocity;
         }
         else
         {
-            return Vector2.zero;  // �N���S�����a
+            return Vector2.zero;
         }
     }
 
