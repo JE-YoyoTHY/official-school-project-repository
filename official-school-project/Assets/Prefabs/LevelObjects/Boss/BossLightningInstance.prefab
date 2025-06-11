@@ -144,6 +144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76cff8c6dacf4f348a11919ef4cfa9f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  brightnessBlock: {fileID: 2503639123842132099, guid: e919f44a2601fba42a851bb5a7d0c2c5, type: 3}
   flickerCurve:
     serializedVersion: 2
     m_Curve:

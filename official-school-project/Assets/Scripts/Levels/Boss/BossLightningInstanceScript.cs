@@ -6,6 +6,7 @@ using UnityEngine.Events;
 
 public class BossLightningInstanceScript : MonoBehaviour
 {
+    [SerializeField] private GameObject brightnessBlock;
     private SpriteRenderer spriteRenderer;
     private Animator animator;
 
@@ -23,7 +24,14 @@ public class BossLightningInstanceScript : MonoBehaviour
     [SerializeField] private Sprite[] thunderImages;
     [SerializeField] private GameObject thunderPreview;
     private GameObject thunderPreviewInstance;
-    
+
+    private void Awake()
+    {
+        if (brightnessBlock == null)
+        {
+            brightnessBlock = GameObject.Find("Thunder Brightness");
+        }
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -85,7 +93,7 @@ public class BossLightningInstanceScript : MonoBehaviour
         thunderInstance = Instantiate(thunderSprite, transform.position, Quaternion.identity);
         SpriteRenderer thunderSpriteRenderer = thunderInstance.GetComponent<SpriteRenderer>();
         thunderSpriteRenderer.size = transform.localScale / thunderSprite.transform.localScale.x;
-
+        brightnessBlock.GetComponent<VisualEffectManager>().applyVFX();
         //animation
         //animator.enabled = true;
         //if (transform.localScale.y / transform.localScale.x > 3)

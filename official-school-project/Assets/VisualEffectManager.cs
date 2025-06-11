@@ -34,7 +34,7 @@ public class VisualEffectManager : MonoBehaviour
         }
         if (mainCam == null)
         {
-            mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+            mainCam = Camera.main;
         }
     }
     void Start()
@@ -53,6 +53,7 @@ public class VisualEffectManager : MonoBehaviour
 
     public void applyVFX()
     {
+        print("apply vfx");
         forceEndTween();
         m_volume.enabled = true;
         if (currentVFXType == VFXType.ThunderBloom)
@@ -63,8 +64,9 @@ public class VisualEffectManager : MonoBehaviour
             currentTweener = gameObject.transform.DOMove(marginBack, _duration)
                 .SetEase(_ease);
             currentTweener.onComplete = VFXCompleted;
+            print("into vfx");
         }
-
+        print("vfx end");
     }
 
     public void forceEndTween()
@@ -77,9 +79,14 @@ public class VisualEffectManager : MonoBehaviour
 
     public Vector3 getMainCameraPositionXY()
     {
+        if (mainCam == null)
+        {
+            mainCam = Camera.main;
+        }
         Vector3 _pos = mainCam.transform.position;
         _pos.z = 0;
-        return mainCam.transform.position;
+        
+        return _pos;
     }
 
     public void VFXCompleted()
