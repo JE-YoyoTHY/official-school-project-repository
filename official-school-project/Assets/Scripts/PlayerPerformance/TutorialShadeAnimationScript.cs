@@ -15,10 +15,10 @@ public class TutorialShadeAnimationScript : MonoBehaviour
     #region States
     // states,
     public string currentState;
-    public string STATE_IDLE { get; private set; } = "PlayerIdle";
-    public string STATE_RUN { get; private set; } = "PlayerRun";
-    public string STATE_JUMP { get; private set; } = "PlayerJump";
-    public string STATE_FALL { get; private set; } = "PlayerFall";
+    public string STATE_IDLE { get; private set; } = "TutorIdle";
+    public string STATE_RUN { get; private set; } = "TutorRun";
+    public string STATE_JUMP { get; private set; } = "TutorJump";
+    public string STATE_FALL { get; private set; } = "TutorFall";
     public string STATE_FALL_RIGHT { get; private set; } = "PlayerFallRight";
     public string STATE_FALL_LEFT { get; private set; } = "PlayerFallLeft";
     public string STATE_LAND { get; private set; } = "PlayerLand";
@@ -27,7 +27,7 @@ public class TutorialShadeAnimationScript : MonoBehaviour
 
     private List<string> availableAnims = new List<string>()
     {
-        "PlayerRun", "PlayerIdle", "PlayerJump", "PlayerFall", "PlayerFallRight", "PlayerFallLeft", "PlayerLand"
+        "TutorRun", "TutorIdle", "TutorJump", "TutorFall", "PlayerFallRight", "PlayerFallLeft", "PlayerLand"
     };
     #endregion
 
@@ -96,7 +96,7 @@ public class TutorialShadeAnimationScript : MonoBehaviour
         }
         if (stateCondition["fall"])
         {
-            if (currentVelocity.y <= -15)
+            /*if (currentVelocity.y <= -15)
             {
                 if (currentVelocity.x <= -0.5f)
                 {
@@ -109,8 +109,8 @@ public class TutorialShadeAnimationScript : MonoBehaviour
                     changeState(STATE_FALL_RIGHT);
                 }
 
-                else changeState(STATE_FALL);
-            }
+                }*/
+            changeState(STATE_FALL);
         }
 
 
@@ -178,7 +178,7 @@ public class TutorialShadeAnimationScript : MonoBehaviour
 
         stateCondition = new Dictionary<string, bool>
         {
-            {"run",  Mathf.Abs(currentVelocity.x) > 0.05f /*&& playerGroundTriggerScript.isGrounded == true*/},//{"run",  playerControlScript.isMoving == true && playerGroundTriggerScript.isGrounded == true}¥H«eªºrun§P§O¦¡
+            {"run",  Mathf.Abs(currentVelocity.x) > 0.05f /*&& playerGroundTriggerScript.isGrounded == true*/},//{"run",  playerControlScript.isMoving == true && playerGroundTriggerScript.isGrounded == true}ï¿½Hï¿½eï¿½ï¿½runï¿½Pï¿½Oï¿½ï¿½
             {"jump", followingShade.isJumping == true},
             {"fall", currentVelocity.y <= -0.0001f/* && playerGroundTriggerScript.isGrounded == false*/},
             //{"land", getLandVelocity() != Vector2.zero && Mathf.Abs(getLandVelocity().y) <= hardLandMinVy},
