@@ -43,6 +43,11 @@ public class SoundDataBase : ScriptableObject
     [SerializeField] private List<AudioClip> ambientSoundClipList;
     public Dictionary<AmbientSoundType, AudioClip> ambientSoundClipDict = new Dictionary<AmbientSoundType, AudioClip>();
 
+    public float musicVolume;
+    public float sfxVolume;
+    public float ambientSoundVolume;
+    public float cameraShakeDegree;
+
 
 
     private void _initDict()

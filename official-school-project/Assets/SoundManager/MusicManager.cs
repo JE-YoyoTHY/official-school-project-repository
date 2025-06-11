@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(AudioSource))]
 public class MusicManager : MonoBehaviour
@@ -9,12 +10,16 @@ public class MusicManager : MonoBehaviour
     private static MusicManager instance;
     [SerializeField] private SoundDataBase soundData;
     [SerializeField] private AudioSource audioSource;
+    [SerializeField] private Slider _slider;
+
 
 
     private void Awake()
     {
         instance = this;
         audioSource = GetComponent<AudioSource>();
+        sliderVolumeChanged();
+
 
     }
     void Start()
@@ -69,5 +74,20 @@ public class MusicManager : MonoBehaviour
             }
         }
         return SoundDataBase.MusicType._NULL;
+    }
+
+    public static void sliderVolumeChanged()
+    {
+        print("value changed");
+        float newValue = instance.audioSource.volume;
+        print(newValue);
+
+        instance.soundData.musicVolume = newValue;
+
+    }
+
+    public static void setSliderValue(float _value)
+    {
+        instance._slider.value = _value;
     }
 }
