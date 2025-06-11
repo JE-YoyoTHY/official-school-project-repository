@@ -153,6 +153,14 @@ public class PlayerAnims : MonoBehaviour
             changeState(STATE_IDLE);
         }
 
+        if (PlayerPerformanceSystemScript.instance.isBeingControl && PlayerPerformanceSystemScript.instance.currentController != null)
+        {
+            if(PlayerPerformanceSystemScript.instance.currentController.performanceTriggerInspectorObject.action == PerformanceAction.waitForInput && !playerGroundTriggerScript.isGrounded)
+            {
+                changeState(STATE_FALL);
+            }
+        }
+
     }
 
     public void flipPlayerSprite(sbyte facingDir)
