@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(AudioSource))]
 public class AmbientSoundManager: MonoBehaviour
@@ -11,6 +12,8 @@ public class AmbientSoundManager: MonoBehaviour
     [SerializeField] private SoundDataBase soundData;
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private List<GameObject> tempGameObjs;
+    [SerializeField] private Slider _slider;
+
 
 
     private void Awake()
@@ -18,6 +21,7 @@ public class AmbientSoundManager: MonoBehaviour
         instance = this;
         audioSource = GetComponent<AudioSource>();
         previousVolume = audioSource.volume;
+        sliderVolumeChanged();
     }
     void Start()
     {
@@ -107,11 +111,16 @@ public class AmbientSoundManager: MonoBehaviour
             float finalVolume = instance.audioSource.volume;
             obj.GetComponent<AudioSource>().volume = finalVolume;
         }
-
+        instance.GetComponent<AudioSource>().volume = newValue;
+        instance.soundData.ambientSoundVolume = newValue;
         previousVolume = newValue;
 
     }
 
+    public static void setSliderValue(float _value)
+    {
+        instance._slider.value = _value;
+    }
 
 
 
