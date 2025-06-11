@@ -253,7 +253,7 @@ public class PlayerControlScript : MonoBehaviour
     void Update()
     {
 		inputMain();
-		if (!LogicScript.instance.isFreeze() && !isDying)
+		if (!LogicScript.instance.isFreeze())
 		{
 			groundHitCheckMain();
 			//myGravityMain();
