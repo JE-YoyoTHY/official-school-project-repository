@@ -59,10 +59,10 @@ public class UISliderManager : MonoBehaviour, IBeginDragHandler, IEndDragHandler
 
         if (percentageDisplay != null)
         {
+            // TO DO this func won't execute
             percentageText = percentageDisplay.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
             percentageDisplay.SetActive(false);
         }
-        changeSliderValue(0.5f);
     }
     void Start()
     {
@@ -94,8 +94,15 @@ public class UISliderManager : MonoBehaviour, IBeginDragHandler, IEndDragHandler
             float sliderValue = gameObject.GetComponent<Slider>().value;
             float sliderPercentage = sliderValue * 100;
             sliderPercentage = Mathf.Floor(sliderPercentage);
-            
-            percentageText.text = sliderPercentage + "%".ToString();
+            print($"slider percentage {sliderPercentage}");
+            if (percentageText == null)
+            {
+                print("percentageText is null");
+            }
+            if (percentageText.text == null) print("this text is null");
+            print($"percentage's text {percentageText.text}");
+
+            percentageText.text = sliderPercentage.ToString() + "%";
         }
     }
 

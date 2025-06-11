@@ -9,6 +9,7 @@ using UnityEngine.SceneManagement;
 
 
 
+
 public class LevelManagerScript : MonoBehaviour
 {
 	//reference
@@ -76,7 +77,8 @@ public class LevelManagerScript : MonoBehaviour
 		if(levelNumber.x == 1 && levelNumber.y == 1)
 		{
 			testThisLevel(false);
-            //PlayerControlScript.instance.fireballPlayerGetAbility(false);
+			//PlayerControlScript.instance.fireballPlayerGetAbility(false);
+
         }
 	}
 

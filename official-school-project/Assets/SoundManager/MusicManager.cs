@@ -18,7 +18,6 @@ public class MusicManager : MonoBehaviour
     {
         instance = this;
         audioSource = GetComponent<AudioSource>();
-        sliderVolumeChanged();
 
 
     }
@@ -88,6 +87,7 @@ public class MusicManager : MonoBehaviour
 
     public static void setSliderValue(float _value)
     {
+        if (instance._slider == null) print("slider is null");
         instance._slider.value = _value;
     }
 }

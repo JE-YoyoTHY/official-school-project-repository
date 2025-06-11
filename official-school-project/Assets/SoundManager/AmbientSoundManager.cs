@@ -21,7 +21,7 @@ public class AmbientSoundManager: MonoBehaviour
         instance = this;
         audioSource = GetComponent<AudioSource>();
         previousVolume = audioSource.volume;
-        sliderVolumeChanged();
+        //sliderVolumeChanged();
     }
     void Start()
     {
