@@ -35,10 +35,14 @@ public class PlayerGroundTriggerScript : MonoBehaviour
     {
         if (collision.gameObject.layer == groundLayer && isGrounded == false)
 		{
-			print("land sfx");
-            SFXManager.playSFXOneShot(SoundDataBase.SFXType.Land, 0.35f);
-			PlayerLandEvent.Invoke();
-			print(collision.gameObject.name);
+			//print("land sfx");
+			if (!PlayerControlScript.instance.isDying)
+			{
+				SFXManager.playSFXOneShot(SoundDataBase.SFXType.Land, 0.35f);
+				PlayerLandEvent.Invoke();
+			}
+
+			//print(collision.gameObject.name);
         }
     }
     private void OnTriggerStay2D(Collider2D collision)

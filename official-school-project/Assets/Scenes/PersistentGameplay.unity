@@ -11664,7 +11664,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1611867108464218590, guid: e386ded94a5a38145993d65b89342b47, type: 3}
       propertyPath: closeHoleFinished.m_PersistentCalls.m_Calls.Array.size
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1611867108464218590, guid: e386ded94a5a38145993d65b89342b47, type: 3}
       propertyPath: openHoleFinished.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
