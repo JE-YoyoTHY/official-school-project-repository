@@ -31,6 +31,9 @@ public class PlayerFireballCountIndicatorScript : MonoBehaviour
     private bool patternChanged = false;
     private int currentPattern = 0;
 
+    [Header("Display")]
+    [SerializeField] private GameObject indicatorSprite;
+
 
     // Start is called before the first frame update
     void Start()
@@ -44,6 +47,9 @@ public class PlayerFireballCountIndicatorScript : MonoBehaviour
         if (!LogicScript.instance.isFreeze())
         {
             rotateMain();
+
+            indicatorSprite.transform.position = (Vector2)transform.GetChild(0).position;
+            
         }
 
         transform.position = PlayerControlScript.instance.transform.position;
@@ -96,15 +102,18 @@ public class PlayerFireballCountIndicatorScript : MonoBehaviour
     private void setSpriteLayer(int layer)
     {
         //child 0 is the rotating object
-        GameObject child = transform.GetChild(0).gameObject;
-        child.GetComponent<SpriteRenderer>().sortingOrder = layer;
-        child.GetComponent<TrailRenderer>().sortingOrder = layer;
+        //GameObject child = transform.GetChild(0).gameObject;
+        //child.GetComponent<SpriteRenderer>().sortingOrder = layer;
+        //child.GetComponent<TrailRenderer>().sortingOrder = layer;
+
+        indicatorSprite.GetComponent<SpriteRenderer>().sortingOrder = layer;
     }
 
     public void setIndicatorActiveState(bool state)
     {
-        transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = state;
-        transform.GetChild(0).GetComponent<TrailRenderer>().enabled = state;
-        transform.GetChild(0).GetComponent<Light2D>().enabled = state;
+        //transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = state;
+        //transform.GetChild(0).GetComponent<TrailRenderer>().enabled = state;
+        //transform.GetChild(0).GetComponent<Light2D>().enabled = state;
+        indicatorSprite.SetActive(state);
     }
 }
