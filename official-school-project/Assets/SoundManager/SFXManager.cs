@@ -16,7 +16,7 @@ public class SFXManager : MonoBehaviour
     {        
         instance = this;
         audioSource = GetComponent<AudioSource>();
-        sliderVolumeChanged();
+
 
     }
     void Start()

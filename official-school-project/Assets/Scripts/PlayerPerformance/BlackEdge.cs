@@ -11,7 +11,7 @@ public class BlackEdge : MonoBehaviour
     private RectTransform rect;
 
     private float outerOffsetY = 0;
-    private float innerOffsetY = 135;
+    [SerializeField] private float innerOffsetY = 135;
 
     [SerializeField] private float slideDuration = 0.5f;
     private float currentOffsetY;
@@ -39,16 +39,16 @@ public class BlackEdge : MonoBehaviour
 
     public void StartSlideIn()
     {
-        size = Camera.main.GetComponent<Camera>().orthographicSize;
+        //size = Camera.main.GetComponent<Camera>().orthographicSize;
         StopAllCoroutines();
-        StartCoroutine(SlideTo(innerOffsetY/10* size* (edgeType == EdgeType.Top ? 1 : -1)));
+        StartCoroutine(SlideTo(innerOffsetY * (edgeType == EdgeType.Top ? 1 : -1)));
     }
 
     public void StartSlideOut()
     {
-        size = Camera.main.GetComponent<Camera>().orthographicSize;
+        //size = Camera.main.GetComponent<Camera>().orthographicSize;
         StopAllCoroutines();
-        StartCoroutine(SlideTo(outerOffsetY/10*size * (edgeType == EdgeType.Top ? 1 : -1)));
+        StartCoroutine(SlideTo(outerOffsetY * (edgeType == EdgeType.Top ? 1 : -1)));
     }
 
     private IEnumerator SlideTo(float targetOffsetY)

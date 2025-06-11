@@ -28,11 +28,19 @@ public class StudioPresent : MonoBehaviour
 
     public void appear()
     {
-        gameObject.GetComponent<Image>().DOFade(1, duration);
-        gameObject.GetComponent<Image>().raycastTarget = true;
+        if (gameObject.GetComponent<Image>() != null)
+        {
+            gameObject.GetComponent<Image>().DOFade(1, duration);
+            gameObject.GetComponent<Image>().raycastTarget = true;
+        }
         foreach (GameObject _obj in GameObjectMethods.GetAllChildren(gameObject))
         {
-            _obj.GetComponent<Image>().DOFade(1, duration);
+            if (_obj.GetComponent<Image>() != null)
+            {
+                _obj.GetComponent<Image>().DOFade(1, duration);
+                _obj.GetComponent<Image>().raycastTarget = true;
+            }
+
             if (_obj.GetComponent<TextMeshProUGUI>())
             {
                 _obj.GetComponent<TextMeshProUGUI>().DOFade(1, duration);
@@ -42,11 +50,20 @@ public class StudioPresent : MonoBehaviour
 
     public void disappear()
     {
-        gameObject.GetComponent<Image>().DOFade(0, duration);
-        gameObject.GetComponent<Image>().raycastTarget = false;
+        if (gameObject.GetComponent<Image>() != null)
+        {
+            gameObject.GetComponent<Image>().DOFade(0, duration);
+            gameObject.GetComponent<Image>().raycastTarget = false;
+        }
+
         foreach (GameObject _obj in GameObjectMethods.GetAllChildren(gameObject))
         {
-            _obj.GetComponent<Image>().DOFade(0, duration);
+            if (_obj.GetComponent<Image>() != null)
+            {
+                _obj.GetComponent<Image>().DOFade(0, duration);
+                _obj.GetComponent<Image>().raycastTarget = false;
+            }
+
             if (_obj.GetComponent<TextMeshProUGUI>())
             {
                 _obj.GetComponent<TextMeshProUGUI>().DOFade(0, duration);
