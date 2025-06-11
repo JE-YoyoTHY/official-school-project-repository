@@ -110,6 +110,7 @@ public class TutorialFireballScript : MonoBehaviour
 		coll.isTrigger = true;
 
         animator.Play("Explode");
+		transform.rotation = Quaternion.identity;
 
     }
 
