@@ -150,7 +150,9 @@ public class ComicPageScript : MonoBehaviour
 
             for (int i = 0; i < comicImages.Length; i++)
             {
-                comicImages[i].GetComponent<Image>().color = color;
+                Color color1 = comicImages[i].GetComponent<Image>().color;
+                color1.a = color.a;
+                comicImages[i].GetComponent<Image>().color = color1;
             }
 
 
@@ -163,7 +165,9 @@ public class ComicPageScript : MonoBehaviour
 
         for (int i = 0; i < comicImages.Length; i++)
         {
-            comicImages[i].GetComponent<Image>().color = color;
+            Color color1 = comicImages[i].GetComponent<Image>().color;
+            color1.a = color.a;
+            comicImages[i].GetComponent<Image>().color = color1;
         }
 
         gameObject.SetActive(false);

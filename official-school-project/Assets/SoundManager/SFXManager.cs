@@ -30,7 +30,7 @@ public class SFXManager : MonoBehaviour
         
     }
 
-    public static void playSFXOneShot(SoundDataBase.SFXType sfxType, float _volume = 1.0f)
+    public static void playSFXOneShot(SoundDataBase.SFXType sfxType, float _volume = 0.4f)
     {
         instance.audioSource.PlayOneShot(instance.soundData.SFXClipDict[sfxType], _volume);
     }
