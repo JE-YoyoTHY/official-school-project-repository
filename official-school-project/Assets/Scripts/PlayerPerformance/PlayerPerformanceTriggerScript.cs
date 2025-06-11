@@ -7,6 +7,7 @@ using static UnityEngine.RuleTile.TilingRuleOutput;
 using Unity.VisualScripting;
 using Cinemachine;
 using JetBrains.Annotations;
+using static InstructionUI;
 
 //[ExecuteInEditMode]
 public class PlayerPerformanceTriggerScript : MonoBehaviour
@@ -16,6 +17,9 @@ public class PlayerPerformanceTriggerScript : MonoBehaviour
 
 	private Rigidbody2D playerRB;
 	private CinemachineImpulseSource impulseSource;
+	[SerializeField] private ActionsEnum fireballOneKey;
+    [SerializeField] private InstructionUI.ActionsEnum fireballTwoKey1;
+	[SerializeField] private InstructionUI.ActionsEnum fireballTwoKey2;
 
 	public sbyte moveDir { get; private set; }
 
@@ -113,9 +117,35 @@ public class PlayerPerformanceTriggerScript : MonoBehaviour
 	}
 
     #region Instruction UI
+
+	public void setFireballTwoKeyFirst(int actionEnumInt1)
+    {
+		fireballTwoKey1 = (InstructionUI.ActionsEnum)actionEnumInt1;
+    }
+	public void setFireballTwoKeySecond(int actionEnumInt2)
+	{
+        fireballTwoKey2 = (InstructionUI.ActionsEnum)actionEnumInt2;
+    }
+    public void changeInstructionFireballTwoKey()
+    {
+        GameObject instructionUI = InstructionUIManager.instance.availableInstructionsUIObj[InstructionUI.InstructionTypeEnum.ShootFireball_TwoKey];
+		print($"fireballtwokey1{fireballTwoKey1}");
+		print($"fireballtwokey2{fireballTwoKey2}");
+        instructionUI.gameObject.GetComponent<InstructionUI>().changeAction_ShootFireball_TwoKey(fireballTwoKey1, fireballTwoKey2);
+    }
+
+    public void changeInstructionFireballOneKey()
+    {
+        GameObject instructionUI = InstructionUIManager.instance.availableInstructionsUIObj[InstructionUI.InstructionTypeEnum.ShootFireball_OneKey];
+        instructionUI.gameObject.GetComponent<InstructionUI>().changeAction_ShootFireball_OneKey(fireballOneKey);
+
+    }
+
     public void showInstructionUIFromPerformanceTrigger(int instructionTypeInt)
     {
 		InstructionUI.InstructionTypeEnum instructionType = (InstructionUI.InstructionTypeEnum)instructionTypeInt;
+		changeInstructionFireballOneKey();
+		changeInstructionFireballTwoKey();
         InstructionUIManager.instance.showInstructionUI(instructionType);
     }
 

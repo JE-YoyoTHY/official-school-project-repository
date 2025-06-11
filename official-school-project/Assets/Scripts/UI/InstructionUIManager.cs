@@ -13,7 +13,7 @@ public class InstructionUIManager : MonoBehaviour
 {
     public static InstructionUIManager instance;
     [SerializeField] private List<GameObject> instructionUIList = new List<GameObject>();  // 用於在Inspector拖曳進去
-    private Dictionary<InstructionTypeEnum, GameObject> availableInstructionsUIObj = new Dictionary<InstructionTypeEnum, GameObject>();
+    public Dictionary<InstructionTypeEnum, GameObject> availableInstructionsUIObj = new Dictionary<InstructionTypeEnum, GameObject>();
     [SerializeField] public GameObject currentInstructionUIObj = null;
 
     [SerializeField] private float maskGrowDuration = 1.5f;
