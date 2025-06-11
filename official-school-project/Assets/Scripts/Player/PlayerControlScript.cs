@@ -9,6 +9,7 @@ using static Unity.Burst.Intrinsics.X86;
 
 public class PlayerControlScript : MonoBehaviour
 {
+	[SerializeField] private SoundDataBase soundData;
 
 	#region singleton
 
@@ -1006,7 +1007,7 @@ public class PlayerControlScript : MonoBehaviour
 		CinemachineImpulseSource impulseSource = GetComponent<CinemachineImpulseSource>();
 
 		impulseSource.m_DefaultVelocity = fireballDir;
-		impulseSource.GenerateImpulseWithForce(fireballPushScreenShakeForce);
+		impulseSource.GenerateImpulseWithForce(fireballPushScreenShakeForce * soundData.cameraShakeDegree);
 
 		//fall particle
 		currentMaxFallSpeedInAir = 0;

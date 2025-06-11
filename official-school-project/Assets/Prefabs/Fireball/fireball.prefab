@@ -5175,6 +5175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8537a5a824c26514c8416a2889d3aaca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  soundData: {fileID: 11400000, guid: 62d2e7e8368208a4fb376848af1fed28, type: 2}
   triggerOnLeft: {fileID: 209643069965685381}
   triggerOnRight: {fileID: 3887909984042735184}
   normalMoveSpeed: 40

@@ -5,6 +5,7 @@ using Cinemachine;
 
 public class CameraShakeManagerScript : MonoBehaviour
 {
+	[SerializeField] private SoundDataBase soundData;
 	//singleton
 	public static CameraShakeManagerScript instance {  get; private set; }
 
@@ -32,7 +33,7 @@ public class CameraShakeManagerScript : MonoBehaviour
 	{
 		setupScreenShakeSettings(profile, impulseSource);
 
-		impulseSource.GenerateImpulseWithForce(profile.impulseForce);
+		impulseSource.GenerateImpulseWithForce(profile.impulseForce * soundData.cameraShakeDegree);
 	}
 
 	public void cameraShakeWithProfileWithRandomDirection(ScreenShakeProfile profile, CinemachineImpulseSource impulseSource)
@@ -43,7 +44,7 @@ public class CameraShakeManagerScript : MonoBehaviour
 		Vector2 randomDirection = new Vector2(Random.Range(-1.0f, 1f), Random.Range(-1.0f, 1f));
 		impulseSource.m_DefaultVelocity = randomDirection;
 
-		impulseSource.GenerateImpulseWithForce(profile.impulseForce);
+		impulseSource.GenerateImpulseWithForce(profile.impulseForce * soundData.cameraShakeDegree);
 	}
 
 	public void cameraShakeWithProfileWithGivenDirection(ScreenShakeProfile profile, CinemachineImpulseSource impulseSource, Vector2 defualtVelocity)
@@ -53,7 +54,7 @@ public class CameraShakeManagerScript : MonoBehaviour
 		//random
 		impulseSource.m_DefaultVelocity = defualtVelocity;
 
-		impulseSource.GenerateImpulseWithForce(profile.impulseForce);
+		impulseSource.GenerateImpulseWithForce(profile.impulseForce * soundData.cameraShakeDegree);
 	}
 
 	private void setupScreenShakeSettings(ScreenShakeProfile profile, CinemachineImpulseSource impulseSource)

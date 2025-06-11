@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class FireballScript : MonoBehaviour
 {
+	[SerializeField] private SoundDataBase soundData;
 	[Header("Collision")]
 	[SerializeField] private FireballTriggerScript triggerOnLeft;
 	[SerializeField] private FireballTriggerScript triggerOnRight;
@@ -216,7 +217,7 @@ public class FireballScript : MonoBehaviour
 		CinemachineImpulseSource impulseSource = GetComponent<CinemachineImpulseSource>();
 
 		impulseSource.m_DefaultVelocity = pushDir;
-		impulseSource.GenerateImpulseWithForce(impulseForce);
+		impulseSource.GenerateImpulseWithForce(impulseForce * soundData.cameraShakeDegree);
 	}
 
 	IEnumerator destroyCoroutine(float t)

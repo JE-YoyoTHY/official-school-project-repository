@@ -63,6 +63,7 @@ public class UISliderManager : MonoBehaviour, IBeginDragHandler, IEndDragHandler
             percentageText = percentageDisplay.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
             percentageDisplay.SetActive(false);
         }
+        changePercentageDisplay();
     }
     void Start()
     {

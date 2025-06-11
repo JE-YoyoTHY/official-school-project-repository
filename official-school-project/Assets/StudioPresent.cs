@@ -11,19 +11,12 @@ public class StudioPresent : MonoBehaviour
     [SerializeField] private Ease _ease;
     void Start()
     {
-        
+        StartCoroutine(delayAndDisappear());
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            appear();
-        }
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            disappear();
-        }
+
     }
 
     public void appear()
@@ -69,6 +62,12 @@ public class StudioPresent : MonoBehaviour
                 _obj.GetComponent<TextMeshProUGUI>().DOFade(0, duration);
             }
         }
+    }
+
+    IEnumerator delayAndDisappear()
+    {
+        yield return new WaitForSeconds(3);
+        disappear();
     }
 
 }

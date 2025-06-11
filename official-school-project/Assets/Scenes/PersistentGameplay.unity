@@ -151,6 +151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02bcbaebc9771234e8e162639cc71336, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  soundData: {fileID: 11400000, guid: 62d2e7e8368208a4fb376848af1fed28, type: 2}
 --- !u!4 &11238043
 Transform:
   m_ObjectHideFlags: 0
@@ -427,11 +428,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1549583612069711395, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1549583612069711395, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1886111046103616762, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_Name
@@ -439,15 +440,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2128577423494707373, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2128577423494707373, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2128577423494707373, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3528865267409666377, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: sfxAudioSource
@@ -1401,6 +1402,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf0671b9dcc35e243badc3f7c0343a7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  soundData: {fileID: 11400000, guid: 62d2e7e8368208a4fb376848af1fed28, type: 2}
   myNormalGravityScale: 80
   myNormalGravityMaxSpeed: 22
   myNormalFrictionAcceleration: 100
@@ -5339,11 +5341,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1549583612069711395, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1549583612069711395, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1886111046103616762, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_Name
@@ -5351,15 +5353,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2128577423494707373, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2128577423494707373, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2128577423494707373, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3528865267409666377, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: sfxAudioSource
@@ -8352,11 +8354,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1549583612069711395, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1549583612069711395, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1886111046103616762, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_Name
@@ -8364,15 +8366,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2128577423494707373, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2128577423494707373, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2128577423494707373, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3528865267409666377, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: sfxAudioSource
@@ -10077,7 +10079,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1452433708
 Transform:
   m_ObjectHideFlags: 0
@@ -14765,11 +14767,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1549583612069711395, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1549583612069711395, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1886111046103616762, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_Name
@@ -14777,15 +14779,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2128577423494707373, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2128577423494707373, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2128577423494707373, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3528865267409666377, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: sfxAudioSource
@@ -14886,6 +14888,14 @@ PrefabInstance:
     - target: {fileID: 4767697916206179385, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8000234154733903381, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
+      propertyPath: m_Value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8000234154733903381, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
+      propertyPath: m_MaxValue
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8000234154733903381, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_Navigation.m_Mode
