@@ -81,6 +81,7 @@ public class BossLightningInstanceScript : MonoBehaviour
         gameObject.layer = killZoneLayer;
         GetComponent<Collider2D>().enabled = true;
 
+        if (thunderInstance != null) Destroy(thunderInstance);
         thunderInstance = Instantiate(thunderSprite, transform.position, Quaternion.identity);
         SpriteRenderer thunderSpriteRenderer = thunderInstance.GetComponent<SpriteRenderer>();
         thunderSpriteRenderer.size = transform.localScale / thunderSprite.transform.localScale.x;

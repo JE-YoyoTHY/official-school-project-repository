@@ -21,11 +21,16 @@ public class PlayerPerformanceTriggerScript : MonoBehaviour
 	private void Start()
 	{
 		//playerRB = PlayerControlScript.instance.GetComponent<Rigidbody2D>();
-		//impulseSource = GetComponent<CinemachineImpulseSource>();
+		impulseSource = GetComponent<CinemachineImpulseSource>();
 	}
 
-	// Update is called once per frame
-	void OnDrawGizmos()
+    private void Awake()
+    {
+        impulseSource = GetComponent<CinemachineImpulseSource>();
+    }
+
+    // Update is called once per frame
+    void OnDrawGizmos()
     {
         if(performanceTriggerInspectorObject.action == PerformanceAction.move)
 		{
@@ -213,7 +218,8 @@ public class PlayerPerformanceTriggerScript : MonoBehaviour
 
 	public void screenShake()
 	{
-		CameraShakeManagerScript.instance.cameraShakeWithProfileWithRandomDirection(performanceTriggerInspectorObject.screenShakeProfile, impulseSource);
+        impulseSource = GetComponent<CinemachineImpulseSource>();
+        CameraShakeManagerScript.instance.cameraShakeWithProfileWithRandomDirection(performanceTriggerInspectorObject.screenShakeProfile, impulseSource);
 	}
 
 	public void performanceTileDestroy(string name)

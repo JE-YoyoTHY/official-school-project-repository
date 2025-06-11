@@ -253,7 +253,7 @@ public class PlayerControlScript : MonoBehaviour
     void Update()
     {
 		inputMain();
-		if (!LogicScript.instance.isFreeze())
+		if (!LogicScript.instance.isFreeze() && !isDying)
 		{
 			groundHitCheckMain();
 			//myGravityMain();
@@ -274,7 +274,7 @@ public class PlayerControlScript : MonoBehaviour
 	//gravity use fixed update can make jump height more constant
 	private void FixedUpdate()
 	{
-		if (!LogicScript.instance.isFreeze())
+		if (!LogicScript.instance.isFreeze() && !isDying)
 		{
 			myFrictionMain();
 			myGravityMain();
@@ -1466,10 +1466,14 @@ public class PlayerControlScript : MonoBehaviour
 	public void playerRespawn()
 	{
 		deathRespawnDelayCoroutine = null;
-        if (deathRespawnPlayerControlRegainCoroutine != null) StopCoroutine(deathRespawnPlayerControlRegainCoroutine);
-		deathRespawnPlayerControlRegainCoroutine = StartCoroutine(playerRespawnControlRegain());
+  //      if (deathRespawnPlayerControlRegainCoroutine != null) StopCoroutine(deathRespawnPlayerControlRegainCoroutine);
+		//deathRespawnPlayerControlRegainCoroutine = StartCoroutine(playerRespawnControlRegain());
 
         //PlayerAnims.instance.GetComponent<SpriteRenderer>().enabled = true;
+
+		//newer version
+        isFrictionActive = true; isMoveActive = true; isJumpActive = true; isFireballActive = true;
+        isDying = false; //currently is only to prevent getting wrong camera if player dies in swap trigger
     }
 
 	//call when player touch killzone, the actual death start

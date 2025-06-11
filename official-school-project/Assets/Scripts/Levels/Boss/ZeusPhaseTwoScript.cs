@@ -70,12 +70,16 @@ public class ZeusPhaseTwoScript : MonoBehaviour
             if (isAttackActive)
             {
                 attackMain();
+                
             }
+            //print("is attack active : " + isAttackActive);
         }
     }
 
     private void attackMain()
     {
+        //print("Is fighting" + isFighting);
+        
         if (isFighting)
         {
             if (currentDataIndex < attackProfiles[currentProfileIndex].fightDatas.Length)

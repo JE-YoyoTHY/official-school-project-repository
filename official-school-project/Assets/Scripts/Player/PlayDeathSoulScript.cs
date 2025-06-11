@@ -129,6 +129,7 @@ public class PlayDeathSoulScript : MonoBehaviour
         if (moveTimeCounter < 0)
         {
             moveEnd();
+            PlayerControlScript.instance.playerRespawn();
         }
     }
 }
