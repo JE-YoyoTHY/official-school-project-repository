@@ -637,7 +637,7 @@ public class TutorialShadeScript : MonoBehaviour
 
 
 		/* extra push up force for horizontal only
-		 * and because of this, jump will be disabled while explode duration
+		 * and because of this, jump will be disabled while explode _duration
 		 */
 		bool addPushUpForce = (localVelocity.y >= Mathf.Sin(0 - PlayerControlScript.instance.m_fireballExplodeExtraPushUpAngle * Mathf.Deg2Rad) && localVelocity.y <= Mathf.Sin(PlayerControlScript.instance.m_fireballExplodeExtraPushUpAngle * Mathf.Deg2Rad)) ? true : false;
 
@@ -684,7 +684,7 @@ public class TutorialShadeScript : MonoBehaviour
 		mySetFriction(PlayerControlScript.instance.m_fireballExplodeFriction, PlayerControlScript.instance.m_fireballExplodeAdjustFriction);
 
 
-		//coroutine phase 3 -> wait until duration end
+		//coroutine phase 3 -> wait until _duration end
 		float t = PlayerControlScript.instance.m_fireballExplodeDuration;
 		while (t > 0)
 		{

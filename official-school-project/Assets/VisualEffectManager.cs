@@ -16,7 +16,10 @@ public class VisualEffectManager : MonoBehaviour
     [SerializeField] private VFXType currentVFXType;
     [SerializeField] private Volume m_volume;
     [SerializeField] private Vector3 margin;
-    [SerializeField] private float duration;
+    [SerializeField] private float _duration;
+    [SerializeField] private Ease _ease;
+
+    private Tweener currentTweener;
 
     // Start is called before the first frame update
     private void Awake()
@@ -28,6 +31,10 @@ public class VisualEffectManager : MonoBehaviour
         else 
         {
             m_volume.enabled = false;
+        }
+        if (mainCam == null)
+        {
+            mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         }
     }
     void Start()
@@ -46,15 +53,26 @@ public class VisualEffectManager : MonoBehaviour
 
     public void applyVFX()
     {
+        forceEndTween();
         m_volume.enabled = true;
         if (currentVFXType == VFXType.ThunderBloom)
         {
             Vector3 marginFront = getMainCameraPositionXY() + margin;
             Vector3 marginBack = getMainCameraPositionXY() - margin;
             gameObject.transform.position = marginFront;
-            gameObject.transform.DOMove(marginBack, duration);
+            currentTweener = gameObject.transform.DOMove(marginBack, _duration)
+                .SetEase(_ease);
+            currentTweener.onComplete = VFXCompleted;
         }
 
+    }
+
+    public void forceEndTween()
+    {
+        if (currentTweener != null)
+        {
+            currentTweener.Kill();
+        }
     }
 
     public Vector3 getMainCameraPositionXY()
@@ -64,5 +82,12 @@ public class VisualEffectManager : MonoBehaviour
         return mainCam.transform.position;
     }
 
-
+    public void VFXCompleted()
+    {
+        if (currentTweener != null)
+        {
+            currentTweener.Kill();
+        }
+        m_volume.enabled = false;
+    }
 }

@@ -1060,7 +1060,7 @@ public class PlayerControlScript : MonoBehaviour
 			}
 
 			/* extra push up force for horizontal only
-			 * and because of this, jump will be disabled while explode duration
+			 * and because of this, jump will be disabled while explode _duration
 			 */
 			bool addPushUpForce = (localVelocity.y >= Mathf.Sin(0 - fireballExplodeExtraPushUpAngle * Mathf.Deg2Rad) && localVelocity.y <= Mathf.Sin(fireballExplodeExtraPushUpAngle * Mathf.Deg2Rad)) ? true : false;
 
@@ -1114,7 +1114,7 @@ public class PlayerControlScript : MonoBehaviour
 			if (localVelocity.y > 0) leaveGround(false); // for cancel coyote time
 
 
-		//coroutine phase 3 -> wait until duration end
+		//coroutine phase 3 -> wait until _duration end
 			float t = fireballExplodeDuration;
 			while(t > 0)
 			{
@@ -1569,7 +1569,7 @@ public class PlayerControlScript : MonoBehaviour
 		fireballChargeGain(3);
 		//transform.position = localPos;
 
-		//hang time, maybe i need its own hang time duration
+		//hang time, maybe i need its own hang time _duration
 		/*mySetGravity(0, myGravityMaxSpeed);
 		if (localForce.x > 0) fireballHangTimeMoveBoostDir = 1;
 		else if (localForce.x < 0) fireballHangTimeMoveBoostDir = -1;
