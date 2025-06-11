@@ -40,6 +40,7 @@ public class LogicScript : MonoBehaviour
 	//private List<AsyncOperation> sceneToLoad = new List<AsyncOperation>();
 	public List<SceneField> scenesCanLoad;
 	private SceneField lastSceneLoaded;
+	//[SerializeField] private SceneField mainMenu;
 
 	[SerializeField] private GameObject settingTab;
 
@@ -174,26 +175,9 @@ public class LogicScript : MonoBehaviour
 			if (breakableGround.m_tileName == name) breakableGround.groundBreak();
 		}
 	}
-	#endregion
+    #endregion
 
-
-	public void tutorialShadeFreezeTime(TutorialShadeScript shade)
-	{
-		//GameObject[] shades = GameObject.FindGameObjectsWithTag("TutorialShade");
-		//foreach (GameObject shade in shades)
-		//{
-		//	freezeEndEvent.AddListener(shade.GetComponent<TutorialShadeScript>().freezeEnd);
-		//}
-
-		tutorialShades.Add(shade);
-		freezeEndEvent.AddListener(shade.freezeEnd);
-	}
-
-	public void setGlobalLightIntensity(float intensity)
-	{
-		globalLight.intensity = intensity;
-	}
-
+    #region scene
 
 	public void myLoadScene(SceneField scene)
 	{
@@ -218,6 +202,37 @@ public class LogicScript : MonoBehaviour
         //sceneToLoad.Add(SceneManager.LoadSceneAsync(scene, LoadSceneMode.Additive));
 
     }
+
+	public void backToMainMenu()
+	{
+		SceneManager.LoadSceneAsync(mainMenu);
+	}
+
+    #endregion
+    
+	
+	
+	public void tutorialShadeFreezeTime(TutorialShadeScript shade)
+	{
+		//GameObject[] shades = GameObject.FindGameObjectsWithTag("TutorialShade");
+		//foreach (GameObject shade in shades)
+		//{
+		//	freezeEndEvent.AddListener(shade.GetComponent<TutorialShadeScript>().freezeEnd);
+		//}
+
+		tutorialShades.Add(shade);
+		freezeEndEvent.AddListener(shade.freezeEnd);
+	}
+
+	public void setGlobalLightIntensity(float intensity)
+	{
+		globalLight.intensity = intensity;
+	}
+
+
+	
+
+
 	
 
 	public void comicStart(string id)
