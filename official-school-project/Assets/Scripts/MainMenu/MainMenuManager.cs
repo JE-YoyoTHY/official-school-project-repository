@@ -43,8 +43,8 @@ public class MainMenuManager : MonoBehaviour
     private void Start()
     {
 		settingTab.SetActive(false);
-        AmbientSoundManager.playAmbientSoundLoop(SoundDataBase.AmbientSoundType.Frog);
-        AmbientSoundManager.playAmbientSoundLoop(SoundDataBase.AmbientSoundType.Cicada);
+        AmbientSoundManager.playAmbientSoundLoop(SoundDataBase.AmbientSoundType.Frog, 0.5f);
+        AmbientSoundManager.playAmbientSoundLoop(SoundDataBase.AmbientSoundType.Cicada, 0.5f);
         Object.DontDestroyOnLoad(startComic.transform.parent.gameObject);
     }
     private void Update()
