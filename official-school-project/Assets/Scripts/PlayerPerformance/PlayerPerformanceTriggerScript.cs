@@ -292,6 +292,11 @@ public class PlayerPerformanceTriggerScript : MonoBehaviour
 		LogicScript.instance.gridColor();
 	}
 
+	public void backToMainMenu()
+	{
+		LogicScript.instance.backToMainMenu();
+	}
+
 	#endregion
 }
 

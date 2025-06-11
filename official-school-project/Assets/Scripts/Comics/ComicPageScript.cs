@@ -148,6 +148,11 @@ public class ComicPageScript : MonoBehaviour
             color.a = Mathf.Lerp(fullOpacity, 0, (1 - t) / fadeInTime);
             image.color = color;
 
+            for (int i = 0; i < comicImages.Length; i++)
+            {
+                comicImages[i].GetComponent<Image>().color = color;
+            }
+
 
             t -= Time.unscaledDeltaTime;
 
@@ -155,6 +160,12 @@ public class ComicPageScript : MonoBehaviour
         }
         color.a = 0;
         image.color = color;
+
+        for (int i = 0; i < comicImages.Length; i++)
+        {
+            comicImages[i].GetComponent<Image>().color = color;
+        }
+
         gameObject.SetActive(false);
     }
 
