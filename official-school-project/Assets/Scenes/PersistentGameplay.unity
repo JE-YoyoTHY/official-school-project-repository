@@ -151,6 +151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02bcbaebc9771234e8e162639cc71336, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  soundData: {fileID: 0}
 --- !u!4 &11238043
 Transform:
   m_ObjectHideFlags: 0
@@ -393,6 +394,7 @@ MonoBehaviour:
   - {fileID: 1417753965}
   - {fileID: 1882241931}
   - {fileID: 166025997}
+  - {fileID: 776693803}
   - {fileID: 1241400906}
   scenesCanLoad:
   - m_SceneAsset: {fileID: 102900000, guid: c563e7eaf94aea34bb6ccd44602bebed, type: 3}
@@ -1401,6 +1403,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf0671b9dcc35e243badc3f7c0343a7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  soundData: {fileID: 0}
   myNormalGravityScale: 80
   myNormalGravityMaxSpeed: 22
   myNormalFrictionAcceleration: 100
@@ -6597,6 +6600,7 @@ MonoBehaviour:
   parkourRollMinVx: 10
   previousIsGrounded: 0
   currentIsGrounded: 0
+  isShootingFireball: 0
 --- !u!95 &920351189
 Animator:
   serializedVersion: 5
