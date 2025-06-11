@@ -426,11 +426,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1549583612069711395, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1549583612069711395, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1886111046103616762, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_Name
@@ -438,15 +438,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2128577423494707373, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2128577423494707373, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2128577423494707373, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3528865267409666377, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: sfxAudioSource
@@ -1118,11 +1118,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2039250643159674716, guid: 44a10314dba42474d8cd3611f9b4c284, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 1920
+      value: 2200
       objectReference: {fileID: 0}
     - target: {fileID: 2039250643159674716, guid: 44a10314dba42474d8cd3611f9b4c284, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 1080
+      value: 1300
       objectReference: {fileID: 0}
     - target: {fileID: 2039250643159674716, guid: 44a10314dba42474d8cd3611f9b4c284, type: 3}
       propertyPath: m_LocalScale.x
@@ -1202,15 +1202,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2589372697572522385, guid: 44a10314dba42474d8cd3611f9b4c284, type: 3}
       propertyPath: m_Color.b
-      value: 0.49056602
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2589372697572522385, guid: 44a10314dba42474d8cd3611f9b4c284, type: 3}
       propertyPath: m_Color.g
-      value: 0.49056602
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2589372697572522385, guid: 44a10314dba42474d8cd3611f9b4c284, type: 3}
       propertyPath: m_Color.r
-      value: 0.49056602
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2811779912629093660, guid: 44a10314dba42474d8cd3611f9b4c284, type: 3}
       propertyPath: pageID
@@ -2456,7 +2456,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.39215687}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4169,7 +4169,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   page: {fileID: 172056601}
   hideOpacity: 0.35
-  fadeInTime: 1
+  fadeInTime: 0.5
   fullOpacity: 1
   isAuto: 0
 --- !u!114 &638142845
@@ -4777,7 +4777,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   page: {fileID: 172056601}
   hideOpacity: 0.35
-  fadeInTime: 1
+  fadeInTime: 0.5
   fullOpacity: 1
   isAuto: 0
 --- !u!114 &719130474
@@ -5337,11 +5337,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1549583612069711395, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1549583612069711395, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1886111046103616762, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_Name
@@ -5349,15 +5349,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2128577423494707373, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2128577423494707373, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2128577423494707373, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3528865267409666377, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: sfxAudioSource
@@ -7023,7 +7023,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   page: {fileID: 172056601}
   hideOpacity: 0.35
-  fadeInTime: 1
+  fadeInTime: 0.5
   fullOpacity: 1
   isAuto: 0
 --- !u!114 &1080972007
@@ -7600,7 +7600,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.39215687}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -7925,7 +7925,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2811779912629093660, guid: 44a10314dba42474d8cd3611f9b4c284, type: 3}
       propertyPath: fadeInTime
-      value: 0.6
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2811779912629093660, guid: 44a10314dba42474d8cd3611f9b4c284, type: 3}
       propertyPath: fadeOutTime
@@ -8075,7 +8075,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.105882354}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.39215687}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -8350,11 +8350,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1549583612069711395, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1549583612069711395, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1886111046103616762, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_Name
@@ -8362,15 +8362,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2128577423494707373, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2128577423494707373, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2128577423494707373, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3528865267409666377, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: sfxAudioSource
@@ -9899,7 +9899,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1452433708
 Transform:
   m_ObjectHideFlags: 0
@@ -10094,14 +10094,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.105882354}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: a5fcaa99f1ea57a4eb3acf0c72fe89ad, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -12241,7 +12241,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.34901962}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.39215687}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -14353,11 +14353,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2039250643159674716, guid: 44a10314dba42474d8cd3611f9b4c284, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 1920
+      value: 2200
       objectReference: {fileID: 0}
     - target: {fileID: 2039250643159674716, guid: 44a10314dba42474d8cd3611f9b4c284, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 1080
+      value: 1300
       objectReference: {fileID: 0}
     - target: {fileID: 2039250643159674716, guid: 44a10314dba42474d8cd3611f9b4c284, type: 3}
       propertyPath: m_LocalScale.x
@@ -14437,15 +14437,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2589372697572522385, guid: 44a10314dba42474d8cd3611f9b4c284, type: 3}
       propertyPath: m_Color.b
-      value: 0.49056602
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2589372697572522385, guid: 44a10314dba42474d8cd3611f9b4c284, type: 3}
       propertyPath: m_Color.g
-      value: 0.49056602
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2589372697572522385, guid: 44a10314dba42474d8cd3611f9b4c284, type: 3}
       propertyPath: m_Color.r
-      value: 0.49056602
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2811779912629093660, guid: 44a10314dba42474d8cd3611f9b4c284, type: 3}
       propertyPath: pageID
@@ -14587,11 +14587,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1549583612069711395, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1549583612069711395, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1886111046103616762, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_Name
@@ -14599,15 +14599,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2128577423494707373, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2128577423494707373, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2128577423494707373, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3528865267409666377, guid: 4fb95eaf880af1a4482e2d1553ac10a3, type: 3}
       propertyPath: sfxAudioSource
