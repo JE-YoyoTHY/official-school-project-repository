@@ -11,20 +11,10 @@ using static InstructionUI;
 
 public class InstructionUIManager : MonoBehaviour
 {
+    public static InstructionUIManager instance;
     [SerializeField] private List<GameObject> instructionUIList = new List<GameObject>();  // 用於在Inspector拖曳進去
     private Dictionary<InstructionTypeEnum, GameObject> availableInstructionsUIObj = new Dictionary<InstructionTypeEnum, GameObject>();
     [SerializeField] public GameObject currentInstructionUIObj = null;
-
-    #region Deprecated Ref
-
-    [SerializeField] private float showDuration;
-    [SerializeField] private Ease showEaseType;
-    [SerializeField] private float showBackgroundAlpha;
-    [SerializeField] private float disappearDuration;
-    [SerializeField] private Ease disappearEaseType;
-
-    public Shader dissolveShader;
-    #endregion
 
     [SerializeField] private float maskGrowDuration = 1.5f;
     [SerializeField] private Ease maskGrowEaseType = Ease.InOutExpo;
@@ -43,14 +33,11 @@ public class InstructionUIManager : MonoBehaviour
 
     [Header("Drag")]
     [SerializeField] private RebindingManager rebindingManager;
+    private void Awake()
+    {
+        instance = this;
+    }
 
-
-
-
-
-
-
-        
     void Start()
     {
         /*
