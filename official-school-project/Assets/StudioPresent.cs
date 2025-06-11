@@ -29,6 +29,7 @@ public class StudioPresent : MonoBehaviour
     public void appear()
     {
         gameObject.GetComponent<Image>().DOFade(1, duration);
+        gameObject.GetComponent<Image>().raycastTarget = true;
         foreach (GameObject _obj in GameObjectMethods.GetAllChildren(gameObject))
         {
             _obj.GetComponent<Image>().DOFade(1, duration);
@@ -42,6 +43,7 @@ public class StudioPresent : MonoBehaviour
     public void disappear()
     {
         gameObject.GetComponent<Image>().DOFade(0, duration);
+        gameObject.GetComponent<Image>().raycastTarget = false;
         foreach (GameObject _obj in GameObjectMethods.GetAllChildren(gameObject))
         {
             _obj.GetComponent<Image>().DOFade(0, duration);

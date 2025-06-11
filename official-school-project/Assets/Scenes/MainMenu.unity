@@ -157,6 +157,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &23545271
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -930,6 +931,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &186228000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1285,6 +1287,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &359715565
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1931,6 +1934,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &629199157
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3289,6 +3293,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &1022238938
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4785,6 +4790,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &1279405173
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5436,15 +5442,15 @@ RectTransform:
   m_GameObject: {fileID: 1487319858}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 5.37, y: 6.392857, z: 6.392857}
-  m_ConstrainProportionsScale: 1
+  m_LocalScale: {x: 1, y: 1, z: 6.392857}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1528188321}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: 0, y: -0.000022888}
+  m_SizeDelta: {x: 476.4125, y: 694.0963}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1487319860
 MonoBehaviour:
@@ -8004,6 +8010,7 @@ MonoBehaviour:
   hideOpacity: 0.35
   fadeInTime: 1
   fullOpacity: 1
+  isAuto: 0
 --- !u!114 &1886710696
 MonoBehaviour:
   m_ObjectHideFlags: 0
