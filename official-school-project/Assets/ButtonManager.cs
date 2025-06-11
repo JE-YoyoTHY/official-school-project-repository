@@ -18,7 +18,8 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         CloseSettingButton, 
         OpenCreditButton, 
         CloseCreditButton,
-        SingleHandler  // 只需要一個就好, 例如ESC
+        SingleHandler,  // 只需要一個就好, 例如ESC
+        QuitGame
     }
     [SerializeField] private ButtonDataBase buttonData;
     
@@ -133,6 +134,10 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         else if (whichButton == ButtonTypes.CloseCreditButton)
         {
             closeCredit();
+        }
+        else if (whichButton == ButtonTypes.QuitGame)
+        {
+            Application.Quit();
         }
     }
 

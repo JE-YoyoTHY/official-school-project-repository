@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class PlayerFireballCountIndicatorScript : MonoBehaviour
 {
