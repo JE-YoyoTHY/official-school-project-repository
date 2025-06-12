@@ -1861,6 +1861,12 @@ public class PlayerControlScript : MonoBehaviour
 		changeLevel();
 	}
 
+	[ContextMenu("Instant Death")]
+	public void instantDeath()
+	{
+        playerDeathDelayStart();
+    }
+
     #endregion
 
     #region sound effect
