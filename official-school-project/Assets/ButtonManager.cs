@@ -130,6 +130,7 @@ public class ButtonManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             selectionTriangle.disappear();
             TMPBackToOriginalInstantly();
             mainMenuManager.startGame();
+            AmbientSoundManager.stopAllAmbientSound();
         }
         else if (whichButton == ButtonTypes.CloseCreditButton)
         {

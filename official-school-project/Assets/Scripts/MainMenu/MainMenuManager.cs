@@ -38,13 +38,12 @@ public class MainMenuManager : MonoBehaviour
 
 	private void Awake()
 	{
+		Time.timeScale = 1;
 		loadingBar.SetActive(false);
 	}
     private void Start()
     {
 		settingTab.SetActive(false);
-        AmbientSoundManager.playAmbientSoundLoop(SoundDataBase.AmbientSoundType.Frog, 0.5f);
-        AmbientSoundManager.playAmbientSoundLoop(SoundDataBase.AmbientSoundType.Cicada, 0.5f);
         Object.DontDestroyOnLoad(startComic.transform.parent.gameObject);
     }
     private void Update()

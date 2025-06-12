@@ -9,6 +9,10 @@ public class StudioPresent : MonoBehaviour
 {
     [SerializeField] private float duration;
     [SerializeField] private Ease _ease;
+    [SerializeField] private Coroutine m_coroutine;
+    private void Awake()
+    {
+    }
     void Start()
     {
         StartCoroutine(delayAndDisappear());
@@ -45,7 +49,9 @@ public class StudioPresent : MonoBehaviour
     {
         if (gameObject.GetComponent<Image>() != null)
         {
-            gameObject.GetComponent<Image>().DOFade(0, duration);
+            Tweener fadeTweener;
+            fadeTweener = gameObject.GetComponent<Image>().DOFade(0, duration);
+            fadeTweener.onComplete = playAmbientAndDeactiveSelf;
             gameObject.GetComponent<Image>().raycastTarget = false;
         }
 
@@ -70,4 +76,15 @@ public class StudioPresent : MonoBehaviour
         disappear();
     }
 
+    public void playAmbientAndDeactiveSelf()
+    {
+        startPlayAmbient();
+        gameObject.SetActive(false);
+    }
+
+    public void startPlayAmbient()
+    {
+        AmbientSoundManager.playAmbientSoundLoop(SoundDataBase.AmbientSoundType.Frog, 0.5f);
+        AmbientSoundManager.playAmbientSoundLoop(SoundDataBase.AmbientSoundType.Cicada, 0.5f);
+    }
 }
