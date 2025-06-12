@@ -875,7 +875,7 @@ public class PlayerControlScript : MonoBehaviour
 	public void fireballStart(bool isCastByKeyboard) 
 	{
 		print("shoot fireball sfx");
-		SFXManager.playSFXOneShot(SoundDataBase.SFXType.ShootFireball);
+		SFXManager.playSFXOneShot(SoundDataBase.SFXType.ShootFireball, 2.0f);
 		fireballCastByKeyboard = isCastByKeyboard;
 
 		isFireballPushForceAdding = true;

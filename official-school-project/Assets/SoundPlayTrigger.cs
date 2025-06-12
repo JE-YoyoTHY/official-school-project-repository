@@ -21,11 +21,21 @@ public class SoundPlayTrigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        float _volume;
         if (collision.CompareTag("Player"))
         {
             if (hasPlayed == false && isPlay == true)
             {
-                AmbientSoundManager.playAmbientSoundLoop(currentAmbientSoundType, 0.5f);
+                if (currentAmbientSoundType == SoundDataBase.AmbientSoundType.Frog || currentAmbientSoundType == SoundDataBase.AmbientSoundType.Cicada)
+                {
+                    _volume = 0.05f;
+                }
+                else
+                {
+                    _volume = 0.5f;
+                }
+                AmbientSoundManager.playAmbientSoundLoop(currentAmbientSoundType, _volume);
+                hasPlayed = true;
             }
             else if (isPlay == false)
             {
