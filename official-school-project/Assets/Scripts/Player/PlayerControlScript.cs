@@ -1864,7 +1864,12 @@ public class PlayerControlScript : MonoBehaviour
 	[ContextMenu("Instant Death")]
 	public void instantDeath()
 	{
-        playerDeathDelayStart();
+		if (!isDying && !PlayerPerformanceSystemScript.instance.isBeingControl)
+		{
+			playerDeathDelayStart();
+
+		}
+
     }
 
     #endregion

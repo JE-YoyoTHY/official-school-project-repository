@@ -45,10 +45,7 @@ public class VisualEffectManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            applyVFX();
-        }
+
     }
 
     public void applyVFX()
