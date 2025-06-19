@@ -45,6 +45,18 @@ public class ZeusPhaseOneScript : MonoBehaviour
         GetComponent<ParticleCommonScript>().emitParticle();
     }
 
+    public void resetBoss()
+    {
+
+        bossLightningManager.setAttackState("Loop");
+        bossLightningInstance.setStaticWallState(true);
+
+        myIgnoreCollision(true);
+        gameObject.SetActive(false);
+
+
+    }
+
     private void myIgnoreCollision(bool ignore)
     {
         Collider2D[] colls = PlayerControlScript.instance.GetComponents<Collider2D>();

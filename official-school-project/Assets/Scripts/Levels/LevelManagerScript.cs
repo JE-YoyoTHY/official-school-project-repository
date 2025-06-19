@@ -65,7 +65,8 @@ public class LevelManagerScript : MonoBehaviour
 				objectsToHideWhenDisable.Add(transform.GetChild(2).GetChild(i).gameObject);
             }
 			if (transform.GetChild(2).GetChild(i).tag == "ZeusCrystalManager") levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<ZeusPowerCrystalManagerScript>().resetZeusPowerCrystal);
-			if (transform.GetChild(2).GetChild(i).tag == "ZeusPhaseTwo") levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<ZeusPhaseTwoScript>().resetBoss);
+            if (transform.GetChild(2).GetChild(i).tag == "ZeusPhaseOne") levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<ZeusPhaseOneScript>().resetBoss);
+            if (transform.GetChild(2).GetChild(i).tag == "ZeusPhaseTwo") levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<ZeusPhaseTwoScript>().resetBoss);
 
             //if (transform.GetChild(2).GetChild(i).tag == "BreakablePlatform") levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<BreakablePlatformScript>().restoreAfterBreak);
         }
