@@ -1447,6 +1447,9 @@ MonoBehaviour:
   fireballExplodeShade: {fileID: 8836143847271298720, guid: 78840065ee18bf44b8b4dd4fe42f5ef9, type: 3}
   fireballExplodeShadeInterval: 0.02
   fireballExplodeShadeCount: 10
+  fblizeMoveSpeed: 20
+  fblizeDuration: 10
+  fblizeFreezeTime: 0.05
   deathSoul: {fileID: 8139547032279310443, guid: 9e37a9e5349a23047af358e762deec23, type: 3}
   deathRespawnDelayTime: 0.8
   deathHoleScript: {fileID: 1704808575}
@@ -12191,6 +12194,7 @@ MonoBehaviour:
   fireballCastByKeyboardInput: 3
   fireballCastByMouseInput: 3
   fireballDirInput: {x: 0, y: 0}
+  fblizeDirInput: {x: 0, y: 0}
   inputAsset: {fileID: -944628639613478452, guid: fafb337cfa4dba94584c1db912a56d83, type: 3}
   playerMap:
     m_Name: Player Map

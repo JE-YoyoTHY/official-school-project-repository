@@ -14,6 +14,7 @@ public class InputManagerScript : MonoBehaviour
 	public InputState fireballCastByKeyboardInput;
 	public InputState fireballCastByMouseInput;
 	public Vector2 fireballDirInput = Vector2.zero;
+	public Vector2 fblizeDirInput = Vector2.zero;
 
     [SerializeField] private InputActionAsset inputAsset;
     [SerializeField] private InputActionMap playerMap;
@@ -29,6 +30,7 @@ public class InputManagerScript : MonoBehaviour
 	private InputAction fireballDirDownAction;
 	private InputAction fireballDirLeftAction;
 	private InputAction fireballDirRightAction;
+	private InputAction fblizeAction;
 
 
 
@@ -81,6 +83,7 @@ public class InputManagerScript : MonoBehaviour
         fireballDirDownAction = playerMap.FindAction("fireballDirDown");
         fireballDirLeftAction = playerMap.FindAction("fireballDirLeft");
         fireballDirRightAction = playerMap.FindAction("fireballDirRight");
+		fblizeAction = playerMap.FindAction("fblize");
     }
 
 	private void updateInputs()
@@ -97,6 +100,7 @@ public class InputManagerScript : MonoBehaviour
 		updateFireballDirInput();
 		if (fireballDirInput.magnitude == 0) fireballCastByKeyboardInput = InputState.release;
 		if (fireballCastByKeyboardInput == InputState.release && fireballDirInput.magnitude > 0) fireballCastByKeyboardInput = InputState.press;
+		fblizeDirInput = fblizeAction.ReadValue<Vector2>();
 	}
 
 	private void updateMoveInput()

@@ -147,6 +147,14 @@ public class PlayerControlScript : MonoBehaviour
 	[SerializeField] private int fireballExplodeShadeCount;
 	private Coroutine fireballExplodeShadeCoroutine;
 
+	[Header("Fireballize")]
+	[SerializeField] private float fblizeMoveSpeed;
+	private Vector2 fblizeMoveDir;
+	[SerializeField] private float fblizeDuration; //some const
+	private float fblizeDurationCounter; //to count remaining time
+	[SerializeField] private float fblizeFreezeTime;
+	public bool isFblized {  get; private set; }
+
 	//freeze frame
 	private Vector2 freezeVelocity;
 
@@ -261,6 +269,7 @@ public class PlayerControlScript : MonoBehaviour
 			moveMain();
 			jumpMain();
 			fireballMain();
+			//fblizeMain();
 
 			//myFrictionMain();
 			checkAndPlayStepSFX();
@@ -280,7 +289,8 @@ public class PlayerControlScript : MonoBehaviour
 			myFrictionMain();
 			myGravityMain();
 
-			addMoveForce();
+            fblizeMain();
+            addMoveForce();
 			addFireballPushForce();
 			
 		}
@@ -539,7 +549,7 @@ public class PlayerControlScript : MonoBehaviour
 
 	private bool canMove()
 	{
-		if (!isFireballPushForceAdding && !LogicScript.instance.isFreeze() && isMoveActive && !isControlBySpring && !PlayerPerformanceSystemScript.instance.isBeingControl) return true;
+		if (!isFireballPushForceAdding && !LogicScript.instance.isFreeze() && isMoveActive && !isControlBySpring && !PlayerPerformanceSystemScript.instance.isBeingControl && !isFblized) return true;
 		else return false;
 	}
 
@@ -561,7 +571,7 @@ public class PlayerControlScript : MonoBehaviour
 	//friction
 	private void myFrictionMain() // horizontal
 	{
-		if(!isMoving && isFrictionActive && !(isFireballPushForceAdding && fireballDir.x != 0) && !(PlayerPerformanceSystemScript.instance.isBeingControl && performanceWithNoFriction) /*&& !isControlBySpring*/)
+		if(!isMoving && isFrictionActive && !(isFireballPushForceAdding && fireballDir.x != 0) && !(PlayerPerformanceSystemScript.instance.isBeingControl && performanceWithNoFriction && !isFblized) /*&& !isControlBySpring*/)
 		{
 			if(rb.velocity.x < 0)
 			{
@@ -590,7 +600,7 @@ public class PlayerControlScript : MonoBehaviour
 	//gravity
 	private void myGravityMain()
 	{
-		if(!isJumping && !isFireballPushForceAdding && !isFireballExplodeForceAdding && !isControlBySpring)
+		if(!isJumping && !isFireballPushForceAdding && !isFireballExplodeForceAdding && !isControlBySpring && !isFblized)
 		{
 			if (rb.velocity.y < jumpMinSpeed && rb.velocity.y > -jumpMinSpeed)
 				mySetGravity(jumpGravity * jumpExtraHangTimeGravityScale, myNormalGravityMaxSpeed);
@@ -656,11 +666,18 @@ public class PlayerControlScript : MonoBehaviour
 
 	private void jumpStart()
 	{
+		//play sound effect
 		print("jump sfx");
 		SFXManager.playSFXOneShot(SoundDataBase.SFXType.Jump);
+
+		//重置 跳躍結束後才有的Coroutine
 		if (jumpExtraHangTimeCoroutine != null) StopCoroutine(jumpExtraHangTimeCoroutine);
 
+		//setup
 		isJumping = true;
+
+		//apply velocity and change gravity
+		//case 1 : 玩家被爆炸波及
 		if(isFireballExplodeForceAdding)
 		{
 			if(rb.velocity.y < jumpStrength)
@@ -668,13 +685,13 @@ public class PlayerControlScript : MonoBehaviour
 				mySetVy(jumpStrength);
 			}
 		}
-		else
+		else // case 2 : 其他狀況(一般性)
 		{
 			mySetVy(jumpStrength);
 			mySetGravity(jumpGravity, myGravityMaxSpeed);
 		}
 
-		
+		//跳躍 -> 離地 -> 離地的setup
 		leaveGround(true);
 		currentMaxFallSpeedInAir = 0;
 
@@ -708,7 +725,7 @@ public class PlayerControlScript : MonoBehaviour
 
 	private bool canJump()
 	{
-		if (!isJumping && onGround && !isFireballPushForceAdding && !LogicScript.instance.isFreeze() && isJumpActive && !isControlBySpring && !PlayerPerformanceSystemScript.instance.isBeingControl) return true;
+		if (!isJumping && onGround && !isFireballPushForceAdding && !LogicScript.instance.isFreeze() && isJumpActive && !isControlBySpring && !PlayerPerformanceSystemScript.instance.isBeingControl && !isFblized) return true;
 		else return false;
 	}
 
@@ -982,6 +999,7 @@ public class PlayerControlScript : MonoBehaviour
 		}
 		if (fireballHangTimeCoroutine != null) StopCoroutine(fireballHangTimeCoroutine);
         if (isFireballExplodeForceAdding) fireballExplodeEnd();
+        if (isFblized) fblizeEnd();
         springEnd();
 		mySetGravity(0, myGravityMaxSpeed);
 		
@@ -1165,12 +1183,6 @@ public class PlayerControlScript : MonoBehaviour
 		}
 	}
 
-	//i tried to write this part in fireballExplode
-	/*IEnumerator fireballExplodeControlless(float t)
-	{
-
-	}*/
-
 	private void fireballChargeMain()
 	{
 		//recharge
@@ -1276,12 +1288,6 @@ public class PlayerControlScript : MonoBehaviour
 		isFireballActive = true;
 	}
 
-	/*IEnumerator fireballStartAfterFreezeTime()
-	{
-		while(LogicScript.instance.isFreeze()) yield return null;
-		fireballSummon();
-		fireballPushForceStart();
-	}*/
 
 	[ContextMenu("Get Fireball Ability")]
 	public void fireballPlayerGetAbility(bool isSettingActive)
@@ -1289,11 +1295,120 @@ public class PlayerControlScript : MonoBehaviour
 		fireballPlayerGotten = isSettingActive;
 	}
 
-	#endregion
+    #endregion
 
-	#region freeze frame
+    #region FBlize
+	/* fblize is the abbreviation for fireballize
+	 * it is similar to celeste's feather :
+	 * when player touch the object, they transform into fireball
+	 * after a brief pause, player can move in 8 direction through wsad
+	 * (like celeste's feather without initial momentum that forces you to move in certain dir for a short time)
+	 *
+	 * player can shoot fireball when fblized without consuming their charge
+	 * when player exit fblized status, they recharges
+	 * when player hit wall when fblized they summon fb in front of their move dir, causing explosion
+	 * when player touch another fblizingItem, refill the duration
+	 * when player is hit by fireball / encounter explosion, refill the duration
+	 * when player hit spring, start spring
+	 * 
+	 * variables : movement speed, duration, freeze duration
+	 * auxiliary variable : current dir, duration counter
+	 * 
+	 * disable : move, jump, gravity, friction
+	 */
+	private void fblizeMain()
+	{
+		//need to update move dir
+		if (isFblized)
+		{
+			//rb.velocity = InputManagerScript.instance.fblizeDirInput * fblizeMoveSpeed;
+			if (InputManagerScript.instance.fblizeDirInput != Vector2.zero) fblizeMoveDir = InputManagerScript.instance.fblizeDirInput;
+			rb.velocity = fblizeMoveDir * fblizeMoveSpeed;
 
-	public void freezeStart()
+            //fblizeDurationCounter -= Time.deltaTime;
+            fblizeDurationCounter -= Time.fixedDeltaTime;
+
+            if (fblizeDurationCounter <= 0)
+			{
+				fblizeEnd();
+			}
+		}
+	}
+
+	//call this function to start, meaning the object needs to call this function
+	[ContextMenu("Start Fireballize")]
+	public void fblizeStart()
+	{
+        //stop player and freeze
+        //end jump, fireball push force, explosion, spring
+
+        //reset player state
+        isMoving = false;
+        if (isJumping) jumpEnd();
+        if (jumpExtraHangTimeCoroutine != null) StopCoroutine(jumpExtraHangTimeCoroutine);
+
+        if (isFireballPushForceAdding) fireballPushForceEnd();
+        if (fireballHangTimeCoroutine != null) StopCoroutine(fireballHangTimeCoroutine);
+        fireballHangTimeMoveBoostDir = 0;
+
+        if (isFireballExplodeForceAdding) fireballExplodeEnd();
+
+        if (myFrictionLessCoroutine != null) StopCoroutine(myFrictionLessCoroutine);
+
+        mySetGravity(0, myGravityMaxSpeed);
+        mySetFriction(myNormalFrictionAcceleration, myNormalAdjustFriction);
+        isFrictionActive = true; isMoveActive = true; isJumpActive = true;
+        if (myFrictionLessCoroutine != null) StopCoroutine(myFrictionLessCoroutine);
+        if (moveLessCoroutine != null) StopCoroutine(moveLessCoroutine);
+        if (jumpLessCoroutine != null) StopCoroutine(jumpLessCoroutine);
+
+        isFireballActive = true;
+        if (fireballLessCoroutine != null) StopCoroutine(fireballLessCoroutine);
+
+        springEnd();
+
+        //fall particle
+        currentMaxFallSpeedInAir = 0;
+
+		//recharge
+        fireballChargeGain(3);
+
+		//fblize
+        isFblized = true;
+		fblizeDurationCounter = fblizeDuration;
+		if (rb.velocity != Vector2.zero) fblizeMoveDir = rb.velocity.normalized;
+		else fblizeMoveDir = Vector2.right;
+
+		//stop player
+		rb.velocity = Vector2.zero;
+
+        //freeze
+        LogicScript.instance.setFreezeTime(fblizeFreezeTime);
+    }
+
+	//call this function to end 
+	//what can end fblize : duration expiration, spring, fireball push, hit wall
+	private void fblizeEnd()
+	{
+		//reset
+        mySetGravity(myNormalGravityScale, myNormalGravityMaxSpeed);
+        mySetFriction(myNormalFrictionAcceleration, myNormalAdjustFriction);
+
+
+		//fblize
+        isFblized = false;
+
+        //recharge
+        fireballChargeGain(3);
+    }
+
+
+
+    #endregion
+
+    #region freeze frame
+
+    public void freezeStart()
 	{
 		freezeVelocity = rb.velocity;
 		rb.velocity = Vector2.zero;
@@ -1422,7 +1537,8 @@ public class PlayerControlScript : MonoBehaviour
 		if (isFireballPushForceAdding) fireballPushForceEnd();
 		if (isFireballExplodeForceAdding) fireballExplodeEnd();
 		if (fireballHangTimeCoroutine != null) StopCoroutine(fireballHangTimeCoroutine);
-		GameObject[] fbs;
+        if (isFblized) fblizeEnd();
+        GameObject[] fbs;
 		fbs = GameObject.FindGameObjectsWithTag("Fireball");
 		foreach (GameObject fb in fbs) Destroy(fb);
 
@@ -1561,6 +1677,8 @@ public class PlayerControlScript : MonoBehaviour
 
 		if (myFrictionLessCoroutine != null) StopCoroutine(myFrictionLessCoroutine);
 
+		if (isFblized) fblizeEnd();
+
 		mySetGravity(myNormalGravityScale, myNormalGravityMaxSpeed);
 		mySetFriction(myNormalFrictionAcceleration, myNormalAdjustFriction);
 		fireballHangTimeMoveBoostDir = 0;
@@ -1569,6 +1687,7 @@ public class PlayerControlScript : MonoBehaviour
 		isFireballActive = false;
 		if (fireballLessCoroutine != null) StopCoroutine(fireballLessCoroutine);
 		fireballLessCoroutine = StartCoroutine(fireballLess(springFireballLessTime));
+		
 
         //fall particle
         currentMaxFallSpeedInAir = 0;
@@ -1652,6 +1771,7 @@ public class PlayerControlScript : MonoBehaviour
 		if (isFireballPushForceAdding) fireballPushForceEnd();
 		if (isFireballExplodeForceAdding) fireballExplodeEnd();
 		if (fireballHangTimeCoroutine != null) StopCoroutine(fireballHangTimeCoroutine);
+		if (isFblized) fblizeEnd();
 
 		//friction
 		if (myFrictionLessCoroutine != null) StopCoroutine(myFrictionLessCoroutine);

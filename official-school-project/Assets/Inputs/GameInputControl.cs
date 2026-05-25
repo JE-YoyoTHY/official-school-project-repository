@@ -134,6 +134,15 @@ public partial class @GameInputControl: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""fblize"",
+                    ""type"": ""Value"",
+                    ""id"": ""392e1dab-20f1-4c4c-9fb6-2e1339d56cca"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -433,6 +442,61 @@ public partial class @GameInputControl: IInputActionCollection2, IDisposable
                     ""action"": ""moveLeft"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""bbfdc533-b8a9-4101-9f79-bc60980c200c"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""fblize"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""5852f688-d04c-417c-88f2-6f8062bbca95"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""fblize"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""336afbb8-be8d-4bac-8668-00824ce419fc"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""fblize"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""8866ae2f-4a7d-4444-827c-dc556a3f7368"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""fblize"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""ef433e52-80cc-40f2-8fbe-8520f8fa68ef"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""fblize"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -569,6 +633,7 @@ public partial class @GameInputControl: IInputActionCollection2, IDisposable
         m_Player_Legacy = m_Player.FindAction("Legacy", throwIfNotFound: true);
         m_Player_fireballDir = m_Player.FindAction("fireballDir", throwIfNotFound: true);
         m_Player_move = m_Player.FindAction("move", throwIfNotFound: true);
+        m_Player_fblize = m_Player.FindAction("fblize", throwIfNotFound: true);
         // UINavigation
         m_UINavigation = asset.FindActionMap("UINavigation", throwIfNotFound: true);
         m_UINavigation_nextSelection = m_UINavigation.FindAction("nextSelection", throwIfNotFound: true);
@@ -651,6 +716,7 @@ public partial class @GameInputControl: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Legacy;
     private readonly InputAction m_Player_fireballDir;
     private readonly InputAction m_Player_move;
+    private readonly InputAction m_Player_fblize;
     public struct PlayerActions
     {
         private @GameInputControl m_Wrapper;
@@ -667,6 +733,7 @@ public partial class @GameInputControl: IInputActionCollection2, IDisposable
         public InputAction @Legacy => m_Wrapper.m_Player_Legacy;
         public InputAction @fireballDir => m_Wrapper.m_Player_fireballDir;
         public InputAction @move => m_Wrapper.m_Player_move;
+        public InputAction @fblize => m_Wrapper.m_Player_fblize;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -712,6 +779,9 @@ public partial class @GameInputControl: IInputActionCollection2, IDisposable
             @move.started += instance.OnMove;
             @move.performed += instance.OnMove;
             @move.canceled += instance.OnMove;
+            @fblize.started += instance.OnFblize;
+            @fblize.performed += instance.OnFblize;
+            @fblize.canceled += instance.OnFblize;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -752,6 +822,9 @@ public partial class @GameInputControl: IInputActionCollection2, IDisposable
             @move.started -= instance.OnMove;
             @move.performed -= instance.OnMove;
             @move.canceled -= instance.OnMove;
+            @fblize.started -= instance.OnFblize;
+            @fblize.performed -= instance.OnFblize;
+            @fblize.canceled -= instance.OnFblize;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -899,6 +972,7 @@ public partial class @GameInputControl: IInputActionCollection2, IDisposable
         void OnLegacy(InputAction.CallbackContext context);
         void OnFireballDir(InputAction.CallbackContext context);
         void OnMove(InputAction.CallbackContext context);
+        void OnFblize(InputAction.CallbackContext context);
     }
     public interface IUINavigationActions
     {
