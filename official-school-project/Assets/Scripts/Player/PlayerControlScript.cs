@@ -1430,7 +1430,7 @@ public class PlayerControlScript : MonoBehaviour
         if (myFrictionLessCoroutine != null) StopCoroutine(myFrictionLessCoroutine);
 
         mySetGravity(0, 0);
-        mySetFriction(0, fblizeAdjustFriction);
+        mySetFriction(0, myNormalAdjustFriction);
         isFrictionActive = true; isMoveActive = true; isJumpActive = true;
         if (myFrictionLessCoroutine != null) StopCoroutine(myFrictionLessCoroutine);
         if (moveLessCoroutine != null) StopCoroutine(moveLessCoroutine);
