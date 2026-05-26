@@ -152,7 +152,10 @@ public class PlayerControlScript : MonoBehaviour
 	private Vector2 fblizeMoveDir;
 	[SerializeField] private float fblizeDuration; //some const
 	private float fblizeDurationCounter; //to count remaining time
-	[SerializeField] private float fblizeFreezeTime;
+	[SerializeField] private float fblizeAccelerationX;
+    [SerializeField] private float fblizeAccelerationY;
+	//[SerializeField] private float fblizeAdjustFriction;
+    [SerializeField] private float fblizeFreezeTime;
 	public bool isFblized {  get; private set; }
 
 	//freeze frame
@@ -571,7 +574,7 @@ public class PlayerControlScript : MonoBehaviour
 	//friction
 	private void myFrictionMain() // horizontal
 	{
-		if(!isMoving && isFrictionActive && !(isFireballPushForceAdding && fireballDir.x != 0) && !(PlayerPerformanceSystemScript.instance.isBeingControl && performanceWithNoFriction && !isFblized) /*&& !isControlBySpring*/)
+		if(!isMoving && isFrictionActive && !(isFireballPushForceAdding && fireballDir.x != 0) && !(PlayerPerformanceSystemScript.instance.isBeingControl && performanceWithNoFriction) && !isFblized /*&& !isControlBySpring*/)
 		{
 			if(rb.velocity.x < 0)
 			{
@@ -608,7 +611,7 @@ public class PlayerControlScript : MonoBehaviour
 				mySetGravity(myNormalGravityScale, myNormalGravityMaxSpeed);
 		}
 
-		if(!performanceWithNoGravity)
+		if(!performanceWithNoGravity && !isFblized)
 			myAccelerationWithFixedDeltatime(Vector2.down * myGravityScale, Vector2.down * myGravityMaxSpeed);
 
 
@@ -1311,7 +1314,7 @@ public class PlayerControlScript : MonoBehaviour
 	 * when player is hit by fireball / encounter explosion, refill the duration
 	 * when player hit spring, start spring
 	 * 
-	 * variables : movement speed, duration, freeze duration
+	 * variables : movement speed, duration, freeze duration, acceleration x and y
 	 * auxiliary variable : current dir, duration counter
 	 * 
 	 * disable : move, jump, gravity, friction
@@ -1321,9 +1324,14 @@ public class PlayerControlScript : MonoBehaviour
 		//need to update move dir
 		if (isFblized)
 		{
+			/*
 			//rb.velocity = InputManagerScript.instance.fblizeDirInput * fblizeMoveSpeed;
 			if (InputManagerScript.instance.fblizeDirInput != Vector2.zero) fblizeMoveDir = InputManagerScript.instance.fblizeDirInput;
-			rb.velocity = fblizeMoveDir * fblizeMoveSpeed;
+			//rb.velocity = fblizeMoveDir * fblizeMoveSpeed;
+			Vector2 fblizeLocalAcceleration = fblizeMoveDir;
+			fblizeLocalAcceleration.x *= fblizeAccelerationX;
+            fblizeLocalAcceleration.y *= fblizeAccelerationY;
+			myAccelerationWithFixedDeltatime(fblizeLocalAcceleration, fblizeMoveDir * fblizeMoveSpeed);
 
             //fblizeDurationCounter -= Time.deltaTime;
             fblizeDurationCounter -= Time.fixedDeltaTime;
@@ -1332,7 +1340,73 @@ public class PlayerControlScript : MonoBehaviour
 			{
 				fblizeEnd();
 			}
-		}
+			print(fblizeLocalAcceleration);
+			print(fblizeMoveDir * fblizeMoveSpeed);
+			*/
+			//if (InputManagerScript.instance.fblizeDirInput != Vector2.zero) fblizeMoveDir = InputManagerScript.instance.fblizeDirInput;
+			//Vector2 fblizeLocalAcceleration = fblizeMoveDir;
+			//fblizeLocalAcceleration.x *= fblizeAccelerationX;
+			//fblizeLocalAcceleration.y *= fblizeAccelerationY;
+			//fblizeLocalAcceleration *= Time.fixedDeltaTime;
+			
+			Vector2 localInputTargetDir = InputManagerScript.instance.fblizeDirInput;
+			Vector2 localAcceleration = Vector2.zero;
+            if ( localInputTargetDir != Vector2.zero)
+			{
+				float localRotateDir = Vector3.Cross(rb.velocity ,localInputTargetDir).z;
+
+				if (localRotateDir <= 0)
+				{
+					//clockwise rotation
+					localAcceleration = Vector3.Cross(rb.velocity.normalized, Vector3.forward);
+				}
+				else
+				{
+                    //counter clock wise
+                    localAcceleration = Vector3.Cross(rb.velocity.normalized, Vector3.back);
+                }
+
+                localAcceleration.x *= fblizeAccelerationX; localAcceleration.y *= fblizeAccelerationY;
+                localAcceleration *= Time.fixedDeltaTime;
+                rb.velocity += localAcceleration;
+                rb.velocity = rb.velocity.normalized * fblizeMoveSpeed;
+				fblizeMoveDir = rb.velocity.normalized;
+            }
+			else
+			{
+				rb.velocity = fblizeMoveDir * fblizeMoveSpeed;
+			}
+
+
+				// acceleration
+				/*if (rb.velocity.x < localTargetSpeed.x)
+				{
+					rb.AddForce(new Vector2(Mathf.Min(fblizeAccelerationX * Time.fixedDeltaTime, localTargetSpeed.x - rb.velocity.x), 0) * rb.mass, ForceMode2D.Impulse);
+				}
+				else if (rb.velocity.x > localTargetSpeed.x)
+				{
+					rb.AddForce(Mathf.Max(fblizeAccelerationX * Time.fixedDeltaTime * -1, localTargetSpeed.x - rb.velocity.x) * Vector2.right * rb.mass, ForceMode2D.Impulse);
+				}
+
+				if (rb.velocity.y < localTargetSpeed.y)
+				{
+					rb.AddForce(new Vector2(0, Mathf.Min(fblizeAccelerationY * Time.fixedDeltaTime, localTargetSpeed.y - rb.velocity.y)) * rb.mass, ForceMode2D.Impulse);
+				}
+				else if (rb.velocity.y > localTargetSpeed.y)
+				{
+					rb.AddForce(Mathf.Max(fblizeAccelerationY * Time.fixedDeltaTime * -1, localTargetSpeed.y - rb.velocity.y) * Vector2.up * rb.mass, ForceMode2D.Impulse);
+				}*/
+				//Vector2 localAcceleration = (localTargetSpeed - rb.velocity).normalized;
+				//localAcceleration.x *= fblizeAccelerationX; localAcceleration.y *= fblizeAccelerationY;
+				//myAccelerationWithFixedDeltatime(localAcceleration, localTargetSpeed);
+				//
+
+				fblizeDurationCounter -= Time.fixedDeltaTime;
+            if (fblizeDurationCounter <= 0)
+            {
+                fblizeEnd();
+            }
+        }
 	}
 
 	//call this function to start, meaning the object needs to call this function
@@ -1355,8 +1429,8 @@ public class PlayerControlScript : MonoBehaviour
 
         if (myFrictionLessCoroutine != null) StopCoroutine(myFrictionLessCoroutine);
 
-        mySetGravity(0, myGravityMaxSpeed);
-        mySetFriction(myNormalFrictionAcceleration, myNormalAdjustFriction);
+        mySetGravity(0, 0);
+        mySetFriction(0, fblizeAdjustFriction);
         isFrictionActive = true; isMoveActive = true; isJumpActive = true;
         if (myFrictionLessCoroutine != null) StopCoroutine(myFrictionLessCoroutine);
         if (moveLessCoroutine != null) StopCoroutine(moveLessCoroutine);

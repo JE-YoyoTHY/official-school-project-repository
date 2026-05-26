@@ -1449,6 +1449,9 @@ MonoBehaviour:
   fireballExplodeShadeCount: 10
   fblizeMoveSpeed: 20
   fblizeDuration: 10
+  fblizeAccelerationX: 80
+  fblizeAccelerationY: 80
+  fblizeAdjustFriction: 200
   fblizeFreezeTime: 0.05
   deathSoul: {fileID: 8139547032279310443, guid: 9e37a9e5349a23047af358e762deec23, type: 3}
   deathRespawnDelayTime: 0.8
