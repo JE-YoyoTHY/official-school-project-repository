@@ -199,6 +199,32 @@ public class FireballScript : MonoBehaviour
 
 	}
 
+	public void summon_for_explosion()
+	{
+        rb = GetComponent<Rigidbody2D>();
+        coll = GetComponent<CircleCollider2D>();
+        animator = GetComponent<Animator>();
+        //isExploding = false;
+        playerPushed = false;
+        leftPlayer = true;
+
+        hitPlayerSpeedModifier = Vector2.zero;
+
+        myIgnoreCollision(false);
+
+
+		moveSpeed = 0;
+
+
+
+        //particle
+        movingParticle = transform.GetChild(0).GetComponent<ParticleSystem>(); // child 0 -> particle system
+        movingParticle.transform.rotation = Quaternion.FromToRotation(Vector3.left, moveDir * -1);
+
+   
+
+    }
+
 	private void explodePushPlayer()
 	{
 		Vector3 dis = PlayerControlScript.instance.transform.position - transform.position;

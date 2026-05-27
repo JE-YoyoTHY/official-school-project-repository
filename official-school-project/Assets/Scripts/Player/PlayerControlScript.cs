@@ -36,8 +36,8 @@ public class PlayerControlScript : MonoBehaviour
 	private Rigidbody2D rb;
 	private PlayerGroundTriggerScript groundTrigger;
 	private GameObject fireballMeter;
-	//private LogicScript logic;
-
+    //private LogicScript logic;
+    private const int groundLayer = 6;
 
 
     //physics
@@ -154,7 +154,7 @@ public class PlayerControlScript : MonoBehaviour
 	private float fblizeDurationCounter; //to count remaining time
 	[SerializeField] private float fblizeAccelerationX;
     [SerializeField] private float fblizeAccelerationY;
-	[SerializeField] private float fblizeAdjustFriction;
+	//[SerializeField] private float fblizeAdjustFriction;
     [SerializeField] private float fblizeFreezeTime;
 	public bool isFblized {  get; private set; }
 
@@ -1307,8 +1307,8 @@ public class PlayerControlScript : MonoBehaviour
 	 * after a brief pause, player can move in 8 direction through wsad
 	 * (like celeste's feather without initial momentum that forces you to move in certain dir for a short time)
 	 *
-	 * player can shoot fireball when fblized without consuming their charge
-	 * when player exit fblized status, they recharges
+	 * nope (player can shoot fireball when fblized without consuming their charge)
+	 * nope (when player exit fblized status, they recharges)
 	 * when player hit wall when fblized they summon fb in front of their move dir, causing explosion
 	 * when player touch another fblizingItem, refill the duration
 	 * when player is hit by fireball / encounter explosion, refill the duration
@@ -1457,8 +1457,8 @@ public class PlayerControlScript : MonoBehaviour
         if (myFrictionLessCoroutine != null) StopCoroutine(myFrictionLessCoroutine);
 
         mySetGravity(0, 0);
-        //mySetFriction(0, myNormalAdjustFriction);
-		mySetFriction(0, fblizeAdjustFriction);
+        mySetFriction(0, myNormalAdjustFriction);
+		//mySetFriction(0, fblizeAdjustFriction);
         isFrictionActive = true; isMoveActive = false; isJumpActive = true;
         if (myFrictionLessCoroutine != null) StopCoroutine(myFrictionLessCoroutine);
         if (moveLessCoroutine != null) StopCoroutine(moveLessCoroutine);
@@ -1474,6 +1474,9 @@ public class PlayerControlScript : MonoBehaviour
 
 		//recharge
         fireballChargeGain(3);
+
+		//animation
+		PlayerAnims.instance.GetComponent<SpriteRenderer>().color = Color.red;
 
 
         //freeze
@@ -1494,7 +1497,10 @@ public class PlayerControlScript : MonoBehaviour
         isFblized = false;
 
         //recharge
-        fireballChargeGain(3);
+        //fireballChargeGain(3);
+
+        //animation
+        PlayerAnims.instance.GetComponent<SpriteRenderer>().color = Color.white;
     }
 
 	//touch item, be exploded, hit by firebal when isFblized
@@ -1504,6 +1510,20 @@ public class PlayerControlScript : MonoBehaviour
 		fblizeDurationCounter = fblizeDuration;
 	}
 
+	private void fblizeTouchWall()
+	{
+        fblizeEnd();
+
+        transform.position += (Vector3)fblizeMoveDir * fblizeMoveSpeed * Time.fixedDeltaTime;
+
+        GameObject summonedFireball = null;
+        summonedFireball = Instantiate(fireballPrefab, transform.position, transform.rotation);
+        summonedFireball.GetComponent<FireballScript>().summon_for_explosion();
+
+        transform.position -= (Vector3)fblizeMoveDir * fblizeMoveSpeed * Time.fixedDeltaTime;
+
+
+    }
 
     #endregion
 
@@ -1526,91 +1546,7 @@ public class PlayerControlScript : MonoBehaviour
 
 	#region level functions
 
-	private void OnTriggerEnter2D(Collider2D collision)
-	{
-		if (collision.gameObject.layer == killZoneLayer)
-		{
-			if (collision.CompareTag("DeadZoneSpike"))
-			{
-				DeadZoneScript deadZone = collision.GetComponent<DeadZoneScript>();
-				if (deadZone.noDirection || (deadZone.deadZoneDirection.x * rb.velocity.x <= 0 || deadZone.deadZoneDirection.y * rb.velocity.y <= 0))
-				{
-					if(deathRespawnDelayCoroutine == null)
-					playerDeathDelayStart();
-				}
-			}
-			else
-			{
-				if(deathRespawnDelayCoroutine == null)
-				playerDeathDelayStart();
-			}
-			
-		}
-
-		if (collision.gameObject.layer == levelTriggerLayer)
-		{
-			/*if (currentLevel != collision.gameObject.transform.parent.parent.parent.gameObject.GetComponent<LevelManagerScript>())
-			{
-				if (currentLevel != null)
-				{
-					currentLevel.disableLevel();
-				}
-				currentLevel = collision.gameObject.transform.parent.parent.parent.gameObject.GetComponent<LevelManagerScript>();
-				changeLevel();
-			}*/
-			if (collision.gameObject.name == "EnterTrigger")
-			{
-				if (currentLevel != null)
-				{
-					currentLevel.disableLevel();
-				}
-				currentLevel = collision.gameObject.transform.parent.parent.parent.gameObject.GetComponent<LevelManagerScript>();
-				changeLevel();
-			}
-
-			if (collision.gameObject.name == "ExitTrigger")
-			{
-				if (currentLevel != null)
-				{
-					currentLevel.disableLevel();
-				}
-
-				LevelManagerScript levelManager = collision.gameObject.transform.parent.parent.parent.gameObject.GetComponent<LevelManagerScript>();
-
-                if (levelManager.nextLevel == null)
-				{
-                    GameObject[] levelManagerScripts = GameObject.FindGameObjectsWithTag("LevelManager");
-                    foreach (var levelManagerScript in levelManagerScripts)
-                    {
-                        if (levelManagerScript.GetComponent<LevelManagerScript>().levelNumber.x == levelManager.levelNumber.x + 1 &&
-                            levelManagerScript.GetComponent<LevelManagerScript>().levelNumber.y == 1)
-                        {
-                            currentLevel = levelManagerScript.GetComponent<LevelManagerScript>();
-
-                        }
-                    }
-                }
-				else
-				{
-					currentLevel = levelManager.nextLevel;
-				}
-
-				//currentLevel = collision.gameObject.transform.parent.parent.parent.gameObject.GetComponent<LevelManagerScript>().nextLevel;
-				changeLevel();
-
-               
-            }
-		}
-
-		if (collision.gameObject.layer == respawnTriggerLayer)
-		{
-			/*if(currentRespawnPoint != collision.gameObject.transform.GetChild(0).gameObject)
-			{
-				currentRespawnPoint = collision.gameObject.transform.GetChild(0).gameObject;
-			}*/
-			currentLevel.swapRespawnPoint(collision.gameObject.transform.GetChild(0).gameObject);
-		}
-	}
+	
 
 	private void changeLevel()
 	{
@@ -1908,13 +1844,115 @@ public class PlayerControlScript : MonoBehaviour
 		performanceWithNoFriction = localPerformanceWithNoFriction;
 	}
 
-	#endregion
+    #endregion
+
+    #region collision
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer == groundLayer)
+		{
+			if (isFblized)
+			{
+				fblizeTouchWall();
+            }
+		}
+    }
 
 
-	//inputs region handles inputs function, namely set keyValue 2 -> 1, and trigger pre input
-	#region inputs
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.layer == killZoneLayer)
+        {
+            if (collision.CompareTag("DeadZoneSpike"))
+            {
+                DeadZoneScript deadZone = collision.GetComponent<DeadZoneScript>();
+                if (deadZone.noDirection || (deadZone.deadZoneDirection.x * rb.velocity.x <= 0 || deadZone.deadZoneDirection.y * rb.velocity.y <= 0))
+                {
+                    if (deathRespawnDelayCoroutine == null)
+                        playerDeathDelayStart();
+                }
+            }
+            else
+            {
+                if (deathRespawnDelayCoroutine == null)
+                    playerDeathDelayStart();
+            }
 
-	private void inputMain()
+        }
+
+        if (collision.gameObject.layer == levelTriggerLayer)
+        {
+            /*if (currentLevel != collision.gameObject.transform.parent.parent.parent.gameObject.GetComponent<LevelManagerScript>())
+			{
+				if (currentLevel != null)
+				{
+					currentLevel.disableLevel();
+				}
+				currentLevel = collision.gameObject.transform.parent.parent.parent.gameObject.GetComponent<LevelManagerScript>();
+				changeLevel();
+			}*/
+            if (collision.gameObject.name == "EnterTrigger")
+            {
+                if (currentLevel != null)
+                {
+                    currentLevel.disableLevel();
+                }
+                currentLevel = collision.gameObject.transform.parent.parent.parent.gameObject.GetComponent<LevelManagerScript>();
+                changeLevel();
+            }
+
+            if (collision.gameObject.name == "ExitTrigger")
+            {
+                if (currentLevel != null)
+                {
+                    currentLevel.disableLevel();
+                }
+
+                LevelManagerScript levelManager = collision.gameObject.transform.parent.parent.parent.gameObject.GetComponent<LevelManagerScript>();
+
+                if (levelManager.nextLevel == null)
+                {
+                    GameObject[] levelManagerScripts = GameObject.FindGameObjectsWithTag("LevelManager");
+                    foreach (var levelManagerScript in levelManagerScripts)
+                    {
+                        if (levelManagerScript.GetComponent<LevelManagerScript>().levelNumber.x == levelManager.levelNumber.x + 1 &&
+                            levelManagerScript.GetComponent<LevelManagerScript>().levelNumber.y == 1)
+                        {
+                            currentLevel = levelManagerScript.GetComponent<LevelManagerScript>();
+
+                        }
+                    }
+                }
+                else
+                {
+                    currentLevel = levelManager.nextLevel;
+                }
+
+                //currentLevel = collision.gameObject.transform.parent.parent.parent.gameObject.GetComponent<LevelManagerScript>().nextLevel;
+                changeLevel();
+
+
+            }
+        }
+
+        if (collision.gameObject.layer == respawnTriggerLayer)
+        {
+            /*if(currentRespawnPoint != collision.gameObject.transform.GetChild(0).gameObject)
+			{
+				currentRespawnPoint = collision.gameObject.transform.GetChild(0).gameObject;
+			}*/
+            currentLevel.swapRespawnPoint(collision.gameObject.transform.GetChild(0).gameObject);
+        }
+    }
+
+
+    #endregion
+
+    //inputs region handles inputs function, namely set keyValue 2 -> 1, and trigger pre input
+    #region inputs
+
+    private void inputMain()
 	{
 		//move
 		moveKeyValue = (sbyte)InputManagerScript.instance.moveInput;
