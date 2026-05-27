@@ -29,9 +29,9 @@ public class VFXManager : MonoBehaviour
     }
     void Start()
     {
-        print(m_shader.name);
-        print(mat.HasFloat("_Radius"));
-        print(mat.GetFloat("_Radius"));
+        //print(m_shader.name);
+        //print(mat.HasFloat("_Radius"));
+        //print(mat.GetFloat("_Radius"));
     }
 
     void Update()
@@ -68,6 +68,6 @@ public class VFXManager : MonoBehaviour
         {
             mat.SetFloat("_Radius", 0.0f);
         }
-        print("Completed VFX");
+        //print("Completed VFX");
     }
 }

@@ -131,9 +131,9 @@ public class InstructionUI : MonoBehaviour
 
         else if (currentInstructionType == InstructionTypeEnum.ShootFireball_TwoKey)
         {
-            print("Manage changing key display - two key");
-            print((int)currentShootFireballInstruction_TwoKey_First);
-            print((int)currentShootFireballInstruction_TwoKey_Second);
+            //print("Manage changing key display - two key");
+            //print((int)currentShootFireballInstruction_TwoKey_First);
+            //print((int)currentShootFireballInstruction_TwoKey_Second);
             changeKeyboardKeyImageDisplay((int)currentShootFireballInstruction_TwoKey_First, 0);  
             changeKeyboardKeyImageDisplay((int)currentShootFireballInstruction_TwoKey_Second, 1);  
             setInstructionSize();
@@ -142,7 +142,7 @@ public class InstructionUI : MonoBehaviour
 
     public void changeKeyboardKeyImageDisplay(int actionEnumIndex, int targetKeyboardKeyImageIndex)
     {
-        print($"Received actionEnumIndex: {actionEnumIndex}");
+        //print($"Received actionEnumIndex: {actionEnumIndex}");
         ActionsEnum m_action = (ActionsEnum)actionEnumIndex;
         if (rebindSystemDataBase == null)
             Debug.LogError("rebindSystemDataBase 是 null");
@@ -185,8 +185,8 @@ public class InstructionUI : MonoBehaviour
                 RectTransform keyImageTransform = keyImage.GetComponent<RectTransform>();
                 float spriteWidth = keyImage.GetComponent<Image>().sprite.rect.width;
                 float spriteHeight = keyImage.GetComponent<Image>().sprite.rect.height;
-                print($"Sprite Width: {spriteWidth}");
-                print($"Sprite Height: {spriteHeight}");
+                //print($"Sprite Width: {spriteWidth}");
+                //print($"Sprite Height: {spriteHeight}");
                 float _scale = getMaskMaxSize().y / spriteHeight;
                 float _scale_fineTune = 1.0f / 2.75f;
                 _scale *= _scale_fineTune;
@@ -206,7 +206,7 @@ public class InstructionUI : MonoBehaviour
             }
         }
 
-        print("change display completed");
+        //print("change display completed");
     }
     public List<GameObject> getAllKeyboardKeyImage()
     {
@@ -231,7 +231,7 @@ public class InstructionUI : MonoBehaviour
     [ContextMenu("set instruction size")]
     public void setInstructionSize()
     {
-        print("set instru");
+        //print("set instru");
         const string imageFilterName = "KeyboardKeyImage";
         const float widthPaddingForText = 60.0f;
         const float widthPaddingForImage = 18.0f;
@@ -246,7 +246,7 @@ public class InstructionUI : MonoBehaviour
             {
                 // 不是按鍵圖片
                 horizontalLayout_AllKeyboardKeyImage.Add(child);
-                print(child.name);
+                //print(child.name);
             }
         }
 
@@ -255,7 +255,7 @@ public class InstructionUI : MonoBehaviour
         {
             GameObject keyCodeText = keyboardKeyImage.transform.GetChild(0).gameObject;
             GameObject keyImage = keyboardKeyImage.transform.GetChild(1).gameObject;
-            print(keyCodeText.name);
+            //print(keyCodeText.name);
             
             if (keyCodeText.gameObject.activeSelf == true && keyImage.gameObject.activeSelf == false)
             {

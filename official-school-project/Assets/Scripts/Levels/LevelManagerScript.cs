@@ -52,7 +52,8 @@ public class LevelManagerScript : MonoBehaviour
 		for(int i = 0; i < transform.GetChild(2).childCount; i++) // child 2 -> level objects
 		{
 			if (transform.GetChild(2).GetChild(i).tag == "RechargeCrystal") levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<RechargeCrystalScript>().regainPower);
-			if (transform.GetChild(2).GetChild(i).tag == "Gate") levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<GateScript>().gateReset);
+            if (transform.GetChild(2).GetChild(i).tag == "FblizeFlame") levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<FblizeFlameScript>().regainPower);
+            if (transform.GetChild(2).GetChild(i).tag == "Gate") levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<GateScript>().gateReset);
 			if (transform.GetChild(2).GetChild(i).tag == "TutorialShade")
 			{
 				levelSetUpEvent.AddListener(transform.GetChild(2).GetChild(i).GetComponent<TutorialShadeScript>().resetTutorial);

@@ -209,8 +209,15 @@ public class FireballScript : MonoBehaviour
 
 		//print("pushDir : " + pushDir);
 		//PlayerControlScript.instance.fireballExplodeStart(pushDir, rb.velocity * hitPlayerSpeedScale);
-		PlayerControlScript.instance.fireballExplodeStart(pushDir, hitPlayerSpeedModifier);
-		playerPushed = true;
+		if (PlayerControlScript.instance.isFblized)
+		{
+			PlayerControlScript.instance.fblizeRecharge();
+		}
+		else
+		{
+            PlayerControlScript.instance.fireballExplodeStart(pushDir, hitPlayerSpeedModifier);
+            playerPushed = true;
+        }
 
 
 		//screen shake

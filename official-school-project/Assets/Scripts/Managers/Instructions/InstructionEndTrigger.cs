@@ -31,7 +31,7 @@ public class InstructionEndTrigger : MonoBehaviour
 
         if (collision.CompareTag("Player") && hadEnded == false)
         {
-            print("instruction end trigger entered");
+            //print("instruction end trigger entered");
 
             instructionUIManager.disappearInstructionUI();
         }

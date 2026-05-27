@@ -154,7 +154,7 @@ public class PlayerControlScript : MonoBehaviour
 	private float fblizeDurationCounter; //to count remaining time
 	[SerializeField] private float fblizeAccelerationX;
     [SerializeField] private float fblizeAccelerationY;
-	//[SerializeField] private float fblizeAdjustFriction;
+	[SerializeField] private float fblizeAdjustFriction;
     [SerializeField] private float fblizeFreezeTime;
 	public bool isFblized {  get; private set; }
 
@@ -670,7 +670,7 @@ public class PlayerControlScript : MonoBehaviour
 	private void jumpStart()
 	{
 		//play sound effect
-		print("jump sfx");
+		//print("jump sfx");
 		SFXManager.playSFXOneShot(SoundDataBase.SFXType.Jump);
 
 		//重置 跳躍結束後才有的Coroutine
@@ -894,7 +894,7 @@ public class PlayerControlScript : MonoBehaviour
 	 */
 	public void fireballStart(bool isCastByKeyboard) 
 	{
-		print("shoot fireball sfx");
+		//print("shoot fireball sfx");
 		SFXManager.playSFXOneShot(SoundDataBase.SFXType.ShootFireball, 2.0f);
 		fireballCastByKeyboard = isCastByKeyboard;
 
@@ -1046,7 +1046,7 @@ public class PlayerControlScript : MonoBehaviour
 
 	public void fireballExplodeStart(Vector2 localVelocity, Vector2 fireballVelocity)
 	{
-		print("fireball explode sfx");
+		//print("fireball explode sfx");
 		SFXManager.playSFXOneShot(SoundDataBase.SFXType.FireballExplode);
 		//freezeStart(fireballExplodeFreezeTime);
 		LogicScript.instance.setFreezeTime(fireballExplodeFreezeTime);
@@ -1221,7 +1221,7 @@ public class PlayerControlScript : MonoBehaviour
 		fireballCurrentCharges += localCharges;
 		fireballCurrentCharges = (fireballCurrentCharges > fireballMaxCharges) ? fireballMaxCharges : fireballCurrentCharges;
         SFXManager.playSFXOneShot(SoundDataBase.SFXType.StrikeMatch);
-        print("Regain");
+        //print("Regain");
     }
 
 	private void fireballMouseDir()
@@ -1351,25 +1351,42 @@ public class PlayerControlScript : MonoBehaviour
 			
 			Vector2 localInputTargetDir = InputManagerScript.instance.fblizeDirInput;
 			Vector2 localAcceleration = Vector2.zero;
-            if ( localInputTargetDir != Vector2.zero)
+            if ( localInputTargetDir != Vector2.zero && fblizeMoveDir != localInputTargetDir)
 			{
 				float localRotateDir = Vector3.Cross(rb.velocity ,localInputTargetDir).z;
+				//localAcceleration = Vector2.Perpendicular(rb.velocity.normalized);
 
+				//vertical acceleration (for circular motion)
 				if (localRotateDir <= 0)
 				{
 					//clockwise rotation
 					localAcceleration = Vector3.Cross(rb.velocity.normalized, Vector3.forward);
+
+					//localAcceleration *= -1;
 				}
 				else
 				{
-                    //counter clock wise
                     localAcceleration = Vector3.Cross(rb.velocity.normalized, Vector3.back);
                 }
 
-                localAcceleration.x *= fblizeAccelerationX; localAcceleration.y *= fblizeAccelerationY;
-                localAcceleration *= Time.fixedDeltaTime;
-                rb.velocity += localAcceleration;
+				
+				
+				localAcceleration.x *= fblizeAccelerationX; localAcceleration.y *= fblizeAccelerationY;
+				localAcceleration *= Time.fixedDeltaTime;
+				rb.velocity += localAcceleration;
+
+				//check if rotate too much
+				float localDirCheck = Vector3.Cross(rb.velocity, localInputTargetDir).z;
+				if(localDirCheck *  localRotateDir < 0)
+				{
+					//too much
+					rb.velocity = localInputTargetDir * fblizeMoveSpeed;
+				}
+
+                //myAccelerationWithFixedDeltatime(localAcceleration, localInputTargetDir * fblizeMoveSpeed);
                 rb.velocity = rb.velocity.normalized * fblizeMoveSpeed;
+
+
 				fblizeMoveDir = rb.velocity.normalized;
             }
 			else
@@ -1413,11 +1430,21 @@ public class PlayerControlScript : MonoBehaviour
 	[ContextMenu("Start Fireballize")]
 	public void fblizeStart()
 	{
-        //stop player and freeze
-        //end jump, fireball push force, explosion, spring
+		//print("fblize start");
+
+        //fblize
+        isFblized = true;
+        fblizeDurationCounter = fblizeDuration;
+        if (InputManagerScript.instance.fblizeDirInput != Vector2.zero) fblizeMoveDir = InputManagerScript.instance.fblizeDirInput;
+        else fblizeMoveDir = Vector2.right;
+		//fblizeMoveDir = Vector2.right;
+		rb.velocity = fblizeMoveDir * fblizeMoveSpeed;
+        
 
         //reset player state
         isMoving = false;
+		moveKeyValue = 0;
+
         if (isJumping) jumpEnd();
         if (jumpExtraHangTimeCoroutine != null) StopCoroutine(jumpExtraHangTimeCoroutine);
 
@@ -1430,8 +1457,9 @@ public class PlayerControlScript : MonoBehaviour
         if (myFrictionLessCoroutine != null) StopCoroutine(myFrictionLessCoroutine);
 
         mySetGravity(0, 0);
-        mySetFriction(0, myNormalAdjustFriction);
-        isFrictionActive = true; isMoveActive = true; isJumpActive = true;
+        //mySetFriction(0, myNormalAdjustFriction);
+		mySetFriction(0, fblizeAdjustFriction);
+        isFrictionActive = true; isMoveActive = false; isJumpActive = true;
         if (myFrictionLessCoroutine != null) StopCoroutine(myFrictionLessCoroutine);
         if (moveLessCoroutine != null) StopCoroutine(moveLessCoroutine);
         if (jumpLessCoroutine != null) StopCoroutine(jumpLessCoroutine);
@@ -1447,14 +1475,6 @@ public class PlayerControlScript : MonoBehaviour
 		//recharge
         fireballChargeGain(3);
 
-		//fblize
-        isFblized = true;
-		fblizeDurationCounter = fblizeDuration;
-		if (rb.velocity != Vector2.zero) fblizeMoveDir = rb.velocity.normalized;
-		else fblizeMoveDir = Vector2.right;
-
-		//stop player
-		rb.velocity = Vector2.zero;
 
         //freeze
         LogicScript.instance.setFreezeTime(fblizeFreezeTime);
@@ -1464,18 +1484,25 @@ public class PlayerControlScript : MonoBehaviour
 	//what can end fblize : duration expiration, spring, fireball push, hit wall
 	private void fblizeEnd()
 	{
+		//print("fblize End");
 		//reset
         mySetGravity(myNormalGravityScale, myNormalGravityMaxSpeed);
         mySetFriction(myNormalFrictionAcceleration, myNormalAdjustFriction);
+        isMoveActive = true;
 
-
-		//fblize
+        //fblize
         isFblized = false;
 
         //recharge
         fireballChargeGain(3);
     }
 
+	//touch item, be exploded, hit by firebal when isFblized
+	public void fblizeRecharge()
+	{
+		//print("fblize Rechage");
+		fblizeDurationCounter = fblizeDuration;
+	}
 
 
     #endregion
